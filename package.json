@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "faas": "bin/deploy.js"
+    "publish": "bin/publish.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
