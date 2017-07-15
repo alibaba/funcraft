@@ -60,7 +60,7 @@ async function makeFunction(fc, serviceName, func) {
     fn = await fc.createFunction(serviceName, {
       functionName: functionName,
       description: functionDescription,
-      handler: 'hello.index',
+      handler: func.handler,
       memorySize: 128,
       runtime: 'nodejs4.4',
       code: {
@@ -71,7 +71,7 @@ async function makeFunction(fc, serviceName, func) {
     // update
     fn = await fc.updateFunction(serviceName, functionName, {
       description: functionDescription,
-      handler: 'hello.index',
+      handler: func.handler,
       memorySize: 128,
       runtime: 'nodejs4.4',
       code: {
@@ -159,7 +159,7 @@ async function makeRole(ram, conf) {
 
 async function makeAPI(ag, group, conf, role) {
   const apiName = conf.name;
-  const [serviceName, functionName] = conf['function'].split('/');
+  const [fcRegion, serviceName, functionName] = conf['function'].split('/');
   const groupId = group.GroupId;
   const result = await ag.describeApis();
   var api = result.ApiSummarys && result.ApiSummarys.ApiSummary.find((item) => {
@@ -167,34 +167,35 @@ async function makeAPI(ag, group, conf, role) {
   });
 
   if (!api) {
+    const method = conf.method || 'GET';
     api = await ag.createApi({
-      GroupId: group.groupId,
+      GroupId: groupId,
       ApiName: apiName,
       Visibility: 'PUBLIC',
       AuthType: 'ANONYMOUS',
       RequestConfig: JSON.stringify({
-        "RequestHttpMethod": "GET",
+        "RequestHttpMethod": method,
         "RequestProtocol": "HTTP",
-        "BodyFormat":"",
-        "PostBodyDescription":"",
+        "BodyFormat": conf.body_format || '',
+        "PostBodyDescription": "",
         "RequestPath": conf.path
       }),
       ServiceConfig: JSON.stringify({
-        "ServiceProtocol":"FunctionCompute",
-        "ContentTypeValue":"application/x-www-form-urlencoded; charset=UTF-8",
-        "Mock":"FALSE",
-        "MockResult":"",
-        "ServiceTimeout":3000,
-        "ServiceAddress":"",
-        "ServicePath":"",
-        "ServiceHttpMethod":"",
+        "ServiceProtocol": "FunctionCompute",
+        "ContentTypeValue": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Mock": "FALSE",
+        "MockResult": "",
+        "ServiceTimeout": 3000,
+        "ServiceAddress": "",
+        "ServicePath": "",
+        "ServiceHttpMethod": "",
         "ContentTypeCatagory":"DEFAULT",
         "ServiceVpcEnable":"FALSE",
         FunctionComputeConfig: {
-          FcRegionId: "cn-shanghai",
+          FcRegionId: fcRegion,
           ServiceName: serviceName,
           FunctionName: functionName,
-          RoleArn: role.Role.RoleArn
+          RoleArn: role.Role.Arn
         }
       }),
       ResultType: "TEXT",
@@ -271,10 +272,6 @@ async function work() {
       const _api = apis[l];
       const api = await makeAPI(ag, apiGroup, _api, role);
       debug('%j', api);
-      const apiDetail = await ag.describeApi({
-        GroupId: apiGroup.GroupId,
-        ApiId: api.ApiId
-      });
 
       const deploy = await ag.deployApi({
         GroupId: apiGroup.GroupId,
@@ -283,7 +280,13 @@ async function work() {
         Description: 'Just for test'
       });
 
-      console.log('URL: http://%s%s => %s',
+      const apiDetail = await ag.describeApi({
+        GroupId: apiGroup.GroupId,
+        ApiId: api.ApiId
+      });
+
+      console.log('URL: %s http://%s%s => %s',
+        apiDetail.RequestConfig.RequestHttpMethod,
         apiGroup.SubDomain,
         apiDetail.RequestConfig.RequestPath,
         _api.function);
