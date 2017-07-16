@@ -190,7 +190,7 @@ async function makeAPI(ag, group, conf, role) {
         "ServicePath": "",
         "ServiceHttpMethod": "",
         "ContentTypeCatagory":"DEFAULT",
-        "ServiceVpcEnable":"FALSE",
+        "ServiceVpcEnable": "FALSE",
         FunctionComputeConfig: {
           FcRegionId: fcRegion,
           ServiceName: serviceName,
@@ -198,7 +198,7 @@ async function makeAPI(ag, group, conf, role) {
           RoleArn: role.Role.Arn
         }
       }),
-      ResultType: "TEXT",
+      ResultType: conf.resultType || "TEXT",
       ResultSample: "Hello world!"
     });
   }
