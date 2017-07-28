@@ -12,7 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@alicloud/cloudapi": "^1.0.0",
+    "@alicloud/ram": "^1.0.0",
     "@alicloud/fc": "^1.1.2",
+    "debug": "^2.6.8",
     "js-yaml": "^3.9.0",
     "jszip": "^3.1.3"
   }
