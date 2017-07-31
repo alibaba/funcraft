@@ -106,5 +106,12 @@ Use `fun` command to upload & deploy it to AliCloud:
 $ fun
 ```
 
+## Architect
+
+See relationship of API Gateway & Function Compute：
+
+![](./figures/arch.png)
+
 ## License
+
 The MIT License
