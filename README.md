@@ -112,6 +112,10 @@ See relationship of API Gateway & Function Compute：
 
 ![](./figures/arch.png)
 
+## Referrences
+
+- [以函数计算作为 API 网关后端服务](https://help.aliyun.com/document_detail/54788.html)
+
 ## License
 
 The MIT License
