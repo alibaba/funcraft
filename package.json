@@ -1,15 +1,14 @@
 {
-  "name": "lambda",
+  "name": "@alicloud/fun",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "bin": {
-    "publish": "bin/publish.js"
+    "fun": "bin/fun.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Jackson Tian",
   "license": "ISC",
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",

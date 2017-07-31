@@ -206,8 +206,7 @@ async function makeAPI(ag, group, conf, role) {
   return api;
 }
 
-
-async function work() {
+async function fun() {
   const confPath = path.join(rootDir, 'faas.yml');
   const isexists = await exists(confPath);
   if (!isexists) {
@@ -294,8 +293,6 @@ async function work() {
   }
 }
 
-work().then(() => {
-
-}, (err) => {
+fun().catch((err) => {
   console.error(err.stack);
 });
