@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
@@ -53,7 +55,7 @@ async function makeFunction(fc, serviceName, func) {
     var item = code[i];
     zip.file(item, await readFile(path.join(rootDir, item)));
   }
-  const base64 = await zip.generateAsync({type:"base64"});
+  const base64 = await zip.generateAsync({type: 'base64'});
 
   if (!fn) {
     // create
@@ -89,18 +91,18 @@ async function makeGroup(ag, group) {
   var groups = await ag.describeApiGroups({}, {timeout: 10000});
 
   var list = groups.ApiGroupAttributes.ApiGroupAttribute;
-  var group = list.find((item) => {
+  var findGroup = list.find((item) => {
     return item.GroupName === groupName;
   });
 
-  if (!group) {
-    group = await ag.createApiGroup({
+  if (!findGroup) {
+    findGroup = await ag.createApiGroup({
       GroupName: groupName,
       Description: groupDescription
     }, {timeout: 10000});
   }
 
-  return group;
+  return findGroup;
 }
 
 async function makeRole(ram, conf) {
@@ -119,20 +121,20 @@ async function makeRole(ram, conf) {
   if (!role) {
     role = await ram.createRole({
       RoleName: roleName,
-      Description: "API网关访问 FunctionCompute",
+      Description: 'API网关访问 FunctionCompute',
       AssumeRolePolicyDocument: JSON.stringify({
-        "Statement": [
+        'Statement': [
           {
-            "Action": "sts:AssumeRole",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": [
-                "apigateway.aliyuncs.com"
+            'Action': 'sts:AssumeRole',
+            'Effect': 'Allow',
+            'Principal': {
+              'Service': [
+                'apigateway.aliyuncs.com'
               ]
             }
           }
         ],
-        "Version": "1"
+        'Version': '1'
       })
     });
   }
@@ -174,23 +176,23 @@ async function makeAPI(ag, group, conf, role) {
       Visibility: 'PUBLIC',
       AuthType: 'ANONYMOUS',
       RequestConfig: JSON.stringify({
-        "RequestHttpMethod": method,
-        "RequestProtocol": "HTTP",
-        "BodyFormat": conf.body_format || '',
-        "PostBodyDescription": "",
-        "RequestPath": conf.path
+        'RequestHttpMethod': method,
+        'RequestProtocol': 'HTTP',
+        'BodyFormat': conf.body_format || '',
+        'PostBodyDescription': '',
+        'RequestPath': conf.path
       }),
       ServiceConfig: JSON.stringify({
-        "ServiceProtocol": "FunctionCompute",
-        "ContentTypeValue": "application/x-www-form-urlencoded; charset=UTF-8",
-        "Mock": "FALSE",
-        "MockResult": "",
-        "ServiceTimeout": 3000,
-        "ServiceAddress": "",
-        "ServicePath": "",
-        "ServiceHttpMethod": "",
-        "ContentTypeCatagory":"DEFAULT",
-        "ServiceVpcEnable": "FALSE",
+        'ServiceProtocol': 'FunctionCompute',
+        'ContentTypeValue': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Mock': 'FALSE',
+        'MockResult': '',
+        'ServiceTimeout': 3000,
+        'ServiceAddress': '',
+        'ServicePath': '',
+        'ServiceHttpMethod': '',
+        'ContentTypeCatagory':'DEFAULT',
+        'ServiceVpcEnable': 'FALSE',
         FunctionComputeConfig: {
           FcRegionId: fcRegion,
           ServiceName: serviceName,
@@ -198,8 +200,8 @@ async function makeAPI(ag, group, conf, role) {
           RoleArn: role.Role.Arn
         }
       }),
-      ResultType: conf.resultType || "TEXT",
-      ResultSample: "Hello world!"
+      ResultType: conf.resultType || 'TEXT',
+      ResultSample: 'Hello world!'
     });
   }
 
@@ -240,7 +242,7 @@ async function fun() {
     const item = services[i];
     const serviceDescription = item.description;
     const serviceName = item.name;
-    const service = await makeService(fc, serviceName, serviceDescription);
+    await makeService(fc, serviceName, serviceDescription);
     const functions = item.functions;
     for (var j = 0; j < functions.length; j++) {
       const func = functions[j];
@@ -272,7 +274,7 @@ async function fun() {
       const api = await makeAPI(ag, apiGroup, _api, role);
       debug('%j', api);
 
-      const deploy = await ag.deployApi({
+      await ag.deployApi({
         GroupId: apiGroup.GroupId,
         ApiId: api.ApiId,
         StageName: 'RELEASE',
