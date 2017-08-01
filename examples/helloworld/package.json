@@ -1,17 +1,19 @@
 {
   "name": "helloworld",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "The hello world demo for Fun",
   "main": "helloworld.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/*",
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jackson Tian",
+  "license": "MIT",
   "dependencies": {
     "fc-helper": "^1.0.0"
   },
   "devDependencies": {
+    "expect.js": "^0.3.1",
     "mocha": "^3.5.0"
   }
 }
