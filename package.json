@@ -1,12 +1,12 @@
 {
   "name": "@alicloud/fun",
   "version": "1.0.0",
-  "description": "",
+  "description": "(have)Fun with Serverless",
   "bin": {
     "fun": "bin/fun.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "author": "Jackson Tian",
   "license": "MIT",
@@ -24,6 +24,7 @@
   ],
   "devDependencies": {
     "eslint": "^4.3.0",
+    "expect.js": "^0.3.1",
     "mocha": "^3.4.2"
   }
 }
