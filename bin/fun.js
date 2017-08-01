@@ -12,7 +12,7 @@ const FC = require('@alicloud/fc');
 const Ram = require('@alicloud/ram');
 const debug = require('debug')('faas');
 
-const JSZip = require('jszip');
+const zip = require('../lib/zip');
 
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
@@ -49,13 +49,7 @@ async function makeFunction(fc, serviceName, func) {
     }
   }
 
-  const zip = new JSZip();
-  const code = func.code;
-  for (var i = 0; i < code.length; i++) {
-    var item = code[i];
-    zip.file(item, await readFile(path.join(rootDir, item)));
-  }
-  const base64 = await zip.generateAsync({type: 'base64'});
+  const base64 = await zip(func.codes, rootDir);
 
   if (!fn) {
     // create
@@ -111,7 +105,7 @@ async function makeRole(ram, conf) {
   try {
     role = await ram.getRole({
       RoleName: roleName
-    });
+    }, {timeout: 10000});
   } catch (ex) {
     if (ex.name !== 'EntityNotExist.RoleError') {
       throw ex;
@@ -209,14 +203,39 @@ async function makeAPI(ag, group, conf, role) {
 }
 
 async function fun() {
-  const confPath = path.join(rootDir, 'faas.yml');
-  const isexists = await exists(confPath);
+  var confPath = path.join(rootDir, 'faas.yml');
+  var isexists = await exists(confPath);
+
+  if (!isexists) {
+    // try faas.yaml
+    confPath = path.join(rootDir, 'faas.yaml');
+    isexists = await exists(confPath);
+  }
+
   if (!isexists) {
     console.log('Current folder not a Faas project');
+    console.log('The folder must contains faas.yml or faas.yaml');
     process.exit(-1);
   }
+
   const confContent = await readFile(confPath, 'utf8');
   const conf = yaml.safeLoad(confContent);
+
+  if (!conf.accountid) {
+    debug('try to get ACCOUNT_ID from environment variable');
+    conf.accountid = process.env.ACCOUNT_ID;
+  }
+
+  if (!conf.accessKeyId) {
+    debug('try to get ACCESS_KEY_ID from environment variable');
+    conf.accessKeyId = process.env.ACCESS_KEY_ID;
+  }
+
+  if (!conf.accessKeySecret) {
+    debug('try to get ACCESS_KEY_SECRET from environment variable');
+    conf.accessKeySecret = process.env.ACCESS_KEY_SECRET;
+  }
+
   debug('exitst config: %j', conf);
 
   const ag = new CloudAPI({
@@ -255,6 +274,12 @@ async function fun() {
 
   // Step 3: make role
   debug('make sure Role');
+  if (!conf.role) {
+    conf.role = {
+      name: 'apigatewayAccessFC'
+    };
+  }
+
   const role = await makeRole(ram, conf.role);
 
   debug('%j', role);
