@@ -1,7 +1,7 @@
 'use strict';
 
-const run = require('fc-helper');
+const hook = require('fc-helper');
 
-exports.index = run((req, res) => {
+exports.index = hook((req, res) => {
   res.send('Hello world!\n');
 });

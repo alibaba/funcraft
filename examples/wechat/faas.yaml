@@ -1,0 +1,23 @@
+function-compute:
+  region: 'cn-shanghai'
+  services:
+    - name: 'wechat'
+      description: 'wechat demo'
+      functions:
+        - name: 'helloworld'
+          description: 'Hello world!'
+          handler: helloworld.index
+          codes:
+            - 'helloworld.js'
+            - 'node_modules'
+
+api-gateway:
+  endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
+  groups:
+    - name: 'apigw_fc'
+      description: 'API Gateway & Function Compute'
+      apis:
+        - name: 'helloworld'
+          method: 'GET'
+          path: '/helloworld'
+          function: 'cn-shanghai/fc/helloworld'
