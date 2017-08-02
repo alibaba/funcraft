@@ -4,20 +4,30 @@ function-compute:
     - name: 'wechat'
       description: 'wechat demo'
       functions:
-        - name: 'helloworld'
-          description: 'Hello world!'
-          handler: helloworld.index
+        - name: 'wechat_get'
+          description: 'Wechat get handler'
+          handler: wechat.get
           codes:
-            - 'helloworld.js'
+            - 'wechat.js'
             - 'node_modules'
+        - name: 'wechat_post'
+          description: 'Wechat post handler'
+          handler: wechat.post
+          codes:
+            - 'wechat.js'
 
 api-gateway:
   endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
   groups:
-    - name: 'apigw_fc'
+    - name: 'wechat_group'
       description: 'API Gateway & Function Compute'
       apis:
-        - name: 'helloworld'
+        - name: 'wechat_get'
           method: 'GET'
-          path: '/helloworld'
-          function: 'cn-shanghai/fc/helloworld'
+          path: '/wechat'
+          function: 'cn-shanghai/wechat/get'
+        - name: 'wechat_post'
+          method: 'POST'
+          body_format: 'FORM'
+          path: '/wechat'
+          function: 'cn-shanghai/wechat/post'
