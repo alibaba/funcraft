@@ -10,7 +10,7 @@ const yaml = require('js-yaml');
 const CloudAPI = require('@alicloud/cloudapi');
 const FC = require('@alicloud/fc');
 const Ram = require('@alicloud/ram');
-const debug = require('debug')('faas');
+const debug = require('debug')('fun:bin');
 
 const zip = require('../lib/zip');
 
@@ -57,8 +57,8 @@ async function makeFunction(fc, serviceName, func) {
       functionName: functionName,
       description: functionDescription,
       handler: func.handler,
-      memorySize: 128,
-      runtime: 'nodejs4.4',
+      memorySize: func.memorySize || 128,
+      runtime: func.runtime || 'nodejs4.4',
       code: {
         zipFile: base64
       }
@@ -68,8 +68,8 @@ async function makeFunction(fc, serviceName, func) {
     fn = await fc.updateFunction(serviceName, functionName, {
       description: functionDescription,
       handler: func.handler,
-      memorySize: 128,
-      runtime: 'nodejs4.4',
+      memorySize: func.memorySize || 128,
+      runtime: func.runtime || 'nodejs4.4',
       code: {
         zipFile: base64
       }
@@ -162,8 +162,32 @@ async function makeAPI(ag, group, conf, role) {
     return item.ApiName === apiName && item.GroupId === groupId;
   });
 
+  const method = conf.method || 'GET';
+  const parameters = conf.parameters || [];
+  const requestParameters = parameters.map((item) => {
+    return {
+      ApiParameterName: item.name,
+      Location: item.location || "Query",
+      ParameterType: item.type || "String",
+      Required: item.required
+    };
+  });
+  const serviceParameters = parameters.map((item) => {
+    return {
+      ServiceParameterName: item.name,
+      Location: item.location || "Query",
+      Type: item.type || "String",
+      ParameterCatalog: "REQUEST"
+    };
+  });
+  const serviceParametersMap = parameters.map((item) => {
+    return {
+      ServiceParameterName: item.name,
+      RequestParameterName: item.name
+    };
+  });
+
   if (!api) {
-    const method = conf.method || 'GET';
     api = await ag.createApi({
       GroupId: groupId,
       ApiName: apiName,
@@ -176,6 +200,9 @@ async function makeAPI(ag, group, conf, role) {
         'PostBodyDescription': '',
         'RequestPath': conf.path
       }),
+      RequestParameters: JSON.stringify(requestParameters),
+      ServiceParameters: JSON.stringify(serviceParameters),
+      ServiceParametersMap: JSON.stringify(serviceParametersMap),
       ServiceConfig: JSON.stringify({
         'ServiceProtocol': 'FunctionCompute',
         'ContentTypeValue': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -195,7 +222,46 @@ async function makeAPI(ag, group, conf, role) {
         }
       }),
       ResultType: conf.resultType || 'TEXT',
-      ResultSample: 'Hello world!'
+      ResultSample: conf.resultSample || 'result sample'
+    });
+  } else {
+    await ag.modifyApi({
+      GroupId: groupId,
+      ApiId: api.ApiId,
+      ApiName: apiName,
+      Visibility: 'PUBLIC',
+      Description: conf.description || 'The awesome api',
+      AuthType: 'ANONYMOUS',
+      RequestConfig: JSON.stringify({
+        'RequestHttpMethod': method,
+        'RequestProtocol': 'HTTP',
+        'BodyFormat': conf.body_format || '',
+        'PostBodyDescription': '',
+        'RequestPath': conf.path
+      }),
+      RequestParameters: JSON.stringify(requestParameters),
+      ServiceParameters: JSON.stringify(serviceParameters),
+      ServiceParametersMap: JSON.stringify(serviceParametersMap),
+      ServiceConfig: JSON.stringify({
+        'ServiceProtocol': 'FunctionCompute',
+        'ContentTypeValue': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Mock': 'FALSE',
+        'MockResult': '',
+        'ServiceTimeout': 3000,
+        'ServiceAddress': '',
+        'ServicePath': '',
+        'ServiceHttpMethod': '',
+        'ContentTypeCatagory':'DEFAULT',
+        'ServiceVpcEnable': 'FALSE',
+        FunctionComputeConfig: {
+          FcRegionId: fcRegion,
+          ServiceName: serviceName,
+          FunctionName: functionName,
+          RoleArn: role.Role.Arn
+        }
+      }),
+      ResultType: conf.resultType || 'TEXT',
+      ResultSample: conf.resultSample || 'result sample'
     });
   }
 
