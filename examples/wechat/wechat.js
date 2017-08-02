@@ -200,13 +200,12 @@ exports.get = hook((req, res) => {
 });
 
 function* handle(message) {
-  // 回复屌丝(普通回复)
-  return 'hehe';
+  return JSON.stringify(message);
+  // return 'Just hello world!';
 }
 
 exports.post = hook((req, res) => {
   co(function* () {
-    console.log(req);
     const query = req.query;
     // 加密模式
     const encrypted = !!(query.encrypt_type && query.encrypt_type === 'aes' && query.msg_signature);
