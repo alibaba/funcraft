@@ -8,9 +8,9 @@ const hook = require('fc-helper');
 const WXBizMsgCrypt = require('wechat-crypto');
 const xml2js = require('xml2js');
 
-const TOKEN = 'random';
-const ENCODING_AES_KEY = 'UcOZ19yTgocUdj2yb2EblpxPKorZs5GAOByUVWBb2By';
-const APPID = 'wxb00e9505019a21c8';
+const TOKEN = '<YOUR TOKEN>';
+const ENCODING_AES_KEY = '<YOUR ENCODING AES KEY>';
+const APPID = '<YOUR APP ID>';
 
 function getSignature (timestamp, nonce, token) {
   var shasum = crypto.createHash('sha1');
