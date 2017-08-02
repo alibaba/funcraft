@@ -4,13 +4,13 @@ function-compute:
     - name: 'wechat'
       description: 'wechat demo'
       functions:
-        - name: 'wechat_get'
+        - name: 'get'
           description: 'Wechat get handler'
           handler: wechat.get
           codes:
             - 'wechat.js'
             - 'node_modules'
-        - name: 'wechat_post'
+        - name: 'post'
           description: 'Wechat post handler'
           handler: wechat.post
           codes:
@@ -28,6 +28,6 @@ api-gateway:
           function: 'cn-shanghai/wechat/get'
         - name: 'wechat_post'
           method: 'POST'
-          body_format: 'FORM'
+          body_format: 'STREAM'
           path: '/wechat'
           function: 'cn-shanghai/wechat/post'
