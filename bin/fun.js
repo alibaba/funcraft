@@ -26,9 +26,6 @@ if (!subcommand) {
   process.exit(0);
 }
 
-console.log(subcommand);
-console.log(...args);
-
 var handle = function (err) {
   console.error(err.stack);
 };
@@ -37,4 +34,8 @@ if (subcommand === 'deploy') {
   require('../lib/commands/deploy')(...args).catch(handle);
 } else if (subcommand === 'build') {
   require('../lib/commands/build')(...args).catch(handle);
+} else {
+  console.log('unsupported subcommand.');
+  console.log('type: fun help');
+  process.exit(-1);
 }
