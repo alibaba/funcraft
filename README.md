@@ -103,7 +103,7 @@ api-gateway:
 Use `fun` command to upload & deploy it to AliCloud:
 
 ```sh
-$ fun
+$ fun deploy
 ```
 
 ## Architect
