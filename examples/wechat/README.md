@@ -29,7 +29,7 @@ const APPID = '<YOUR APP ID>';
 Deploy it to AliCloud API Gateway & Function Compute:
 
 ```sh
-$ fun
+$ fun deploy
 URL: GET http://<api group id>-cn-hangzhou.alicloudapi.com/wechat => cn-shanghai/wechat/get
 URL: POST http://<api group id>-cn-hangzhou.alicloudapi.com/wechat => cn-shanghai/wechat/post
 ```

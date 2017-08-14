@@ -19,7 +19,7 @@ $ npm install
 ## Deploy
 
 ```sh
-$ fun
+$ fun deploy
 URL: GET http://<api group id>-cn-hangzhou.alicloudapi.com/helloworld => cn-shanghai/fc/helloworld
 ```
 

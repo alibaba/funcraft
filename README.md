@@ -105,6 +105,11 @@ Use `fun` command to upload & deploy it to AliCloud:
 $ fun deploy
 ```
 
+## Examples
+
+- [Hello world](./examples/helloworld)
+- [微信公众号自动回复](./examples/wechat)
+
 ## Architect
 
 See relationship of API Gateway & Function Compute：
