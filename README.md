@@ -51,12 +51,11 @@ Write your function into `hello.js` with:
 ```js
 'use strict';
 
-const Response = require('./helper').Response;
+const hook = require('fc-helper');
 
-exports.index = function (event, context, callback) {
-  var res = new Response(callback);
-  res.send('hello Jackson Tian!\n');
-};
+exports.index = hook((req, res) => {
+  res.send('Hello world!\n');
+});
 ```
 
 The helper.js can be found at here.
