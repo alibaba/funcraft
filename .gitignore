@@ -56,3 +56,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+node_modules_*.zip
+node_modules_*.zip.md5

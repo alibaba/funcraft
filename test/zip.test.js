@@ -8,9 +8,13 @@ const zip = require('../lib/zip');
 
 describe('zip', () => {
   it('should ok', async function () {
-    var base64 = await zip([
-      'file1.txt'
-    ], path.join(__dirname, 'figures'));
-    expect(base64).to.be('UEsDBBQACAAIACIxAUsAAAAAAAAAAAAAAAAJAAAAZmlsZTEudHh080jNyclXKM8vyklR5AIAUEsHCEHkqbIPAAAADQAAAFBLAQItAxQACAAIACIxAUtB5KmyDwAAAA0AAAAJAAAAAAAAAAAAIACkgQAAAABmaWxlMS50eHRQSwUGAAAAAAEAAQA3AAAARgAAAAAA');
+    var func = {
+      codes: [
+        'file1.txt'
+      ]
+    };
+    var base64 = await zip.compress(func, path.join(__dirname, 'figures'), 'local');
+    require('fs').writeFileSync('./test.zip', base64, 'base64');
+    expect(base64).to.be('UEsDBAoAAAAAADUpD0tB5KmyDQAAAA0AAAAJAAAAZmlsZTEudHh0SGVsbG8gd29ybGQhClBLAQIUAAoAAAAAADUpD0tB5KmyDQAAAA0AAAAJAAAAAAAAAAAAAAAAAAAAAABmaWxlMS50eHRQSwUGAAAAAAEAAQA3AAAANAAAAAAA');
   });
 });
