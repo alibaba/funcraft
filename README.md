@@ -75,7 +75,7 @@ function-compute:
           # entry point
           handler: hello.index
           # which files should be ziped
-          code:
+          codes:
             - 'hello.js'
 ```
 
