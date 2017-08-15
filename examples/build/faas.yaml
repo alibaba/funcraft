@@ -1,0 +1,43 @@
+function-compute:
+  region: 'cn-shanghai'
+  services:
+    - name: 'build'
+      description: 'dependencies build'
+      functions:
+        - name: 'nodejs6'
+          description: 'build for nodejs6'
+          handler: build.index
+          runtime: nodejs6
+          memorySize: 1024
+          timeout: 300
+          codes:
+            - 'build.js'
+            - 'zip.js'
+        - name: 'nodejs4_4'
+          description: 'build for nodejs4.4'
+          handler: build.index
+          runtime: nodejs4.4
+          memorySize: 1024
+          timeout: 300
+          codes:
+            - 'build.js'
+            - 'zip.js'
+
+api-gateway:
+  endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
+  groups:
+    - name: 'build_ag'
+      description: 'API Gateway & Function Compute'
+      apis:
+        - name: 'build_nodejs_4_4'
+          method: 'POST'
+          path: '/build/nodejs4_4'
+          body_format: 'STREAM'
+          function: 'cn-shanghai/build/nodejs4_4'
+          timeout: 30
+        - name: 'build_nodejs_6'
+          method: 'POST'
+          path: '/build/nodejs6'
+          body_format: 'STREAM'
+          function: 'cn-shanghai/build/nodejs6'
+          timeout: 30

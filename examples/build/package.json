@@ -6,6 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Jackson Tian",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^2.0.0",
+    "fc-helper": "^1.0.0",
+    "kitx": "^1.2.1"
+  }
 }
