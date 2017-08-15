@@ -6,11 +6,13 @@ function-compute:
       functions:
         - name: 'get'
           description: 'Wechat get handler'
+          runtime: nodejs6
           handler: wechat.get
           codes:
             - 'wechat.js'
         - name: 'post'
           description: 'Wechat post handler'
+          runtime: nodejs6
           handler: wechat.post
           codes:
             - 'wechat.js'
