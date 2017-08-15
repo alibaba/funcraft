@@ -109,6 +109,7 @@ $ fun deploy
 
 - [Hello world](./examples/helloworld)
 - [微信公众号自动回复](./examples/wechat)
+- [build node_modules](./examples/build)
 
 ## Architect
 
