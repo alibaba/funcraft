@@ -9,7 +9,6 @@ function-compute:
           handler: helloworld.index
           codes:
             - 'helloworld.js'
-            - 'node_modules'
 
 api-gateway:
   endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
