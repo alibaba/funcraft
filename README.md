@@ -120,6 +120,8 @@ See relationship of API Gateway & Function Compute：
 ## Referrences
 
 - [以函数计算作为 API 网关后端服务](https://help.aliyun.com/document_detail/54788.html)
+- [函数计算](https://www.aliyun.com/product/fc)
+- [API Gateway](https://www.aliyun.com/product/apigateway)
 
 ## License
 
