@@ -103,6 +103,22 @@ Use `fun` command to upload & deploy it to AliCloud:
 
 ```sh
 $ fun deploy
+Function compute(region):
+  service service_name ok.
+    function function_name ok.
+API gateway(region):
+    URL: POST http://<groupid>-<region>.alicloudapi.com/<the api path>
+      => cn-hangzhou/service_name/function_name
+      stage: RELEASE, deployed, version: 20171101125034887
+      stage: PRE, deployed, version: 20171101125107780
+      stage: TEST, deployed, version: 20171101144618017
+```
+
+Deploy to TEST & PRE stage:
+
+```sh
+$ fun deploy TEST
+$ fun deploy PRE
 ```
 
 ## Examples
