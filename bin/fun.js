@@ -28,6 +28,7 @@ if (!subcommand) {
 
 var handle = function (err) {
   console.error(err.stack);
+  process.exit(-1);
 };
 
 if (subcommand === 'deploy') {
