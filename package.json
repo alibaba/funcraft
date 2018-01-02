@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "(have)Fun with Serverless",
   "bin": {
     "fun": "bin/fun.js"
