@@ -1,0 +1,32 @@
+function-compute:
+  region: 'cn-shanghai'
+  services:
+    - name: 'pythondemo'
+      description: 'fc test'
+      functions:
+        - name: 'hello'
+          description: 'Hello world!'
+          handler: helloworld.index
+          codes:
+            - 'helloworld.js'
+
+api-gateway:
+  endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
+  groups:
+    - name: 'aliyunfcdemo2'
+      description: 'API Gateway & Function Compute'
+      apis:
+        - name: 'connectid'
+          method: 'GET'
+          visibility: 'PRIVATE'
+          auth_type: 'OPENID'
+          openid_connect_config:
+            id_token_param_name: 'token'
+            openid_api_type: 'BUSINESS'
+          path: '/getUserInfo/[token]'
+          parameters:
+            - name: 'token'
+              location: 'Path'
+              type: 'String'
+              required: 'REQUIRED'
+          function: 'cn-shanghai/pythondemo/hello'
