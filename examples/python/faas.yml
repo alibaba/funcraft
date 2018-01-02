@@ -1,0 +1,23 @@
+function-compute:
+  region: 'cn-shanghai'
+  services:
+    - name: 'pythondemo'
+      description: 'python demo'
+      functions:
+        - name: 'hello'
+          description: 'Hello world with python!'
+          handler: main.hello
+          runtime: python2.7
+          codes:
+            - 'main.py'
+
+api-gateway:
+  endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
+  groups:
+    - name: 'apigw_fc'
+      description: 'API Gateway & Function Compute'
+      apis:
+        - name: 'pythonhello'
+          method: 'GET'
+          path: '/python/hello'
+          function: 'cn-shanghai/pythondemo/hello'
