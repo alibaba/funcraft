@@ -4,6 +4,15 @@ function-compute:
     - name: 'build'
       description: 'dependencies build'
       functions:
+        - name: 'nodejs8'
+          description: 'build for nodejs8'
+          handler: build.index
+          runtime: nodejs8
+          memorySize: 1024
+          timeout: 300 # in seconds
+          codes:
+            - 'build.js'
+            - 'zip.js'
         - name: 'nodejs6'
           description: 'build for nodejs6'
           handler: build.index
@@ -40,4 +49,10 @@ api-gateway:
           path: '/build/nodejs6'
           body_format: 'STREAM'
           function: 'cn-shanghai/build/nodejs6'
+          timeout: 30 # in seconds
+        - name: 'build_nodejs_8'
+          method: 'POST'
+          path: '/build/nodejs8'
+          body_format: 'STREAM'
+          function: 'cn-shanghai/build/nodejs8'
           timeout: 30 # in seconds
