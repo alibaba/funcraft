@@ -35,6 +35,9 @@ if (subcommand === 'deploy') {
   require('../lib/commands/deploy')(...args).catch(handle);
 } else if (subcommand === 'build') {
   require('../lib/commands/build')(...args).catch(handle);
+} else if (subcommand === '--version') {
+  console.log(require('../package.json').version);
+  process.exit(0);
 } else {
   console.log('unsupported subcommand.');
   console.log('type: fun help');
