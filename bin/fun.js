@@ -35,7 +35,7 @@ if (subcommand === 'deploy') {
   require('../lib/commands/deploy')(...args).catch(handle);
 } else if (subcommand === 'build') {
   require('../lib/commands/build')(...args).catch(handle);
-} else if (subcommand === '--version') {
+} else if (subcommand === '--version' || subcommand === '-v') {
   console.log(require('../package.json').version);
   process.exit(0);
 } else {
