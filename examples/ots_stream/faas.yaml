@@ -1,0 +1,12 @@
+function-compute:
+  region: 'cn-hangzhou'
+  services:
+    - name: 'otsstream'
+      description: 'Stream trigger for OTS'
+      functions:
+        - name: 'processor'
+          description: 'Stream trigger processor'
+          handler: main.index
+          runtime: nodejs6
+          codes:
+            - 'main.js'
