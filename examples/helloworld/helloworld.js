@@ -1,7 +1,7 @@
 'use strict';
 
-const hook = require('fc-helper');
+const { hook } = require('fc-helper');
 
-exports.index = hook((req, res) => {
-  res.send('Hello world!\n');
+exports.index = hook(async (ctx) => {
+  ctx.body = 'Hello Function Compute & API Gateway!';
 });

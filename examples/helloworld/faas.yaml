@@ -7,6 +7,7 @@ function-compute:
         - name: 'helloworld'
           description: 'Hello world!'
           handler: helloworld.index
+          runtime: nodejs8
           codes:
             - 'helloworld.js'
 
