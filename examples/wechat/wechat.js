@@ -2,9 +2,8 @@
 
 const crypto = require('crypto');
 
-const co = require('co');
 const ejs = require('ejs');
-const hook = require('fc-helper');
+const { hook } = require('fc-helper');
 const WXBizMsgCrypt = require('wechat-crypto');
 const xml2js = require('xml2js');
 
@@ -169,8 +168,8 @@ function reply (content, fromUsername, toUsername) {
 
 const cryptor = new WXBizMsgCrypt(TOKEN, ENCODING_AES_KEY, APPID);
 
-exports.get = hook((req, res) => {
-  const query = req.query;
+exports.get = hook(async (ctx) => {
+  const query = ctx.query;
   // 加密模式
   const encrypted = !!(query.encrypt_type && query.encrypt_type === 'aes' && query.msg_signature);
   const timestamp = query.timestamp;
@@ -187,87 +186,83 @@ exports.get = hook((req, res) => {
   }
 
   if (!valid) {
-    res.status = 401;
-    res.send('Invalid signature');
+    ctx.status = 401;
+    ctx.body = 'Invalid signature';
   } else {
     if (encrypted) {
       var decrypted = cryptor.decrypt(echostr);
-      res.send(decrypted.message);
+      ctx.body = decrypted.message;
     } else {
-      res.send(echostr);
+      ctx.body = echostr;
     }
   }
 });
 
-function* handle(message) {
+async function handle(message) {
   return JSON.stringify(message);
   // return 'Just hello world!';
 }
 
-exports.post = hook((req, res) => {
-  co(function* () {
-    const query = req.query;
-    // 加密模式
-    const encrypted = !!(query.encrypt_type && query.encrypt_type === 'aes' && query.msg_signature);
-    const timestamp = query.timestamp;
-    const nonce = query.nonce;
+exports.post = hook(async (ctx) => {
+  const query = ctx.query;
+  // 加密模式
+  const encrypted = !!(query.encrypt_type && query.encrypt_type === 'aes' && query.msg_signature);
+  const timestamp = query.timestamp;
+  const nonce = query.nonce;
 
-    if (!encrypted) {
-      // 校验
-      if (query.signature !== getSignature(timestamp, nonce, TOKEN)) {
-        res.status = 401;
-        res.send('Invalid signature');
-        return;
-      }
-    }
-
-    // 取原始数据
-    var xml = req.body;
-    var result = yield parseXML(xml);
-    var formatted = formatMessage(result.xml);
-    if (encrypted) {
-      var encryptMessage = formatted.Encrypt;
-      if (query.msg_signature !== cryptor.getSignature(timestamp, nonce, encryptMessage)) {
-        res.status = 401;
-        res.send('Invalid signature');
-        return;
-      }
-      var decryptedXML = cryptor.decrypt(encryptMessage);
-      var messageWrapXml = decryptedXML.message;
-      if (messageWrapXml === '') {
-        res.status = 401;
-        res.send('Invalid signature');
-        return;
-      }
-      var decodedXML = yield parseXML(messageWrapXml);
-      formatted = formatMessage(decodedXML.xml);
-    }
-
-    // 业务逻辑处理
-    const body = yield handle(formatted);
-
-    /*
-     * 假如服务器无法保证在五秒内处理并回复，可以直接回复空串。
-     * 微信服务器不会对此作任何处理，并且不会发起重试。
-     */
-    if (body === '') {
-      res.send('');
+  if (!encrypted) {
+    // 校验
+    if (query.signature !== getSignature(timestamp, nonce, TOKEN)) {
+      ctx.status = 401;
+      ctx.body = 'Invalid signature';
       return;
     }
+  }
 
-    var replyMessageXml = reply(body, formatted.ToUserName, formatted.FromUserName);
-
-    if (!query.encrypt_type || query.encrypt_type === 'raw') {
-      res.send(replyMessageXml);
-    } else {
-      var wrap = {};
-      wrap.encrypt = cryptor.encrypt(replyMessageXml);
-      wrap.nonce = parseInt((Math.random() * 100000000000), 10);
-      wrap.timestamp = new Date().getTime();
-      wrap.signature = cryptor.getSignature(wrap.timestamp, wrap.nonce, wrap.encrypt);
-      res.send(encryptWrap(wrap));
+  // 取原始数据
+  var xml = ctx.req.body;
+  var result = await parseXML(xml);
+  var formatted = formatMessage(result.xml);
+  if (encrypted) {
+    var encryptMessage = formatted.Encrypt;
+    if (query.msg_signature !== cryptor.getSignature(timestamp, nonce, encryptMessage)) {
+      ctx.status = 401;
+      ctx.body = 'Invalid signature';
+      return;
     }
-  }).catch((err) => {
-    console.log(err.stack);
-  });
+    var decryptedXML = cryptor.decrypt(encryptMessage);
+    var messageWrapXml = decryptedXML.message;
+    if (messageWrapXml === '') {
+      ctx.status = 401;
+      ctx.body = 'Invalid signature';
+      return;
+    }
+    var decodedXML = await parseXML(messageWrapXml);
+    formatted = formatMessage(decodedXML.xml);
+  }
+
+  // 业务逻辑处理
+  const body = await handle(formatted);
+
+  /*
+   * 假如服务器无法保证在五秒内处理并回复，可以直接回复空串。
+   * 微信服务器不会对此作任何处理，并且不会发起重试。
+   */
+  if (body === '') {
+    ctx.body = '';
+    return;
+  }
+
+  var replyMessageXml = reply(body, formatted.ToUserName, formatted.FromUserName);
+
+  if (!query.encrypt_type || query.encrypt_type === 'raw') {
+    ctx.body = replyMessageXml;
+  } else {
+    var wrap = {};
+    wrap.encrypt = cryptor.encrypt(replyMessageXml);
+    wrap.nonce = parseInt((Math.random() * 100000000000), 10);
+    wrap.timestamp = new Date().getTime();
+    wrap.signature = cryptor.getSignature(wrap.timestamp, wrap.nonce, wrap.encrypt);
+    ctx.body = encryptWrap(wrap);
+  }
 });

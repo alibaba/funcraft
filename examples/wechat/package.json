@@ -16,9 +16,8 @@
     "nyc": "^11.1.0"
   },
   "dependencies": {
-    "co": "^4.6.0",
     "ejs": "^2.5.7",
-    "fc-helper": "^1.0.0",
+    "fc-helper": "^2.0.0",
     "wechat-crypto": "^0.0.2",
     "xml2js": "^0.4.17"
   }

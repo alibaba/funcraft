@@ -2,9 +2,9 @@
 
 const expect = require('expect.js');
 
+const { test } = require('fc-helper');
 const handler = require('../wechat.js');
-const template = require('./support').template;
-const makeQuery = require('./support').makeQuery;
+const { template, makeQuery } = require('./support');
 
 describe('wechat', function () {
   it('GET should 401 without query', (done) => {
@@ -17,7 +17,7 @@ describe('wechat', function () {
       'body': '',
       'isBase64Encoded': false
     };
-    handler.get(JSON.stringify(event), {}, function (err, data) {
+    test(handler.get).run(JSON.stringify(event), {}, function (err, data) {
       expect(err).to.not.be.ok();
       expect(data.statusCode).to.be(401);
       expect(data.body).to.be('Invalid signature');
@@ -38,7 +38,7 @@ describe('wechat', function () {
       'body': '',
       'isBase64Encoded': false
     };
-    handler.get(JSON.stringify(event), {}, function (err, data) {
+    test(handler.get).run(JSON.stringify(event), {}, function (err, data) {
       expect(err).to.not.be.ok();
       expect(data.body).to.be('hehe');
       done();
@@ -63,7 +63,7 @@ describe('wechat', function () {
       'body': template(info),
       'isBase64Encoded': false
     };
-    handler.post(JSON.stringify(event), {}, function (err, data) {
+    test(handler.post).run(JSON.stringify(event), {}, function (err, data) {
       expect(err).to.not.be.ok();
       var body = data.body;
 
