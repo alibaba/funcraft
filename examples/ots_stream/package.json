@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cbor": "^3.0.3"
+    "cbor": "^3.0.3",
+    "fc-helper": "^2.1.0"
   }
 }
