@@ -10,7 +10,7 @@
   "author": "Jackson Tian",
   "license": "MIT",
   "dependencies": {
-    "fc-helper": "^2.0.0"
+    "fc-helper": "^2.1.0"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
