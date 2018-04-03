@@ -1,5 +1,7 @@
 'use strict';
 
+const { asyncWrap } = require('fc-helper');
+
 // {
 //   "eventSource": "acs:datahub",
 //   "eventName": "acs:datahub:putRecord",
@@ -19,7 +21,7 @@
 //   ]
 // }
 
-exports.index = function (event, ctx, callback) {
+exports.index = asyncWrap(async function (event, ctx) {
   var result = JSON.parse(event);
   console.log(`Event Source: ${result.eventSource}`);
   console.log(`Event Name: ${result.eventName}`);
@@ -36,5 +38,6 @@ exports.index = function (event, ctx, callback) {
       console.log(`value: ${item}`);
     }
   }
-  callback(null, 'ok');
-};
+
+  return 'ok';
+});
