@@ -16,6 +16,7 @@ function-compute:
           handler: wechat.post
           codes:
             - 'wechat.js'
+            - 'biz.js'
 
 api-gateway:
   endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'

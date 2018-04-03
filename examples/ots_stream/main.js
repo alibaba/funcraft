@@ -1,8 +1,10 @@
 'use strict';
 
+const { asyncWrap } = require('fc-helper');
+
 const cbor = require('cbor');
 
-exports.index = function (event, ctx, callback) {
+exports.index = asyncWrap(async function (event, ctx) {
   var [ result ] = cbor.decodeAllSync(event);
   if (result) {
     console.log(`Version: ${result.Version}`);
@@ -16,5 +18,5 @@ exports.index = function (event, ctx, callback) {
       }
     }
   }
-  callback(null, 'ok');
-};
+  return 'ok';
+});

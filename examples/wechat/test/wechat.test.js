@@ -7,7 +7,7 @@ const handler = require('../wechat.js');
 const { template, makeQuery } = require('./support');
 
 describe('wechat', function () {
-  it('GET should 401 without query', (done) => {
+  it('GET should 401 without query', async () => {
     var event = {
       'path': '/wechat',
       'httpMethod': 'GET',
@@ -17,18 +17,14 @@ describe('wechat', function () {
       'body': '',
       'isBase64Encoded': false
     };
-    test(handler.get).run(JSON.stringify(event), {}, function (err, data) {
-      expect(err).to.not.be.ok();
-      expect(data.statusCode).to.be(401);
-      expect(data.body).to.be('Invalid signature');
-      done();
-    });
+    const data = await test(handler.get).run(JSON.stringify(event), {});
+    expect(data.statusCode).to.be(401);
+    expect(data.body).to.be('Invalid signature');
   });
 
-  it('GET should ok', (done) => {
+  it('GET should ok', async () => {
     var q = makeQuery('random');
     q.echostr = 'hehe';
-    console.log(q);
     var event = {
       'path': '/wechat',
       'httpMethod': 'GET',
@@ -38,14 +34,11 @@ describe('wechat', function () {
       'body': '',
       'isBase64Encoded': false
     };
-    test(handler.get).run(JSON.stringify(event), {}, function (err, data) {
-      expect(err).to.not.be.ok();
-      expect(data.body).to.be('hehe');
-      done();
-    });
+    const data = await test(handler.get).run(JSON.stringify(event), {});
+    expect(data.body).to.be('hehe');
   });
 
-  it('POST should ok', (done) => {
+  it('POST should ok', async () => {
     var info = {
       sp: 'nvshen',
       user: 'diaosi',
@@ -63,16 +56,13 @@ describe('wechat', function () {
       'body': template(info),
       'isBase64Encoded': false
     };
-    test(handler.post).run(JSON.stringify(event), {}, function (err, data) {
-      expect(err).to.not.be.ok();
-      var body = data.body;
+    const data = await test(handler.post).run(JSON.stringify(event), {});
 
-      expect(body).to.contain('<ToUserName><![CDATA[diaosi]]></ToUserName>');
-      expect(body).to.contain('<FromUserName><![CDATA[nvshen]]></FromUserName>');
-      expect(body).to.match(/<CreateTime>\d{13}<\/CreateTime>/);
-      expect(body).to.contain('<MsgType><![CDATA[text]]></MsgType>');
-      expect(body).to.contain('<Content><![CDATA[hehe]]></Content>');
-      done();
-    });
+    const body = data.body;
+    expect(body).to.contain('<ToUserName><![CDATA[diaosi]]></ToUserName>');
+    expect(body).to.contain('<FromUserName><![CDATA[nvshen]]></FromUserName>');
+    expect(body).to.match(/<CreateTime>\d{13}<\/CreateTime>/);
+    expect(body).to.contain('<MsgType><![CDATA[text]]></MsgType>');
+    expect(body).to.contain('<Content><![CDATA[hehe]]></Content>');
   });
 });

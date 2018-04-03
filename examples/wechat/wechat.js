@@ -7,9 +7,15 @@ const { hook } = require('fc-helper');
 const WXBizMsgCrypt = require('wechat-crypto');
 const xml2js = require('xml2js');
 
-const TOKEN = '<YOUR TOKEN>';
-const ENCODING_AES_KEY = '<YOUR ENCODING AES KEY>';
-const APPID = '<YOUR APP ID>';
+const {
+  handle,
+  config
+} = require('./biz');
+
+const {
+  token: TOKEN,
+  encodingAESkey: ENCODING_AES_KEY,
+  appid: APPID } = config;
 
 function getSignature (timestamp, nonce, token) {
   var shasum = crypto.createHash('sha1');
@@ -197,11 +203,6 @@ exports.get = hook(async (ctx) => {
     }
   }
 });
-
-async function handle(message) {
-  return JSON.stringify(message);
-  // return 'Just hello world!';
-}
 
 exports.post = hook(async (ctx) => {
   const query = ctx.query;

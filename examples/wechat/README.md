@@ -18,12 +18,14 @@ $ npm install
 
 ## Deploy
 
-Modify the `wechat.js` file, replace following config with yourself token, encoding aes key, appid:
+Modify the `config.js` file, replace following config with yourself token, encoding aes key, appid:
 
 ```js
-const TOKEN = '<YOUR TOKEN>';
-const ENCODING_AES_KEY = '<YOUR ENCODING AES KEY>';
-const APPID = '<YOUR APP ID>';
+exports.config = {
+  token: '<YOUR TOKEN>',
+  encodingAESkey: '<YOUR ENCODING AES KEY>',
+  appid: '<YOUR APP ID>'
+};
 ```
 
 Deploy it to AliCloud API Gateway & Function Compute:
