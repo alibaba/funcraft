@@ -1,0 +1,24 @@
+function-compute:
+  region: 'cn-hangzhou'
+  services:
+    - name: 'maas'
+      description: 'Module as a service'
+      functions:
+        - name: 'doSegment'
+          description: 'do segment'
+          handler: index.doSegment
+          runtime: nodejs8
+          codes:
+            - 'index.js'
+
+api-gateway:
+  endpoint: 'http://apigateway.cn-hangzhou.aliyuncs.com'
+  groups:
+    - name: 'maas'
+      description: 'API Gateway & Function Compute'
+      apis:
+        - name: 'doSegment'
+          method: 'POST'
+          path: '/do_segement'
+          body_format: 'STREAM'
+          function: 'cn-hangzhou/maas/doSegment'
