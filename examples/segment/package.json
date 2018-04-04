@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "fc-helper": "^2.1.0",
+    "segment": "^0.1.3"
+  },
+  "name": "segment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "mocha": "^5.0.5"
+  },
+  "scripts": {
+    "test": "mocha -R spec test/*"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
