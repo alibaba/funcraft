@@ -30,7 +30,7 @@ $ npm install
 - 开通[心知天气账号](https://www.seniverse.com/doc)
   - uid/apisecret
 
-获取上述账户后，替换源码中的 <UID>/<API SECRET>/<ACCESS TOKEN>。
+获取上述账户后，替换源码中的 \<UID\>/\<API SECRET\>/\<ACCESS TOKEN\>。
 
 ## Deploy
 
