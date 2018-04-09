@@ -1,0 +1,20 @@
+function-compute:
+  region: 'cn-shanghai'
+  services:
+    - name: 'timer'
+      description: 'timer test'
+      functions:
+        - name: 'weather'
+          description: 'send hangzhou weather'
+          handler: index.handler
+          runtime: nodejs8
+          codes:
+            - 'index.js'
+            - 'api.js'
+          triggers:
+            - name: 'timer'
+              type: 'timer'
+              config:
+                payload: "awesome-fc"
+                cronExpression: "0 0 8 * * *"
+                enable: true
