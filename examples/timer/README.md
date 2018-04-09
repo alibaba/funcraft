@@ -54,6 +54,10 @@ triggers:
       enable: true
 ```
 
+### 执行示例
+
+![](./figures/demo.png)
+
 ## Test
 
 ```sh
