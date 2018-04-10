@@ -16,5 +16,6 @@ function-compute:
               type: 'timer'
               config:
                 payload: "awesome-fc"
-                cronExpression: "0 0 8 * * *"
+                # utc 时间，北京时间减8小时
+                cronExpression: "0 0 0 * * *"
                 enable: true
