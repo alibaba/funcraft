@@ -1,0 +1,14 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  java:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'java demo'
+    helloworld:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: example.App::handleRequest
+        Runtime: java8
+        Description: 'Hello world!'
+        CodeUri: './demo.jar'

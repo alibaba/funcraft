@@ -1,0 +1,43 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  maas:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Module as a service'
+    doSegment:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.doSegment
+        CodeUri: './'
+        Description: 'do segment'
+      Events:
+        GetApi:
+          Type: API
+          Properties: 
+            Path: /do_segement
+            Method: get
+            RestApiId:
+              Ref: maasapi
+
+  maasapi:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      DefinitionBody:
+        openapi: "3.0.0"
+        info:
+          title: 'API Gateway & Function Compute'
+          version: v1
+        'do_segement':
+          post:
+            x-aliyun-apigateway-fc:
+              arn: acs:lambda:::services/${mass.Arn}/functions/${doSegment.Arn}/
+              role: acs:ram:::role/aliyunapigatewayaccessingfcrole
+            requestBody:
+              content:
+                application/octet-stream: 
+                  schema:
+                    type: string
+                    format: binary
+
+            

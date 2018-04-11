@@ -1,0 +1,53 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  fc:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'fc test'
+    helloworld:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: helloworld.index
+        CodeUri: './'
+        Description: 'Hello world!'
+      Events:
+        GetApi:
+          Type: API
+          Properties: 
+            Path: /helloworld
+            Method: get
+            RestApiId:
+              Ref: aliyunfcdemo2
+
+  aliyunfcdemo2:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      DefinitionBody:
+        openapi: "3.0.0"
+        info:
+          title: 'API Gateway & Function Compute'
+          version: v1
+        components:
+          securitySchemes:
+            openId:
+              type: openIdConnect
+              name: 'token'
+              in: 'query'
+        '/getUserInfo/[token]':
+          get:
+            security:
+              openId: {}
+            x-aliyun-apigateway-parameters-mapping
+              - from:
+                  name: 'token'
+                  localtion: 'Path'
+                  type: 'String'
+                  requeired: 'REQUIRED'
+                to: 
+                  location: 'Query'
+            x-aliyun-apigateway-visibility: PRIVATE
+            x-aliyun-apigateway-fc:
+              arn: acs:lambda:::services/${fc.Arn}/functions/${helloworld.Arn}/
+              role: acs:ram:::role/aliyunapigatewayaccessingfcrole
+            
