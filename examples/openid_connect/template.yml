@@ -38,7 +38,7 @@ Resources:
           get:
             security:
               openId: {}
-            x-aliyun-apigateway-parameters-mapping
+            x-aliyun-apigateway-parameters-mapping:
               - from:
                   name: 'token'
                   localtion: 'Path'

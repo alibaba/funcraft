@@ -10,7 +10,7 @@ components:
       in: 'query'
 '/wechat':
   get:
-    x-aliyun-apigateway-parameters-mapping
+    x-aliyun-apigateway-parameters-mapping:
       - from:
           name: 'encrypt_type'
       - from:
@@ -36,7 +36,7 @@ components:
       arn: acs:lambda:::services/${wechat.Arn}/functions/${get.Arn}/
       role: acs:ram:::role/aliyunapigatewayaccessingfcrole
   post:
-    x-aliyun-apigateway-parameters-mapping
+    x-aliyun-apigateway-parameters-mapping:
       - from:
           name: 'timestamp'
           localtion: 'Query'
