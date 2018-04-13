@@ -1,0 +1,18 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  MyService:
+    Type: 'Aliyun::Serverless::Service'
+    MyFunction:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: datahub.index
+        Runtime: nodejs6.10
+        CodeUri: './'
+      Events:
+        DhsTrigger:
+          Type: Datahub
+          Properties: 
+            Topic: acs:dhs:cn-hangzhou:123456789012:projects/my-prj/topics/my-tpc
+            StartingPosition: LATEST
+            BatchSize: 100
