@@ -1,0 +1,44 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  wechat:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'wechat demo'
+    get:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: wechat.get
+        CodeUri: './'
+        Runtime: nodejs6
+        Description: 'Wechat get handler'
+      Events:
+        GetApi:
+          Type: API
+          Properties: 
+            Path: /wechat
+            Method: get
+            RestApiId:
+              Ref: wechat_group
+    post:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: wechat.post
+        CodeUri: './'
+        Runtime: nodejs6
+        Description: 'Wechat post handler'
+      Events:
+        GetApi:
+          Type: API
+          Properties: 
+            Path: /wechat
+            Method: post
+            RestApiId:
+              Ref: wechat_group
+
+  wechat_group:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      DefinitionUri: ./swagger.xml
+        
+            

@@ -1,0 +1,18 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  otsstream:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Stream trigger for OTS'
+    processor:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: main.index
+        Runtime: nodejs8
+        CodeUri: './'
+      Events:
+        OtsTrigger:
+          Type: OTS
+          Properties:
+            Stream: acs:ots:cn-hangzhou:123456789012:instance/test_instance/table/test_table

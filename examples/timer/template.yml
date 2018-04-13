@@ -1,0 +1,19 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  MyService:
+    Type: 'Aliyun::Serverless::Service'
+    MyFunction:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs6.10
+        Description: 'send hangzhou weather'
+        CodeUri: './'
+      Events:
+        TmTrigger:
+          Type: Timer
+          Properties: 
+            Payload: "awesome-fc"
+            CronExpression: "0 0 8 * * *"
+            Enable: true
