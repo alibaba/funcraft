@@ -60,3 +60,6 @@ typings/
 node_modules_*.zip
 node_modules_*.zip.md5
 package_*.zip
+
+examples/java/demo/.project
+examples/java/demo/bin

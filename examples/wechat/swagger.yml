@@ -1,0 +1,63 @@
+openapi: "3.0.0"
+info:
+  title: 'API Gateway & Function Compute'
+  version: v1
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      name: 'token'
+      in: 'query'
+'/wechat':
+  get:
+    x-aliyun-apigateway-parameters-mapping:
+      - from:
+          name: 'encrypt_type'
+      - from:
+          name: 'msg_signature'
+      - from:
+          name: 'timestamp'
+          localtion: 'Query'
+          type: 'String'
+          requeired: 'REQUIRED'
+      - from:
+          name: 'nonce'
+          localtion: 'Query'
+          type: 'String'
+      - from:
+          name: 'signature'
+          localtion: 'Query'
+          type: 'String'
+      - from:
+          name: 'echostr'
+          localtion: 'Query'
+          type: 'String'
+    x-aliyun-apigateway-fc:
+      arn: acs:lambda:::services/${wechat.Arn}/functions/${get.Arn}/
+      role: acs:ram:::role/aliyunapigatewayaccessingfcrole
+  post:
+    x-aliyun-apigateway-parameters-mapping:
+      - from:
+          name: 'timestamp'
+          localtion: 'Query'
+          type: 'String'
+          requeired: 'REQUIRED'
+      - from:
+          name: 'nonce'
+          localtion: 'Query'
+          type: 'String'
+      - from:
+          name: 'signature'
+          localtion: 'Query'
+          type: 'String'
+      - from:
+          name: 'msg_signature'
+          localtion: 'Query'
+          type: 'String'
+      - from:
+          name: 'encrypt_type'
+          localtion: 'Path'
+          type: 'String'
+    x-aliyun-apigateway-fc:
+      arn: acs:lambda:::services/${wechat.Arn}/functions/${post.Arn}/
+      role: acs:ram:::role/aliyunapigatewayaccessingfcrole
