@@ -12,6 +12,7 @@ These are common Fun commands used in various situations:
 
 start a working area
    config      Configure the fun
+   validate    Validate a fun template
    deploy      Deploy a project to AliCloud
    build       Build the dependencies
    help        Print help information
@@ -35,6 +36,8 @@ var handle = function (err) {
 
 if (subcommand === 'config') {
   require('../lib/commands/config')(...args).catch(handle);
+} else if (subcommand === 'validate') {
+  require('../lib/commands/validate')(...args).catch(handle);
 } else if (subcommand === 'deploy') {
   require('../lib/commands/deploy')(...args).catch(handle);
 } else if (subcommand === 'build') {

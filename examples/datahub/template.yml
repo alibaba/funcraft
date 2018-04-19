@@ -7,7 +7,7 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: datahub.index
-        Runtime: nodejs6.10
+        Runtime: nodejs6
         CodeUri: './'
       Events:
         DhsTrigger:

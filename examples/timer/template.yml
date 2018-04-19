@@ -7,7 +7,7 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
-        Runtime: nodejs6.10
+        Runtime: nodejs8
         Description: 'send hangzhou weather'
         CodeUri: './'
       Events:
