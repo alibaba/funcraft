@@ -11,6 +11,7 @@ usage: fun [--version] [--help]
 These are common Fun commands used in various situations:
 
 start a working area
+   config      Configure the fun
    deploy      Deploy a project to AliCloud
    build       Build the dependencies
    help        Print help information
@@ -31,7 +32,10 @@ var handle = function (err) {
   process.exit(-1);
 };
 
-if (subcommand === 'deploy') {
+
+if (subcommand === 'config') {
+  require('../lib/commands/config')(...args).catch(handle);
+} else if (subcommand === 'deploy') {
   require('../lib/commands/deploy')(...args).catch(handle);
 } else if (subcommand === 'build') {
   require('../lib/commands/build')(...args).catch(handle);
