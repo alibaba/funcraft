@@ -1,14 +1,16 @@
-TESTS = test/*.js
+TEST_FOLDER = ./test/
+TEST_FILES = *.test.js
 REPORTER = spec
 TIMEOUT = 20000
 MOCHA = ./node_modules/mocha/bin/_mocha
 PATH := ./node_modules/.bin:$(PATH)
+SHELL := /bin/bash
 
 lint:
 	@eslint --fix lib bin test
 
 test: lint
-	@mocha -t $(TIMEOUT) -R spec $(TESTS)
+	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
 
 test-cov:
 	@nyc --reporter=html --reporter=text mocha -t $(TIMEOUT) -R spec $(TESTS)
