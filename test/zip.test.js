@@ -6,7 +6,7 @@ const expect = require('expect.js');
 
 const zip = require('../lib/zip');
 
-describe('zip', () => {
+describe.skip('zip', () => {
   it('should ok', async function () {
     var func = {
       codes: [
