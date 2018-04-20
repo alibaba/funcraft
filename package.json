@@ -14,6 +14,7 @@
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.1.2",
     "@alicloud/ram": "^1.0.0",
+    "ajv": "^6.4.0",
     "archiver": "^2.0.0",
     "colors": "^1.1.2",
     "debug": "^2.6.8",

@@ -11,6 +11,7 @@ Resources:
         Handler: index.doSegment
         CodeUri: './'
         Description: 'do segment'
+        Runtime: nodejs8
       Events:
         GetApi:
           Type: API
