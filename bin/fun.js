@@ -2,51 +2,45 @@
 
 'use strict';
 
-const [subcommand, ...args] = process.argv.slice(2);
-
-const usage = `
-usage: fun [--version] [--help]
-           <command> [<args>]
-
-These are common Fun commands used in various situations:
-
-start a working area
-   config      Configure the fun
-   validate    Validate a fun template
-   deploy      Deploy a project to AliCloud
-   build       Build the dependencies
-   help        Print help information
-
-
-'fun help -a' and 'fun help -g' list available subcommands and some
-concept guides. See 'fun help <command>' or 'fun help <concept>'
-to read about a specific subcommand or concept.
-`;
-
-if (!subcommand) {
-  console.log(usage);
-  process.exit(0);
-}
-
-var handle = function (err) {
+const errHandle = function (err) {
   console.error(err.stack);
   process.exit(-1);
 };
 
+const yargs = require('yargs');
 
-if (subcommand === 'config') {
-  require('../lib/commands/config')(...args).catch(handle);
-} else if (subcommand === 'validate') {
-  require('../lib/commands/validate')(...args).catch(handle);
-} else if (subcommand === 'deploy') {
-  require('../lib/commands/deploy')(...args).catch(handle);
-} else if (subcommand === 'build') {
-  require('../lib/commands/build')(...args).catch(handle);
-} else if (subcommand === '--version' || subcommand === '-v') {
-  console.log(require('../package.json').version);
-  process.exit(0);
-} else {
-  console.log('unsupported subcommand.');
-  console.log('type: fun help');
-  process.exit(-1);
-}
+yargs.command('config', 'Configure the fun', {}, (argv) => {
+  require('../lib/commands/config')().catch(errHandle);
+})
+  .command('validate', 'Validate FUN template file', (yargs) => {
+    return yargs.option('template', {
+      alias: 't',
+      default: 'template.{yaml|yml}',
+      desc: 'path of FUN template file.'
+    })
+      .version(false)
+      .help('help');
+  }, (argv) => {
+    require('../lib/commands/validate')(argv.template).catch(errHandle);
+  })
+  .command('build', 'Build the dependencies', {}, (argv) => {
+    require('../lib/commands/build')().catch(errHandle);
+  })
+  .command('deploy', 'Deploy a project to AliCloud', (yargs) => {
+    return yargs.option('stage', {
+      alias: 's',
+      default: 'RELEASE',
+      desc: 'StageName of API gateway.'
+    })
+      .version(false)
+      .help('help');
+  }, (argv) => {
+    require('../lib/commands/deploy')(argv.stage).catch(errHandle);
+  })
+  .help('help')
+  .showHelpOnFail(true)
+  .demandCommand(1, '')
+  .usage('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.\n\nUsage: $0 [--version] [--help] <command> [<args>]')
+  .epilog(`See '$0 <command> --help' to read about a specific subcommand.`)
+  .wrap(Math.min(80, yargs.terminalWidth()))
+  .argv;
