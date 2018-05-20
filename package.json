@@ -13,6 +13,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.1.2",
+    "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
     "archiver": "^2.0.0",
@@ -35,6 +36,9 @@
   "devDependencies": {
     "eslint": "^4.3.0",
     "expect.js": "^0.3.1",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "nock": "^9.2.6",
+    "proxyquire": "^2.0.1",
+    "sinon": "^5.0.7"
   }
 }
