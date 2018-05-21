@@ -15,4 +15,14 @@ Resources:
         OtsTrigger:
           Type: OTS
           Properties:
-            Stream: acs:ots:cn-hangzhou:123456789012:instance/test_instance/table/test_table
+            Stream: acs:ots:::instance/fc-test1/table/mytable1
+  fc-test1:
+      Type: 'Aliyun::Serverless::TableStore'
+      mytable1:
+        Type: 'Aliyun::Serverless::TableStore::Table'
+        Properties:
+            PrimaryKeyList:
+              - Name: uid
+                Type: STRING
+
+    

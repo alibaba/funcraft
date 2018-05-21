@@ -4,7 +4,7 @@ const os = require('os');
 const fs = require('fs');
 const util = require('util');
 
-const mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 const yaml = require('js-yaml');
 const expect = require('expect.js');
@@ -19,7 +19,7 @@ const readFile = util.promisify(fs.readFile);
 describe('config prompt', () => {
 
   var prevHome;
-  beforeEach(async () => {
+  before(async () => {
     prevHome = os.homedir();
     process.env.HOME = os.tmpdir();
   
@@ -36,7 +36,7 @@ describe('config prompt', () => {
       sls_endpoint: `cn-hangzhou.log.aliyuncs.com`
     }));
   });
-  afterEach(async () => {
+  after(async () => {
     rimraf.sync(`${os.homedir()}/.fcli/`);
   
     process.env.HOME = prevHome;

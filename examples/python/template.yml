@@ -14,7 +14,7 @@ Resources:
         Runtime: python2.7
       Events:
         GetApi:
-          Type: API
+          Type: Api
           Properties: 
             Path: '/python/hello'
             Method: get
@@ -24,6 +24,7 @@ Resources:
   apigw_fc:
     Type: 'Aliyun::Serverless::Api'
     Properties:
+      StageName: RELEASE
       DefinitionBody:
         openapi: "3.0.0"
         info:
@@ -31,6 +32,7 @@ Resources:
           version: v1
         '/python/hello':
           get:
+            x-aliyun-apigateway-api-name: pythonhello
             x-aliyun-apigateway-fc:
-              arn: acs:lambda:::services/${fc.Arn}/functions/${helloworld.Arn}/
+              arn: acs:fc:::services/${pythondemo.Arn}/functions/${hello.Arn}/
               role: acs:ram:::role/aliyunapigatewayaccessingfcrole
