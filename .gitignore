@@ -61,4 +61,10 @@ node_modules_*.zip
 node_modules_*.zip.md5
 
 examples/java/demo/.project
+examples/java/demo/.classpath
+examples/java/demo/.settings/
 examples/java/demo/bin
+
+examples/**/node_modules/
+examples/**/package-lock.json
+examples/java/demo.jar

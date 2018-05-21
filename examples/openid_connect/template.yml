@@ -13,9 +13,9 @@ Resources:
         Description: 'Hello world!'
       Events:
         GetApi:
-          Type: API
+          Type: Api
           Properties: 
-            Path: /helloworld
+            Path: '/getUserInfo/[token]'
             Method: get
             RestApiId:
               Ref: aliyunfcdemo2
@@ -23,31 +23,25 @@ Resources:
   aliyunfcdemo2:
     Type: 'Aliyun::Serverless::Api'
     Properties:
+      StageName: RELEASE
       DefinitionBody:
         openapi: "3.0.0"
         info:
           title: 'API Gateway & Function Compute'
           version: v1
-        components:
-          securitySchemes:
-            openId:
-              type: openIdConnect
-              name: 'token'
-              in: 'query'
         '/getUserInfo/[token]':
           get:
-            security:
-              openId: {}
-            x-aliyun-apigateway-parameters-mapping:
-              - from:
-                  name: 'token'
-                  localtion: 'Path'
-                  type: 'String'
-                  requeired: 'REQUIRED'
-                to: 
-                  location: 'Query'
+            x-aliyun-apigateway-parameters:
+              - name: 'token'
+                location: 'Path'
+                type: 'String'
+                requeired: 'REQUIRED'
             x-aliyun-apigateway-visibility: PRIVATE
+            x-aliyun-apigateway-auth-type: 'OPENID'
+            x-aliyun-apigateway-auth-config:
+              id-token-param-name: 'token'
+              openid-api-type: 'BUSINESS'
             x-aliyun-apigateway-fc:
-              arn: acs:lambda:::services/${fc.Arn}/functions/${helloworld.Arn}/
+              arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/
               role: acs:ram:::role/aliyunapigatewayaccessingfcrole
             

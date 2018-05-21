@@ -14,9 +14,9 @@ Resources:
         Runtime: nodejs8
       Events:
         GetApi:
-          Type: API
+          Type: Api
           Properties: 
-            Path: /do_segement
+            Path: /do_segment
             Method: get
             RestApiId:
               Ref: maasapi
@@ -24,13 +24,15 @@ Resources:
   maasapi:
     Type: 'Aliyun::Serverless::Api'
     Properties:
+      StageName: RELEASE
       DefinitionBody:
         openapi: "3.0.0"
         info:
           title: 'API Gateway & Function Compute'
           version: v1
-        'do_segement':
+        '/do_segment':
           post:
+            x-aliyun-apigateway-api-name: segment_post
             x-aliyun-apigateway-fc:
               arn: acs:lambda:::services/${mass.Arn}/functions/${doSegment.Arn}/
               role: acs:ram:::role/aliyunapigatewayaccessingfcrole
