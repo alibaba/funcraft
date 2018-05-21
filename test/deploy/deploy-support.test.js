@@ -7,9 +7,21 @@ const deploySupport = require('../../lib/deploy/deploy-support');
 describe('make', () => {
 
   beforeEach(() => {
+    process.env.ACCOUNT_ID = '12384123985012938421';
+    process.env.DEFAULT_REGION = 'cn-shanghai';
+    process.env.ACCESS_KEY_ID = 'LTAIsgxsdfDokKbBS';
+    process.env.ACCESS_KEY_SECRET = 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM';
+    if (!nock.isActive()) {
+      nock.activate();
+    }
   });
 
   afterEach(() => {
+    delete process.env.ACCOUNT_ID;
+    delete process.env.DEFAULT_REGION;
+    delete process.env.ACCESS_KEY_ID;
+    delete process.env.ACCESS_KEY_SECRET;
+    nock.cleanAll();
     nock.restore();
   });
 
@@ -199,6 +211,21 @@ describe('make', () => {
         }
       }, []);
 
+    nock('https://ram.aliyuncs.com:443', { 'encodedQueryParams': true })
+      .get('/')
+      .query(actualQueryObject => actualQueryObject.Action === 'ListPoliciesForRole')
+      .reply(200, {
+        'Policies': {
+          'Policy': [{
+            'Description': '调用函数计算(FC)服务函数的权限',
+            'PolicyName': 'AliyunFCInvocationAccess',
+            'AttachDate': '2018-04-27T12:17:37Z',
+            'DefaultVersion': 'v1',
+            'PolicyType': 'System'
+          }]
+        }, 'RequestId': '16FFCF68-25DB-4CB1-8108-E0653FC1C1EA'
+      }, []);
+
 
 
     nock('http://apigateway.cn-shanghai.aliyuncs.com:80', { 'encodedQueryParams': true })
@@ -267,5 +294,3 @@ describe('make', () => {
   });
 
 });
-
-// require('nock').recorder.rec();
