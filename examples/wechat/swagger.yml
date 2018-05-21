@@ -10,54 +10,49 @@ components:
       in: 'query'
 '/wechat':
   get:
-    x-aliyun-apigateway-parameters-mapping:
-      - from:
-          name: 'encrypt_type'
-      - from:
-          name: 'msg_signature'
-      - from:
-          name: 'timestamp'
-          localtion: 'Query'
-          type: 'String'
-          requeired: 'REQUIRED'
-      - from:
-          name: 'nonce'
-          localtion: 'Query'
-          type: 'String'
-      - from:
-          name: 'signature'
-          localtion: 'Query'
-          type: 'String'
-      - from:
-          name: 'echostr'
-          localtion: 'Query'
-          type: 'String'
+    x-aliyun-apigateway-parameters:
+      - name: 'encrypt_type'
+      - name: 'msg_signature'
+      - name: 'timestamp'
+        location: 'Query'
+        type: 'String'
+        required: 'REQUIRED'
+      - name: 'nonce'
+        location: 'Query'
+        type: 'String'
+      - name: 'signature'
+        location: 'Query'
+        type: 'String'
+      - name: 'echostr'
+        location: 'Query'
+        type: 'String'
     x-aliyun-apigateway-fc:
-      arn: acs:lambda:::services/${wechat.Arn}/functions/${get.Arn}/
+      arn: acs:fc:::services/${wechat.Arn}/functions/${get.Arn}/
       role: acs:ram:::role/aliyunapigatewayaccessingfcrole
   post:
-    x-aliyun-apigateway-parameters-mapping:
-      - from:
-          name: 'timestamp'
-          localtion: 'Query'
-          type: 'String'
-          requeired: 'REQUIRED'
-      - from:
-          name: 'nonce'
-          localtion: 'Query'
-          type: 'String'
-      - from:
-          name: 'signature'
-          localtion: 'Query'
-          type: 'String'
-      - from:
-          name: 'msg_signature'
-          localtion: 'Query'
-          type: 'String'
-      - from:
-          name: 'encrypt_type'
-          localtion: 'Path'
-          type: 'String'
+    requestBody:
+      content:
+        application/octet-stream: 
+          schema:
+            type: string
+            format: binary
+    x-aliyun-apigateway-parameters:
+      - name: 'timestamp'
+        location: 'Query'
+        type: 'String'
+        required: 'REQUIRED'
+      - name: 'nonce'
+        location: 'Query'
+        type: 'String'
+      - name: 'signature'
+        location: 'Query'
+        type: 'String'
+      - name: 'msg_signature'
+        location: 'Query'
+        type: 'String'
+      - name: 'encrypt_type'
+        location: 'Query'
+        type: 'String'
     x-aliyun-apigateway-fc:
-      arn: acs:lambda:::services/${wechat.Arn}/functions/${post.Arn}/
+      arn: acs:fc:::services/${wechat.Arn}/functions/${post.Arn}/
       role: acs:ram:::role/aliyunapigatewayaccessingfcrole

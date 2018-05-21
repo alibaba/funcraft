@@ -13,7 +13,7 @@ Resources:
         CodeUri: './'
       Events:
         GetResource:
-          Type: API
+          Type: Api
           Properties: 
             Path: '/helloworld'
             Method: get
