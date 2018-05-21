@@ -26,7 +26,7 @@
     "js-yaml": "^3.9.0",
     "jszip": "^3.1.3",
     "kitx": "^1.2.1",
-    "mkdirp": "^0.5.1",
+    "mkdirp-promise": "^5.0.1",
     "rimraf": "^2.6.2"
   },
   "files": [

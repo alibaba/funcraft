@@ -4,7 +4,7 @@ const os = require('os');
 const fs = require('fs');
 const util = require('util');
 
-const mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 const yaml = require('js-yaml');
 const expect = require('expect.js');
