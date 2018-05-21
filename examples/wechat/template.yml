@@ -14,7 +14,7 @@ Resources:
         Description: 'Wechat get handler'
       Events:
         GetApi:
-          Type: API
+          Type: Api
           Properties: 
             Path: /wechat
             Method: get
@@ -29,7 +29,7 @@ Resources:
         Description: 'Wechat post handler'
       Events:
         GetApi:
-          Type: API
+          Type: Api
           Properties: 
             Path: /wechat
             Method: post
@@ -39,6 +39,7 @@ Resources:
   wechat_group:
     Type: 'Aliyun::Serverless::Api'
     Properties:
-      DefinitionUri: ./swagger.xml
+      StageName: RELEASE
+      DefinitionUri: ./swagger.yml
         
             

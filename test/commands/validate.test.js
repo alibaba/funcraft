@@ -6,10 +6,10 @@ const validate = require('../../lib/commands/validate');
 
 describe('validate template', () => {
   var prevCWD;
-  beforeEach(async () => {
+  beforeEach(() => {
     prevCWD = process.cwd();
   });
-  afterEach(async () => {
+  afterEach(() => {
     process.chdir(prevCWD);
   });
 
