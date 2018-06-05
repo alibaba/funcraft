@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
-    "@alicloud/fc": "^1.1.2",
+    "@alicloud/fc": "^1.2.3",
     "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
