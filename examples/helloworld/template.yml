@@ -4,13 +4,29 @@ Resources:
   fc:
     Type: 'Aliyun::Serverless::Service'
     Properties:
+      Policies: 
+        - AliyunFCReadOnlyAccess
+        - AliyunRDSFullAccess
       Description: 'fc test'
+      LogConfig: 
+        Project: localtestlog
+        Logstore: localteststore
+    localtestlog:
+      Type: 'Aliyun::Serverless::Log'
+      Properties:
+        Description: 'xxx'
+      logstore:
+        Type: 'Aliyun::Serverless::Log::Logstore'
+        Properties: 
+          TTL: 363
+          ShardCount: 1
     helloworld:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: helloworld.index
         Runtime: nodejs8
-        CodeUri: './'
+        CodeUri: 'oss://my-fc-testt/2018/01/helloworld.zip'
+        Timeout: 60
       Events:
         GetResource:
           Type: Api
