@@ -9,9 +9,14 @@ Resources:
         - AliyunRDSFullAccess
       Description: 'fc test'
       LogConfig: 
-        Project: localtestlog
-        Logstore: localteststore
-    localtestlog:
+        Project: localtestlog-hangkong
+        Logstore: logstore
+      VpcConfig: 
+        VpcId: 'vpc-j6cfu2g6tslzekh8grfmk'
+        VSwitchIds: [ 'vsw-j6chkgsg9naj6gx49espd' ]
+        SecurityGroupId: 'sg-j6ceitqs6ljyssm1apom'
+      InternetAccess: true
+    localtestlog-hangkong:
       Type: 'Aliyun::Serverless::Log'
       Properties:
         Description: 'xxx'
@@ -25,7 +30,7 @@ Resources:
       Properties:
         Handler: helloworld.index
         Runtime: nodejs8
-        CodeUri: 'oss://my-fc-testt/2018/01/helloworld.zip'
+        CodeUri: ./
         Timeout: 60
       Events:
         GetResource:
