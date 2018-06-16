@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
 'use strict';
+const argv = require('yargs').argv;
 
-const [subcommand, ...args] = process.argv.slice(2);
+let subcommand = "build";
+if (Array.isArray(argv._)) {
+  subcommand = argv._[0]
+}
 
 const usage = `
 usage: fun [--version] [--help]
@@ -32,9 +36,9 @@ var handle = function (err) {
 };
 
 if (subcommand === 'deploy') {
-  require('../lib/commands/deploy')(...args).catch(handle);
+  require('../lib/commands/deploy')(argv).catch(handle);
 } else if (subcommand === 'build') {
-  require('../lib/commands/build')(...args).catch(handle);
+  require('../lib/commands/build')(argv).catch(handle);
 } else if (subcommand === '--version' || subcommand === '-v') {
   console.log(require('../package.json').version);
   process.exit(0);
