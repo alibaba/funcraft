@@ -2,8 +2,6 @@
 
 'use strict';
 
-require('dotenv').config();
-
 const handle = function (err) {
   console.error(err.stack);
   process.exit(-1);
