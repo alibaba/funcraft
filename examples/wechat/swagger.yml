@@ -28,12 +28,7 @@ components:
         parameterType: 'String'
     x-aliyun-apigateway-fc:
       arn: acs:fc:::services/${wechat.Arn}/functions/${get.Arn}/
-      role: acs:ram:::role/aliyunapigatewayaccessingfcrole
   post:
-    x-aliyun-apigateway-request-config:
-      bodyFormat: "STREAM"
-      requestMode: "MAPPING"
-      requestProtocol: "HTTPS"
     x-aliyun-apigateway-request-parameters:
       - apiParameterName: 'timestamp'
         location: 'Query'
@@ -53,7 +48,3 @@ components:
         parameterType: 'String'
     x-aliyun-apigateway-fc:
       arn: acs:fc:::services/${wechat.Arn}/functions/${post.Arn}/
-      role: acs:ram:::role/aliyunapigatewayaccessingfcrole
-      type: "passthrough"
-      sample: "sample!!!!!"
-      failSample: "failed!!!"

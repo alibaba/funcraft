@@ -4,33 +4,13 @@ Resources:
   fc:
     Type: 'Aliyun::Serverless::Service'
     Properties:
-      Policies: 
-        - AliyunFCReadOnlyAccess
-        - AliyunRDSFullAccess
       Description: 'fc test'
-      LogConfig: 
-        Project: localtestlog-hangkong
-        Logstore: logstore
-      VpcConfig: 
-        VpcId: 'vpc-j6cfu2g6tslzekh8grfmk'
-        VSwitchIds: [ 'vsw-j6chkgsg9naj6gx49espd' ]
-        SecurityGroupId: 'sg-j6ceitqs6ljyssm1apom'
-      InternetAccess: true
-    localtestlog-hangkong:
-      Type: 'Aliyun::Serverless::Log'
-      Properties:
-        Description: 'xxx'
-      logstore:
-        Type: 'Aliyun::Serverless::Log::Logstore'
-        Properties: 
-          TTL: 363
-          ShardCount: 1
     helloworld:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: helloworld.index
         Runtime: nodejs8
-        CodeUri: ./
+        CodeUri: './'
         Timeout: 60
       Events:
         GetResource:
@@ -38,4 +18,3 @@ Resources:
           Properties: 
             Path: '/helloworld'
             Method: get
-

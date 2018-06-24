@@ -7,10 +7,14 @@ const assert = sinon.assert;
 
 const deploySupport = require('../../lib/deploy/deploy-support');
 
+const getProfile = require('../../lib/profile').getProfile;
+
 describe('deploy', () => {
   beforeEach(() => {
-    Object.keys(deploySupport).forEach(m =>
-      sandbox.stub(deploySupport, m).resolves({})
+    Object.keys(deploySupport).forEach(m => {
+      console.log('method: ' + m);
+      sandbox.stub(deploySupport, m).resolves({});
+    }
     );
   });
 
@@ -27,7 +31,17 @@ describe('deploy', () => {
   it('deploy datahub', async () => {
     await deploy('datahub');
 
-    assert.calledWith(deploySupport.makeService, 'MyService', undefined);
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: undefined,
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-myservice`,
+      serviceName: 'MyService',
+      vpcConfig: undefined
+    });
+  
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: undefined,
@@ -44,7 +58,16 @@ describe('deploy', () => {
   it('deploy helloworld', async () => {
     await deploy('helloworld');
 
-    assert.calledWith(deploySupport.makeService, 'fc', 'fc test');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'fc test',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-fc`,
+      serviceName: 'fc',
+      vpcConfig: undefined
+    });
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: undefined,
@@ -53,22 +76,23 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'fc',
-      timeout: undefined
-    });
-    assert.calledWith(deploySupport.makeApiTrigger, {
-      serviceName: 'fc',
-      functionName: 'helloworld',
-      triggerName: 'GetResource',
-      method: 'GET',
-      requestPath: '/helloworld',
-      restApiId: undefined
+      timeout: 60
     });
   });
 
   it('deploy java', async () => {
     await deploy('java');
 
-    assert.calledWith(deploySupport.makeService, 'java', 'java demo');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'java demo',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-java`,
+      serviceName: 'java',
+      vpcConfig: undefined
+    });
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './demo.jar',
       description: 'Hello world!',
@@ -85,7 +109,17 @@ describe('deploy', () => {
   it('deploy openid_connect', async () => {
     await deploy('openid_connect');
 
-    assert.calledWith(deploySupport.makeService, 'fc', 'fc test');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'fc test',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-fc`,
+      serviceName: 'fc',
+      vpcConfig: undefined
+    });
+
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: 'Hello world!',
@@ -96,51 +130,53 @@ describe('deploy', () => {
       serviceName: 'fc',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeApiTrigger, {
-      serviceName: 'fc',
-      functionName: 'helloworld',
-      triggerName: 'GetApi',
-      method: 'GET',
-      requestPath: '/getUserInfo/[token]',
-      restApiId: { Ref: 'aliyunfcdemo2' }
-    });
     assert.calledWith(deploySupport.makeGroup, {
       name: 'aliyunfcdemo2',
       description: 'api group for function compute'
     });
-    assert.calledWith(deploySupport.makeRole, 'aliyunapigatewayaccessingfcrole');
     assert.calledWith(deploySupport.makeApi, {}, {
       apiName: 'getUserInfo_token_get',
       auth: {
         config: {
-          'id-token-param-name': 'token',
-          'openid-api-type': 'BUSINESS'
+          'idTokenParamName': 'token',
+          'openidApiType': 'BUSINESS'
         },
         type: 'OPENID'
       },
-      bodyFormat: '',
       functionName: 'helloworld',
       method: 'get',
       parameters: [
         {
           location: 'Path',
-          name: 'token',
-          requeired: 'REQUIRED',
+          apiParameterName: 'token',
+          parameterType: 'REQUIRED',
           type: 'String'
         }
       ],
       requestPath: '/getUserInfo/[token]',
-      role: {},
+      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
       serviceName: 'fc',
       stageName: 'RELEASE',
-      visibility: 'PRIVATE'
+      visibility: 'PRIVATE',
+      serviceTimeout: 3000,
+      resultConfig: {  },
+      requestConfig: {  },
     });
   });
 
   it('deploy ots_stream', async () => {
     await deploy('ots_stream');
 
-    assert.calledWith(deploySupport.makeService, 'otsstream', 'Stream trigger for OTS');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'Stream trigger for OTS',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-otsstream`,
+      serviceName: 'otsstream',
+      vpcConfig: undefined
+    });
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: undefined,
@@ -151,28 +187,31 @@ describe('deploy', () => {
       serviceName: 'otsstream',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeOtsTrigger, {
-      functionName: 'processor',
-      serviceName: 'otsstream',
-      stream: 'acs:ots:::instance/fc-test1/table/mytable1',
-      triggerName: 'OtsTrigger'
-    });
     assert.calledWith(deploySupport.makeOtsTable, {
-      instanceName: 'fc-test1',
+      instanceName: 'fun-test',
       primaryKeys: [
         {
           name: 'uid',
           type: 'STRING'
         }
       ],
-      tableName: 'mytable1'
+      tableName: 'mytable'
     });
   });
 
   it('deploy python', async () => {
     await deploy('python');
 
-    assert.calledWith(deploySupport.makeService, 'pythondemo', 'python demo');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'python demo',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-pythondemo`,
+      serviceName: 'pythondemo',
+      vpcConfig: undefined
+    });
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: 'Hello world with python!',
@@ -183,40 +222,43 @@ describe('deploy', () => {
       serviceName: 'pythondemo',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeApiTrigger, {
-      functionName: 'hello',
-      method: 'GET',
-      requestPath: '/python/hello',
-      restApiId: { Ref: 'apigw_fc' },
-      serviceName: 'pythondemo',
-      triggerName: 'GetApi'
-    });
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
       name: 'apigw_fc'
     });
-    assert.calledWith(deploySupport.makeRole, 'aliyunapigatewayaccessingfcrole');
     assert.calledWith(deploySupport.makeApi, {}, {
       apiName: 'pythonhello',
       auth: {
         config: undefined,
         type: undefined
       },
-      bodyFormat: '',
       functionName: 'hello',
       method: 'get',
       parameters: undefined,
       requestPath: '/python/hello',
-      role: {},
+      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
       serviceName: 'pythondemo',
       stageName: 'RELEASE',
-      visibility: undefined
+      visibility: undefined,
+      serviceTimeout: 3000,
+      requestConfig: {},
+      resultConfig: {},
     });
   });
   it('deploy segment', async () => {
     await deploy('segment');
 
-    assert.calledWith(deploySupport.makeService, 'maas', 'Module as a service');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'Module as a service',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-maas`,
+      serviceName: 'maas',
+      vpcConfig: undefined
+    });
+    
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: 'do segment',
@@ -227,37 +269,40 @@ describe('deploy', () => {
       serviceName: 'maas',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeApiTrigger, {
-      functionName: 'doSegment',
-      method: 'GET',
-      requestPath: '/do_segment',
-      restApiId: { Ref: 'maasapi' },
-      serviceName: 'maas',
-      triggerName: 'GetApi'
-    });
+
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
       name: 'maasapi'
     });
-    assert.calledWith(deploySupport.makeRole, 'aliyunapigatewayaccessingfcrole');
     assert.calledWith(deploySupport.makeApi, {}, {
       apiName: 'segment_post',
       auth: { config: undefined, type: undefined },
-      bodyFormat: 'STREAM',
       functionName: 'doSegment',
       method: 'post',
       parameters: undefined,
       requestPath: '/do_segment',
-      role: {},
+      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
       serviceName: 'mass',
       stageName: 'RELEASE',
-      visibility: undefined
+      visibility: undefined,
+      resultConfig: {  },
+      serviceTimeout: 3000,
+      requestConfig: {  }
     });
   });
   it('deploy timer', async () => {
     await deploy('timer');
 
-    assert.calledWith(deploySupport.makeService, 'MyService', undefined);
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: undefined,
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-myservice`,
+      serviceName: 'MyService',
+      vpcConfig: undefined
+    });
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       description: 'send hangzhou weather',
@@ -283,7 +328,16 @@ describe('deploy', () => {
   it('deploy wechat', async () => {
     await deploy('wechat');
 
-    assert.calledWith(deploySupport.makeService, 'wechat', 'wechat demo');
+    const profile = await getProfile();
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'wechat demo',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-wechat`,
+      serviceName: 'wechat',
+      vpcConfig: undefined
+    });
     assert.calledWith(deploySupport.makeFunction.firstCall, {
       codeUri: './',
       description: 'Wechat get handler',
@@ -294,39 +348,32 @@ describe('deploy', () => {
       serviceName: 'wechat',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeApiTrigger.firstCall, {
-      functionName: 'get',
-      method: 'GET',
-      requestPath: '/wechat',
-      restApiId: { Ref: 'wechat_group' },
-      serviceName: 'wechat',
-      triggerName: 'GetApi'
-    });
     assert.alwaysCalledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
       name: 'wechat_group'
     });
-    assert.alwaysCalledWith(deploySupport.makeRole, 'aliyunapigatewayaccessingfcrole');
-    assert.calledWith(deploySupport.makeApi.firstCall, {}, {
-      apiName: 'wechat_get',
-      auth: { config: undefined, type: undefined },
-      bodyFormat: '',
-      functionName: 'get',
-      method: 'get',
-      parameters: [
-        { name: 'encrypt_type' },
-        { name: 'msg_signature' },
-        { location: 'Query', name: 'timestamp', required: 'REQUIRED', type: 'String' },
-        { location: 'Query', name: 'nonce', type: 'String' },
-        { location: 'Query', name: 'signature', type: 'String' },
-        { location: 'Query', name: 'echostr', type: 'String' }
-      ],
-      requestPath: '/wechat',
-      role: {},
-      serviceName: 'wechat',
-      stageName: 'RELEASE',
-      visibility: undefined
-    });
+    // assert.calledWith(deploySupport.makeApi.firstCall, {}, {
+    //   apiName: 'wechat_get',
+    //   auth: { config: undefined, type: undefined },
+    //   functionName: 'get',
+    //   method: 'get',
+    //   parameters: [
+    //     { apiParameterName: 'encrypt_type' },
+    //     { apiParameterName: 'msg_signature' },
+    //     { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' },
+    //     { location: 'Query', apiParameterName: 'nonce', parameterType: 'String' },
+    //     { location: 'Query', apiParameterName: 'signature', parameterType: 'String' },
+    //     { location: 'Query', apiParameterName: 'echostr', parameterType: 'String' }
+    //   ],
+    //   requestPath: '/wechat',
+    //   roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+    //   serviceName: 'wechat',
+    //   stageName: 'RELEASE',
+    //   visibility: undefined,
+    //   requestConfig: {  },
+    //   resultConfig: {  },
+    //   serviceTimeout: 3000
+    // });
 
     assert.calledWith(deploySupport.makeFunction.secondCall, {
       codeUri: './',
@@ -338,32 +385,26 @@ describe('deploy', () => {
       serviceName: 'wechat',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeApiTrigger.secondCall, {
-      functionName: 'post',
-      method: 'POST',
-      requestPath: '/wechat',
-      restApiId: { Ref: 'wechat_group' },
-      serviceName: 'wechat',
-      triggerName: 'GetApi'
-    });
-    assert.calledWith(deploySupport.makeApi.secondCall, {}, {
+    assert.calledWith(deploySupport.makeApi, {}, {
       apiName: 'wechat_post',
       auth: { config: undefined, type: undefined },
-      bodyFormat: 'STREAM',
       functionName: 'post',
       method: 'post',
       parameters: [
-        { location: 'Query', name: 'timestamp', required: 'REQUIRED', type: 'String' }, 
-        { location: 'Query', name: 'nonce', type: 'String' }, 
-        { location: 'Query', name: 'signature', type: 'String' }, 
-        { location: 'Query', name: 'msg_signature', type: 'String' }, 
-        { location: 'Query', name: 'encrypt_type', type: 'String' }
+        { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' }, 
+        { location: 'Query', apiParameterName: 'nonce', parameterType: 'String' }, 
+        { location: 'Query', apiParameterName: 'signature', parameterType: 'String' }, 
+        { location: 'Query', apiParameterName: 'msg_signature', parameterType: 'String' }, 
+        { location: 'Query', apiParameterName: 'encrypt_type', parameterType: 'String' }
       ],
       requestPath: '/wechat',
-      role: {  },
+      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
       serviceName: 'wechat',
       stageName: 'RELEASE',
-      visibility: undefined
+      visibility: undefined,
+      requestConfig: {  },
+      resultConfig: {  },
+      serviceTimeout: 3000
     });
   });
 });
