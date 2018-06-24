@@ -352,28 +352,28 @@ describe('deploy', () => {
       description: 'api group for function compute',
       name: 'wechat_group'
     });
-    // assert.calledWith(deploySupport.makeApi.firstCall, {}, {
-    //   apiName: 'wechat_get',
-    //   auth: { config: undefined, type: undefined },
-    //   functionName: 'get',
-    //   method: 'get',
-    //   parameters: [
-    //     { apiParameterName: 'encrypt_type' },
-    //     { apiParameterName: 'msg_signature' },
-    //     { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' },
-    //     { location: 'Query', apiParameterName: 'nonce', parameterType: 'String' },
-    //     { location: 'Query', apiParameterName: 'signature', parameterType: 'String' },
-    //     { location: 'Query', apiParameterName: 'echostr', parameterType: 'String' }
-    //   ],
-    //   requestPath: '/wechat',
-    //   roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
-    //   serviceName: 'wechat',
-    //   stageName: 'RELEASE',
-    //   visibility: undefined,
-    //   requestConfig: {  },
-    //   resultConfig: {  },
-    //   serviceTimeout: 3000
-    // });
+    assert.calledWith(deploySupport.makeApi.firstCall, {}, {
+      apiName: 'wechat_get',
+      auth: { config: undefined, type: undefined },
+      functionName: 'get',
+      method: 'get',
+      parameters: [
+        { apiParameterName: 'encrypt_type' },
+        { apiParameterName: 'msg_signature' },
+        { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' },
+        { location: 'Query', apiParameterName: 'nonce', parameterType: 'String' },
+        { location: 'Query', apiParameterName: 'signature', parameterType: 'String' },
+        { location: 'Query', apiParameterName: 'echostr', parameterType: 'String' }
+      ],
+      requestPath: '/wechat',
+      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+      serviceName: 'wechat',
+      stageName: 'RELEASE',
+      visibility: undefined,
+      requestConfig: {  },
+      resultConfig: {  },
+      serviceTimeout: 3000
+    });
 
     assert.calledWith(deploySupport.makeFunction.secondCall, {
       codeUri: './',
@@ -385,7 +385,7 @@ describe('deploy', () => {
       serviceName: 'wechat',
       timeout: undefined
     });
-    assert.calledWith(deploySupport.makeApi, {}, {
+    assert.calledWith(deploySupport.makeApi.secondCall, {}, {
       apiName: 'wechat_post',
       auth: { config: undefined, type: undefined },
       functionName: 'post',
