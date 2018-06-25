@@ -11,14 +11,6 @@ Resources:
         Handler: helloworld.index
         CodeUri: './'
         Description: 'Hello world!'
-      Events:
-        GetApi:
-          Type: Api
-          Properties: 
-            Path: '/getUserInfo/[token]'
-            Method: get
-            RestApiId:
-              Ref: aliyunfcdemo2
 
   aliyunfcdemo2:
     Type: 'Aliyun::Serverless::Api'
@@ -31,16 +23,16 @@ Resources:
           version: v1
         '/getUserInfo/[token]':
           get:
-            x-aliyun-apigateway-parameters:
-              - name: 'token'
+            x-aliyun-apigateway-request-parameters:
+              - apiParameterName: 'token'
                 location: 'Path'
                 type: 'String'
-                requeired: 'REQUIRED'
+                parameterType: 'REQUIRED'
             x-aliyun-apigateway-visibility: PRIVATE
             x-aliyun-apigateway-auth-type: 'OPENID'
-            x-aliyun-apigateway-auth-config:
-              id-token-param-name: 'token'
-              openid-api-type: 'BUSINESS'
+            x-aliyun-apigateway-openid-connect-config:
+              idTokenParamName: 'token'
+              openidApiType: 'BUSINESS'
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/
               role: acs:ram:::role/aliyunapigatewayaccessingfcrole

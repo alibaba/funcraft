@@ -12,14 +12,6 @@ Resources:
         CodeUri: './'
         Runtime: nodejs6
         Description: 'Wechat get handler'
-      Events:
-        GetApi:
-          Type: Api
-          Properties: 
-            Path: /wechat
-            Method: get
-            RestApiId:
-              Ref: wechat_group
     post:
       Type: 'Aliyun::Serverless::Function'
       Properties:
@@ -27,14 +19,6 @@ Resources:
         CodeUri: './'
         Runtime: nodejs6
         Description: 'Wechat post handler'
-      Events:
-        GetApi:
-          Type: Api
-          Properties: 
-            Path: /wechat
-            Method: post
-            RestApiId:
-              Ref: wechat_group
 
   wechat_group:
     Type: 'Aliyun::Serverless::Api'

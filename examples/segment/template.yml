@@ -12,14 +12,6 @@ Resources:
         CodeUri: './'
         Description: 'do segment'
         Runtime: nodejs8
-      Events:
-        GetApi:
-          Type: Api
-          Properties: 
-            Path: /do_segment
-            Method: get
-            RestApiId:
-              Ref: maasapi
 
   maasapi:
     Type: 'Aliyun::Serverless::Api'
@@ -35,7 +27,6 @@ Resources:
             x-aliyun-apigateway-api-name: segment_post
             x-aliyun-apigateway-fc:
               arn: acs:lambda:::services/${mass.Arn}/functions/${doSegment.Arn}/
-              role: acs:ram:::role/aliyunapigatewayaccessingfcrole
             requestBody:
               content:
                 application/octet-stream: 

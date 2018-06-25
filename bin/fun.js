@@ -2,7 +2,6 @@
 
 'use strict';
 
-
 const handle = function (err) {
   console.error(err.stack);
   process.exit(-1);
