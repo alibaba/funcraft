@@ -204,7 +204,7 @@ describe('make', () => {
         'RequestId': 'D0FAE93F-E16C-4C6F-AA97-4CB343A36C27',
         'Role': {
           'RoleName': 'apigatewayAccessFC',
-          'Description': 'API网关访问 FunctionCompute',
+          'Description': 'API Gateway access FunctionCompute',
           'AssumeRolePolicyDocument': '{\n    "Statement": [{\n"Action": "sts:AssumeRole",\n            "Effect": "Allow",\n            "Principal": {"Service": ["apigateway.aliyuncs.com"]}}],\n    "Version": "1"}', 'Arn': 'acs:ram::1751705494334733:role/apigatewayaccessfc',
           'CreateDate': '2018-04-27T12:17:37Z',
           'RoleId': '357770690351169377'

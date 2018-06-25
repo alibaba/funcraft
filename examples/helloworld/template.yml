@@ -11,10 +11,10 @@ Resources:
         Handler: helloworld.index
         Runtime: nodejs8
         CodeUri: './'
+        Timeout: 60
       Events:
         GetResource:
           Type: Api
           Properties: 
             Path: '/helloworld'
             Method: get
-

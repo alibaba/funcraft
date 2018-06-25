@@ -11,18 +11,16 @@ Resources:
         Handler: main.index
         Runtime: nodejs8
         CodeUri: './'
-      Events:
-        OtsTrigger:
-          Type: OTS
-          Properties:
-            Stream: acs:ots:::instance/fc-test1/table/mytable1
-  fc-test1:
-      Type: 'Aliyun::Serverless::TableStore'
-      mytable1:
-        Type: 'Aliyun::Serverless::TableStore::Table'
-        Properties:
-            PrimaryKeyList:
-              - Name: uid
-                Type: STRING
+  fun-test:
+    Type: 'Aliyun::Serverless::TableStore'
+    Properties:
+      ClusterType: HYBRID
+      Description: just for fun test
+    mytable:
+      Type: 'Aliyun::Serverless::TableStore::Table'
+      Properties:
+          PrimaryKeyList:
+            - Name: uid
+              Type: STRING
 
-    
+  

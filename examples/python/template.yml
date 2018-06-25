@@ -12,14 +12,6 @@ Resources:
         CodeUri: './'
         Description: 'Hello world with python!'
         Runtime: python2.7
-      Events:
-        GetApi:
-          Type: Api
-          Properties: 
-            Path: '/python/hello'
-            Method: get
-            RestApiId:
-              Ref: apigw_fc
 
   apigw_fc:
     Type: 'Aliyun::Serverless::Api'
@@ -35,4 +27,3 @@ Resources:
             x-aliyun-apigateway-api-name: pythonhello
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${pythondemo.Arn}/functions/${hello.Arn}/
-              role: acs:ram:::role/aliyunapigatewayaccessingfcrole

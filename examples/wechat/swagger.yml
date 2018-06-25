@@ -10,49 +10,41 @@ components:
       in: 'query'
 '/wechat':
   get:
-    x-aliyun-apigateway-parameters:
-      - name: 'encrypt_type'
-      - name: 'msg_signature'
-      - name: 'timestamp'
+    x-aliyun-apigateway-request-parameters:
+      - apiParameterName: 'encrypt_type'
+      - apiParameterName: 'msg_signature'
+      - apiParameterName: 'timestamp'
         location: 'Query'
-        type: 'String'
+        parameterType: 'String'
         required: 'REQUIRED'
-      - name: 'nonce'
+      - apiParameterName: 'nonce'
         location: 'Query'
-        type: 'String'
-      - name: 'signature'
+        parameterType: 'String'
+      - apiParameterName: 'signature'
         location: 'Query'
-        type: 'String'
-      - name: 'echostr'
+        parameterType: 'String'
+      - apiParameterName: 'echostr'
         location: 'Query'
-        type: 'String'
+        parameterType: 'String'
     x-aliyun-apigateway-fc:
       arn: acs:fc:::services/${wechat.Arn}/functions/${get.Arn}/
-      role: acs:ram:::role/aliyunapigatewayaccessingfcrole
   post:
-    requestBody:
-      content:
-        application/octet-stream: 
-          schema:
-            type: string
-            format: binary
-    x-aliyun-apigateway-parameters:
-      - name: 'timestamp'
+    x-aliyun-apigateway-request-parameters:
+      - apiParameterName: 'timestamp'
         location: 'Query'
-        type: 'String'
+        parameterType: 'String'
         required: 'REQUIRED'
-      - name: 'nonce'
+      - apiParameterName: 'nonce'
         location: 'Query'
-        type: 'String'
-      - name: 'signature'
+        parameterType: 'String'
+      - apiParameterName: 'signature'
         location: 'Query'
-        type: 'String'
-      - name: 'msg_signature'
+        parameterType: 'String'
+      - apiParameterName: 'msg_signature'
         location: 'Query'
-        type: 'String'
-      - name: 'encrypt_type'
+        parameterType: 'String'
+      - apiParameterName: 'encrypt_type'
         location: 'Query'
-        type: 'String'
+        parameterType: 'String'
     x-aliyun-apigateway-fc:
       arn: acs:fc:::services/${wechat.Arn}/functions/${post.Arn}/
-      role: acs:ram:::role/aliyunapigatewayaccessingfcrole
