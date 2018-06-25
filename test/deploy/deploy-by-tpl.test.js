@@ -50,9 +50,9 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs6',
       serviceName: 'MyService',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
-
   });
 
   it('deploy helloworld', async () => {
@@ -76,7 +76,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'fc',
-      timeout: 60
+      timeout: 60,
+      environmentVariables: undefined
     });
   });
 
@@ -101,7 +102,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'java8',
       serviceName: 'java',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
 
   });
@@ -128,7 +130,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: undefined,
       serviceName: 'fc',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeGroup, {
       name: 'aliyunfcdemo2',
@@ -185,7 +188,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'otsstream',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeOtsTable, {
       instanceName: 'fun-test',
@@ -220,7 +224,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'python2.7',
       serviceName: 'pythondemo',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
@@ -267,7 +272,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'maas',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
 
     assert.calledWith(deploySupport.makeGroup, {
@@ -311,7 +317,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'MyService',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeTrigger, {
       functionName: 'MyFunction',
@@ -346,7 +353,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs6',
       serviceName: 'wechat',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
     assert.alwaysCalledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
@@ -383,7 +391,8 @@ describe('deploy', () => {
       memorySize: undefined,
       runtime: 'nodejs6',
       serviceName: 'wechat',
-      timeout: undefined
+      timeout: undefined,
+      environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeApi.secondCall, {}, {
       apiName: 'wechat_post',
