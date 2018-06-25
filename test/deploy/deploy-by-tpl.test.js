@@ -6,16 +6,25 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
 const deploySupport = require('../../lib/deploy/deploy-support');
-
-const getProfile = require('../../lib/profile').getProfile;
+const ram = require('../../lib/ram');
 
 describe('deploy', () => {
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-      console.log('method: ' + m);
       sandbox.stub(deploySupport, m).resolves({});
-    }
-    );
+    });
+
+    Object.keys(ram).forEach(m => {
+      if (m === 'makeRole') {
+        sandbox.stub(ram, m).resolves({
+          'Role': {
+            'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+          }
+        });
+      } else {
+        sandbox.stub(ram, m).resolves({});
+      }
+    });
   });
 
   afterEach(() => {
@@ -24,20 +33,23 @@ describe('deploy', () => {
 
   async function deploy(example) {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
-      './deploy-support': deploySupport
+      './deploy-support': deploySupport,
+      '../ram': ram
     })(`./examples/${example}/template.yml`);
+
+    // await proxyquire('../../lib/deploy/deploy-support', {
+      
+    // })(`./examples/${example}/template.yml`);
   }
 
   it('deploy datahub', async () => {
     await deploy('datahub');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: undefined,
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-myservice`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'MyService',
       vpcConfig: undefined
     });
@@ -58,13 +70,11 @@ describe('deploy', () => {
   it('deploy helloworld', async () => {
     await deploy('helloworld');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'fc test',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-fc`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'fc',
       vpcConfig: undefined
     });
@@ -84,13 +94,11 @@ describe('deploy', () => {
   it('deploy java', async () => {
     await deploy('java');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'java demo',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-java`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'java',
       vpcConfig: undefined
     });
@@ -111,13 +119,11 @@ describe('deploy', () => {
   it('deploy openid_connect', async () => {
     await deploy('openid_connect');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'fc test',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-fc`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'fc',
       vpcConfig: undefined
     });
@@ -157,7 +163,7 @@ describe('deploy', () => {
         }
       ],
       requestPath: '/getUserInfo/[token]',
-      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+      roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'fc',
       stageName: 'RELEASE',
       visibility: 'PRIVATE',
@@ -170,13 +176,11 @@ describe('deploy', () => {
   it('deploy ots_stream', async () => {
     await deploy('ots_stream');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'Stream trigger for OTS',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-otsstream`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'otsstream',
       vpcConfig: undefined
     });
@@ -206,13 +210,11 @@ describe('deploy', () => {
   it('deploy python', async () => {
     await deploy('python');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'python demo',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-pythondemo`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'pythondemo',
       vpcConfig: undefined
     });
@@ -241,7 +243,7 @@ describe('deploy', () => {
       method: 'get',
       parameters: undefined,
       requestPath: '/python/hello',
-      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+      roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'pythondemo',
       stageName: 'RELEASE',
       visibility: undefined,
@@ -253,13 +255,11 @@ describe('deploy', () => {
   it('deploy segment', async () => {
     await deploy('segment');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'Module as a service',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-maas`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'maas',
       vpcConfig: undefined
     });
@@ -287,7 +287,7 @@ describe('deploy', () => {
       method: 'post',
       parameters: undefined,
       requestPath: '/do_segment',
-      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+      roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'mass',
       stageName: 'RELEASE',
       visibility: undefined,
@@ -299,13 +299,11 @@ describe('deploy', () => {
   it('deploy timer', async () => {
     await deploy('timer');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: undefined,
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-myservice`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'MyService',
       vpcConfig: undefined
     });
@@ -335,13 +333,11 @@ describe('deploy', () => {
   it('deploy wechat', async () => {
     await deploy('wechat');
 
-    const profile = await getProfile();
-
     assert.calledWith(deploySupport.makeService, {
       description: 'wechat demo',
       internetAccess: null,
       logConfig: {  },
-      role: `acs:ram::${profile.accountId}:role/aliyunfcgeneratedrole-wechat`,
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'wechat',
       vpcConfig: undefined
     });
@@ -360,7 +356,7 @@ describe('deploy', () => {
       description: 'api group for function compute',
       name: 'wechat_group'
     });
-    assert.calledWith(deploySupport.makeApi.firstCall, {}, {
+    assert.calledWith(deploySupport.makeApi, {}, {
       apiName: 'wechat_get',
       auth: { config: undefined, type: undefined },
       functionName: 'get',
@@ -374,7 +370,7 @@ describe('deploy', () => {
         { location: 'Query', apiParameterName: 'echostr', parameterType: 'String' }
       ],
       requestPath: '/wechat',
-      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+      roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'wechat',
       stageName: 'RELEASE',
       visibility: undefined,
@@ -407,7 +403,7 @@ describe('deploy', () => {
         { location: 'Query', apiParameterName: 'encrypt_type', parameterType: 'String' }
       ],
       requestPath: '/wechat',
-      roleArn: `acs:ram::${profile.accountId}:role/aliyunapigatewayaccessingfcrole`,
+      roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'wechat',
       stageName: 'RELEASE',
       visibility: undefined,
