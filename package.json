@@ -13,10 +13,10 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
+    "@alicloud/log": "^1.0.0",
     "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
-    "aliyun-sdk": "github:tanhe123/aliyun-sdk-js",
     "archiver": "^2.0.0",
     "colors": "^1.1.2",
     "commander": "^2.15.1",
