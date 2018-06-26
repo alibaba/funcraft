@@ -13,7 +13,7 @@ test: lint
 	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
 
 test-cov:
-	@nyc --reporter=html --reporter=text mocha -t $(TIMEOUT) -R spec $(TESTS)
+	@nyc --reporter=html --reporter=text mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
 
 test-coveralls:
 	@nyc mocha -t $(TIMEOUT) -R spec $(TESTS)
