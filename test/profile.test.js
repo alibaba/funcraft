@@ -13,7 +13,7 @@ const getProfile = require('../lib/profile').getProfile;
 const writeFile = util.promisify(fs.writeFile);
 
 
-describe.skip('without local ~/.fcli/config.yml', () => {
+describe.skip('without local ~/.fcli/config.yaml', () => {
   var prevHome;
   beforeEach(() => {
     prevHome = os.homedir();
@@ -51,7 +51,7 @@ describe.skip('without local ~/.fcli/config.yml', () => {
 
 });
 
-describe('with local ~/.fcli/config.yml', () => {
+describe('with local ~/.fcli/config.yaml', () => {
   var prevHome;
   beforeEach(async () => {
     prevHome = os.homedir();
