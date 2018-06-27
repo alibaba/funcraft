@@ -134,7 +134,7 @@ describe('deploy', () => {
       functionName: 'helloworld',
       handler: 'helloworld.index',
       memorySize: undefined,
-      runtime: undefined,
+      runtime: 'nodejs6',
       serviceName: 'fc',
       timeout: undefined,
       environmentVariables: undefined
@@ -293,7 +293,7 @@ describe('deploy', () => {
       visibility: undefined,
       resultConfig: {  },
       serviceTimeout: 3000,
-      requestConfig: {  }
+      requestConfig: { bodyFormat: 'stream', protocol: 'http', requestMode: 'PASSTHROUGH' }
     });
   });
   it('deploy timer', async () => {

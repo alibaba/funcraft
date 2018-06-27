@@ -12,9 +12,15 @@ Resources:
         Runtime: nodejs8
         CodeUri: './'
         Timeout: 60
-      Events:
-        GetResource:
-          Type: Api
-          Properties: 
-            Path: '/helloworld'
-            Method: get
+
+  HelloworldGroup:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      StageName: RELEASE
+      DefinitionBody:
+        '/':
+          get:
+            x-aliyun-apigateway-api-name: hello_get
+            x-aliyun-apigateway-fc:
+              arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/
+                        

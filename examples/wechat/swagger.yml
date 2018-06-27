@@ -2,12 +2,6 @@ openapi: "3.0.0"
 info:
   title: 'API Gateway & Function Compute'
   version: v1
-components:
-  securitySchemes:
-    openId:
-      type: openIdConnect
-      name: 'token'
-      in: 'query'
 '/wechat':
   get:
     x-aliyun-apigateway-request-parameters:

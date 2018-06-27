@@ -25,13 +25,11 @@ Resources:
         '/do_segment':
           post:
             x-aliyun-apigateway-api-name: segment_post
+            x-aliyun-apigateway-request-config:
+              bodyFormat: "stream"
+              requestMode: "PASSTHROUGH"
+              protocol: "http"
             x-aliyun-apigateway-fc:
-              arn: acs:lambda:::services/${mass.Arn}/functions/${doSegment.Arn}/
-            requestBody:
-              content:
-                application/octet-stream: 
-                  schema:
-                    type: string
-                    format: binary
+              arn: acs:fc:::services/${mass.Arn}/functions/${doSegment.Arn}/
 
             

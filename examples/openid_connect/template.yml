@@ -8,6 +8,7 @@ Resources:
     helloworld:
       Type: 'Aliyun::Serverless::Function'
       Properties:
+        Runtime: nodejs6
         Handler: helloworld.index
         CodeUri: './'
         Description: 'Hello world!'
@@ -35,5 +36,4 @@ Resources:
               openidApiType: 'BUSINESS'
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/
-              role: acs:ram:::role/aliyunapigatewayaccessingfcrole
             
