@@ -63,9 +63,7 @@ exports.handler = function(event, context, callback) {
 };
 ```
 
-上面的 fc-helper 模块可以在这里找到 https://github.com/aliyun/fc-helper ，通过 package.json 可以管理它。
-
-接下来我们配置它。在项目根目录创建一个 template.yml 文件：
+接下来我们配置相关服务。在项目根目录创建一个 template.yml 文件：
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'
