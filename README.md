@@ -143,3 +143,13 @@ https://github.com/aliyun/fun/tree/master/examples
 ## 反馈
 
 如您在使用中遇到问题，可以在这里反馈 https://github.com/aliyun/fun/issues
+
+## 参考
+
+- [以函数计算作为 API 网关后端服务](https://help.aliyun.com/document_detail/54788.html)
+- [函数计算](https://www.aliyun.com/product/fc)
+- [API Gateway](https://www.aliyun.com/product/apigateway)
+
+## 开源许可
+
+The MIT License
