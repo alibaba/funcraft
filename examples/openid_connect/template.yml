@@ -8,6 +8,7 @@ Resources:
     helloworld:
       Type: 'Aliyun::Serverless::Function'
       Properties:
+        Runtime: nodejs6
         Handler: helloworld.index
         CodeUri: './'
         Description: 'Hello world!'
