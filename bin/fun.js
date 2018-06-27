@@ -2,7 +2,7 @@
 
 'use strict';
 
-require('../check-version').checkVersion();
+require('../lib/check-version').checkVersion();
 
 const handle = function (err) {
   console.error(err.stack);
