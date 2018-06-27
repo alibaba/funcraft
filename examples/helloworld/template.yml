@@ -21,10 +21,6 @@ Resources:
         '/':
           get:
             x-aliyun-apigateway-api-name: hello_get
-            x-aliyun-apigateway-request-config:
-              bodyFormat: "stream"
-              requestMode: "mapping"
-              requestProtocol: "http"
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/
                         

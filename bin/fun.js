@@ -25,7 +25,7 @@ program.command('validate')
     require('../lib/commands/validate')(options.template).catch(handle);
   });
 
-program.command('deploy [stage]')
+program.command('deploy')
   .description('Deploy a project to AliCloud')
   .action((stage)=> {
     require('../lib/commands/deploy')(stage).catch(handle);
