@@ -1,22 +1,24 @@
-# fun
+# Fun
 
 (have)Fun with Serverless
 
 ![logo.jpg](./logo.jpg)
 
-[fun](https://github.com/aliyun/fun) 是一个用于支持 Serverless 应用部署的工具，能帮助您便捷地管理函数计算、API 网关、日志服务等资源。它通过一个资源配置文件（template.yml），协助您进行开发、构建、部署操作。
+[中文文档](README-zh.md)
 
-如果您想要使用旧版语法，请[参考](./README.old.md)。
+[Fun](https://github.com/aliyun/fun) is a tool for supporting the deployment of Serverless applications and can help you easily manage resources such as Function Compute, API Gateways, Log Serivce, and so on. It assists you with development, build, and deployment operations through a resource configuration file (template.yml).
 
-## 安装
+If you want to use the old syntax, please refer to [README.old.md](./README.old.md).
 
-fun 是一个 Node.js 编写的命令行工具，但它也能支持 Python，Java 等环境的部署操作。安装它的方式是通过 npm：
+## Installation
+
+Fun is a command-line tool written in Node.js, but it can also support the deployment of Python, Java and other environments. The easiest way to install `Fun` is to use [npm](https://www.npmjs.com/):
 
 ```
 $ npm install @alicloud/fun -g
 ```
 
-安装完成之后，会有一个 fun 命令提供使用。输入 fun 命令可以查看帮助信息：
+After the installation is complete, a `fun` command is provided for use. Enter `fun` command to see help information:
 
 ```
 $ fun -h
@@ -38,21 +40,21 @@ $ fun -h
     build               Build the dependencies
 ```
 
-## 使用
+## Usage
 
-安装完命令行工具之后，即可开始进行代码的开发了。为了配合 fun 工具，您需要创建一个工程目录，然后在工程目录下创建一个 `template.yml` 模板文件，fun 会将该目录视为一个工程。
+Once you have installed the command line tools, you are ready to write code. In order to use fun tool, you need to create a project directory and then create a file named template.yml in the project directory. Fun will treat the directory as a project.
 
-我们将在该模板文件中定义项目相关的信息。fun 可以定义的信息参见 [fun 的规范文档](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03-zh-cn.md)。
+We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03.md).
 
-在使用前，我们需要先进行配置，通过键入 `fun config`，然后按照提示，依次配置 `Account ID`、`Access Key Id`、`Secret Access Key`、 `Default Region Name` 即可。
+However before useing `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
 
-完成 config 操作后，fun 会将配置保存到用户目录下的 `.fcli/config.yaml` 文件中。
+After the `fun config` is completed, fun saves the configuration to the `.fcli/config.yaml` file in the user home.
 
-配置完成后，就可以使用 fun 命令了，模板文件、代码编写完成后，通过 fun deploy 就可以一键将服务部署到线上环境了。
+Now you are ready to use the fun command. 
 
-## 示例
+### Example
 
-下面我们一个示例来演示 fun 如何使用。首先在项目根目录下创建一个 hello.js 文件。
+Here is an example to demonstrate how fun is used. First create a hello.js file in the project root directory.
 
 ```
 exports.handler = function(event, context, callback) {
@@ -65,7 +67,7 @@ exports.handler = function(event, context, callback) {
 };
 ```
 
-接下来我们配置相关服务。在项目根目录创建一个 template.yml 文件：
+Next we configure related services. Create a template.yml file in the project root directory:
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'
@@ -95,9 +97,11 @@ Resources:
               arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/    
 ```
 
-最后执行 `fun deploy` 即可看到成功的信息：
+After the template file and code are written, you can use the deploy command to deploy the service, function and api gateway to online.
 
 ```
+$fun deploy
+
 Waiting for service fc to be deployed...
 service fc deploy success
 Waiting for api gateway HelloworldGroup to be deployed...
@@ -109,13 +113,16 @@ Waiting for api gateway HelloworldGroup to be deployed...
 api gateway HelloworldGroup deploy success
 ```
 
-打开浏览器访问 `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/` 这个地址即可。
+Open the browser to access `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/` to view the result.
 
-## 配置
+## Configuration
 
-除了使用 `fun config` 对 fun 进行配置外，还可以通过环境变量以及 .env 为 fun 进行配置。
+In addition to configuring fun with `fun config`, you can also configure for fun with environment variables and `.env`.
 
-环境变量的方式很简单，这里简单说下 .env 的方式，在项目根下创建一个名为 .env 的文件，录入以下配置即可：
+The way of using environment variables is very simple. We briefly describe the configuration of fun through `.env`.
+
+
+Create a file named `.env` in the project directory with the following content:
 
 ```
 ACCOUNT_ID=xxxxxxxx
@@ -124,32 +131,28 @@ ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
 ```
 
-建议将 .env 放到 .gitignore 中，避免泄漏重要的账户信息。
+It is recommended that put the `.env` file into `.gitignore` to protect your acouunt credentials from leaking into the public network environment.
 
-### 配置的优先级
+### Configuring Priority
 
-fun 配置方式的优先级按以下顺序依次递减：
+The priority of the fun configuration is decremented in the following order：
 
 - .env
-- 环境变量
+- environment variables
 - ~/.fcli/config.yaml
 
-## 更多例子
+## More examples
 
-更复杂的例子可以从这里查看：
+You can find more complicated examples here:
 
 https://github.com/aliyun/fun/tree/master/examples
 
-## 反馈
-
-如您在使用中遇到问题，可以在这里反馈 https://github.com/aliyun/fun/issues
-
-## 参考
+## Referrences
 
 - [以函数计算作为 API 网关后端服务](https://help.aliyun.com/document_detail/54788.html)
 - [函数计算](https://www.aliyun.com/product/fc)
 - [API Gateway](https://www.aliyun.com/product/apigateway)
 
-## 开源许可
+## License
 
 The MIT License
