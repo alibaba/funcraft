@@ -7,6 +7,13 @@ const handle = function (err) {
   process.exit(-1);
 };
 
+const semver = require('semver')
+
+if ( ! semver.satisfies(process.version, '>=8.0.0') ) {
+  console.error('Error: require nodejs version >= 8.0.0');
+  process.exit(1);
+}
+
 const program = require('commander');
 
 program.version(require('../package.json').version, '-v, --version')
