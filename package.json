@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "make test",
-    "postinstall": "node -e 'require(\"./lib/check-version\")'"
+    "postinstall": "node ./lib/check-version.js"
   },
   "author": "Jackson Tian",
   "license": "MIT",
