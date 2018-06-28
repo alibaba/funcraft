@@ -12,7 +12,9 @@ If you want to use the old syntax, please refer to [README.old.md](./README.old.
 
 ## Installation
 
-Fun is a command-line tool written in Node.js, but it can also support the deployment of Python, Java and other environments. The easiest way to install `Fun` is to use [npm](https://www.npmjs.com/):
+Fun is a development tool for serverless applications. It could help you efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
+
+The easiest way to install `Fun` is to use [npm](https://www.npmjs.com/):
 
 ```
 $ npm install @alicloud/fun -g
@@ -46,7 +48,7 @@ Once you have installed the command line tools, you are ready to write code. In 
 
 We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03.md).
 
-However before useing `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
+However before using `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
 
 After the `fun config` is completed, fun saves the configuration to the `.fcli/config.yaml` file in the user home.
 
