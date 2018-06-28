@@ -6,15 +6,13 @@
 
 [中文文档](README-zh.md)
 
-[Fun](https://github.com/aliyun/fun) is a tool for supporting the deployment of Serverless applications and can help you easily manage resources such as Function Compute, API Gateways, Log Serivce, and so on. It assists you with development, build, and deployment operations through a resource configuration file (template.yml).
+[Fun](https://github.com/aliyun/fun) is a development tool for serverless applications. It could help you efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
 
 If you want to use the old syntax, please refer to [README.old.md](./README.old.md).
 
 ## Installation
 
-Fun is a development tool for serverless applications. It could help you efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
-
-The easiest way to install `Fun` is to use [npm](https://www.npmjs.com/):
+Fun is a command-line tool written in Node.js, but it can also support the deployment of Python, Java and other environments. The easiest way to install `Fun` is to use [npm](https://www.npmjs.com/):
 
 ```
 $ npm install @alicloud/fun -g
