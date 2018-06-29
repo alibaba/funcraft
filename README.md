@@ -12,13 +12,13 @@ If you want to use the old syntax, please refer to [README.old.md](./README.old.
 
 ## Installation
 
-Fun is a command-line tool written in Node.js, but it can also support the deployment of Python, Java and other environments. The easiest way to install `Fun` is to use [npm](https://www.npmjs.com/):
+Fun is a command line tool developed by Node.js, however it also support Python, Java or other runtime enviroments. It can be installed by [npm]([npm](https://www.npmjs.com/):
 
 ```
 $ npm install @alicloud/fun -g
 ```
 
-After the installation is complete, a `fun` command is provided for use. Enter `fun` command to see help information:
+A fun command is available after installed completely. Type `fun` in the console will print usage:
 
 ```
 $ fun -h
@@ -42,19 +42,19 @@ $ fun -h
 
 ## Usage
 
-Once you have installed the command line tools, you are ready to write code. In order to use fun tool, you need to create a project directory and then create a file named template.yml in the project directory. Fun will treat the directory as a project.
+Before going ahead to develop, you need to create a directory which contains a file named template.yml. The directory will as project root directory.
 
 We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03.md).
 
 However before using `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
 
-After the `fun config` is completed, fun saves the configuration to the `.fcli/config.yaml` file in the user home.
+After the `fun config` is completed, fun saves the configuration to the `.fcli/config.yaml` file in the user home directory.
 
 Now you are ready to use the fun command. 
 
 ### Example
 
-Here is an example to demonstrate how fun is used. First create a hello.js file in the project root directory.
+Here is an example. First create a hello.js file in the project root directory.
 
 ```
 exports.handler = function(event, context, callback) {
@@ -67,7 +67,7 @@ exports.handler = function(event, context, callback) {
 };
 ```
 
-Next we configure related services. Create a template.yml file in the project root directory:
+Then Let's configure related services. Create a template.yml file in the project root directory:
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'
@@ -131,7 +131,7 @@ ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
 ```
 
-It is recommended that put the `.env` file into `.gitignore` to protect your acouunt credentials from leaking into the public network environment.
+It is recommended that add the .env into .gitignore file to prevent your account credentials be checked into code repository.
 
 ### Configuring Priority
 
