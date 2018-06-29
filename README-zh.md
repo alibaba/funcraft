@@ -2,7 +2,7 @@
 
 (have)Fun with Serverless
 
-![logo.jpg](./logo.jpg)
+![logo.jpg](./figures/logo.jpg)
 
 [English](README.md)
 
@@ -14,13 +14,13 @@
 
 fun 是一个 Node.js 编写的命令行工具，但它也能支持 Python，Java 等环境的部署操作。安装它的方式是通过 npm：
 
-```
+```shell
 $ npm install @alicloud/fun -g
 ```
 
 安装完成之后，会有一个 fun 命令提供使用。输入 fun 命令可以查看帮助信息：
 
-```
+```shell
 $ fun -h
 
   Usage: fun [options] [command]
@@ -56,7 +56,7 @@ $ fun -h
 
 下面我们一个示例来演示 fun 如何使用。首先在项目根目录下创建一个 hello.js 文件。
 
-```
+```javascript
 exports.handler = function(event, context, callback) {
   var response = {
       isBase64Encoded: false,
@@ -69,7 +69,7 @@ exports.handler = function(event, context, callback) {
 
 接下来我们配置相关服务。在项目根目录创建一个 template.yml 文件：
 
-```
+```yaml
 ROSTemplateFormatVersion: '2015-09-01'
 Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
@@ -99,7 +99,7 @@ Resources:
 
 代码以及模板文件编写完成后，就可以使用 `fun deploy` 命令一键将服务部署到线上环境了:
 
-```
+```shell
 $ fun deploy
 
 Waiting for service fc to be deployed...
@@ -120,7 +120,7 @@ api gateway HelloworldGroup deploy success
 
 环境变量的方式很简单，这里简单说下 .env 的方式，在项目根下创建一个名为 .env 的文件，录入以下配置即可：
 
-```
+```shell
 ACCOUNT_ID=xxxxxxxx
 REGION=cn-shanghai
 ACCESS_KEY_ID=xxxxxxxxxxxx

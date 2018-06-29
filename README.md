@@ -2,7 +2,7 @@
 
 (have)Fun with Serverless
 
-![logo.jpg](./logo.jpg)
+![logo.jpg](./figures/logo.jpg)
 
 [中文文档](README-zh.md)
 
@@ -12,15 +12,15 @@ If you want to use the old syntax, please refer to [README.md](https://github.co
 
 ## Installation
 
-Fun is a command line tool developed by Node.js, however it also support Python, Java or other runtime enviroments. It can be installed by [npm]([npm](https://www.npmjs.com/):
+Fun is a command line tool developed by Node.js, however it also support Python, Java or other runtime enviroments. It can be installed by [npm](https://www.npmjs.com/):
 
-```
+```shell
 $ npm install @alicloud/fun -g
 ```
 
 A fun command is available after installed completely. Type `fun` in the console will print usage:
 
-```
+```shell
 $ fun -h
 
   Usage: fun [options] [command]
@@ -56,7 +56,7 @@ Now you are ready to use the fun command.
 
 Here is an example. First create a hello.js file in the project root directory.
 
-```
+```javascript
 exports.handler = function(event, context, callback) {
   var response = {
       isBase64Encoded: false,
@@ -69,7 +69,7 @@ exports.handler = function(event, context, callback) {
 
 Then Let's configure related services. Create a template.yml file in the project root directory:
 
-```
+```yaml
 ROSTemplateFormatVersion: '2015-09-01'
 Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
@@ -99,7 +99,7 @@ Resources:
 
 After the template file and code are written, you can use the deploy command to deploy the service, function and api gateway to online.
 
-```
+```shell
 $fun deploy
 
 Waiting for service fc to be deployed...
@@ -123,7 +123,7 @@ The way of using environment variables is very simple. We briefly describe the c
 
 Create a file named `.env` in the project directory with the following content:
 
-```
+```shell
 ACCOUNT_ID=xxxxxxxx
 REGION=cn-shanghai
 ACCESS_KEY_ID=xxxxxxxxxxxx
