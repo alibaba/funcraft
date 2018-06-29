@@ -1,0 +1,15 @@
+{
+    "instanceName": "your ots instance name",
+    "tableName": "your ots table name",
+    "otsRegion": "cn-region",
+    "bucketName": "your service name",
+    "ossRegion": "oss-cn-region",
+    "logAuthApiUrl": "http://your api group domain/login",
+    "loginUrl": "http://bucketName.ossRegion.aliyuncs.com/login/index.html",
+
+    "_comment":"this is Step II,photo-gallery based on CDN",
+    "domainName": "your domain name",
+    "logAuthCDNApiUrl": "http://your api group domain/loginCDN",
+    "loginCDNUrl": "http://bucketName.ossRegion.aliyuncs.com/loginCDN/index.html",
+    "key": "cdn key pair"
+}

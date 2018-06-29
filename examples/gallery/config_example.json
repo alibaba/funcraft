@@ -1,0 +1,14 @@
+{
+    "instanceName": "accessControl",
+    "tableName": "userTable",
+    "otsRegion": "cn-shanghai",
+    "bucketName": "photo-gallery-cici",
+    "ossRegion": "oss-cn-shanghai",
+    "logAuthApiUrl": "http://90c87dae2522471588c3df7010339d3e-cn-shanghai.alicloudapi.com/login",
+    "loginUrl": "http://photo-gallery-cici.oss-cn-shanghai.aliyuncs.com/login/index.html",
+
+    "domainName": "http://photo-gallery-cici.aliyun.com",
+    "logAuthCDNApiUrl": "http://90c87dae2522471588c3df7010339d3e-cn-shanghai.alicloudapi.com/loginCDN",
+    "loginCDNUrl": "http://photo-gallery-cici.oss-cn-shanghai.aliyuncs.com/loginCDN/index.html",
+    "key": "cdnkey"
+}

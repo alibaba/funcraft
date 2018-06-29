@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>{title}</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+
+	<link rel="stylesheet" href="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/css/main.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+	<noscript>
+		<link rel="stylesheet" href="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/css/noscript.css" />
+	</noscript>
+	<link rel="shortcut icon" href="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/favicon.ico" type="image/x-icon" />
+
+</head>
+
+<body>
+	<div id="main">
+		<header id="header">
+			<h1>{title}</h1>
+			<p>{comment1}</p>
+			<p>{comment2}</p>
+			<p>{backToHomePage}</p>
+		</header>
+		<section id="thumbnails">
+			{pictures}
+		</section>
+		<footer id="footer">
+			<ul class="copyright">
+				<li>Design:
+					<a href="https://html5up.net">HTML5 UP</a>.</li>
+			</ul>
+		</footer>
+	</div>
+	<script src="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/js/jquery.min.js"></script>
+	<script src="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/js/skel.min.js"></script>
+	<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+	<script src="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/js/main.js"></script>
+	<script src="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/js/jquery.lazyload.js"></script>
+	<script src="http://{bucketName}.{ossRegion}.aliyuncs.com/webCDN/albumSite/{title}/assets/js/isExpire.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(window).ready(function () {
+			$("img.lazy").lazyload();
+		});
+	</script>
+</body>
+
+</html>

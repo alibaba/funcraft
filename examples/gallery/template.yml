@@ -1,0 +1,84 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  photo-gallery:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'more info see https://yq.aliyun.com/articles/576234?spm=a2c4e.11155435.0.0.772d3312y026yC'
+      Policies:
+        - AliyunOSSFullAccess
+        - AliyunOTSReadOnlyAccess
+      LogConfig:
+        Project: photo-gallery-log-project1
+        Logstore: photo-gallery-log-stores
+    logAuth: 
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: login/logAuth.handler
+        Runtime: nodejs6
+        CodeUri: './' 
+        Description: demo for gallery
+    uploadLoginPage: 
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Runtime: nodejs6
+        CodeUri: './'
+        Handler: login/uploadLoginPage.uploadLoginPage
+    resize: 
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Runtime: nodejs6
+        CodeUri: './'
+        MemorySize: 512
+        Handler: resize/resize.resize
+    build: 
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Runtime: nodejs6
+        CodeUri: './'
+        MemorySize: 512
+        Handler: site-builder/index.build
+      Events:
+        time-trigger:
+          Type: Timer
+          Properties:
+              CronExpression: '@every 120m'
+              Enable: true
+              Payload: '' 
+    
+
+  photo-gallery-log-project1: 
+    Type: 'Aliyun::Serverless::Log'
+    Properties:
+      Description: 'used for gallery'
+    photo-gallery-log-stores:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 362
+        ShardCount: 1
+
+  mytablestore: # tablestore name
+    Type: 'Aliyun::Serverless::TableStore'
+    Properties:
+      ClusterType: HYBRID
+      Description: used for gallery
+    mytable: # table name
+      Type: 'Aliyun::Serverless::TableStore::Table'
+      Properties:
+          PrimaryKeyList:
+            - Name: username
+              Type: STRING
+
+  photo_gallery:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      StageName: RELEASE
+      DefinitionBody:
+        '/login':
+          post:
+            x-aliyun-apigateway-api-name: logAuth
+            x-aliyun-apigateway-request-config:
+              requestProtocol: "HTTP,HTTPS"
+              requestMode: "PASSTHROUGH"
+            x-aliyun-apigateway-fc:
+              arn: acs:fc:::services/${pythondemo.Arn}/functions/${hello.Arn}/

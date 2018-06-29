@@ -1,0 +1,9 @@
+triggerConfig:
+    events:
+        - oss:ObjectCreated:PutObject
+        - oss:ObjectRemoved:DeleteObject
+        - oss:ObjectCreated:PostObject
+        - oss:ObjectRemoved:DeleteObjects
+    filter:
+        key:
+            prefix: processed/fulls
