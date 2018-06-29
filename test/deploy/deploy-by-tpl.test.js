@@ -144,7 +144,7 @@ describe('deploy', () => {
       description: 'api group for function compute'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
-      apiName: 'getUserInfo_token_get',
+      apiName: 'connectid',
       auth: {
         config: {
           'idTokenParamName': 'token',
