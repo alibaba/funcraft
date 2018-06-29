@@ -106,7 +106,6 @@ Waiting for service fc to be deployed...
 service fc deploy success
 Waiting for api gateway HelloworldGroup to be deployed...
     URL: GET http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/
-      => undefined
       stage: RELEASE, deployed, version: 20180627110526681
       stage: PRE, undeployed
       stage: TEST, undeployed
