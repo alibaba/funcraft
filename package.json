@@ -2,11 +2,15 @@
   "name": "@alicloud/fun",
   "version": "1.6.3",
   "description": "(have)Fun with Serverless",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "bin": {
     "fun": "bin/fun.js"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "postinstall": "node ./lib/check-version.js"
   },
   "author": "Jackson Tian",
   "license": "MIT",
@@ -29,7 +33,8 @@
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
     "mkdirp-promise": "^5.0.1",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "semver": "^5.5.0"
   },
   "files": [
     "bin",
