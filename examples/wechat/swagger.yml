@@ -4,6 +4,10 @@ info:
   version: v1
 '/wechat':
   get:
+    x-aliyun-apigateway-request-config:
+      requestProtocol: "HTTP"
+      requestMode: "MAPPING"
+      bodyFormat: "STREAM"
     x-aliyun-apigateway-request-parameters:
       - apiParameterName: 'encrypt_type'
       - apiParameterName: 'msg_signature'
@@ -40,5 +44,9 @@ info:
       - apiParameterName: 'encrypt_type'
         location: 'Query'
         parameterType: 'String'
+    x-aliyun-apigateway-request-config:
+      requestProtocol: "HTTP"
+      requestMode: "MAPPING"
+      bodyFormat: "STREAM"
     x-aliyun-apigateway-fc:
       arn: acs:fc:::services/${wechat.Arn}/functions/${post.Arn}/

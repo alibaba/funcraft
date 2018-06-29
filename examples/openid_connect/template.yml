@@ -8,7 +8,7 @@ Resources:
     helloworld:
       Type: 'Aliyun::Serverless::Function'
       Properties:
-        Runtime: nodejs6
+        Runtime: nodejs8
         Handler: helloworld.index
         CodeUri: './'
         Description: 'Hello world!'
@@ -18,10 +18,6 @@ Resources:
     Properties:
       StageName: RELEASE
       DefinitionBody:
-        openapi: "3.0.0"
-        info:
-          title: 'API Gateway & Function Compute'
-          version: v1
         '/getUserInfo/[token]':
           get:
             x-aliyun-apigateway-request-parameters:
@@ -30,7 +26,7 @@ Resources:
                 type: 'String'
                 parameterType: 'REQUIRED'
             x-aliyun-apigateway-visibility: PRIVATE
-            x-aliyun-apigateway-auth-type: 'OPENID'
+            x-aliyun-apigateway-auth-type: 'APPOPENID'
             x-aliyun-apigateway-openid-connect-config:
               idTokenParamName: 'token'
               openidApiType: 'BUSINESS'

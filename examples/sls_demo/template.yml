@@ -1,0 +1,46 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  log-compute1:
+    Type: 'Aliyun::Serverless::Service'
+    Properties: 
+      Description: 'sls test'
+
+    log-compute:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python2.7
+        CodeUri: './'
+      Events:
+        log-stream:
+          Type: Log
+          Properties:
+            SourceConfig:
+               Logstore: log-com-m
+            JobConfig:
+               MaxRetryTime: 1
+               TriggerInterval: 30
+            LogConfig:
+               Project: log-com-m
+               Logstore: log-en-m
+               Enable: true
+
+  log-com-m1:
+    Type: 'Aliyun::Serverless::Log'
+    Properties:
+      Description: 'just python  log'
+    log-com-m:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1
+    log-en-m:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1
+
+
+
+

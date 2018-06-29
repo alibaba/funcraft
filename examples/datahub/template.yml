@@ -8,11 +8,5 @@ Resources:
       Properties:
         Handler: datahub.index
         Runtime: nodejs6
-        CodeUri: './'
-      Events:
-        DhsTrigger:
-          Type: Datahub
-          Properties: 
-            Topic: acs:dhs:cn-hangzhou:123456789012:projects/my-prj/topics/my-tpc
-            StartingPosition: LATEST
-            BatchSize: 100
+        CodeUri: 'datahub.js'
+
