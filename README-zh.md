@@ -56,7 +56,7 @@ $ fun -h
 
 下面我们一个示例来演示 fun 如何使用。首先在项目根目录下创建一个 hello.js 文件。
 
-```js
+```javascript
 exports.handler = function(event, context, callback) {
   var response = {
       isBase64Encoded: false,

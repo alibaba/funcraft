@@ -56,7 +56,7 @@ Now you are ready to use the fun command.
 
 Here is an example. First create a hello.js file in the project root directory.
 
-```js
+```javascript
 exports.handler = function(event, context, callback) {
   var response = {
       isBase64Encoded: false,
