@@ -8,7 +8,7 @@
 
 [Fun](https://github.com/aliyun/fun) is a development tool for serverless applications. It could help you efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
 
-If you want to use the old syntax, please refer to [README.old.md](./README.old.md).
+If you want to use the old syntax, please refer to [README.md](https://github.com/aliyun/fun/blob/be948f66afac020409ac2403be321fced83db808/README.md).
 
 ## Installation
 
@@ -44,7 +44,7 @@ $ fun -h
 
 Before going ahead to develop, you need to create a directory which contains a file named template.yml. The directory will as project root directory.
 
-We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03.md).
+We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md).
 
 Before using `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
 

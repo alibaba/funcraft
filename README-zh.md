@@ -8,7 +8,7 @@
 
 [Fun](https://github.com/aliyun/fun) 是一个用于支持 Serverless 应用部署的工具，能帮助您便捷地管理函数计算、API 网关、日志服务等资源。它通过一个资源配置文件（template.yml），协助您进行开发、构建、部署操作。
 
-如果你想使用旧版本的语法，请参考 [README.old.md](./README.old.md).
+如果你想使用旧版本的语法，请[参考](https://github.com/aliyun/fun/blob/be948f66afac020409ac2403be321fced83db808/README.md).
 
 ## Installation
 
@@ -44,7 +44,7 @@ $ fun -h
 
 安装完命令行工具之后，即可开始进行代码的开发了。为了配合 fun 工具，您需要创建一个工程目录，然后在工程目录下创建一个 `template.yml` 模板文件，fun 会将该目录视为一个工程。
 
-我们将在该模板文件中定义项目相关的信息。fun 可以定义的信息参见 [fun 的规范文档](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03-zh-cn.md)。
+我们将在该模板文件中定义项目相关的信息。fun 可以定义的信息参见 [fun 的规范文档](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md)。
 
 在使用前，我们需要先进行配置，通过键入 `fun config`，然后按照提示，依次配置 `Account ID`、`Access Key Id`、`Secret Access Key`、 `Default Region Name` 即可。
 
