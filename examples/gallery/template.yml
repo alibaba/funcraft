@@ -9,7 +9,7 @@ Resources:
         - AliyunOSSFullAccess
         - AliyunOTSReadOnlyAccess
       LogConfig:
-        Project: photo-gallery-log-project1
+        Project: photo-gallery-log-project
         Logstore: photo-gallery-log-stores
     logAuth: 
       Type: 'Aliyun::Serverless::Function'
@@ -47,7 +47,7 @@ Resources:
               Payload: '' 
     
 
-  photo-gallery-log-project1: 
+  photo-gallery-log-project: 
     Type: 'Aliyun::Serverless::Log'
     Properties:
       Description: 'used for gallery'
