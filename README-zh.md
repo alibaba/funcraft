@@ -8,7 +8,7 @@
 
 [Fun](https://github.com/aliyun/fun) 是一个用于支持 Serverless 应用部署的工具，能帮助您便捷地管理函数计算、API 网关、日志服务等资源。它通过一个资源配置文件（template.yml），协助您进行开发、构建、部署操作。
 
-如果你想使用旧版本的语法，请[参考](https://github.com/aliyun/fun/blob/be948f66afac020409ac2403be321fced83db808/README.md).
+如果你想使用旧版本的语法，请[参考](https://github.com/aliyun/fun/blob/v1.x/README.md).
 
 ## Installation
 

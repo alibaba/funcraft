@@ -45,13 +45,13 @@ Function compute(cn-shanghai):
 因为 fun 提供了对 trigger 的编排支持，所以在 function 下，我们可以增加 triggers 的定义。本例中的定义如下：
 
 ```yaml
-triggers:
-  - name: 'timer'
-    type: 'timer'
-    config:
-      payload: "awesome-fc"
-      cronExpression: "0 0 8 * * *"
-      enable: true
+Events:
+  TmTrigger:
+    Type: Timer
+    Properties: 
+      Payload: "awesome-fc"
+      CronExpression: "0 0 8 * * *"
+      Enable: true
 ```
 
 ### 执行示例

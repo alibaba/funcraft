@@ -55,7 +55,7 @@ describe('deploy', () => {
     });
   
     assert.calledWith(deploySupport.makeFunction, {
-      codeUri: './',
+      codeUri: 'datahub.js',
       description: undefined,
       functionName: 'MyFunction',
       handler: 'datahub.index',
@@ -134,7 +134,7 @@ describe('deploy', () => {
       functionName: 'helloworld',
       handler: 'helloworld.index',
       memorySize: undefined,
-      runtime: 'nodejs6',
+      runtime: 'nodejs8',
       serviceName: 'fc',
       timeout: undefined,
       environmentVariables: undefined
@@ -144,13 +144,13 @@ describe('deploy', () => {
       description: 'api group for function compute'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
-      apiName: 'getUserInfo_token_get',
+      apiName: 'connectid',
       auth: {
         config: {
           'idTokenParamName': 'token',
           'openidApiType': 'BUSINESS'
         },
-        type: 'OPENID'
+        type: 'APPOPENID'
       },
       functionName: 'helloworld',
       method: 'get',
@@ -168,8 +168,8 @@ describe('deploy', () => {
       stageName: 'RELEASE',
       visibility: 'PRIVATE',
       serviceTimeout: 3000,
-      resultConfig: {  },
-      requestConfig: {  },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      
+      requestConfig: {  }
     });
   });
 
@@ -249,8 +249,7 @@ describe('deploy', () => {
       visibility: undefined,
       serviceTimeout: 3000,
       requestConfig: {},
-      resultConfig: {},
-    });
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },    });
   });
   it('deploy segment', async () => {
     await deploy('segment');
@@ -288,12 +287,12 @@ describe('deploy', () => {
       parameters: undefined,
       requestPath: '/do_segment',
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
-      serviceName: 'mass',
+      serviceName: 'maas',
       stageName: 'RELEASE',
       visibility: undefined,
-      resultConfig: {  },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
       serviceTimeout: 3000,
-      requestConfig: { bodyFormat: 'stream', protocol: 'http', requestMode: 'PASSTHROUGH' }
+      requestConfig: { requestMode: 'PASSTHROUGH', requestProtocol: 'http' }
     });
   });
   it('deploy timer', async () => {
@@ -356,7 +355,7 @@ describe('deploy', () => {
       description: 'api group for function compute',
       name: 'wechat_group'
     });
-    assert.calledWith(deploySupport.makeApi, {}, {
+    assert.calledWith(deploySupport.makeApi.firstCall, {}, {
       apiName: 'wechat_get',
       auth: { config: undefined, type: undefined },
       functionName: 'get',
@@ -374,8 +373,8 @@ describe('deploy', () => {
       serviceName: 'wechat',
       stageName: 'RELEASE',
       visibility: undefined,
-      requestConfig: {  },
-      resultConfig: {  },
+      requestConfig: { bodyFormat: 'STREAM', requestMode: 'MAPPING', requestProtocol: 'HTTP' },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      
       serviceTimeout: 3000
     });
 
@@ -407,9 +406,8 @@ describe('deploy', () => {
       serviceName: 'wechat',
       stageName: 'RELEASE',
       visibility: undefined,
-      requestConfig: {  },
-      resultConfig: {  },
-      serviceTimeout: 3000
+      requestConfig: { bodyFormat: 'STREAM', requestMode: 'MAPPING', requestProtocol: 'HTTP' },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      serviceTimeout: 3000
     });
   });
 });

@@ -18,18 +18,13 @@ Resources:
     Properties:
       StageName: RELEASE
       DefinitionBody:
-        openapi: "3.0.0"
-        info:
-          title: 'API Gateway & Function Compute'
-          version: v1
         '/do_segment':
           post:
             x-aliyun-apigateway-api-name: segment_post
             x-aliyun-apigateway-request-config:
-              bodyFormat: "stream"
               requestMode: "PASSTHROUGH"
-              protocol: "http"
+              requestProtocol: "http"
             x-aliyun-apigateway-fc:
-              arn: acs:fc:::services/${mass.Arn}/functions/${doSegment.Arn}/
+              arn: acs:fc:::services/${maas.Arn}/functions/${doSegment.Arn}/
 
             

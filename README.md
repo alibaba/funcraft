@@ -8,7 +8,7 @@
 
 [Fun](https://github.com/aliyun/fun) is a development tool for serverless applications. It could help you efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
 
-If you want to use the old syntax, please refer to [README.md](https://github.com/aliyun/fun/blob/be948f66afac020409ac2403be321fced83db808/README.md).
+If you want to use the old syntax, please refer to [README.md](https://github.com/aliyun/fun/blob/v1.x/README.md).
 
 ## Installation
 
@@ -144,7 +144,8 @@ The priority of the fun configuration is decremented in the following order：
 
 You can find more complicated examples here:
 
-https://github.com/aliyun/fun/tree/master/examples
+- https://github.com/aliyun/fun/tree/master/examples
+- [十分钟上线-在函数计算上部署基于django开发的个人博客系统](https://yq.aliyun.com/articles/603249?spm=a2c4e.11153959.teamhomeleft.26.115948f26ECqbQ)
 
 ## Referrences
 
