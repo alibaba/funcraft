@@ -46,7 +46,7 @@ Before going ahead to develop, you need to create a directory which contains a f
 
 We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/spec_for_ros/docs/specs/2018-04-03.md).
 
-However before using `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
+Before using `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
 
 After the `fun config` is completed, fun saves the configuration to the `.fcli/config.yaml` file in the user home directory.
 
