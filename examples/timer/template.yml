@@ -15,5 +15,5 @@ Resources:
           Type: Timer
           Properties: 
             Payload: "awesome-fc"
-            CronExpression: "0 0 8 * * *"
+            CronExpression: "0 0 8 * * *"  # utc 时间，北京时间减8小时
             Enable: true

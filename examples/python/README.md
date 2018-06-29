@@ -21,7 +21,7 @@ URL: GET http://<api group id>-cn-hangzhou.alicloudapi.com/python/hello => cn-sh
 
 ## Note
 
-Like Node.js demo, just change the `runtime` and `codes` properties in faas.yml file.
+Like Node.js demo, just change the `runtime` and `codes` properties in template.yml file.
 
 ## License
 

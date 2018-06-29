@@ -20,6 +20,7 @@ Resources:
       DefinitionBody:
         '/getUserInfo/[token]':
           get:
+            x-aliyun-apigateway-api-name: connectid
             x-aliyun-apigateway-request-parameters:
               - apiParameterName: 'token'
                 location: 'Path'
