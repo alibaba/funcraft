@@ -1,11 +1,20 @@
 language: node_js
 node_js:
-  - "8"
-  - "9"
-  - "10"
-
+- '8'
+- '9'
+- '10'
 cache:
   directories:
-    - "node_modules"
-
+  - node_modules
 script: make test
+deploy:
+  provider: npm
+  email: duwan@live.com
+  api_key:
+    secure: UJ7hrwXNo/nEDdvtEfwuX7s1lR0vW1Nd9tq4AmeIxG3KtKBAyglfvh/lPKN5eiO4M9Xga2mLNumNgzk6htZc6zUmKBS/uyDP/BfZFZJDkjfUdDl6l5JtLfSXaWBUSHGM2HoqMXoMrQ0RweT565G4hNDSZ/9vt6DjzCp+twOsKeQWqptcTQxgVk19ynz1Ve0dll/ViIxM04R5vWD9ISI6mHjK1lhcrzsw/HMDimzbOoAtyDSWTwconnv23tY5xCgaTSc4Ltvvlq6pQ9Mtt0mHTkFj+q3B16GeqTiHPjk1MVnPBii9Y/MgdeLkz5RDLggTD5/UzhEtqj8O+dTght4O4uRb7pqLCxVzi5atETvSim+Phsc3y159lQmqmcU/bNXl54C1ro44eBlS1jC8gTrK+c5eBAhju2AOBuoMfmNWHc+sXJLxwaW/o+3alsPeTvpYBlJnU2/LpEpWGohjEUAItyMHtp5nhBXCSf3iQAEXN02fRzj8L+fydTPRFzFnNlGB/qZNGxVIjR9JIaUL8a/DjE5Sjt6OXnNofP7CGMZxSStHVyobo0D36gW/4hRR9kymunvdOoKLmk+E1/0A6vutjOf3ajIdDvr9cfEgHFp9X3cl38WHBwNiQOlJxlE+AooMHgtCiO3+ZFcTsae/EJS3p4KOh+Fx+uBEg3aXT6gqa3Y=
+  on:
+    tags: true
+    repo: aliyun/fun
+    condition: $TRAVIS_TAG = "v$PKG_VERSION"
+  before_deploy:
+    - export PKG_VERSION=`node -p "require('./package').version"`
