@@ -1,0 +1,48 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  views-count-demo: # service name
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Module as a service'
+      Policies: 
+        - AliyunOTSFullAccess
+    views-count: # function name
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: './'
+        Description: 'views counts'
+        Runtime: nodejs8
+        EnvironmentVariables:
+          InstanceName: views-count-inst
+          TableName: viewsTablesName
+          Endpoint: https://views-count-inst.cn-shanghai.ots.aliyuncs.com
+
+  views-count-inst: 
+    Type: 'Aliyun::Serverless::TableStore'
+    Properties:
+      ClusterType: HYBRID
+      Description: used for views_count_demo
+    viewsTablesName: # table name
+      Type: 'Aliyun::Serverless::TableStore::Table'
+      Properties:
+          PrimaryKeyList:
+            - Name: count_name
+              Type: STRING
+
+  views_count_apis:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      StageName: RELEASE
+      DefinitionBody:
+        '/':
+          get:
+            x-aliyun-apigateway-api-name: views
+            x-aliyun-apigateway-request-config:
+              requestMode: "PASSTHROUGH"
+              requestProtocol: "http"
+            x-aliyun-apigateway-fc:
+              arn: acs:fc:::services/${views-count-demo.Arn}/functions/${views-count.Arn}/
+
+            
