@@ -36,7 +36,7 @@ $ fun -h
 
     config              Configure the fun
     validate [options]  Validate a fun template
-    deploy [stage]      Deploy a project to AliCloud
+    deploy              Deploy a project to AliCloud
     build               Build the dependencies
 ```
 
