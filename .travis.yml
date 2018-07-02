@@ -17,4 +17,4 @@ deploy:
     repo: aliyun/fun
     condition: $TRAVIS_TAG = "v$PKG_VERSION"
   before_deploy:
-    - eval "export PKG_VERSION=`node -e \"console.log(require('./package').version)\"`"
+    - export PKG_VERSION=`node -e "console.log(require('./package').version)"`
