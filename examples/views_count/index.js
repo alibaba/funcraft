@@ -42,17 +42,22 @@ exports.handler = function(event, context, callback) {
             views = await getCount(client);
 
             if (views) { 
-                const res = await client.updateRow({
-                    tableName: process.env['TableName'],
-                    condition: new TableStore.Condition(TableStore.RowExistenceExpectation.IGNORE, new TableStore.SingleColumnCondition('count', Long.fromNumber(views), TableStore.ComparatorType.EQUAL)),
-                    primaryKey: [{ 'count_name': 'views' }],
-                    updateOfAttributeColumns: [
-                        { 'PUT': [{'count': Long.fromNumber(views + 1)}]}
-                    ]
-                });
-            
-                if (await getCount(client) === views + 1) seccess = true;
-                
+                try {
+                    await client.updateRow({
+                        tableName: process.env['TableName'],
+                        condition: new TableStore.Condition(TableStore.RowExistenceExpectation.IGNORE, new TableStore.SingleColumnCondition('count', Long.fromNumber(views), TableStore.ComparatorType.EQUAL)),
+                        primaryKey: [{ 'count_name': 'views' }],
+                        updateOfAttributeColumns: [
+                            { 'PUT': [{'count': Long.fromNumber(views + 1)}]}
+                        ],
+                        returnContent: { returnType: TableStore.ReturnType.Primarykey }
+                    });
+                    seccess = true;
+                } catch (ex) {
+                    if (ex.code !== 403) {
+                        callback(ex, null);
+                    }
+                }
             } else {
                 try {
                     views = 1;
@@ -80,4 +85,3 @@ exports.handler = function(event, context, callback) {
         callback(null, response);
     })();
 };
-
