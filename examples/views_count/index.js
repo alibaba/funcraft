@@ -36,7 +36,7 @@ exports.handler = function(event, context, callback) {
         let views = null;
 
         const client = await getClient(context);
-        let seccess = false;
+        let success = false;
 
         do {
             views = await getCount(client);
@@ -52,7 +52,7 @@ exports.handler = function(event, context, callback) {
                         ],
                         returnContent: { returnType: TableStore.ReturnType.Primarykey }
                     });
-                    seccess = true;
+                    success = true;
                 } catch (ex) {
                     if (ex.code !== 403) {
                         callback(ex, null);
@@ -69,12 +69,12 @@ exports.handler = function(event, context, callback) {
                             { 'PUT': [{'count': Long.fromNumber(views)}]}
                         ]
                     });
-                    seccess = true;
+                    success = true;
                 } catch (ex) {
                     console.log(ex);
                 }
             }
-        } while(!seccess);
+        } while(!success);
 
         var response = {
             isBase64Encoded: false,
