@@ -33,6 +33,7 @@
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
     "mkdirp-promise": "^5.0.1",
+    "promise-retry": "^1.1.1",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0"
   },
