@@ -28,7 +28,7 @@ Resources:
                 parameterType: 'REQUIRED'
             x-aliyun-apigateway-visibility: PRIVATE
             x-aliyun-apigateway-auth-type: 'APPOPENID'
-            x-aliyun-apigateway-openid-connect-config:
+            x-aliyun-apigateway-open-id-connect-config:
               idTokenParamName: 'token'
               openidApiType: 'BUSINESS'
             x-aliyun-apigateway-fc:
