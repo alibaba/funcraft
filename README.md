@@ -152,6 +152,7 @@ You can find more complicated examples here:
 - [以函数计算作为 API 网关后端服务](https://help.aliyun.com/document_detail/54788.html)
 - [函数计算](https://www.aliyun.com/product/fc)
 - [API Gateway](https://www.aliyun.com/product/apigateway)
+- [Fun 发布 2.0 新版本啦](https://yq.aliyun.com/articles/604490)
 
 ## License
 
