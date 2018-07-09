@@ -23,6 +23,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
+    "@alicloud/fc2": "^2.0.4",
     "@alicloud/log": "^1.0.0",
     "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/ram": "^1.0.0",
