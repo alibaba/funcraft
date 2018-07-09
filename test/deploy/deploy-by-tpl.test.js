@@ -152,6 +152,7 @@ describe('deploy', () => {
         },
         type: 'APPOPENID'
       },
+      description: undefined,
       functionName: 'helloworld',
       method: 'get',
       parameters: [
@@ -239,6 +240,7 @@ describe('deploy', () => {
         config: undefined,
         type: undefined
       },
+      description: undefined,
       functionName: 'hello',
       method: 'get',
       parameters: undefined,
@@ -280,6 +282,7 @@ describe('deploy', () => {
       name: 'maasapi'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
+      description: undefined,
       apiName: 'segment_post',
       auth: { config: undefined, type: undefined },
       functionName: 'doSegment',
@@ -360,6 +363,7 @@ describe('deploy', () => {
       auth: { config: undefined, type: undefined },
       functionName: 'get',
       method: 'get',
+      description: undefined,
       parameters: [
         { apiParameterName: 'encrypt_type' },
         { apiParameterName: 'msg_signature' },
@@ -394,6 +398,7 @@ describe('deploy', () => {
       auth: { config: undefined, type: undefined },
       functionName: 'post',
       method: 'post',
+      description: undefined,
       parameters: [
         { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' }, 
         { location: 'Query', apiParameterName: 'nonce', parameterType: 'String' }, 

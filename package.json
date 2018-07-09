@@ -8,6 +8,12 @@
   "bin": {
     "fun": "bin/fun.js"
   },
+  "pkg": {
+    "scripts": [
+      "./lib/**/*.js",
+      "./bin/**/*.js"
+    ]
+  },
   "scripts": {
     "test": "make test",
     "postinstall": "node ./lib/check-version.js"
@@ -17,6 +23,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
+    "@alicloud/fc2": "^2.0.4",
     "@alicloud/log": "^1.0.0",
     "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/ram": "^1.0.0",
@@ -33,6 +40,8 @@
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
     "mkdirp-promise": "^5.0.1",
+    "os-locale": "^2.1.0",
+    "promise-retry": "^1.1.1",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0"
   },
