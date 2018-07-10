@@ -20,4 +20,13 @@ test-coveralls:
 	@echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
 	@nyc report --reporter=text-lcov | coveralls
 
-.PHONY: test
+clean: 
+	@rm -rf output
+
+binary: clean
+	@script/binary.sh
+
+upload: 
+	@script/upload.sh
+
+.PHONY: test clean binary
