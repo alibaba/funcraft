@@ -16,7 +16,9 @@
   },
   "scripts": {
     "test": "make test",
-    "postinstall": "node ./lib/check-version.js"
+    "postinstall": "node ./lib/check-version.js",
+    "binary": "make binary",
+    "upload": "make upload"
   },
   "author": "Jackson Tian",
   "license": "MIT",
@@ -54,6 +56,7 @@
     "expect.js": "^0.3.1",
     "mocha": "^3.4.2",
     "nock": "^9.2.6",
+    "pkg": "^4.3.3",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7"
   }

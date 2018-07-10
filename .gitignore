@@ -73,3 +73,6 @@ examples/java/demo/target/
 
 .idea/
 .vscode/
+
+output
+.oss_cfg
