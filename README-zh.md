@@ -153,6 +153,7 @@ https://github.com/aliyun/fun/tree/master/examples
 - [函数计算](https://www.aliyun.com/product/fc)
 - [API Gateway](https://www.aliyun.com/product/apigateway)
 - [Fun 发布 2.0 新版本啦](https://yq.aliyun.com/articles/604490)
+- [三十分钟快速搭建serverless网盘服务](https://yq.aliyun.com/articles/613780)
 
 ## 开源许可
 
