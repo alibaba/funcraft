@@ -1,7 +1,7 @@
 ROSTemplateFormatVersion: '2015-09-01'
 Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
-  log-compute1:
+  log-compute:
     Type: 'Aliyun::Serverless::Service'
     Properties: 
       Description: 'sls test'
@@ -17,15 +17,14 @@ Resources:
           Type: Log
           Properties:
             SourceConfig:
-               Logstore: log-com-m
+              Logstore: log-com-m
             JobConfig:
-               MaxRetryTime: 1
-               TriggerInterval: 30
+              MaxRetryTime: 1
+              TriggerInterval: 30
             LogConfig:
-               Project: log-com-m
-               Logstore: log-en-m
-               Enable: true
-
+              Project: log-com-m
+              Logstore: log-en-m
+            Enable: true
   log-com-m:
     Type: 'Aliyun::Serverless::Log'
     Properties:

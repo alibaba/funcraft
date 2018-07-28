@@ -1,0 +1,77 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  helloworld:
+    Type: 'Aliyun::Serverless::Service'
+    Properties: 
+      Description: 'sls test'
+      LogConfig:
+        Project: sls-log-test
+        Logstore: log-trigger
+    helloworld:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs8
+        CodeUri: './index.js'
+
+  fc:
+    Type: 'Aliyun::Serverless::Service'
+    Properties: 
+      Description: 'sls test'
+      LogConfig:
+        Project: sls-log-test
+        Logstore: log
+    slstrigger:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: trigger.handler
+        Runtime: nodejs8
+        CodeUri: './trigger.js'
+      Events:
+        log-stream:
+          Type: Log
+          Properties:
+            SourceConfig:
+               Logstore: log
+            JobConfig:
+               MaxRetryTime: 1
+               TriggerInterval: 30
+            LogConfig:
+               Project: sls-log-test
+               Logstore: sls-log
+            Enable: true
+
+  sls-log-test:
+    Type: 'Aliyun::Serverless::Log'
+    Properties:
+      Description: 'just python log'
+    log-trigger:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1
+    sls-log: 
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1
+    log:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1
+        
+  hello:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      StageName: RELEASE
+      DefinitionBody:
+        '/hello':
+          get:
+            x-aliyun-apigateway-api-name: pythonhello
+            x-aliyun-apigateway-fc:
+              arn: acs:fc:::services/${helloworld.Arn}/functions/${helloworld.Arn}/
+
+
+
