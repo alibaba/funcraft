@@ -169,6 +169,7 @@ describe('deploy', () => {
       stageName: 'RELEASE',
       visibility: 'PRIVATE',
       serviceTimeout: 3000,
+      constantParameters: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      
       requestConfig: {  }
     });
@@ -251,6 +252,7 @@ describe('deploy', () => {
       visibility: undefined,
       serviceTimeout: 3000,
       requestConfig: {},
+      constantParameters: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },    });
   });
   it('deploy segment', async () => {
@@ -294,6 +296,7 @@ describe('deploy', () => {
       stageName: 'RELEASE',
       visibility: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
+      constantParameters: undefined,
       serviceTimeout: 3000,
       requestConfig: { requestMode: 'PASSTHROUGH', requestProtocol: 'http' }
     });
@@ -376,6 +379,7 @@ describe('deploy', () => {
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'wechat',
       stageName: 'RELEASE',
+      constantParameters: undefined,
       visibility: undefined,
       requestConfig: { bodyFormat: 'STREAM', requestMode: 'MAPPING', requestProtocol: 'HTTP' },
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      
@@ -411,6 +415,7 @@ describe('deploy', () => {
       serviceName: 'wechat',
       stageName: 'RELEASE',
       visibility: undefined,
+      constantParameters: undefined,
       requestConfig: { bodyFormat: 'STREAM', requestMode: 'MAPPING', requestProtocol: 'HTTP' },
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      serviceTimeout: 3000
     });
