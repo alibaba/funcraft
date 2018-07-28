@@ -209,6 +209,42 @@ describe('deploy', () => {
     });
   });
 
+  it('deploy sls_demo', async () => {
+    await deploy('sls_demo');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'sls test',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      serviceName: 'log-compute',
+      vpcConfig: undefined
+    });
+    assert.calledWith(deploySupport.makeFunction, {
+      codeUri: './',
+      handler: 'index.handler',
+      description: undefined,
+      functionName: 'log-compute',
+      memorySize: undefined,
+      runtime: 'python2.7',
+      serviceName: 'log-compute',
+      timeout: undefined,
+      environmentVariables: undefined
+    });
+    assert.calledWith(deploySupport.makeTrigger, {
+      serviceName: 'log-compute',
+      functionName: 'log-compute',
+      triggerName: 'log-stream',
+      triggerType: 'Log',
+      triggerProperties: {
+        Enable: true,
+        JobConfig: { MaxRetryTime: 1, TriggerInterval: 30 },
+        LogConfig: { Logstore: 'log-en-m', Project: 'log-com-m' },
+        SourceConfig: { Logstore: 'log-com-m' }
+      },
+    });
+  });
+
   it('deploy python', async () => {
     await deploy('python');
 
