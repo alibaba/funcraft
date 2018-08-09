@@ -33,6 +33,10 @@ program.command('deploy')
   .option('-r, --defaultRegion [region]', '')
   .option('-t, --timeout [timeout]', '')
   .action((stage, options)=> {
+    if (typeof stage === 'object') {
+      options = stage;
+      stage = undefined;
+    }
     require('../lib/commands/deploy')(stage, options).catch(handle);
   });
 
