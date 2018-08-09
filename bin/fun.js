@@ -27,11 +27,11 @@ program.command('validate')
 
 program.command('deploy')
   .description('Deploy a project to AliCloud')
-  .option('-k, --accessKeyId [access key id]', '')
-  .option('-s, --accessKeySecret [access key id]', '')
-  .option('-i, --accountId [account id]', '')
-  .option('-r, --defaultRegion [region]', '')
-  .option('-t, --timeout [timeout]', '')
+  .option('-k, --accessKeyId [access key id]')
+  .option('-s, --accessKeySecret [access key id]')
+  .option('-i, --accountId [account id]')
+  .option('-r, --defaultRegion [region]')
+  .option('-t, --timeout [timeout]')
   .action((stage, options)=> {
     if (typeof stage === 'object') {
       options = stage;
