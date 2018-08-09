@@ -27,8 +27,13 @@ program.command('validate')
 
 program.command('deploy')
   .description('Deploy a project to AliCloud')
-  .action((stage)=> {
-    require('../lib/commands/deploy')(stage).catch(handle);
+  .option('-k, --accessKeyId [access key id]', '')
+  .option('-s, --accessKeySecret [access key id]', '')
+  .option('-i, --accountId [account id]', '')
+  .option('-r, --defaultRegion [region]', '')
+  .option('-t, --timeout [timeout]', '')
+  .action((stage, options)=> {
+    require('../lib/commands/deploy')(stage, options).catch(handle);
   });
 
 program.command('build')

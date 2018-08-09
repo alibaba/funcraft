@@ -32,10 +32,11 @@ describe('deploy', () => {
   });
 
   async function deploy(example) {
+    const options = {};
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
       '../ram': ram
-    })(`./examples/${example}/template.yml`);
+    })(`./examples/${example}/template.yml`, options);
 
     // await proxyquire('../../lib/deploy/deploy-support', {
       
