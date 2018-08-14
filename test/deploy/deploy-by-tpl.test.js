@@ -148,7 +148,7 @@ describe('deploy', () => {
       auth: {
         config: {
           'idTokenParamName': 'token',
-          'openidApiType': 'BUSINESS'
+          'openIdApiType': 'BUSINESS'
         },
         type: 'APPOPENID'
       },

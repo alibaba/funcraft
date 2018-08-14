@@ -30,7 +30,7 @@ Resources:
             x-aliyun-apigateway-auth-type: 'APPOPENID'
             x-aliyun-apigateway-open-id-connect-config:
               idTokenParamName: 'token'
-              openidApiType: 'BUSINESS'
+              openIdApiType: 'BUSINESS'
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/
             
