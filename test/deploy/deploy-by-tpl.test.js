@@ -456,4 +456,28 @@ describe('deploy', () => {
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },      serviceTimeout: 3000
     });
   });
+
+  it('deploy custom_domain', async () => {
+    await deploy('custom_domain');
+
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'fun.cn-shanghai.1221968287646227.cname-test.fc.aliyun-inc.com',
+      protocol: 'HTTP',
+      routeConfig: {
+        routes: [
+          {
+            path: '/a',
+            serviceName: 'serviceA',
+            functionName: 'functionA',
+          },
+          {
+            path: '/b',
+            serviceName: 'serviceB',
+            functionName: 'functionB',
+          },
+        ]
+      }
+    });
+  });
+
 });
