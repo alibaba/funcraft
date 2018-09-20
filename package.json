@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.0.0"
@@ -25,7 +25,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc2": "^2.0.4",
+    "@alicloud/fc2": "^2.0.5",
     "@alicloud/log": "^1.0.0",
     "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/pop-core": "^1.6.0",
