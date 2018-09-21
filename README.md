@@ -6,22 +6,22 @@
 
 [中文文档](README-zh.md)
 
-[Fun](https://github.com/aliyun/fun) is a development tool for serverless applications. It could help you efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
+[Fun](https://github.com/aliyun/fun) is a development tool for serverless applications. It can help you to efficiently arrange cloud resources such as Function Compute, API Gateway, Log Service and so on. You can use it to develop，build and deploy FC by describing relative resources in a `template.yml` file.
 
 If you want to use the old syntax, please refer to [README.md](https://github.com/aliyun/fun/blob/v1.x/README.md).
 
 ## Installation
 
-Fun is a command line tool developed by Node.js, however it also support Python, Java or other runtime enviroments. It can be installed by [npm](https://www.npmjs.com/):
+Fun is a command line tool developed for Node.js, however it also support Python, Java or other runtime enviroments. It can be installed by [npm](https://www.npmjs.com/):
 
 ```shell
 $ npm install @alicloud/fun -g
 ```
 
-A fun command is available after installed completely. Type `fun` in the console will print usage:
+A fun command is available after a successful installation. Typing `fun` in the console will print usage:
 
 ```shell
-$ fun -h
+$ fun
 
   Usage: fun [options] [command]
 
@@ -42,19 +42,19 @@ $ fun -h
 
 ## Usage
 
-Before going ahead to develop, you need to create a directory which contains a file named template.yml. The directory will as project root directory.
+Before going ahead to develop, you would need to create a directory which contains a file named `template.yml`. The directory will act as project root directory.
 
-We will define a series of resources in this template file. Resources that can be defined by fun can be found on [fun's specification document](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md).
+We will define a series of resources in this template file. You can find the resources available to use with fun on [fun's specification document](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md).
 
-Before using `fun`, we need to configure it first by typing `fun config` and then following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
+Before using `fun`, we need to configure it first by typing `fun config` and then, following the prompts, configure `Account ID`, `Access Key Id`, `Secret Access Key` and `Default Region Name`.
 
-After the `fun config` is completed, fun saves the configuration to the `.fcli/config.yaml` file in the user home directory.
+After the `fun config` is completed, fun saves the configuration to the `~/.fcli/config.yaml` file in the user home directory.
 
 Now you are ready to use the fun command. 
 
 ### Example
 
-Here is an example. First create a hello.js file in the project root directory.
+Here is an example. First, create a `hello.js` file in the project root directory:
 
 ```javascript
 exports.handler = function(event, context, callback) {
@@ -67,7 +67,7 @@ exports.handler = function(event, context, callback) {
 };
 ```
 
-Then Let's configure related services. Create a template.yml file in the project root directory:
+Then, let's configure related services. Create a `template.yml` file in the project root directory:
 
 ```yaml
 ROSTemplateFormatVersion: '2015-09-01'
@@ -97,7 +97,7 @@ Resources:
               arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/    
 ```
 
-After the template file and code are written, you can use the deploy command to deploy the service, function and api gateway to online.
+After the template file and code are written, you can use the deploy command to deploy the service, function and api gateway online.
 
 ```shell
 $fun deploy
@@ -116,9 +116,9 @@ Open the browser to access `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.
 
 ## Configuration
 
-In addition to configuring fun with `fun config`, you can also configure for fun with environment variables and `.env`.
+In addition to configuring fun with `fun config`, you can also configure for fun with environment variables and `.env` files.
 
-The way of using environment variables is very simple. We briefly describe the configuration of fun through `.env`.
+The process for using environment variables is very simple. We briefly describe the configuration of fun through `.env`.
 
 
 Create a file named `.env` in the project directory with the following content:
@@ -130,7 +130,7 @@ ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
 ```
 
-It is recommended that add the .env into .gitignore file to prevent your account credentials be checked into code repository.
+It is recommended to add the `.env` into `.gitignore` file to prevent your account credentials from being checked into code repository.
 
 ### Configuring Priority
 
@@ -142,7 +142,7 @@ The priority of the fun configuration is decremented in the following order：
 
 ## More examples
 
-You can find more complicated examples here:
+You can find more complex examples here:
 
 - https://github.com/aliyun/fun/tree/master/examples
 - [十分钟上线-在函数计算上部署基于django开发的个人博客系统](https://yq.aliyun.com/articles/603249?spm=a2c4e.11153959.teamhomeleft.26.115948f26ECqbQ)
