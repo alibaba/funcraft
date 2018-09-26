@@ -54,7 +54,7 @@ Now you are ready to use the fun command.
 
 ### Example
 
-Here is an example. First, create a `hello.js` file in the project root directory:
+Here is an example. First, create a `helloworld.js` file in the project root directory:
 
 ```javascript
 exports.handler = function(event, context, callback) {
