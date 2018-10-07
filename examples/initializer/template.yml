@@ -1,0 +1,26 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  initializerdemo:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'initializer demo'
+    initializer:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: main.my_handler
+        Initializer: main.my_initializer
+        CodeUri: './'
+        Description: 'Hello world with initializer!'
+        Runtime: python2.7
+
+  apigw_fc:
+    Type: 'Aliyun::Serverless::Api'
+    Properties:
+      StageName: RELEASE
+      DefinitionBody:
+        '/python/initializer':
+          get:
+            x-aliyun-apigateway-api-name: initialize
+            x-aliyun-apigateway-fc:
+              arn: acs:fc:::services/${initializerdemo.Arn}/functions/${initializer.Arn}/

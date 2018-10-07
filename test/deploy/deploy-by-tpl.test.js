@@ -59,8 +59,10 @@ describe('deploy', () => {
       description: undefined,
       functionName: 'MyFunction',
       handler: 'datahub.index',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs6',
+      initializationTimeout: undefined,
       serviceName: 'MyService',
       timeout: undefined,
       environmentVariables: undefined
@@ -83,10 +85,12 @@ describe('deploy', () => {
       description: undefined,
       functionName: 'helloworld',
       handler: 'helloworld.index',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'fc',
       timeout: 60,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
   });
@@ -107,10 +111,12 @@ describe('deploy', () => {
       description: 'Hello world!',
       functionName: 'helloworld',
       handler: 'example.App::handleRequest',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'java8',
       serviceName: 'java',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
 
@@ -133,10 +139,12 @@ describe('deploy', () => {
       description: 'Hello world!',
       functionName: 'helloworld',
       handler: 'helloworld.index',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'fc',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeGroup, {
@@ -191,10 +199,12 @@ describe('deploy', () => {
       description: undefined,
       functionName: 'processor',
       handler: 'main.index',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'otsstream',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeOtsTable, {
@@ -223,12 +233,14 @@ describe('deploy', () => {
     assert.calledWith(deploySupport.makeFunction, {
       codeUri: './',
       handler: 'index.handler',
+      initializer: undefined,
       description: undefined,
       functionName: 'log-compute',
       memorySize: undefined,
       runtime: 'python2.7',
       serviceName: 'log-compute',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeTrigger, {
@@ -261,10 +273,12 @@ describe('deploy', () => {
       description: 'Hello world with python!',
       functionName: 'hello',
       handler: 'main.hello',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'python2.7',
       serviceName: 'pythondemo',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeGroup, {
@@ -308,10 +322,12 @@ describe('deploy', () => {
       description: 'do segment',
       functionName: 'doSegment',
       handler: 'index.doSegment',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'maas',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
 
@@ -353,10 +369,12 @@ describe('deploy', () => {
       description: 'send hangzhou weather',
       functionName: 'MyFunction',
       handler: 'index.handler',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs8',
       serviceName: 'MyService',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeTrigger, {
@@ -387,10 +405,12 @@ describe('deploy', () => {
       description: 'Wechat get handler',
       functionName: 'get',
       handler: 'wechat.get',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs6',
       serviceName: 'wechat',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.alwaysCalledWith(deploySupport.makeGroup, {
@@ -427,10 +447,12 @@ describe('deploy', () => {
       description: 'Wechat post handler',
       functionName: 'post',
       handler: 'wechat.post',
+      initializer: undefined,
       memorySize: undefined,
       runtime: 'nodejs6',
       serviceName: 'wechat',
       timeout: undefined,
+      initializationTimeout: undefined,
       environmentVariables: undefined
     });
     assert.calledWith(deploySupport.makeApi.secondCall, {}, {
@@ -480,4 +502,52 @@ describe('deploy', () => {
     });
   });
 
+  it('deploy initializer', async () => {
+    await deploy('initializer');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'initializer demo',
+      internetAccess: null,
+      logConfig: {  },
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      serviceName: 'initializerdemo',
+      vpcConfig: undefined
+    });
+    assert.calledWith(deploySupport.makeFunction, {
+      codeUri: './',
+      description: 'Hello world with initializer!',
+      functionName: 'initializer',
+      handler: 'main.my_handler',
+      initializer: 'main.my_initializer',
+      memorySize: undefined,
+      runtime: 'python2.7',
+      serviceName: 'initializerdemo',
+      timeout: undefined,
+      initializationTimeout: undefined,
+      environmentVariables: undefined
+    });
+    assert.calledWith(deploySupport.makeGroup, {
+      description: 'api group for function compute',
+      name: 'apigw_fc'
+    });
+    assert.calledWith(deploySupport.makeApi, {}, {
+      apiName: 'initialize',
+      auth: {
+        config: undefined,
+        type: undefined
+      },
+      description: undefined,
+      functionName: 'initializer',
+      method: 'get',
+      parameters: undefined,
+      requestPath: '/python/initializer',
+      roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      serviceName: 'initializerdemo',
+      stageName: 'RELEASE',
+      visibility: undefined,
+      serviceTimeout: 3000,
+      requestConfig: {},
+      constantParameters: undefined,
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },    });
+  });
 });
