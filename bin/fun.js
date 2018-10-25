@@ -8,9 +8,11 @@ const handle = function (err) {
 };
 
 const program = require('commander');
+const debug = require('debug')
 
 program.version(require('../package.json').version, '-v, --version')
-  .description('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.');
+  .description('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.')
+  .option('--debug', 'Turn on debug logging to print debug message')
 
 program.command('config')
   .description('Configure the fun')
@@ -36,6 +38,14 @@ program.command('build')
   .action(()=>{
     require('../lib/commands/build')().catch(handle);
   });
+
+program.addListener("option:debug", function() {
+  debug.enable('*');
+})
+
+program.addListener("command:*", function() {
+  program.help();
+})
 
 program.parse(process.argv);
 
