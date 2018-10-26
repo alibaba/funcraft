@@ -12,7 +12,7 @@ const debug = require('debug')
 
 program.version(require('../package.json').version, '-v, --version')
   .description('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.')
-  .option('--debug', 'Turn on debug logging to print debug message')
+  .option('--verbose', 'Print out more logs');
 
 program.command('config')
   .description('Configure the fun')
@@ -39,7 +39,7 @@ program.command('build')
     require('../lib/commands/build')().catch(handle);
   });
 
-program.addListener("option:debug", function() {
+program.addListener("option:verbose", function() {
   debug.enable('*');
 })
 
