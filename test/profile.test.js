@@ -13,7 +13,7 @@ const getProfile = require('../lib/profile').getProfile;
 const writeFile = util.promisify(fs.writeFile);
 
 
-describe.skip('without local ~/.fcli/config.yaml', () => {
+describe('without local ~/.fcli/config.yaml', () => {
   var prevHome;
   beforeEach(() => {
     prevHome = os.homedir();
@@ -25,6 +25,8 @@ describe.skip('without local ~/.fcli/config.yaml', () => {
     delete process.env.ACCESS_KEY_ID;
     delete process.env.ACCESS_KEY_SECRET;
     delete process.env.DEFAULT_REGION;
+    delete process.env.TIMEOUT;
+    delete process.env.RETRIES;
   });
 
 
@@ -33,11 +35,16 @@ describe.skip('without local ~/.fcli/config.yaml', () => {
     process.env.ACCESS_KEY_ID = '121111';
     process.env.ACCESS_KEY_SECRET = '111311';
     process.env.DEFAULT_REGION = '141111';
+    process.env.TIMEOUT = 10;
+    process.env.RETRIES = 2;
+
     const profile = await getProfile();
     expect(profile.accountId).to.be(process.env.ACCOUNT_ID);
     expect(profile.accessKeyId).to.be(process.env.ACCESS_KEY_ID);
     expect(profile.accessKeySecret).to.be(process.env.ACCESS_KEY_SECRET);
     expect(profile.defaultRegion).to.be(process.env.DEFAULT_REGION);
+    expect(profile.timeout).to.be(process.env.TIMEOUT);
+    expect(profile.retries).to.be(process.env.RETRIES);
   });
 
   it('without env', async () => {
@@ -46,9 +53,9 @@ describe.skip('without local ~/.fcli/config.yaml', () => {
     expect(profile.accessKeyId).to.be(undefined);
     expect(profile.accessKeySecret).to.be(undefined);
     expect(profile.defaultRegion).to.be(undefined);
+    expect(profile.timeout).to.be(undefined);
+    expect(profile.retries).to.be(undefined);
   });
-
-
 });
 
 describe('with local ~/.fcli/config.yaml', () => {
@@ -67,7 +74,8 @@ describe('with local ~/.fcli/config.yaml', () => {
       user_agent: 'fcli-0.1',
       debug: false,
       timeout: 60,
-      sls_endpoint: `cn-hangzhou.log.aliyuncs.com`
+      sls_endpoint: `cn-hangzhou.log.aliyuncs.com`,
+      retries: 10
     }));
   });
   afterEach(async () => {
@@ -78,6 +86,8 @@ describe('with local ~/.fcli/config.yaml', () => {
     delete process.env.ACCESS_KEY_ID;
     delete process.env.ACCESS_KEY_SECRET;
     delete process.env.DEFAULT_REGION;
+    delete process.env.TIMEOUT;
+    delete process.env.RETRIES;
   });
 
   it('with env', async () => {    
@@ -85,11 +95,16 @@ describe('with local ~/.fcli/config.yaml', () => {
     process.env.ACCESS_KEY_ID = '121111';
     process.env.ACCESS_KEY_SECRET = '111311';
     process.env.DEFAULT_REGION = '141111';
+    process.env.TIMEOUT = 10;
+    process.env.RETRIES = 2;
+
     const profile = await getProfile();
     expect(profile.accountId).to.be(process.env.ACCOUNT_ID);
     expect(profile.accessKeyId).to.be(process.env.ACCESS_KEY_ID);
     expect(profile.accessKeySecret).to.be(process.env.ACCESS_KEY_SECRET);
     expect(profile.defaultRegion).to.be(process.env.DEFAULT_REGION);
+    expect(profile.timeout).to.be(process.env.TIMEOUT);
+    expect(profile.retries).to.be(process.env.RETRIES);
   });
 
   it('without env', async () => {
@@ -98,6 +113,7 @@ describe('with local ~/.fcli/config.yaml', () => {
     expect(profile.accessKeyId).to.be('22222');
     expect(profile.accessKeySecret).to.be('3333333');
     expect(profile.defaultRegion).to.be('cn-hangzhou');
+    expect(profile.timeout).to.be(60);
+    expect(profile.retries).to.be(10);
   });
-
 });

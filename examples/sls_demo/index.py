@@ -5,8 +5,8 @@ from aliyun.log import LogClient
 from time import time
 
 def logClient(endpoint):
-  accessKeyId = 'LTAIAyQ560nxSgJI'
-  accessKey = 'sbHue8SB1Kkg5XPj9mCzoBGa4PMICX'
+  accessKeyId = 'your accessKeyId'
+  accessKey = 'your accessKeyId scr'
   client = LogClient(endpoint, accessKeyId, accessKey)
   return client
 
