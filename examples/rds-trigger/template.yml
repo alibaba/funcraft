@@ -1,0 +1,24 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  rds-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties: 
+      Description: 'rds trigger test'
+
+    rds-function:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python2.7
+        CodeUri: './'
+      Events:
+        my-rds-trigger:
+          Type: RDS
+          Properties:
+            InstanceId: rm-12345799xyz
+            SubscriptionObjects: 
+              - db1.table1
+            Retry: 2
+            Concurrency: 1
+            EventFormat: json
