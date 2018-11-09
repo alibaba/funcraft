@@ -16,6 +16,7 @@ program
     .option('-d, --debug-port <port>', "used for local debugging")
     // todo: generate vscode debug config options
     .description("run your function on local") // todo: 
+    .option('-e, --event <path>', 'event file containing event data passed to the function')
     .action(function(invokeName, options) {
         require('../lib/commands/local')(invokeName, options).catch(handler);
     });
