@@ -1,5 +1,5 @@
-TEST_FOLDER = ./test/
-TEST_FILES = *.test.js
+TEST_FOLDER ?= ./test/
+TEST_FILES ?= *.test.js
 REPORTER = spec
 TIMEOUT = 20000
 MOCHA = ./node_modules/mocha/bin/_mocha
