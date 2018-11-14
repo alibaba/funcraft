@@ -161,11 +161,12 @@ describe('test generateDockerOpts', () => {
 });
 
 describe('test invokeFunction', async () => {
+  const codeDir = os.tmpdir();
 
   const functionProps = {
     'Properties': {
       'Handler': 'index.handler',
-      'CodeUri': '.',
+      'CodeUri': codeDir,
       'Initializer': 'index.initializer',
       'Description': 'Hello world with python3!',
       'Runtime': 'python3'
@@ -203,7 +204,7 @@ describe('test invokeFunction', async () => {
         Env: ['local=true'],
         HostConfig: {
           AutoRemove: true,
-          Mounts: [{ Source: '/Users/tan/code/fun', Target: '/code', Type: 'bind' }]
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }]
         }
       });
   });
@@ -223,7 +224,7 @@ describe('test invokeFunction', async () => {
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
-          Mounts: [{ Source: '/Users/tan/code/fun', Target: '/code', Type: 'bind' }],
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }],
           PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
         }
       });
@@ -244,7 +245,7 @@ describe('test invokeFunction', async () => {
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
-          Mounts: [{ Source: '/Users/tan/code/fun', Target: '/code', Type: 'bind' }],
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }],
           PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
         }
       });
