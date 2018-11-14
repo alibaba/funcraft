@@ -1,8 +1,5 @@
 'use strict';
 
-//const path = require('path');
-//const fs = require('fs');
-
 const expect = require('expect.js');
 
 const {
@@ -171,7 +168,7 @@ describe('test generateDebugEnv', () => {
 
   it('test php7.2', async function () {
     const env = await generateDebugEnv('php7.2', 9000);
-    expect(env).to.be('XDEBUG_CONFIG=remote_enable=1 remote_host=30.43.124.248 remote_autostart=1 remote_port=9000');
+    expect(env).to.contain('XDEBUG_CONFIG=remote_enable=1 remote_autostart=1 remote_port=9000 remote_host=');
   });
 
   it('test java8', async function () {

@@ -14,38 +14,39 @@ program.version(require('../package.json').version, '-v, --version')
 
 program.command('config')
   .description('Configure the fun')
-  .action(()=> {
+  .action(() => {
     require('../lib/commands/config')().catch(handler);
   });
 
 program.command('validate')
   .description('Validate a fun template')
   .option('-t, --template [template]', 'path of fun template file. defaults to \'template.{yaml|yml}\'', 'template.{yaml|yml}')
-  .action((options)=>{
+  .action((options) => {
     require('../lib/commands/validate')(options.template).catch(handler);
   });
 
 program.command('deploy')
   .description('Deploy a project to AliCloud')
-  .action((stage)=> {
+  .action((stage) => {
     require('../lib/commands/deploy')(stage).catch(handler);
   });
 
 program.command('build')
   .description('Build the dependencies')
-  .action(()=>{
+  .action(() => {
     require('../lib/commands/build')().catch(handler);
   });
 
-program.addListener("option:verbose", function() {
+program.addListener('option:verbose', function () {
   debug.enable('*');
-})
-
-// todo: 
-// program.addListener("command:*", function() {
-  // program.help();
-// })
+});
+ 
+program.addListener('command:*', function(cmds) {
+  if (cmds[0] !== 'local') {
+    program.help();
+  }
+});
 
 program.parse(process.argv);
 
-if (!program.args.length) {program.help();}
+if (!program.args.length) { program.help(); }
