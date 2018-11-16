@@ -76,3 +76,5 @@ examples/java/demo/target/
 
 output
 .oss_cfg
+*.pyc
+*.iml
