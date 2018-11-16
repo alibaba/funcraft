@@ -148,12 +148,12 @@ describe('test generateVscodeDebugConfig', () => {
 describe('test generateDebugEnv', () => {
   it('test python2.7', async function () {
     const env = await generateDebugEnv('python2.7', 9000);
-    expect(env).to.be.empty();
+    expect(env).to.be('DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait');
   });
 
   it('test python3', async function () {
     const env = await generateDebugEnv('python3', 9000);
-    expect(env).to.be.empty();
+    expect(env).to.be('DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait');
   });
 
   it('test nodejs6', async function () {

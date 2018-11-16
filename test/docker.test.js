@@ -220,7 +220,7 @@ describe('test invokeFunction', async () => {
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
-        Env: ['local=true'],
+        Env: ['local=true', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
@@ -241,7 +241,7 @@ describe('test invokeFunction', async () => {
       ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
       process.stdout,
       {
-        Env: ['local=true'],
+        Env: ['local=true', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
