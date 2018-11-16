@@ -8,9 +8,13 @@ const program = require('commander');
 const debug = require('debug');
 
 program.version(require('../package.json').version, '-v, --version')
+  // todo: describing
   .description('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.')
   .option('--verbose', 'Print out more logs')
-  .command('local', 'local run your serverless application');
+  // git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands
+  // source code see: https://github.com/tj/commander.js/blob/master/index.js#L525-L570
+  // For the current case, the commander will look for fun-local.js as sub-command in the directory where fun is located.
+  .command('local', 'Run your serverless application locally for quick development & testing.');
 
 program.command('config')
   .description('Configure the fun')
