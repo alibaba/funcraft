@@ -13,6 +13,8 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
+var prevHome;
+
 describe('test generateDockerCmd', () => {
   it('test generate docker cmd', () => {
     const functionProps = {
@@ -37,16 +39,16 @@ describe('test generateDockerCmd', () => {
 });
 
 describe('test findDockerImage', () => {
-  it('test find not python 3 image', () => {
+  it('test find not python image', () => {
     for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2']) {
       const imageName = docker.findDockerImage(runtime);
-      expect(imageName).to.be(`aliyunfc/runtime-${runtime}`);
+      expect(imageName).to.be(`aliyunfc/runtime-${runtime}:latest`);
     }
   });
 
   it('test find python 3 image', () => {
     const imageName = docker.findDockerImage('python3');
-    expect(imageName).to.be(`aliyunfc/runtime-python3.6`);
+    expect(imageName).to.be(`aliyunfc/runtime-python3.6:latest`);
   });
 });
 
@@ -99,8 +101,25 @@ describe('test generateDockerOpts', () => {
     'Runtime': 'python3'
   };
 
-  it('testf generate docker opts', () => {
-    const opts = docker.generateDockerOpts(functionProps, 'nodejs8', {
+  beforeEach(() => {
+    prevHome = os.homedir();
+    process.env.HOME = os.tmpdir();
+    process.env.ACCESS_KEY_ID = 'testKeyId';
+    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+  });
+
+  afterEach(() => {
+    process.env.HOME = prevHome;
+    delete process.env.ACCOUNT_ID;
+    delete process.env.ACCESS_KEY_ID;
+    delete process.env.ACCESS_KEY_SECRET;
+    delete process.env.DEFAULT_REGION;
+    delete process.env.TIMEOUT;
+    delete process.env.RETRIES;
+  });
+
+  it('test generate docker opts', async () => {
+    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', {
       Type: 'bind',
       Source: '/test',
       Target: '/code'
@@ -109,6 +128,8 @@ describe('test generateDockerOpts', () => {
     expect(opts).to.eql({
       'Env': [
         'local=true',
+        'FC_ACCESS_KEY_ID=testKeyId',
+        'FC_ACCESS_KEY_SECRET=testKeySecret',
         'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000'
       ],
       'HostConfig': {
@@ -135,8 +156,8 @@ describe('test generateDockerOpts', () => {
     });
   });
 
-  it('testf generate docker opts without debug port', () => {
-    const opts = docker.generateDockerOpts(functionProps, 'nodejs8', {
+  it('test generate docker opts without debug port', async () => {
+    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', {
       Type: 'bind',
       Source: '/test',
       Target: '/code'
@@ -144,7 +165,9 @@ describe('test generateDockerOpts', () => {
 
     expect(opts).to.eql({
       'Env': [
-        'local=true'
+        'local=true',
+        'FC_ACCESS_KEY_ID=testKeyId',
+        'FC_ACCESS_KEY_SECRET=testKeySecret'
       ],
       'HostConfig': {
         'AutoRemove': true,
@@ -184,10 +207,23 @@ describe('test invokeFunction', async () => {
     docker = proxyquire('../lib/docker', {
       'dockerode': DockerCli
     });
+
+    prevHome = os.homedir();
+    process.env.HOME = os.tmpdir();
+    process.env.ACCESS_KEY_ID = 'testKeyId';
+    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
   });
 
   afterEach(() => {
     sandbox.restore();
+
+    process.env.HOME = prevHome;
+    delete process.env.ACCOUNT_ID;
+    delete process.env.ACCESS_KEY_ID;
+    delete process.env.ACCESS_KEY_SECRET;
+    delete process.env.DEFAULT_REGION;
+    delete process.env.TIMEOUT;
+    delete process.env.RETRIES;
   });
 
   it('test invoke function without debug and event', async () => {
@@ -197,11 +233,11 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(DockerCli.prototype.listImages);
 
     assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6',
+      'aliyunfc/runtime-python3.6:latest',
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
-        Env: ['local=true'],
+        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret'],
         HostConfig: {
           AutoRemove: true,
           Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }]
@@ -216,11 +252,11 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(DockerCli.prototype.listImages);
 
     assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6',
+      'aliyunfc/runtime-python3.6:latest',
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
-        Env: ['local=true', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
+        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
@@ -237,11 +273,11 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(DockerCli.prototype.listImages);
 
     assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6',
+      'aliyunfc/runtime-python3.6:latest',
       ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
       process.stdout,
       {
-        Env: ['local=true', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
+        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,

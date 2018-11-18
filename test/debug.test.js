@@ -95,7 +95,7 @@ describe('test generateVscodeDebugConfig', () => {
           'port': 9000,
           'localRoot': '.',
           'remoteRoot': '/code',
-          'protocol': 'inspect',
+          'protocol': 'inspector',
           'stopOnEntry': false
         }
       ]
