@@ -31,6 +31,7 @@
     "@alicloud/pop-core": "^1.6.0",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
+    "@alicloud/mns": "^1.0.0",
     "archiver": "^2.0.0",
     "colors": "^1.1.2",
     "commander": "^2.15.1",
