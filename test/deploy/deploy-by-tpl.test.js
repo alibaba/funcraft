@@ -185,38 +185,40 @@ describe('deploy', () => {
     });
   });
 
-  it('deploy ots_stream', async () => {
-    await deploy('ots_stream');
+  it('deploy tablestore-trigger', async () => {
+    await deploy('tablestore-trigger');
 
     assert.calledWith(deploySupport.makeService, {
-      description: 'Stream trigger for OTS',
+      description: 'Stream trigger for TableStore',
       internetAccess: null,
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
-      serviceName: 'otsstream',
+      serviceName: 'test-tableStore-service',
       vpcConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/ots_stream`, {
+    assert.calledWith(deploySupport.makeFunction, 
+      `${process.cwd()}/examples/tablestore-trigger`,{
         codeUri: './',
-        description: undefined,
-        functionName: 'processor',
         handler: 'main.index',
         initializer: undefined,
+        description: undefined,
+        functionName: 'fun-ots-func',
         memorySize: undefined,
         runtime: 'nodejs8',
-        serviceName: 'otsstream',
+        serviceName: 'test-tableStore-service',
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeOtsTable, {
-      instanceName: 'fun-test',
-      primaryKeys: [{
-        name: 'uid',
-        type: 'STRING'
-      }],
-      tableName: 'mytable'
+    assert.calledWith(deploySupport.makeTrigger, {
+      serviceName: 'test-tableStore-service',
+      functionName: 'fun-ots-func',
+      triggerName: 'my-tablestore-trigger',
+      triggerType: 'TableStore',
+      triggerProperties: {
+        InstanceName: 'fc-test-inst',
+        TableName: 'fc_test_tbl'
+      },
     });
   });
 

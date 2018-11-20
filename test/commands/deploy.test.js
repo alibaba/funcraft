@@ -39,8 +39,8 @@ describe.skip('deploy template', () => {
     expect(await deploy()).to.be(undefined);
   });
 
-  it('deploy ots_stream example', async () => {
-    process.chdir('./examples/ots_stream/');
+  it('deploy tablestore-trigger example', async () => {
+    process.chdir('./examples/tablestore-trigger/');
     expect(await deploy()).to.be(undefined);
   });
 
