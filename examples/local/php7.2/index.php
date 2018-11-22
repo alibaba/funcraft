@@ -1,5 +1,5 @@
 <?php
 function handler($event, $context) {
-    return "hello world";
+    return "hello world\n";
 }
 
