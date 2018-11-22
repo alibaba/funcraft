@@ -4,7 +4,7 @@ Resources:
   localdemo:
     Type: 'Aliyun::Serverless::Service'
     Properties:
-      Description: 'php local invoke demo'
+      Description: 'local invoke demo'
     php72:
       Type: 'Aliyun::Serverless::Function'
       Properties:
@@ -37,6 +37,7 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
+        Initializer: index.initializer
         CodeUri: nodejs8
         Description: 'Hello world with nodejs8!'
         Runtime: nodejs8
@@ -44,6 +45,6 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: example.App::handleRequest
-        CodeUri: ../java/demo.jar
+        CodeUri: java8/target/demo-1.0-SNAPSHOT.jar
         Description: 'Hello world with java8!'
         Runtime: java8

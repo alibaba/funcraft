@@ -12,7 +12,7 @@ program.description('local run your serverless application');
 
 program
   .command('invoke <invokeName>')
-  .usage('invoke [options] <[service/]function>')
+  .usage('[options] <[service/]function>')
   .option('-d, --debug-port <port>', 'Used for local debugging')
   .description('Run your serverless application locally for quick development & testing.') 
   // todo: add auto option to auto config vscode
