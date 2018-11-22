@@ -20,6 +20,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
   - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](): Introduced the basic usage of Fun Local.
   - [开发函数计算的正确姿势 —— 爬虫](): How to use the Fun tool to develop a Serverless application from scratch.。
   - [开发函数计算的正确姿势 —— 排查超时问题](): Demonstrates how to solve a series of bugs and introduces the tricks of debug
+- [Fun's specification document](docs/specs/2018-04-03.md): Introduces the details of the fun Serverless Model Specification.
 - [More Examples](https://github.com/aliyun/fun/tree/master/examples)
 
 ## Referrences
