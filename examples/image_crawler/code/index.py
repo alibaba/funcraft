@@ -41,7 +41,6 @@ def handler(event, context):
                             creds.access_key_secret,
                             creds.security_token)
                             
-    # auth = oss2.StsAuth(creds.accessKeyId, creds.accessKeySecret, creds.securityToken)
     bucket = oss2.Bucket(auth, endpoint, bucket_name)
 
     count = 0

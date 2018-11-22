@@ -63,7 +63,8 @@ describe('test resolveCodeUriToMount', () => {
     expect(mount).to.eql({
       Type: 'bind',
       Source: codeDir,
-      Target: '/code'
+      Target: '/code',
+      ReadOnly: true
     });
   });
 });
@@ -122,7 +123,8 @@ describe('test generateDockerOpts', () => {
     const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', {
       Type: 'bind',
       Source: '/test',
-      Target: '/code'
+      Target: '/code',
+      ReadOnly: true
     }, 9000);
 
     expect(opts).to.eql({
@@ -138,7 +140,8 @@ describe('test generateDockerOpts', () => {
           {
             'Type': 'bind',
             'Source': '/test',
-            'Target': '/code'
+            'Target': '/code',
+            'ReadOnly': true
           }
         ],
         'PortBindings': {
@@ -160,7 +163,8 @@ describe('test generateDockerOpts', () => {
     const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', {
       Type: 'bind',
       Source: '/test',
-      Target: '/code'
+      Target: '/code',
+      ReadOnly: true
     }, null);
 
     expect(opts).to.eql({
@@ -175,7 +179,8 @@ describe('test generateDockerOpts', () => {
           {
             'Type': 'bind',
             'Source': '/test',
-            'Target': '/code'
+            'Target': '/code',
+            'ReadOnly': true
           }
         ]
       }
@@ -240,7 +245,7 @@ describe('test invokeFunction', async () => {
         Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret'],
         HostConfig: {
           AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }]
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }]
         }
       });
   });
@@ -260,7 +265,7 @@ describe('test invokeFunction', async () => {
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }],
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }],
           PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
         }
       });
@@ -281,7 +286,7 @@ describe('test invokeFunction', async () => {
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
           AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind' }],
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }],
           PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
         }
       });
