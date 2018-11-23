@@ -10,138 +10,18 @@
 
 如果你想使用旧版本的语法，请[参考](https://github.com/aliyun/fun/blob/v1.x/README.md).
 
-## Installation
+## 开始使用
 
-fun 是一个 Node.js 编写的命令行工具，但它也能支持 Python，Java 等环境的部署操作。安装它的方式是通过 npm：
+我们准备了一系列教程，助您更快上手：
 
-```shell
-$ npm install @alicloud/fun -g
-```
-
-安装完成之后，会有一个 fun 命令提供使用。输入 fun 命令可以查看帮助信息：
-
-```shell
-$ fun -h
-
-  Usage: fun [options] [command]
-
-  The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.
-
-  Options:
-
-    -v, --version       output the version number
-    -h, --help          output usage information
-
-  Commands:
-
-    config              Configure the fun
-    validate [options]  Validate a fun template
-    deploy              Deploy a project to AliCloud
-    build               Build the dependencies
-```
-
-## 使用
-
-安装完命令行工具之后，即可开始进行代码的开发了。为了配合 fun 工具，您需要创建一个工程目录，然后在工程目录下创建一个 `template.yml` 模板文件，fun 会将该目录视为一个工程。
-
-我们将在该模板文件中定义项目相关的信息。fun 可以定义的信息参见 [fun 的规范文档](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md)。
-
-在使用前，我们需要先进行配置，通过键入 `fun config`，然后按照提示，依次配置 `Account ID`、`Access Key Id`、`Secret Access Key`、 `Default Region Name` 即可。
-
-完成 config 操作后，fun 会将配置保存到用户目录下的 `.fcli/config.yaml` 文件中。
-
-现在，我们就为使用 fun 命令做好了准备。
-
-### 示例
-
-下面我们用一个简单的 helloworld 示例演示 fun 如何使用。首先在项目根目录下创建一个 hello.js 文件。
-
-```javascript
-exports.handler = function(event, context, callback) {
-  var response = {
-      isBase64Encoded: false,
-      statusCode: 200,
-      body: 'hellow wrold'
-  };
-  callback(null, response);
-};
-```
-
-接下来我们配置相关服务。在项目根目录创建一个 template.yml 文件：
-
-```yaml
-ROSTemplateFormatVersion: '2015-09-01'
-Transform: 'Aliyun::Serverless-2018-04-03'
-Resources:
-  fc: # service name
-    Type: 'Aliyun::Serverless::Service'
-    Properties:
-      Description: 'fc test'
-    helloworld: # function name
-      Type: 'Aliyun::Serverless::Function'
-      Properties:
-        Handler: helloworld.handler
-        Runtime: nodejs8
-        CodeUri: './'
-        Timeout: 60
-
-  HelloworldGroup: # Api Group
-    Type: 'Aliyun::Serverless::Api'
-    Properties:
-      StageName: RELEASE
-      DefinitionBody:
-        '/': # request path
-          get: # http method
-            x-aliyun-apigateway-api-name: hello_get # api name
-            x-aliyun-apigateway-fc:
-              arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/    
-```
-
-代码以及模板文件编写完成后，就可以使用 `fun deploy` 命令一键将服务部署到线上环境了:
-
-```shell
-$ fun deploy
-
-Waiting for service fc to be deployed...
-service fc deploy success
-Waiting for api gateway HelloworldGroup to be deployed...
-    URL: GET http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/
-      stage: RELEASE, deployed, version: 20180627110526681
-      stage: PRE, undeployed
-      stage: TEST, undeployed
-api gateway HelloworldGroup deploy success
-```
-
-打开浏览器访问 `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/` 这个地址即可预览效果。
-
-## 配置
-
-除了使用 `fun config` 对 fun 进行配置外，还可以通过环境变量以及 .env 为 fun 进行配置。
-
-环境变量的方式很简单，这里简单说下 .env 的方式，在项目根下创建一个名为 .env 的文件，录入以下配置即可：
-
-```shell
-ACCOUNT_ID=xxxxxxxx
-REGION=cn-shanghai
-ACCESS_KEY_ID=xxxxxxxxxxxx
-ACCESS_KEY_SECRET=xxxxxxxxxx
-```
-
-建议将 .env 放到 .gitignore 中，避免泄漏重要的账户信息。
-
-### 配置的优先级
-
-fun 配置方式的优先级按以下顺序依次递减：
-
-- .env
-- 环境变量
-- ~/.fcli/config.yaml
-
-## 更多例子
-
-更复杂的例子可以从这里查看：
-
-https://github.com/aliyun/fun/tree/master/examples
+- [安装教程](docs/usage/installation-zh.md)：介绍了如何在 macOS、Linux 或者 Windows 上安装 Fun。
+- [使用](docs/usage/getting_started-zh.md)：通过一个简单的示例介绍了 Fun 的基本用法。
+- **本地运行与调试**：关于如何本地运行、调试函数，以及介绍排查 bug 技巧的系列文章。
+  - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](https://yq.aliyun.com/articles/672623)：介绍了 Fun Local 基本用法。
+  - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): 通过一个实战场景，介绍了如何利用 Fun 工具从头开始开发一个 Serverless 应用。
+  - [开发函数计算的正确姿势 —— 排查超时问题](https://yq.aliyun.com/articles/672627): 从一个 bug 开发，介绍了各种排查问题的技巧。
+- [Fun 规范文档](docs/specs/2018-04-03-zh-cn.md): 详细介绍了 Fun 规范文档的细节。
+- [更多示例](https://github.com/aliyun/fun/tree/master/examples)
 
 ## 反馈
 
