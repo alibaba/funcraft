@@ -23,7 +23,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
 - [Fun's specification document](docs/specs/2018-04-03.md): Introduces the details of the fun Serverless Model Specification.
 - [More Examples](https://github.com/aliyun/fun/tree/master/examples)
 
-## Referrences
+## References
 
 - [以函数计算作为 API 网关后端服务](https://help.aliyun.com/document_detail/54788.html)
 - [函数计算](https://www.aliyun.com/product/fc)
