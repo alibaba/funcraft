@@ -42,13 +42,13 @@ describe('test findDockerImage', () => {
   it('test find not python image', () => {
     for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2']) {
       const imageName = docker.findDockerImage(runtime);
-      expect(imageName).to.be(`aliyunfc/runtime-${runtime}:latest`);
+      expect(imageName).to.contain(`aliyunfc/runtime-${runtime}:`);
     }
   });
 
   it('test find python 3 image', () => {
     const imageName = docker.findDockerImage('python3');
-    expect(imageName).to.be(`aliyunfc/runtime-python3.6:latest`);
+    expect(imageName).to.contain(`aliyunfc/runtime-python3.6:`);
   });
 });
 
@@ -238,7 +238,7 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(DockerCli.prototype.listImages);
 
     assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:latest',
+      'aliyunfc/runtime-python3.6:1.1.0',
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
@@ -257,7 +257,7 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(DockerCli.prototype.listImages);
 
     assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:latest',
+      'aliyunfc/runtime-python3.6:1.1.0',
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
@@ -278,7 +278,7 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(DockerCli.prototype.listImages);
 
     assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:latest',
+      'aliyunfc/runtime-python3.6:1.1.0',
       ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
       process.stdout,
       {
