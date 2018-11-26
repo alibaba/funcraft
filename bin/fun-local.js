@@ -1,31 +1,23 @@
 #!/usr/bin/env node
 
+/* eslint-disable quotes */
+
 'use strict';
 
-const handler = require('../lib/exception-handler');
-
-const Command = require('commander').Command;
-
-const program = new Command('fun local');
-
-program.description('local run your serverless application');
+const program = require('commander');
 
 program
-  .command('invoke <invokeName>')
-  .usage('[options] <[service/]function>')
-  .option('-d, --debug-port <port>', 'Used for local debugging')
-  .description('Run your serverless application locally for quick development & testing.') 
-  // todo: add auto option to auto config vscode
-  .option('-c, --config <ide/debugger>', 'Print out ide debug configuration. Options are vscode')
-  .option('-e, --event <path>', 'Event file containing event data passed to the function')
-  .action(function(invokeName, options) {
-    require('../lib/commands/local')(invokeName, options).catch(handler);
-  });
+  .name('fun local')
+  .description('Run your serverless application locally for quick development & testing.')
+  .command('invoke', 'invoke a function locally once');
 
-program.addListener('command:*', function() {
-  program.help();
+// Print help information if commands are unknown.
+program.on('command:*', (cmds) => {
+  if (!program.commands.map((command) => command.name()).includes(cmds[0])) {
+    console.error();
+    console.error("  error: unknown command `%s'", cmds[0]);
+    program.help();
+  }
 });
 
 program.parse(process.argv);
-
-if (!program.args.length) {program.help();}

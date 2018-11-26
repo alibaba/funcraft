@@ -1,56 +1,41 @@
 #!/usr/bin/env node
 
-'use strict';
+/* eslint-disable quotes */
 
-const handler = require('../lib/exception-handler');
+'use strict';
 
 const program = require('commander');
 const debug = require('debug');
 
-program.version(require('../package.json').version, '-v, --version')
-  // todo: describing
-  .description('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.')
-  .option('--verbose', 'Print out more logs')
-  // git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands
-  // source code see: https://github.com/tj/commander.js/blob/master/index.js#L525-L570
-  // For the current case, the commander will look for fun-local.js as sub-command in the directory where fun is located.
-  .command('local', 'Run your serverless application locally for quick development & testing.');
+program
+  .version(require('../package.json').version, '-v, --version')
+  .description(
+    `The fun command line providers a complete set of commands to define, develop, test
+  serverless applications locally, and deploy them to the Alibaba Cloud.`
+  )
+  .option('--verbose', 'verbose output')
+  // See git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands.
+  // See source code: https://github.com/tj/commander.js/blob/master/index.js#L525-L570.
 
-program.command('config')
-  .description('Configure the fun')
-  .action(() => {
-    require('../lib/commands/config')().catch(handler);
-  });
+  // The commander will try to search the executables in the directory of the entry script
+  // (like ./examples/pm) with the name program-command.
+  .command('config', 'configure the fun')
+  .command('build', 'build the dependencies')
+  .command('local', 'run your serverless application locally')
+  .command('validate', 'validate a fun template')
+  .command('deploy', 'deploy a fun application');
 
-program.command('validate')
-  .description('Validate a fun template')
-  .option('-t, --template [template]', 'path of fun template file. defaults to \'template.{yaml|yml}\'', 'template.{yaml|yml}')
-  .action((options) => {
-    require('../lib/commands/validate')(options.template).catch(handler);
-  });
-
-program.command('deploy')
-  .description('Deploy a project to AliCloud')
-  .action((stage) => {
-    require('../lib/commands/deploy')(stage).catch(handler);
-  });
-
-program.command('build')
-  .description('Build the dependencies')
-  .action(() => {
-    require('../lib/commands/build')().catch(handler);
-  });
-
-program.addListener('option:verbose', function () {
+program.on('option:verbose', () => {
   debug.enable('*');
 });
- 
-program.addListener('command:*', function(cmds) {
-  if (cmds[0] !== 'local') {
+
+// Print help information if commands are unknown.
+program.on('command:*', (cmds) => {
+  if (!program.commands.map((command) => command.name()).includes(cmds[0])) {
+    console.error();
+    console.error("  error: unknown command `%s'", cmds[0]);
     program.help();
   }
 });
-
+ 
 program.parse(process.argv);
-
-if (!program.args.length) { program.help(); }
