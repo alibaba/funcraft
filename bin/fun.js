@@ -24,6 +24,7 @@ program
   .command('install', 'install dependencies which are described in fun.yml')
   .command('build', 'build the dependencies')
   .command('local', 'run your serverless application locally')
+  .command('edge', 'run your serverless application at edge')
   .command('validate', 'validate a fun template')
   .command('deploy', 'deploy a fun application');
 

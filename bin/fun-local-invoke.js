@@ -11,14 +11,17 @@ program
   .description(
     `Execute your function in a local environment which replicates the live environment
   almost identically. You can pass in the event body via stdin or by using the -e (--event)
-  parameter.`
-  )
+  parameter.`)
   .usage('[options] <[service/]function>')
-  .option('-d, --debug-port <port>', 'specify the sandboxed container starting in debug' +
-                                     ' mode, and exposing this port on localhost')
+  .option('-d, --debug-port <port>',
+    `specify the sandboxed container starting in debug mode,
+                             and exposing this port on localhost`)
   // todo: add auto option to auto config vscode
   .option('-c, --config <ide/debugger>', 'output ide debug configuration. Options are vscode')
-  .option('-e, --event <path>', 'event file containing event data passed to the function')
+  .option('-e, --event <path>',
+    `a file containing event data passed to the function during
+                             invoke, If this option is not specified, it defaults to
+                             reading event from stdin`)
   .parse(process.argv);
 
 if (!program.args.length) {
@@ -32,6 +35,8 @@ if (!program.args.length > 1) {
   console.error("  error: unexpected argument '%s'", program.args[1]);
   program.help();
 }
+
+program.event = program.event || '-';
 
 require('../lib/commands/local/invoke')(program.args[0], program)
   .then(() =>  {
