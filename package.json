@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.0.0"
@@ -25,13 +25,13 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc2": "^2.0.5",
-    "@alicloud/log": "^1.0.0",
+    "@alicloud/fc2": "^2.1.0",
+    "@alicloud/log": "^1.1.0",
+    "@alicloud/mns": "^1.0.0",
     "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/pop-core": "^1.6.0",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
-    "@alicloud/mns": "^1.0.0",
     "archiver": "^2.0.0",
     "colors": "^1.1.2",
     "commander": "^2.15.1",
@@ -51,7 +51,8 @@
     "os-locale": "^2.1.0",
     "promise-retry": "^1.1.1",
     "rimraf": "^2.6.2",
-    "semver": "^5.5.0"
+    "semver": "^5.5.0",
+    "urlencode": "^1.1.0"
   },
   "files": [
     "bin",
@@ -62,7 +63,7 @@
     "expect.js": "^0.3.1",
     "mocha": "^3.4.2",
     "nock": "^9.2.6",
-    "pkg": "^4.3.3",
+    "pkg": "^4.3.4",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7"
   }

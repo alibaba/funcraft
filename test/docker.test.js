@@ -15,6 +15,10 @@ const assert = sinon.assert;
 
 var prevHome;
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 describe('test generateDockerCmd', () => {
   it('test generate docker cmd', () => {
     const functionProps = {
@@ -120,7 +124,7 @@ describe('test generateDockerOpts', () => {
   });
 
   it('test generate docker opts', async () => {
-    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', {
+    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', 'test', {
       Type: 'bind',
       Source: '/test',
       Target: '/code',
@@ -128,6 +132,7 @@ describe('test generateDockerOpts', () => {
     }, 9000);
 
     expect(opts).to.eql({
+      name: 'test',
       'Env': [
         'local=true',
         'FC_ACCESS_KEY_ID=testKeyId',
@@ -160,7 +165,7 @@ describe('test generateDockerOpts', () => {
   });
 
   it('test generate docker opts without debug port', async () => {
-    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', {
+    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', 'test', {
       Type: 'bind',
       Source: '/test',
       Target: '/code',
@@ -168,6 +173,7 @@ describe('test generateDockerOpts', () => {
     }, null);
 
     expect(opts).to.eql({
+      'name': 'test',
       'Env': [
         'local=true',
         'FC_ACCESS_KEY_ID=testKeyId',
@@ -208,6 +214,7 @@ describe('test invokeFunction', async () => {
 
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
+    sandbox.stub(DockerCli.prototype, 'getContainer').returns({'stop': sandbox.stub()});
 
     docker = proxyquire('../lib/docker', {
       'dockerode': DockerCli
@@ -229,6 +236,10 @@ describe('test invokeFunction', async () => {
     delete process.env.DEFAULT_REGION;
     delete process.env.TIMEOUT;
     delete process.env.RETRIES;
+
+    // https://stackoverflow.com/questions/40905239/how-write-tests-for-checking-behaviour-during-graceful-shutdown-in-node-js/40909092#40909092
+    // avoid test exit code not 0
+    process.removeAllListeners('SIGINT');
   });
 
   it('test invoke function without debug and event', async () => {
@@ -242,6 +253,7 @@ describe('test invokeFunction', async () => {
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
+        name: sinon.match.string,
         Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret'],
         HostConfig: {
           AutoRemove: true,
@@ -261,6 +273,7 @@ describe('test invokeFunction', async () => {
       ['-h', 'index.handler', '-i', 'index.initializer'],
       process.stdout,
       {
+        name: sinon.match.string,
         Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
@@ -282,6 +295,7 @@ describe('test invokeFunction', async () => {
       ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
       process.stdout,
       {
+        name: sinon.match.string,
         Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
         ExposedPorts: { '9000/tcp': {} },
         HostConfig: {
@@ -290,5 +304,42 @@ describe('test invokeFunction', async () => {
           PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
         }
       });
+  });
+
+  it('test cancel invoke function', async () => {
+
+    DockerCli.prototype.run.restore();
+    sandbox.stub(DockerCli.prototype, 'run').callsFake(async () => {
+      return await sleep(100);
+    });
+
+    docker.invokeFunction('test', 'test', functionProps, 9000, '{"testKey": "testValue"}');
+
+    await sleep(10);
+
+    assert.notCalled(DockerCli.prototype.pull);
+    assert.calledOnce(DockerCli.prototype.listImages);
+  
+    assert.calledWith(DockerCli.prototype.run,
+      'aliyunfc/runtime-python3.6:1.1.0',
+      ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
+      process.stdout,
+      {
+        name: sinon.match.string,
+        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
+        ExposedPorts: { '9000/tcp': {} },
+        HostConfig: {
+          AutoRemove: true,
+          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }],
+          PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
+        }
+      });
+    
+    process.kill(process.pid, 'SIGINT');
+  
+    await sleep(10);
+
+    assert.calledWith(DockerCli.prototype.getContainer, sinon.match.string);
+    assert.calledOnce(DockerCli.prototype.getContainer().stop);
   });
 });

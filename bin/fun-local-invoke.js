@@ -34,5 +34,9 @@ if (!program.args.length > 1) {
 }
 
 require('../lib/commands/local/invoke')(program.args[0], program)
+  .then(() =>  {
+    // fix windows not auto exit bug after docker.run
+    process.exit(0);
+  })
   .catch(require('../lib/exception-handler'));
 
