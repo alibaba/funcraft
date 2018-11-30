@@ -65,3 +65,12 @@ $ fun
 Open the [Releases](https://github.com/aliyun/fun/releases) page, click a link of the corresponding platform to download the Fun zip package.
 
 After downloading, unzip it and use it directly.
+
+## Install Fun Using Homebrew
+
+For Mac, you can also install Fun using homebrew.
+
+```
+brew tap vangie/formula 
+brew install fun
+```

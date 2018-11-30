@@ -67,3 +67,12 @@ $ fun -h
 打开 [releases](https://github.com/aliyun/fun/releases) 页面，在最新的版本中选择一个对应平台的 release 压缩包链接，点击即可直接下载。
 
 下载到本地后，解压，即可直接使用。
+
+### 通过 homebrew 安装 Fun
+
+对于 Mac 系统，还可以选择使用 homebrew 安装 Fun。
+
+```
+brew tap vangie/formula 
+brew install fun
+```
