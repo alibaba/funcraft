@@ -27,7 +27,6 @@ def handler(event, context):
   
     html = get_html(url)
   
-    html = get_html(url)
     img_list = get_img(html)
     logger.info(img_list)
 
