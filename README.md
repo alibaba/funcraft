@@ -14,7 +14,7 @@ If you want to use the old syntax, please refer to [README.md](https://github.co
 
 As a command-line tool, Fun has built-in subcommands such as config, local, deploy, and so on.
 
-The config subcommand can be used to configure fun, the local subcommand can be used to run the debugging function locally, and the deploy subcommand can publish resources to the line.
+The config subcommand can be used to configure fun, the local subcommand can be used to run the debugging function locally, and the deploy subcommand can publish your resources.
 
 We have prepared a series of tutorials to help you use the Fun tool more easily:
 
