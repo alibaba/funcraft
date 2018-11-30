@@ -12,9 +12,13 @@
 
 ## 开始使用
 
-我们准备了一系列教程，助您更快上手：
+Fun 作为一个命令行工具，内置了多个子命令，比如 config、local、deploy 等。
 
-- [安装教程](https://github.com/aliyun/fun/blob/master/docs/usage/installation-zh.md)：介绍了如何在 macOS、Linux 或者 Windows 上安装 Fun。
+其中，config 子命令可以用来配置 fun，local 子命令可以用来本地运行调试函数，deploy 子命令可以将资源发布到线上。
+
+为了让您尽快上手，我们准备了一系列教程：
+
+- [安装教程](https://github.com/aliyun/fun/blob/master/docs/usage/installation-zh.md)：介绍了如何在 Mac、Linux 或者 Windows 上安装 Fun。
 - [使用](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started-zh.md)：通过一个简单的示例介绍了 Fun 的基本用法。
 - **本地运行与调试**：关于如何本地运行、调试函数，以及介绍排查 bug 技巧的系列文章。
   - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](https://yq.aliyun.com/articles/672623)：介绍了 Fun Local 基本用法。
@@ -33,7 +37,9 @@
 - [函数计算](https://www.aliyun.com/product/fc)
 - [API Gateway](https://www.aliyun.com/product/apigateway)
 - [Fun 发布 2.0 新版本啦](https://yq.aliyun.com/articles/604490)
+- [函数计算工具链新成员 —— Fun Local 发布啦](https://yq.aliyun.com/articles/672656)
 - [三十分钟快速搭建 serverless 网盘服务](https://yq.aliyun.com/articles/613780)
+- [Fc Docker](https://github.com/aliyun/fc-docker)
 
 ## 开源许可
 
