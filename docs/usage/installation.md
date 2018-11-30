@@ -2,7 +2,9 @@
 
 When using Fun, if you need to run and debug function locally, you need to use the fun local subcommand.
 
-Using fun local subcommand requires pre-installing docker. If you don't want to run and debug function locally, docker is not required.
+Fun local subcommand depend on docker.
+
+If you don't want to run and debug function locally, docker is not required.
 
 ## Docker
 
@@ -32,7 +34,7 @@ Once docker is installed, you can use docker to download the image. If you encou
 
 ## Install Fun Using Npm
 
-Fun can be installed by [npm](https://www.npmjs.com/):
+Fun could be installed by [npm](https://www.npmjs.com/):
 
 ```shell
 $ npm install @alicloud/fun -g
