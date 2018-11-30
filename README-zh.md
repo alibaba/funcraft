@@ -37,7 +37,9 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
 - [函数计算](https://www.aliyun.com/product/fc)
 - [API Gateway](https://www.aliyun.com/product/apigateway)
 - [Fun 发布 2.0 新版本啦](https://yq.aliyun.com/articles/604490)
+- [函数计算工具链新成员 —— Fun Local 发布啦](https://yq.aliyun.com/articles/672656)
 - [三十分钟快速搭建 serverless 网盘服务](https://yq.aliyun.com/articles/613780)
+- [Fc Docker](https://github.com/aliyun/fc-docker)
 
 ## 开源许可
 

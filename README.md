@@ -33,7 +33,9 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
 - [函数计算](https://www.aliyun.com/product/fc)
 - [API Gateway](https://www.aliyun.com/product/apigateway)
 - [Fun 发布 2.0 新版本啦](https://yq.aliyun.com/articles/604490)
+- [函数计算工具链新成员 —— Fun Local 发布啦](https://yq.aliyun.com/articles/672656)
 - [三十分钟快速搭建 serverless 网盘服务](https://yq.aliyun.com/articles/613780)
+- [Fc Docker](https://github.com/aliyun/fc-docker)
 
 ## License
 
