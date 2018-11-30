@@ -12,10 +12,14 @@ If you want to use the old syntax, please refer to [README.md](https://github.co
 
 ## Get Started
 
+As a command-line tool, Fun has built-in subcommands such as config, local, deploy, and so on.
+
+The config subcommand can be used to configure fun, the local subcommand can be used to run the debugging function locally, and the deploy subcommand can publish resources to the line.
+
 We have prepared a series of tutorials to help you use the Fun tool more easily:
 
-- [installation.md](dhttps://github.com/aliyun/fun/blob/master/docs/usage/installation.md): Learn how to install Fun on macOS, Linux or Windows.
-- [getting_started](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started.md): The basic usage of Fun is introduced with a simple example.
+- [Installation](https://github.com/aliyun/fun/blob/master/docs/usage/installation.md): Learn how to install Fun on Mac, Linux or Windows.
+- [Getting Started](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started.md): The basic usage of Fun is introduced with a simple example.
 - **Running and debugging locally**: A series on how to run locally, debug functions, and tips on troubleshooting related issues.
   - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](https://yq.aliyun.com/articles/672623): Introduced the basic usage of Fun Local.
   - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): How to use the Fun tool to develop a Serverless application from scratch.
