@@ -1,0 +1,10 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+ 
+# Dependency directories
+/node_modules/
+jspm_packages
+
+!bb/node_modules

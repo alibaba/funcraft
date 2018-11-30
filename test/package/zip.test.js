@@ -5,7 +5,9 @@ const fs = require('fs');
 
 const expect = require('expect.js');
 
-const zip = require('../lib/zip');
+const zip = require('../../lib/package/zip');
+const funignore = require('../../lib/package/ignore');
+const JSZip = require('jszip');
 
 describe('zip', () => {
   it.skip('should ok', async function () {
@@ -22,17 +24,17 @@ describe('zip', () => {
   });
 
   it.skip('zip file', async function () {
-    var base64 = await zip.file(path.join(__dirname, 'figures', 'file1.txt'));
+    var base64 = await zip.pack(path.join(__dirname, 'figures', 'file1.txt'));
     console.log(base64);
   });
 
   it.skip('zip folder', async function () {
-    var base64 = await zip.file(path.join(__dirname, 'figures'));
+    var base64 = await zip.pack(path.join(__dirname, 'figures'));
     console.log(base64);
   });
 
   it.skip('zip folder with symlink', async function () {
-    var base64 = await zip.file(path.join('examples', 'helloworld'));
+    var base64 = await zip.pack(path.join('examples', 'helloworld'));
 
     fs.writeFile('base64.txt', base64, function (err) {
       if (err) {
@@ -42,4 +44,13 @@ describe('zip', () => {
       console.log('The file was saved!');
     });
   });
+
+  it('.funignore', async function() {
+    var basePath = path.join('examples', 'package', 'funignore');
+    var b64string = await zip.pack(basePath, funignore(basePath));
+    var zipfile = await JSZip.loadAsync(b64string, { base64: true });
+      
+    expect(zipfile.files).to.only.have.keys('example.pdf', 'lib/', 'package.json', 'lib/.keep');
+  });
+
 });
