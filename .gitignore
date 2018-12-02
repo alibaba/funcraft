@@ -80,6 +80,8 @@ examples/local/java8/target/*
 
 output
 .oss_cfg
+
 *.pyc
 *.iml
 *.class
+.DS_Store
