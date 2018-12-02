@@ -94,3 +94,28 @@ fun 配置方式的优先级按以下顺序依次递减：
 - .env
 - 环境变量
 - ~/.fcli/config.yaml
+
+### .funignore
+
+在 template.yml 所在的目录放置一个 .funignore 文件，打包 zip 文件的时候可以排除掉 .funignore 内描述的文件或者文件夹。 例如：
+
+```
+# Logs
+logs/
+*.log
+ 
+# Dependency directories
+node_modules/
+!bb/node_modules
+```
+
+打包时会忽略 logs/ 目录 、*.log 文件。所有层级的 node_modules/ 目录会被忽略，但是 bb/node_modules 会被保留。
+
+.funignore 遵从 .gitignore 的语法。
+
+## 更多示例
+
+下面有更多的示例：
+
+- https://github.com/aliyun/fun/tree/master/examples
+- [十分钟上线-在函数计算上部署基于django开发的个人博客系统](https://yq.aliyun.com/articles/603249?spm=a2c4e.11153959.teamhomeleft.26.115948f26ECqbQ)

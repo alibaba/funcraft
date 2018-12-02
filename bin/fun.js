@@ -20,6 +20,7 @@ program
   // The commander will try to search the executables in the directory of the entry script
   // (like ./examples/pm) with the name program-command.
   .command('config', 'configure the fun')
+  .command('init', 'initialize a new fun project')
   .command('build', 'build the dependencies')
   .command('local', 'run your serverless application locally')
   .command('validate', 'validate a fun template')

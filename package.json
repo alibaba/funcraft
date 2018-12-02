@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "2.6.2",
+  "version": "2.7.0",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.0.0"
@@ -12,6 +12,9 @@
     "scripts": [
       "./lib/**/*.js",
       "./bin/**/*.js"
+    ],
+    "assets": [
+      "./templates/**/*"
     ]
   },
   "scripts": {
@@ -34,6 +37,7 @@
     "ajv": "^6.4.0",
     "archiver": "^2.0.0",
     "colors": "^1.1.2",
+    "command-exists": "^1.2.8",
     "commander": "^2.15.1",
     "debug": "^2.6.8",
     "dockerode": "^2.5.7",
@@ -44,22 +48,26 @@
     "httpx": "^2.1.2",
     "ignore": "^5.0.4",
     "inquirer": "^5.2.0",
+    "inquirer-autocomplete-prompt": "^1.0.1",
     "ip": "^1.1.5",
     "js-yaml": "^3.9.0",
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
+    "lodash": "^4.17.11",
     "mkdirp-promise": "^5.0.1",
     "nested-object-assign": "^1.0.3",
     "node-machine-id": "^1.1.10",
     "os-locale": "^2.1.0",
     "promise-retry": "^1.1.1",
+    "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
     "urlencode": "^1.1.0"
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "templates"
   ],
   "devDependencies": {
     "eslint": "^4.3.0",
