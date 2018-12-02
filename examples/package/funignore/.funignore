@@ -1,0 +1,7 @@
+tmp/
+usr/
+.env
+package-lock.json
+template.yml
+
+.funignore

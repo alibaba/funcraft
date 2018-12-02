@@ -98,6 +98,24 @@ The priority of the fun configuration is decremented in the following order：
 - environment variables
 - ~/.fcli/config.yaml
 
+### .funignore
+
+Create a .funignore file in the same directory as template.yml. When packaging the zip file, you can exclude the files or folders described in .funignore. such as:
+
+```
+# Logs
+logs/
+*.log
+ 
+# Dependency directories
+node_modules/
+!bb/node_modules
+```
+
+The logs/ directory and *.log files are ignored when packaging. The node_modules/ directory of all levels will be ignored, but bb/node_modules is preserved.
+
+.funignore follows the syntax of .gitignore.
+
 ## More examples
 
 You can find more complex examples here:
