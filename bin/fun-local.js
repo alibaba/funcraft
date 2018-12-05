@@ -9,7 +9,8 @@ const program = require('commander');
 program
   .name('fun local')
   .description('Run your serverless application locally for quick development & testing.')
-  .command('invoke', 'invoke a function locally once');
+  .command('invoke', 'invoke a function locally once')
+  .command('start', 'start server'); // todo: 
 
 // Print help information if commands are unknown.
 program.on('command:*', (cmds) => {

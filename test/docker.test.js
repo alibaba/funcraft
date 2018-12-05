@@ -45,16 +45,16 @@ describe('test generateDockerCmd', () => {
   });
 });
 
-describe('test findDockerImage', () => {
+describe('test resolveRuntimeToDockerImage', () => {
   it('test find not python image', () => {
     for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2']) {
-      const imageName = docker.findDockerImage(runtime);
+      const imageName = docker.resolveRuntimeToDockerImage(runtime);
       expect(imageName).to.contain(`aliyunfc/runtime-${runtime}:`);
     }
   });
 
   it('test find python 3 image', () => {
-    const imageName = docker.findDockerImage('python3');
+    const imageName = docker.resolveRuntimeToDockerImage('python3');
     expect(imageName).to.contain(`aliyunfc/runtime-python3.6:`);
   });
 });
