@@ -6,7 +6,9 @@ const expect = require('expect.js');
 
 const sandbox = sinon.createSandbox();
 const fs = {
-  existsSync: sandbox.stub()
+  existsSync: sandbox.stub(),
+  statSync: sandbox.stub(),
+  readdirSync: sandbox.stub()
 };
 
 const rimraf = { sync: sandbox.stub() };
@@ -74,14 +76,38 @@ describe('prompt', () => {
     });
   });
 
-  it('for existing path', async () => {
+  it('for existing path when directory is empty', async () => {
     fs.existsSync.returns(true);
-    inquirer.prompt.returns(Promise.resolve({ okToDelete: true }));
-    await promptStub.promptForExistingPath('foo', 'bar');
+    fs.statSync.returns({ isDirectory: () => true });
+    fs.readdirSync.returns([]);
+    await promptStub.promptForExistingPath('foo', 'bar', true);
+
+    sandbox.assert.notCalled(inquirer.prompt);
+    sandbox.assert.calledOnce(fs.existsSync);
+    sandbox.assert.notCalled(rimraf.sync);
+  });
+
+  it('for existing path when directory is not empty', async () => {
+    fs.existsSync.returns(true);
+    fs.statSync.returns({ isDirectory: () => true });
+    fs.readdirSync.returns(['foo']);
+    inquirer.prompt.returns(Promise.resolve({ ok: true }));
+    await promptStub.promptForExistingPath('foo', 'bar', true);
 
     sandbox.assert.calledOnce(inquirer.prompt);
     sandbox.assert.calledOnce(fs.existsSync);
     sandbox.assert.calledOnce(rimraf.sync);
+
+  });
+
+  it('for existing path when directory does not exist', async () => {
+    fs.existsSync.returns(false);
+    inquirer.prompt.returns(Promise.resolve({ ok: true }));
+    await promptStub.promptForExistingPath('foo', 'bar', true);
+
+    sandbox.assert.notCalled(inquirer.prompt);
+    sandbox.assert.calledOnce(fs.existsSync);
+    sandbox.assert.notCalled(rimraf.sync);
 
   });
 
