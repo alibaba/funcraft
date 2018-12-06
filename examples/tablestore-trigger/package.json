@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "cbor": "^3.0.3",
-    "fc-helper": "^2.1.0"
+    "fc-helper": "^2.1.0",
+    "tablestore": "^4.0.14"
   }
 }

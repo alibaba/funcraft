@@ -31,7 +31,6 @@
     "@alicloud/fc2": "^2.1.0",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
-    "@alicloud/ots2": "^2.0.0-beta1",
     "@alicloud/pop-core": "^1.6.0",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
@@ -62,7 +61,8 @@
     "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
-    "urlencode": "^1.1.0"
+    "urlencode": "^1.1.0",
+    "tablestore": "^4.0.14"
   },
   "files": [
     "bin",
