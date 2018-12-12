@@ -13,6 +13,9 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
+const util = require('util');
+const path = require('path');
+
 var prevHome;
 
 function sleep(ms) {
@@ -58,16 +61,60 @@ describe('test findDockerImage', () => {
 
 describe('test resolveCodeUriToMount', () => {
 
+  beforeEach(() => {
+    
+    const lstat = sandbox.stub();
+    
+    lstat.withArgs('/dir').resolves({
+      isDirectory: function() {return true;}
+    });
+
+    lstat.withArgs('/dir/jar').resolves({
+      isDirectory: function() {return false;}
+    });
+
+    sandbox.stub(path, 'basename').returns('jar');
+
+    sandbox.stub(util, 'promisify').returns(lstat);
+    
+    docker = proxyquire('../lib/docker', {
+      'util': util,
+      'path': path
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+  
   it('test resolve code uri', async () => {
 
-    const codeDir = os.tmpdir();
+    const codeUri = '/dir';
 
-    const mount = await docker.resolveCodeUriToMount(codeDir);
+    const mount = await docker.resolveCodeUriToMount(codeUri);
 
     expect(mount).to.eql({
       Type: 'bind',
-      Source: codeDir,
+      Source: codeUri,
       Target: '/code',
+      ReadOnly: true
+    });
+  });
+
+  it('test resolve jar code uri', async () => {
+
+    const codeUri = '/dir/jar';
+
+    docker = proxyquire('../lib/docker', {
+      'dockerode': DockerCli
+    });
+
+    const mount = await docker.resolveCodeUriToMount(codeUri);
+
+    expect(mount).to.eql({
+      Type: 'bind',
+      Source: codeUri,
+      Target: '/code/jar',
       ReadOnly: true
     });
   });
