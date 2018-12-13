@@ -156,6 +156,7 @@ describe('test generateDockerOpts', () => {
   beforeEach(() => {
     prevHome = os.homedir();
     process.env.HOME = os.tmpdir();
+    process.env.ACCOUNT_ID = 'testAccountId';
     process.env.ACCESS_KEY_ID = 'testKeyId';
     process.env.ACCESS_KEY_SECRET = 'testKeySecret';
   });
@@ -269,6 +270,7 @@ describe('test invokeFunction', async () => {
 
     prevHome = os.homedir();
     process.env.HOME = os.tmpdir();
+    process.env.ACCOUNT_ID = 'testAccountId';
     process.env.ACCESS_KEY_ID = 'testKeyId';
     process.env.ACCESS_KEY_SECRET = 'testKeySecret';
   });
@@ -382,8 +384,9 @@ describe('test invokeFunction', async () => {
         }
       });
     
-    process.kill(process.pid, 'SIGINT');
-  
+    // process.kill(process.pid, 'SIGINT'); // will kill program directly on windows
+    process.emit('SIGINT');
+
     await sleep(10);
 
     assert.calledWith(DockerCli.prototype.getContainer, sinon.match.string);
