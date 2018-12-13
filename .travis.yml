@@ -14,7 +14,15 @@ cache:
   directories:
   - node_modules
 
-script: make test
+script: 
+  - |
+    if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
+      mocha ./test/ -t 20000  -R spec --recursive -name *.test.js
+    else
+      make test
+    fi
+
+    
 
 deploy:
   provider: npm
