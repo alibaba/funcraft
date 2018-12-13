@@ -61,15 +61,20 @@ describe('test findDockerImage', () => {
 
 describe('test resolveCodeUriToMount', () => {
 
+  // windows will resolve /dir to c:\dir
+  const dirPath = path.resolve('/dir');
+  
+  const jarPath = path.resolve('/dir/jar');
+
   beforeEach(() => {
     
     const lstat = sandbox.stub();
     
-    lstat.withArgs('/dir').resolves({
+    lstat.withArgs(dirPath).resolves({
       isDirectory: function() {return true;}
     });
 
-    lstat.withArgs('/dir/jar').resolves({
+    lstat.withArgs(jarPath).resolves({
       isDirectory: function() {return false;}
     });
 
@@ -89,13 +94,11 @@ describe('test resolveCodeUriToMount', () => {
   
   it('test resolve code uri', async () => {
 
-    const codeUri = '/dir';
-
-    const mount = await docker.resolveCodeUriToMount(codeUri);
+    const mount = await docker.resolveCodeUriToMount(dirPath);
 
     expect(mount).to.eql({
       Type: 'bind',
-      Source: codeUri,
+      Source: dirPath,
       Target: '/code',
       ReadOnly: true
     });
@@ -103,17 +106,11 @@ describe('test resolveCodeUriToMount', () => {
 
   it('test resolve jar code uri', async () => {
 
-    const codeUri = '/dir/jar';
-
-    docker = proxyquire('../lib/docker', {
-      'dockerode': DockerCli
-    });
-
-    const mount = await docker.resolveCodeUriToMount(codeUri);
+    const mount = await docker.resolveCodeUriToMount(jarPath);
 
     expect(mount).to.eql({
       Type: 'bind',
-      Source: codeUri,
+      Source: jarPath,
       Target: '/code/jar',
       ReadOnly: true
     });
