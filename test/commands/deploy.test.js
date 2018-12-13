@@ -11,9 +11,16 @@ describe.skip('deploy template', () => {
   var prevCWD;
   beforeEach(() => {
     prevCWD = process.cwd();
+    process.env.ACCOUNT_ID = 'testAccountId';
+    process.env.ACCESS_KEY_ID = 'testKeyId';
+    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+   
   });
   afterEach(() => {
     process.chdir(prevCWD);
+    delete process.env.ACCOUNT_ID;
+    delete process.env.ACCESS_KEY_ID;
+    delete process.env.ACCESS_KEY_SECRET;
   });
 
   it('deploy datahub example', async () => {

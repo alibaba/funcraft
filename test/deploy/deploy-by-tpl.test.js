@@ -26,10 +26,19 @@ describe('deploy', () => {
         sandbox.stub(ram, m).resolves({});
       }
     });
+
+    process.env.ACCOUNT_ID = 'testAccountId';
+    process.env.ACCESS_KEY_ID = 'testKeyId';
+    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+   
   });
 
   afterEach(() => {
     sandbox.restore();
+
+    delete process.env.ACCOUNT_ID;
+    delete process.env.ACCESS_KEY_ID;
+    delete process.env.ACCESS_KEY_SECRET;
   });
 
   async function deploy(example) {

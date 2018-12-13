@@ -47,14 +47,8 @@ describe('without local ~/.fcli/config.yaml', () => {
     expect(profile.retries).to.be(process.env.RETRIES);
   });
 
-  it('without env', async () => {
-    const profile = await getProfile();
-    expect(profile.accountId).to.be(undefined);
-    expect(profile.accessKeyId).to.be(undefined);
-    expect(profile.accessKeySecret).to.be(undefined);
-    expect(profile.defaultRegion).to.be(undefined);
-    expect(profile.timeout).to.be(undefined);
-    expect(profile.retries).to.be(undefined);
+  it('without env', (done) => {
+    getProfile().then().catch(e => done());
   });
 });
 
