@@ -4,6 +4,7 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const path = require('path');
 
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
@@ -35,11 +36,7 @@ describe('deploy', () => {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
       '../ram': ram
-    })(`./examples/${example}/template.yml`);
-
-    // await proxyquire('../../lib/deploy/deploy-support', {
-
-    // })(`./examples/${example}/template.yml`);
+    })(path.join('./examples', example, 'template.yml'));
   }
 
   it('deploy datahub', async () => {
@@ -55,7 +52,7 @@ describe('deploy', () => {
     });
 
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/datahub`, {
+      path.join(process.cwd(), 'examples', 'datahub'), {
         codeUri: 'datahub.js',
         description: undefined,
         functionName: 'MyFunction',
@@ -82,7 +79,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/helloworld`, {
+      path.join(process.cwd(), 'examples', 'helloworld'), {
         codeUri: './',
         description: undefined,
         functionName: 'helloworld',
@@ -109,7 +106,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/java`, {
+      path.join(process.cwd(), 'examples', 'java'), {
         codeUri: './demo.jar',
         description: 'Hello world!',
         functionName: 'helloworld',
@@ -138,7 +135,7 @@ describe('deploy', () => {
     });
 
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/openid_connect`, {
+      path.join(process.cwd(), 'examples', 'openid_connect'), {
         codeUri: './',
         description: 'Hello world!',
         functionName: 'helloworld',
@@ -197,7 +194,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction, 
-      `${process.cwd()}/examples/tablestore-trigger`,{
+      path.join(process.cwd(), 'examples', 'tablestore-trigger'), {
         codeUri: './',
         handler: 'main.index',
         initializer: undefined,
@@ -234,7 +231,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/sls_demo`, {
+      path.join(process.cwd(), 'examples', 'sls_demo'), {
         codeUri: './',
         handler: 'index.handler',
         initializer: undefined,
@@ -273,7 +270,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/rds-trigger`, {
+      path.join(process.cwd(), 'examples', 'rds-trigger'), {
         codeUri: './',
         handler: 'index.handler',
         initializer: undefined,
@@ -313,7 +310,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/mnsTopic-trigger`, {
+      path.join(process.cwd(), 'examples', 'mnsTopic-trigger'), {
         codeUri: './',
         handler: 'index.handler',
         initializer: undefined,
@@ -349,7 +346,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/python`, {
+      path.join(process.cwd(), 'examples', 'python'), {
         codeUri: './',
         description: 'Hello world with python!',
         functionName: 'hello',
@@ -400,7 +397,7 @@ describe('deploy', () => {
     });
 
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/segment`, {
+      path.join(process.cwd(), 'examples', 'segment'), {
         codeUri: './',
         description: 'do segment',
         functionName: 'doSegment',
@@ -448,7 +445,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction,
-      `${process.cwd()}/examples/timer`, {
+      path.join(process.cwd(), 'examples', 'timer'), {
         codeUri: './',
         description: 'send hangzhou weather',
         functionName: 'MyFunction',
@@ -485,7 +482,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction.firstCall,
-      `${process.cwd()}/examples/wechat`, {
+      path.join(process.cwd(), 'examples', 'wechat'), {
         codeUri: './',
         description: 'Wechat get handler',
         functionName: 'get',
@@ -528,7 +525,7 @@ describe('deploy', () => {
     });
 
     assert.calledWith(deploySupport.makeFunction.secondCall,
-      `${process.cwd()}/examples/wechat`, {
+      path.join(process.cwd(), 'examples', 'wechat'), {
         codeUri: './',
         description: 'Wechat post handler',
         functionName: 'post',
@@ -600,7 +597,7 @@ describe('deploy', () => {
       vpcConfig: undefined
     });
     assert.calledWith(deploySupport.makeFunction, 
-      `${process.cwd()}/examples/initializer`,{
+      path.join(process.cwd(), 'examples', 'initializer'), {
         codeUri: './',
         description: 'Hello world with initializer!',
         environmentVariables: undefined,
