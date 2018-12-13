@@ -1,12 +1,21 @@
 language: node_js
+
+os:
+  - linux
+  - osx
+  - windows
+
 node_js:
 - '8'
 - '9'
 - '10'
+
 cache:
   directories:
   - node_modules
+
 script: make test
+
 deploy:
   provider: npm
   email: duwan@live.com
