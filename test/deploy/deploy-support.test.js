@@ -4,23 +4,27 @@ var nock = require('nock');
 
 const deploySupport = require('../../lib/deploy/deploy-support');
 
+const { setProcess } = require('../test-utils');
+
 describe('make', () => {
 
+  let restoreProcess;
+
   beforeEach(() => {
-    process.env.ACCOUNT_ID = '12384123985012938421';
-    process.env.DEFAULT_REGION = 'cn-shanghai';
-    process.env.ACCESS_KEY_ID = 'LTAIsgxsdfDokKbBS';
-    process.env.ACCESS_KEY_SECRET = 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM';
+    restoreProcess = setProcess({
+      ACCOUNT_ID: '12384123985012938421',
+      DEFAULT_REGION: 'cn-shanghai',
+      ACCESS_KEY_ID: 'LTAIsgxsdfDokKbBS',
+      ACCESS_KEY_SECRET: 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM',
+    });
+
     if (!nock.isActive()) {
       nock.activate();
     }
   });
 
   afterEach(() => {
-    delete process.env.ACCOUNT_ID;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
+    restoreProcess();
     nock.cleanAll();
     nock.restore();
   });

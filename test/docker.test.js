@@ -13,7 +13,10 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
-var prevHome;
+const { setProcess } = require('./test-utils');
+
+const util = require('util');
+const path = require('path');
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -58,16 +61,57 @@ describe('test findDockerImage', () => {
 
 describe('test resolveCodeUriToMount', () => {
 
+  // windows will resolve /dir to c:\dir
+  const dirPath = path.resolve('/dir');
+  
+  const jarPath = path.resolve('/dir/jar');
+
+  beforeEach(() => {
+    
+    const lstat = sandbox.stub();
+    
+    lstat.withArgs(dirPath).resolves({
+      isDirectory: function() {return true;}
+    });
+
+    lstat.withArgs(jarPath).resolves({
+      isDirectory: function() {return false;}
+    });
+
+    sandbox.stub(path, 'basename').returns('jar');
+
+    sandbox.stub(util, 'promisify').returns(lstat);
+    
+    docker = proxyquire('../lib/docker', {
+      'util': util,
+      'path': path
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+  
   it('test resolve code uri', async () => {
 
-    const codeDir = os.tmpdir();
-
-    const mount = await docker.resolveCodeUriToMount(codeDir);
+    const mount = await docker.resolveCodeUriToMount(dirPath);
 
     expect(mount).to.eql({
       Type: 'bind',
-      Source: codeDir,
+      Source: dirPath,
       Target: '/code',
+      ReadOnly: true
+    });
+  });
+
+  it('test resolve jar code uri', async () => {
+
+    const mount = await docker.resolveCodeUriToMount(jarPath);
+
+    expect(mount).to.eql({
+      Type: 'bind',
+      Source: jarPath,
+      Target: '/code/jar',
       ReadOnly: true
     });
   });
@@ -106,21 +150,20 @@ describe('test generateDockerOpts', () => {
     'Runtime': 'python3'
   };
 
+  let restoreProcess;
+
   beforeEach(() => {
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
-    process.env.ACCESS_KEY_ID = 'testKeyId';
-    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+    
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
   });
 
   afterEach(() => {
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.TIMEOUT;
-    delete process.env.RETRIES;
+    restoreProcess();
   });
 
   it('test generate docker opts', async () => {
@@ -207,6 +250,8 @@ describe('test invokeFunction', async () => {
     }
   };
 
+  let restoreProcess;
+
   beforeEach(() => {
     sandbox.stub(DockerCli.prototype, 'listImages').resolves({
       length: 1
@@ -220,22 +265,19 @@ describe('test invokeFunction', async () => {
       'dockerode': DockerCli
     });
 
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
-    process.env.ACCESS_KEY_ID = 'testKeyId';
-    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
   });
 
   afterEach(() => {
     sandbox.restore();
 
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.TIMEOUT;
-    delete process.env.RETRIES;
+    restoreProcess();
 
     // https://stackoverflow.com/questions/40905239/how-write-tests-for-checking-behaviour-during-graceful-shutdown-in-node-js/40909092#40909092
     // avoid test exit code not 0
@@ -335,8 +377,9 @@ describe('test invokeFunction', async () => {
         }
       });
     
-    process.kill(process.pid, 'SIGINT');
-  
+    // process.kill(process.pid, 'SIGINT'); // will kill program directly on windows
+    process.emit('SIGINT');
+
     await sleep(10);
 
     assert.calledWith(DockerCli.prototype.getContainer, sinon.match.string);

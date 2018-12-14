@@ -12,17 +12,22 @@ const expect = require('expect.js');
 const mocki = require('../inquirer-mock-prompt');
 const config = require('../../lib/commands/config');
 
+const { setProcess } = require('../test-utils');
+
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 
 
 describe('config prompt', () => {
 
-  var prevHome;
+  let restoreProcess;
+
   before(async () => {
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
-  
+
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+    });
+
     await mkdirp(`${os.homedir()}/.fcli/`);
     await writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://123344234.cn-hangzhou.fc.aliyuncs.com`,
@@ -36,14 +41,10 @@ describe('config prompt', () => {
       sls_endpoint: `cn-hangzhou.log.aliyuncs.com`
     }));
   });
+
   after(async () => {
     rimraf.sync(`${os.homedir()}/.fcli/`);
-  
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
+    restoreProcess();
   });
 
   it('using default value', async () => {  
