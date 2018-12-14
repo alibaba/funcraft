@@ -12,21 +12,18 @@ const rimraf = require('rimraf');
 const getProfile = require('../lib/profile').getProfile;
 const writeFile = util.promisify(fs.writeFile);
 
+const { setProcess } = require('./test-utils');
 
 describe('without local ~/.fcli/config.yaml', () => {
-  var prevHome;
+  
+  let restoreProcess;
   beforeEach(() => {
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
+    restoreProcess = setProcess({
+      HOME: os.tmpdir()
+    });
   });
   afterEach(() => {
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.TIMEOUT;
-    delete process.env.RETRIES;
+    restoreProcess();
   });
 
 
@@ -53,10 +50,13 @@ describe('without local ~/.fcli/config.yaml', () => {
 });
 
 describe('with local ~/.fcli/config.yaml', () => {
-  var prevHome;
+  let restoreProcess;
+
   beforeEach(async () => {
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
+
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+    });
 
     await mkdirp(`${os.homedir}/.fcli/`);
     await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
@@ -72,16 +72,11 @@ describe('with local ~/.fcli/config.yaml', () => {
       retries: 10
     }));
   });
+
   afterEach(async () => {
     rimraf.sync(`${os.homedir}/.fcli/`);
 
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.TIMEOUT;
-    delete process.env.RETRIES;
+    restoreProcess();
   });
 
   it('with env', async () => {    

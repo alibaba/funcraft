@@ -13,10 +13,10 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
+const { setProcess } = require('./test-utils');
+
 const util = require('util');
 const path = require('path');
-
-var prevHome;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -150,22 +150,20 @@ describe('test generateDockerOpts', () => {
     'Runtime': 'python3'
   };
 
+  let restoreProcess;
+
   beforeEach(() => {
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
-    process.env.ACCOUNT_ID = 'testAccountId';
-    process.env.ACCESS_KEY_ID = 'testKeyId';
-    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+    
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
   });
 
   afterEach(() => {
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.TIMEOUT;
-    delete process.env.RETRIES;
+    restoreProcess();
   });
 
   it('test generate docker opts', async () => {
@@ -252,6 +250,8 @@ describe('test invokeFunction', async () => {
     }
   };
 
+  let restoreProcess;
+
   beforeEach(() => {
     sandbox.stub(DockerCli.prototype, 'listImages').resolves({
       length: 1
@@ -265,23 +265,19 @@ describe('test invokeFunction', async () => {
       'dockerode': DockerCli
     });
 
-    prevHome = os.homedir();
-    process.env.HOME = os.tmpdir();
-    process.env.ACCOUNT_ID = 'testAccountId';
-    process.env.ACCESS_KEY_ID = 'testKeyId';
-    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
   });
 
   afterEach(() => {
     sandbox.restore();
 
-    process.env.HOME = prevHome;
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
-    delete process.env.DEFAULT_REGION;
-    delete process.env.TIMEOUT;
-    delete process.env.RETRIES;
+    restoreProcess();
 
     // https://stackoverflow.com/questions/40905239/how-write-tests-for-checking-behaviour-during-graceful-shutdown-in-node-js/40909092#40909092
     // avoid test exit code not 0

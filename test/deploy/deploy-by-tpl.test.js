@@ -9,7 +9,11 @@ const path = require('path');
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 
+const { setProcess } = require('../test-utils');
+
 describe('deploy', () => {
+  let restoreProcess;
+
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
       sandbox.stub(deploySupport, m).resolves({});
@@ -27,18 +31,17 @@ describe('deploy', () => {
       }
     });
 
-    process.env.ACCOUNT_ID = 'testAccountId';
-    process.env.ACCESS_KEY_ID = 'testKeyId';
-    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
-   
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
+
   });
 
   afterEach(() => {
     sandbox.restore();
-
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
+    restoreProcess();
   });
 
   async function deploy(example) {

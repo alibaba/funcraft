@@ -5,22 +5,24 @@ const exec = util.promisify(require('child_process').exec);
 
 const expect = require('expect.js');
 
+const { setProcess } = require('../test-utils');
+
 const deploy = require('../../lib/commands/deploy');
 
 describe.skip('deploy template', () => {
-  var prevCWD;
+
+  let restoreProcess;
+  
   beforeEach(() => {
-    prevCWD = process.cwd();
-    process.env.ACCOUNT_ID = 'testAccountId';
-    process.env.ACCESS_KEY_ID = 'testKeyId';
-    process.env.ACCESS_KEY_SECRET = 'testKeySecret';
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
    
   });
   afterEach(() => {
-    process.chdir(prevCWD);
-    delete process.env.ACCOUNT_ID;
-    delete process.env.ACCESS_KEY_ID;
-    delete process.env.ACCESS_KEY_SECRET;
+    restoreProcess();
   });
 
   it('deploy datahub example', async () => {
