@@ -25,6 +25,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
   - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): How to use the Fun tool to develop a Serverless application from scratch.
   - [开发函数计算的正确姿势 —— 排查超时问题](https://yq.aliyun.com/articles/672627): Demonstrates how to solve a series of bugs and introduces the tricks of debug
 - [Specification](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md): Introduces the syntax of the fun's template.yml file.
+- [FAQ](https://github.com/aliyun/fun/blob/master/docs/usage/faq.md): Frequently asked questions and answers when using fun.
 - [More Examples](https://github.com/aliyun/fun/tree/master/examples)
 
 ## References
