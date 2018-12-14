@@ -9,7 +9,7 @@
 
 ![](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181214113413.png)
 
-如果已经按照错误信息描述的 VSwitch 存在于 VPC 中，那么就可能时没有为服务角色添加正确的权限。文档可以[参考](https://help.aliyun.com/knowledge_detail/72959.html)。
+如果已经按照错误信息描述的 VSwitch 存在于 VPC 中，那么就可能时没有为服务角色添加 `AliyunECSNetworkInterfaceManagementAccess` 的权限。文档可以[参考](https://help.aliyun.com/knowledge_detail/72959.html)。
 
 为服务角色添加权限的方法很简单，即可以直接在 template.yml 中通过 [Policies](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessservice) 声明：
 
@@ -31,7 +31,7 @@ Resources:
 
 指定 `Policies` 时，fun 会附加该权限到 Fun 创建的默认角色上。
 
-也可以手动添加到指定 role 上，然后将 [Role](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessservice) 属性配置到 template.yml 中：
+也可以手动添加权限 `AliyunECSNetworkInterfaceManagementAccess` 到指定 role 上，然后将 [Role](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessservice) 属性配置到 template.yml 中：
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'

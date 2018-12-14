@@ -9,10 +9,12 @@ This problem occurs when deploying vpc with `fun deploy`:
 
 ![](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181214113413.png)
 
-If the VSwitch exists in the VPC as described in the error message, the reason for the problem is that the correct permissions are not added for the service role. The documentation can be [reference](https://www.alibabacloud.com/help/doc-detail/72959.htm).
+If the VSwitch exists in the VPC as described in the error message, the reason for the problem is that the correct permission `AliyunECSNetworkInterfaceManagementAccess` are not added for the service role. [reference](https://www.alibabacloud.com/help/doc-detail/72959.htm).
 
 
-The way to add permissions to a service role is simple. You can use [Policies](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md#aliyunserverlessservice) directly in template.yml:
+The way to add permissions to a service role is simple. 
+
+You can use [Policies](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md#aliyunserverlessservice) directly in template.yml:
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'
@@ -32,8 +34,7 @@ Resources:
 
 When `Policies` is specified, fun will append this permission to the default role created by Fun.
 
-
-You can also manually add it to the specified role and then confiture the [Role](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md#aliyunserverlessservice) property into template.yml:
+You can also manually add `AliyunECSNetworkInterfaceManagementAccess` to the specified role and then configure the [Role](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md#aliyunserverlessservice) property in template.yml:
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'
@@ -60,7 +61,6 @@ This problem occurs with `docker for windows` on the Windows platform. The error
 
 ![](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181214112210.png)
 
-Has been confirmed as a problem with `docker for windows`
 It has been confirmed as a [bug](https://github.com/docker/for-win/issues/573) with `docker for windows`.
 
 This can be as a workaround:
