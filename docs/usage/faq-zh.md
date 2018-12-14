@@ -5,13 +5,13 @@
 
 ## FCINVALIDArgumentError: PUT /services/xxxxx failed with 400. requestId: xxxxx, message: VSwitch 'xxxxx' does not exist in VPC 'xxxxx'. The VSwith may not exist or the service role does not have 'vpc:DescribeVSwitchAttributes` permission.
 
-这个问题发生在使用 `fun deploy` 部署 vpc 时：
+这个问题发生在使用 `fun deploy` 部署配置了 vpc 的函数：
 
 ![](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181214113413.png)
 
-如果已经按照错误信息描述的 VSwitch 存在于 VPC 中，那么就可能时没有为服务角色添加 `AliyunECSNetworkInterfaceManagementAccess` 的权限。文档可以[参考](https://help.aliyun.com/knowledge_detail/72959.html)。
+如果已经确认错误提示中的 VSwitch 存在于 VPC 中，那么就可能是因为没有为服务角色添加 `AliyunECSNetworkInterfaceManagementAccess` 的权限。文档可以[参考](https://help.aliyun.com/knowledge_detail/72959.html)。
 
-为服务角色添加权限的方法很简单，即可以直接在 template.yml 中通过 [Policies](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessservice) 声明：
+为服务角色添加权限的方法很简单，可以直接在 template.yml 中通过 [Policies](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessservice) 声明：
 
 ```
 ROSTemplateFormatVersion: '2015-09-01'
@@ -29,7 +29,7 @@ Resources:
         SecurityGroupId: 'sg-j6ceitqs6ljyssm1apom'
 ```
 
-指定 `Policies` 时，fun 会附加该权限到 Fun 创建的默认角色上。
+指定 `Policies` 时，Fun 会附加该权限到 Fun 创建的默认角色上。
 
 也可以手动添加权限 `AliyunECSNetworkInterfaceManagementAccess` 到指定 role 上，然后将 [Role](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessservice) 属性配置到 template.yml 中：
 
