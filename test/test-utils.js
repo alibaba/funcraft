@@ -11,7 +11,7 @@ function setProcess(envs, cwd) {
   }
 
   return () => {
-    Object.assign(process.env = prevEnv);
+    process.env = prevEnv;
     process.chdir(prevCwd);
   };
 }
