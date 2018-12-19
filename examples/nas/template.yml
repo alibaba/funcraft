@@ -1,0 +1,40 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  nasDemo:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'fc nas test'
+      Policies: 
+        - AliyunECSNetworkInterfaceManagementAccess
+        - AliyunNASFullAccess
+      VpcConfig:
+        VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
+        VSwitchIds: [ 'vsw-bp1gitru7oicyyb4uiylj' ]
+        SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks'
+      NasConfig: 
+        UserId: -1
+        GroupId: -1
+        MountPoints: 
+          - ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
+            MountDir: '/mnt/test'
+
+    readNas:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: read.handler
+        Runtime: nodejs8
+        CodeUri: './read.js'
+        Timeout: 100
+        EnvironmentVariables:
+          ROOT_DIR: /mnt/test
+
+    writeNas:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: write.handler
+        Runtime: python2.7
+        CodeUri: './write.py'
+        Timeout: 100
+        EnvironmentVariables:
+          ROOT_DIR: /mnt/test

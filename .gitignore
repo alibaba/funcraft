@@ -85,3 +85,4 @@ output
 *.iml
 *.class
 .DS_Store
+.fun
