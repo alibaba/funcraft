@@ -1,0 +1,20 @@
+{
+  "name": "helloworld",
+  "private": true,
+  "version": "1.0.0",
+  "description": "The hello world demo for Fun",
+  "main": "helloworld.js",
+  "scripts": {
+    "test": "mocha -R spec test/*"
+  },
+  "author": "Jackson Tian",
+  "license": "MIT",
+  "dependencies": {
+    "fc-helper": "^2.1.0",
+    "raw-body": "^2.3.3"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^3.5.0"
+  }
+}
