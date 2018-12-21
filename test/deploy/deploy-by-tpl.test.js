@@ -161,7 +161,7 @@ describe('deploy', () => {
       }
     });
 
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(deploySupport.makeFunction.firstCall,
       path.join(process.cwd(), 'examples', 'nas'), {
         codeUri: './read.js',
         description: undefined,
@@ -173,7 +173,22 @@ describe('deploy', () => {
         serviceName: 'nasDemo',
         timeout: 100,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: { ROOT_DIR: '/mnt/test' }
+      });
+
+    assert.calledWith(deploySupport.makeFunction.secondCall,
+      path.join(process.cwd(), 'examples', 'nas'), {
+        codeUri: './write.py',
+        description: undefined,
+        functionName: 'writeNas',
+        handler: 'write.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        runtime: 'python2.7',
+        serviceName: 'nasDemo',
+        timeout: 100,
+        initializationTimeout: undefined,
+        environmentVariables: { ROOT_DIR: '/mnt/test' }
       });
   });
 
