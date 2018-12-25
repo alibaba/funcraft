@@ -3,11 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "description": "The hello world demo for Fun",
-  "main": "helloworld.js",
+  "main": "index.js",
   "scripts": {
     "test": "mocha -R spec test/*"
   },
-  "author": "Jackson Tian",
   "license": "MIT",
   "dependencies": {
     "fc-helper": "^2.1.0",

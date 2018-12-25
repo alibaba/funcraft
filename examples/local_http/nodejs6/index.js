@@ -13,7 +13,7 @@ module.exports.handler = function (request, response, context) {
             clientIP: request.clientIP,
             body: body.toString()
         };
-        
+
         response.setStatusCode(200);
         response.setHeader('content-type', 'application/json');
         response.send(JSON.stringify(respBody, null, 4));
