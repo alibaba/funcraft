@@ -103,7 +103,7 @@ describe('test generateHttpParams', async () => {
       }
     };
     const res = httpSupport.generateHttpParams(req, '/prefix');
-    expect(res).to.eql('eyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3BhdGgiLCJjbGllbnRJUCI6IjEyNy4wLjAuMSIsInF1ZXJpZXMiOnsiaG9zdCI6ImxvY2FsaG9zdDo4MDAwIn0sImhlYWRlcnMiOnsidGVzdEhlYWRlciI6InRlc3RIZWFkZXJWYWx1ZSJ9fQ==');
+    expect(res).to.eql('eyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3BhdGgiLCJjbGllbnRJUCI6IjEyNy4wLjAuMSIsInF1ZXJpZXNNYXAiOnsiaG9zdCI6WyJsb2NhbGhvc3Q6ODAwMCJdfSwiaGVhZGVyc01hcCI6eyJ0ZXN0SGVhZGVyIjpbInRlc3RIZWFkZXJWYWx1ZSJdfX0=');
   });
 });
 
@@ -137,9 +137,27 @@ describe('test responseHttpTrigger', async () => {
     assert.calledWith(resp.send, Buffer.from('testBody'));
   });
 
+  it('test response with 4xx invoke http status', async () => {
+    const resp = {
+      send: sinon.stub(),
+      status: sinon.stub(),
+      setHeader: sinon.stub()
+    };
+
+    const httpErrorOutputStream = `--------------------response begin-----------------
+SFRUUC8xLjEgNDAwIE9LCgp0ZXN0Qm9keQ==
+--------------------response end-----------------`;
+    httpSupport.responseHttpTrigger(resp, httpErrorOutputStream, '');
+
+    assert.calledWith(resp.status, '400');
+    assert.calledWith(resp.send, {
+      'errorMessage': sinon.match.string
+    });
+  });
+
   it('test response error http trigger', async () => {
     const resp = {
-      end: sinon.stub(),
+      send: sinon.stub(),
       status: sinon.stub(),
       setHeader: sinon.stub()
     };
@@ -147,7 +165,9 @@ describe('test responseHttpTrigger', async () => {
     httpSupport.responseHttpTrigger(resp, '', 'function invoke error');
     
     assert.calledWith(resp.status, 500);
-    assert.calledWith(resp.end, 'your function occur errors');
+    assert.calledWith(resp.send, {
+      'errorMessage': sinon.match.string
+    });
   });
 });
 
@@ -161,7 +181,6 @@ describe('test responseApi', async () => {
 
     httpSupport.responseApi(resp, apiOutputSream, '');
 
-    assert.calledWith(resp.status, 200);
     assert.calledWith(resp.set, {
       'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
       'content-type': 'application/json',
@@ -232,5 +251,36 @@ describe('test validateSignature', async () => {
     const valid = await httpSupport.validateSignature(req, res, 'POST');
 
     expect(valid).to.be(false);
+  });
+});
+
+describe('test normalizeMultiValues', async () => {
+  it('test normal', () => {
+    const maps = {
+      'header1': 'value1',
+      'header2': ['value2', 'value3' ]
+    };
+
+    const expectMaps = {
+      'header1': [ 'value1' ],
+      'header2': [ 'value2', 'value3' ]
+    };
+
+    const normallized = httpSupport.normalizeMultiValues(maps);
+    expect(normallized).to.eql(expectMaps);
+  });
+
+  it('test empty', () => {
+    const maps = {};
+
+    const normallized = httpSupport.normalizeMultiValues(maps);
+    expect(normallized).to.eql({});
+  });
+
+  it('test null', () => {
+    const maps = null;
+
+    const normallized = httpSupport.normalizeMultiValues(maps);
+    expect(normallized).to.eql({});
   });
 });
