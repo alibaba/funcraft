@@ -321,7 +321,7 @@ describe('test resolveNasConfigToMount', () => {
     };
   
     const mount = await docker.resolveNasConfigToMount(nasConfig, path.posix.join(projectDir, 'template.yml'));
-    console.log('### mount is ' + mount);
+
     expect(mount).to.eql({
       Type: 'bind',
       Source: path.join(projectDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),

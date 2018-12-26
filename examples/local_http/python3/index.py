@@ -38,7 +38,8 @@ def handler(environ, start_response):
         'method': request_method,
         'request_uri': request_uri,
         'path_info': path_info,
-        'body': request_body.decode("utf-8")
+        'body': request_body.decode("utf-8"),
+        'content_type': environ.get('CONTENT_TYPE', '')
     }
 
     sys.stdout.flush()

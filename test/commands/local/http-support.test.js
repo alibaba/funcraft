@@ -28,6 +28,10 @@ OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
 [0;32mRequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8 	 Billed Duration: 44 ms 	 Memory Size: 1998 MB 	 Max Memory Used: 19 MB[0m
 `;
 
+const httpErrorOutputStream = `--------------------response begin-----------------
+SFRUUC8xLjEgNDAwIE9LCgp0ZXN0Qm9keQ==
+--------------------response end-----------------`;
+
 const apiOutputSream = `FC Invoke Start RequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8
 load code for handler:read.handler
 --------------------response begin-----------------
@@ -98,9 +102,9 @@ describe('test generateHttpParams', async () => {
       query: {
         host: 'localhost:8000'
       },
-      headers: {
-        testHeader: 'testHeaderValue'
-      }
+      rawHeaders: [
+        'testHeader', 'testHeaderValue'
+      ]
     };
     const res = httpSupport.generateHttpParams(req, '/prefix');
     expect(res).to.eql('eyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3BhdGgiLCJjbGllbnRJUCI6IjEyNy4wLjAuMSIsInF1ZXJpZXNNYXAiOnsiaG9zdCI6WyJsb2NhbGhvc3Q6ODAwMCJdfSwiaGVhZGVyc01hcCI6eyJ0ZXN0SGVhZGVyIjpbInRlc3RIZWFkZXJWYWx1ZSJdfX0=');
@@ -144,15 +148,10 @@ describe('test responseHttpTrigger', async () => {
       setHeader: sinon.stub()
     };
 
-    const httpErrorOutputStream = `--------------------response begin-----------------
-SFRUUC8xLjEgNDAwIE9LCgp0ZXN0Qm9keQ==
---------------------response end-----------------`;
     httpSupport.responseHttpTrigger(resp, httpErrorOutputStream, '');
 
     assert.calledWith(resp.status, '400');
-    assert.calledWith(resp.send, {
-      'errorMessage': sinon.match.string
-    });
+    assert.calledWith(resp.send, Buffer.from('testBody'));
   });
 
   it('test response error http trigger', async () => {
@@ -162,12 +161,10 @@ SFRUUC8xLjEgNDAwIE9LCgp0ZXN0Qm9keQ==
       setHeader: sinon.stub()
     };
     
-    httpSupport.responseHttpTrigger(resp, '', 'function invoke error');
+    httpSupport.responseHttpTrigger(resp, httpErrorOutputStream, 'function invoke error');
     
-    assert.calledWith(resp.status, 500);
-    assert.calledWith(resp.send, {
-      'errorMessage': sinon.match.string
-    });
+    assert.calledWith(resp.status, '400');
+    assert.calledWith(resp.send, Buffer.from('testBody'));
   });
 });
 
@@ -211,7 +208,7 @@ describe('test validateSignature', async () => {
     req = {
       path: '/test',
       headers: {
-        'headerKey': 'headerValue'
+        'testHeader': 'testHeaderValue'
       },
       queries: {}
     };
@@ -282,5 +279,18 @@ describe('test normalizeMultiValues', async () => {
 
     const normallized = httpSupport.normalizeMultiValues(maps);
     expect(normallized).to.eql({});
+  });
+});
+
+describe('test normalizeRawHeaders', async () => {
+  it('test normal', async () => {
+    const rawHeaders = ['A','A',
+      'B','B',
+      'A', 'C'];
+    const headers = httpSupport.normalizeRawHeaders(rawHeaders);
+    expect(headers).to.eql({
+      'A': ['A', 'C'],
+      'B': ['B']
+    });
   });
 });
