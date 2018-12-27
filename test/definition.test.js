@@ -151,3 +151,29 @@ describe('test findNasConfigInService', () => {
     expect(nasConfig).to.eql(serviceRes.Properties.NasConfig);
   });
 });
+
+describe('test findHttpTriggersInFunction', () => {
+  const functionRes = {
+    nodejs6: {
+      Type: 'Aliyun::Serverless::Function'
+    },
+    python27: {
+      Type: 'Aliyun::Serverless::Function',
+      Events: {
+        'http-test': {
+          Type: 'HTTP'
+        }
+      }
+    }
+  };
+  
+  it('test normal', () => {
+    const triggers = definition.findHttpTriggersInFunction(functionRes);
+    expect(triggers).to.be.eql([{
+      triggerName: 'http-test',
+      triggerRes: {
+        Type: 'HTTP'
+      }
+    }]);
+  });
+});
