@@ -168,7 +168,7 @@ describe('test findHttpTriggersInFunction', () => {
   };
   
   it('test normal', () => {
-    const triggers = definition.findHttpTriggersInFunction(functionRes);
+    const triggers = definition.findHttpTriggersInFunction(functionRes.python27);
     expect(triggers).to.be.eql([{
       triggerName: 'http-test',
       triggerRes: {

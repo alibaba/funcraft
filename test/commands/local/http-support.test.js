@@ -180,7 +180,7 @@ describe('test responseApi', async () => {
 
     assert.calledWith(resp.set, {
       'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
-      'content-type': 'application/json',
+      'content-type': 'application/octet-stream',
       'x-fc-invocation-duration': '182',
       'x-fc-invocation-service-version': 'LATEST',
       'x-fc-max-memory-usage': '20',
