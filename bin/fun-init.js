@@ -48,7 +48,7 @@ program
   .option('-o, --output-dir [path]', 'where to output the initialized app into', '.')
   .option('-n, --name [name]', 'name of your project to be generated as a folder', '')
   .option('-m, --merge [merge]', 'merge into the template.[yml|yaml] file if it already exist', false)
-  .option('--no-input [noInput]', 'disable prompting and accept default values defined template config')
+  .option('--no-input', 'disable prompting and accept default values defined template config')
   .option('-V, --var [vars]', 'template variable', parseVars)
   .on('--help', () => {
     console.log(examples);
