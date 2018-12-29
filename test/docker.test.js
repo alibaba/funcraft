@@ -341,8 +341,12 @@ describe('test resolveNasConfigToMount', () => {
         }
       ]
     };
-  
-    expect(docker.resolveNasConfigToMount).withArgs(nasConfig, path.posix.join(projectDir, 'template.yml')).to.throwException();
+    
+    try {
+      await docker.resolveNasConfigToMount(nasConfig, path.posix.join(projectDir, 'template.yml'));
+    } catch(e) {
+      expect(e).to.be.an(Error);
+    }
   });
   
   it('test empty nas config', async () => {

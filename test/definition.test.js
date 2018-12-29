@@ -66,60 +66,62 @@ const tplWithDuplicatedFunction = {
 describe('test findFunctionByServiceAndFunctionName', () => {
   it('test find by service name and funtion name', () => {
 
-    const [serviceName, serviceDefinition, functionName, functionDefinition] = definition.findFunctionInTpl('localdemo', 'python3', tpl);
+    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo', 'python3', tpl);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
 
-    expect(serviceDefinition).to.eql(tpl.Resources.localdemo);
-    expect(functionDefinition).to.eql(tpl.Resources.localdemo.python3);
+    expect(serviceRes).to.eql(tpl.Resources.localdemo);
+    expect(functionRes).to.eql(tpl.Resources.localdemo.python3);
   });
 
   it('test find by funtion name', async function () {
 
-    const [serviceName, serviceDefinition, functionName, functionDefinition] = definition.findFunctionInTpl(null, 'python3', tpl);
+    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl(null, 'python3', tpl);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
-    expect(serviceDefinition).to.eql(tpl.Resources.localdemo);
-    expect(functionDefinition).to.eql(tpl.Resources.localdemo.python3);
+    expect(serviceRes).to.eql(tpl.Resources.localdemo);
+    expect(functionRes).to.eql(tpl.Resources.localdemo.python3);
   });
 
   it('test find not found', async function () {
 
-    const [serviceName, serviceDefinition, functionName, functionDefinition] = definition.findFunctionInTpl(null, 'python4', tpl);
+    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl(null, 'python4', tpl);
 
-    expect(serviceName).to.be(null);
-    expect(functionName).to.be(null);
-    expect(serviceDefinition).to.be(null);
-    expect(functionDefinition).to.eql(null);
+    expect(serviceName).to.be(undefined);
+    expect(functionName).to.be(undefined);
+    expect(serviceRes).to.be(undefined);
+    expect(functionRes).to.eql(undefined);
   });
 
   it('test find by service name and function name in duplicated function', async function () {
 
-    let [serviceName, serviceDefinition, functionName, functionDefinition] = definition.findFunctionInTpl('localdemo', 'python3', tplWithDuplicatedFunction);
+    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo', 'python3', tplWithDuplicatedFunction);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
-    expect(serviceDefinition).to.eql(tplWithDuplicatedFunction.Resources.localdemo);
-    expect(functionDefinition).to.eql(tplWithDuplicatedFunction.Resources.localdemo.python3);
+    expect(serviceRes).to.eql(tplWithDuplicatedFunction.Resources.localdemo);
+    expect(functionRes).to.eql(tplWithDuplicatedFunction.Resources.localdemo.python3);
+  });
 
-    [serviceName, serviceDefinition, functionName, functionDefinition] = definition.findFunctionInTpl('localdemo2', 'python3', tplWithDuplicatedFunction);
+  it('test find anonther by service name and function name in duplicated function', async () => {
+    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo2', 'python3', tplWithDuplicatedFunction);
 
     expect(serviceName).to.be('localdemo2');
     expect(functionName).to.be('python3');
-    expect(serviceDefinition).to.eql(tplWithDuplicatedFunction.Resources.localdemo2);
-    expect(functionDefinition).to.eql(tplWithDuplicatedFunction.Resources.localdemo2.python3);
+    expect(serviceRes).to.eql(tplWithDuplicatedFunction.Resources.localdemo2);
+    expect(functionRes).to.eql(tplWithDuplicatedFunction.Resources.localdemo2.python3);
   });
 
   it('test find by function name in duplicated function', async function () {
 
-    let [serviceName, serviceDefinition, functionName, functionDefinition] = definition.findFunctionInTpl(null, 'python3', tplWithDuplicatedFunction);
+    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl(null, 'python3', tplWithDuplicatedFunction);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
-    expect(serviceDefinition).to.be(tplWithDuplicatedFunction.Resources.localdemo);
-    expect(functionDefinition).to.eql(tplWithDuplicatedFunction.Resources.localdemo.python3);
+    expect(serviceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
+    expect(functionRes).to.eql(tplWithDuplicatedFunction.Resources.localdemo.python3);
   });
 });
 
