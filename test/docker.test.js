@@ -23,39 +23,89 @@ function sleep(ms) {
 }
 
 describe('test generateDockerCmd', () => {
-  it('test generate docker cmd', () => {
-    const functionProps = {
-      'Handler': 'index.handler',
-      'CodeUri': 'python3',
-      'Initializer': 'index.initializer',
-      'Description': 'Hello world with python3!',
-      'Runtime': 'python3'
-    };
+  const functionProps = {
+    'Handler': 'index.handler',
+    'CodeUri': 'python3',
+    'Initializer': 'index.initializer',
+    'Description': 'Hello world with python3!',
+    'Runtime': 'python3'
+  };
 
-    const cmd = docker.generateDockerCmd(functionProps, '{"testKey":"testValue"}');
+  it('test generate docker cmd', () => {
+
+    const cmd = docker.generateDockerCmd(functionProps, false);
 
     expect(cmd).to.eql([
       '-h',
       'index.handler',
-      '--event',
-      '{"testKey":"testValue"}',
+      '--stdin',
+      '-i',
+      'index.initializer'
+    ]);
+  });
+
+  it('test generate docker http cmd', () => {
+    const cmd = docker.generateDockerCmd(functionProps, true);
+
+    expect(cmd).to.eql([
+      '-h',
+      'index.handler',
+      '--stdin',
+      '--http',
       '-i',
       'index.initializer'
     ]);
   });
 });
 
-describe('test findDockerImage', () => {
+describe('test resolveRuntimeToDockerImage', () => {
   it('test find not python image', () => {
     for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2']) {
-      const imageName = docker.findDockerImage(runtime);
+      const imageName = docker.resolveRuntimeToDockerImage(runtime);
       expect(imageName).to.contain(`aliyunfc/runtime-${runtime}:`);
     }
   });
 
   it('test find python 3 image', () => {
-    const imageName = docker.findDockerImage('python3');
+    const imageName = docker.resolveRuntimeToDockerImage('python3');
     expect(imageName).to.contain(`aliyunfc/runtime-python3.6:`);
+  });
+});
+
+describe('test imageExist', async () => {
+
+  beforeEach(() => {
+    const listImagesStub = sandbox.stub(DockerCli.prototype, 'listImages');
+
+    listImagesStub.withArgs({
+      filters: {
+        reference: ['test']
+      }
+    }).resolves({ length: 1 });
+
+    listImagesStub.withArgs({
+      filters: {
+        reference: ['test not exist']
+      }
+    }).resolves({ length: 0 });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('test image exist', async () => {
+    const exist = await docker.imageExist('test');
+    expect(exist).to.be(true);
+
+    assert.calledOnce(DockerCli.prototype.listImages);
+  });
+
+  it('test image not exist', async () => {
+    const exist = await docker.imageExist('test not exist');
+    expect(exist).to.be(false);
+
+    assert.calledOnce(DockerCli.prototype.listImages);
   });
 });
 
@@ -63,25 +113,25 @@ describe('test resolveCodeUriToMount', () => {
 
   // windows will resolve /dir to c:\dir
   const dirPath = path.resolve('/dir');
-  
+
   const jarPath = path.resolve('/dir/jar');
 
   beforeEach(() => {
-    
+
     const lstat = sandbox.stub();
-    
+
     lstat.withArgs(dirPath).resolves({
-      isDirectory: function() {return true;}
+      isDirectory: function () { return true; }
     });
 
     lstat.withArgs(jarPath).resolves({
-      isDirectory: function() {return false;}
+      isDirectory: function () { return false; }
     });
 
     sandbox.stub(path, 'basename').returns('jar');
 
     sandbox.stub(util, 'promisify').returns(lstat);
-    
+
     docker = proxyquire('../lib/docker', {
       'util': util,
       'path': path
@@ -91,7 +141,7 @@ describe('test resolveCodeUriToMount', () => {
   afterEach(() => {
     sandbox.restore();
   });
-  
+
   it('test resolve code uri', async () => {
 
     const mount = await docker.resolveCodeUriToMount(dirPath);
@@ -117,7 +167,7 @@ describe('test resolveCodeUriToMount', () => {
   });
 });
 
-describe('test generateFunctionEnv', () => {
+describe('test generateFunctionEnvs', () => {
   it('test generate function env', () => {
     const functionProps = {
       'EnvironmentVariables': {
@@ -142,18 +192,10 @@ describe('test generateFunctionEnv', () => {
 });
 
 describe('test generateDockerOpts', () => {
-  const functionProps = {
-    'Handler': 'index.handler',
-    'CodeUri': 'python3',
-    'Initializer': 'index.initializer',
-    'Description': 'Hello world with python3!',
-    'Runtime': 'python3'
-  };
-
   let restoreProcess;
 
   beforeEach(() => {
-    
+
     restoreProcess = setProcess({
       HOME: os.tmpdir(),
       ACCOUNT_ID: 'testAccountId',
@@ -167,21 +209,35 @@ describe('test generateDockerOpts', () => {
   });
 
   it('test generate docker opts', async () => {
-    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', 'test', {
+    const envs = ['local=true',
+      'FC_ACCESS_KEY_ID=testKeyId',
+      'FC_ACCESS_KEY_SECRET=testKeySecret',
+      'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000'];
+
+    const opts = await docker.generateDockerOpts('nodejs8', 'test', [{
       Type: 'bind',
       Source: '/test',
       Target: '/code',
       ReadOnly: true
-    }, 9000);
+    }], 'cmd', 9000, envs, '1000:1000');
 
     expect(opts).to.eql({
-      name: 'test',
+      'name': 'test',
+      'Cmd': 'cmd',
+      'User': '1000:1000',
       'Env': [
         'local=true',
         'FC_ACCESS_KEY_ID=testKeyId',
         'FC_ACCESS_KEY_SECRET=testKeySecret',
         'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000'
       ],
+      'AttachStderr': true,
+      'AttachStdin': true,
+      'AttachStdout': true,
+      'OpenStdin': true,
+      'StdinOnce': true,
+      'Tty': false,
+      'Image': 'aliyunfc/runtime-nodejs8:1.2.0',
       'HostConfig': {
         'AutoRemove': true,
         'Mounts': [
@@ -208,20 +264,25 @@ describe('test generateDockerOpts', () => {
   });
 
   it('test generate docker opts without debug port', async () => {
-    const opts = await docker.generateDockerOpts(functionProps, 'nodejs8', 'test', {
+    const opts = await docker.generateDockerOpts('nodejs8', 'test', [{
       Type: 'bind',
       Source: '/test',
       Target: '/code',
       ReadOnly: true
-    }, null);
+    }], null, null, null, null);
 
     expect(opts).to.eql({
       'name': 'test',
-      'Env': [
-        'local=true',
-        'FC_ACCESS_KEY_ID=testKeyId',
-        'FC_ACCESS_KEY_SECRET=testKeySecret'
-      ],
+      'Env': null,
+      'Cmd': null,
+      'AttachStderr': true,
+      'AttachStdin': true,
+      'AttachStdout': true,
+      'OpenStdin': true,
+      'StdinOnce': true,
+      'Tty': false,
+      'User': null,
+      'Image': 'aliyunfc/runtime-nodejs8:1.2.0',
       'HostConfig': {
         'AutoRemove': true,
         'Mounts': [
@@ -237,34 +298,97 @@ describe('test generateDockerOpts', () => {
   });
 });
 
-describe('test invokeFunction', async () => {
-  const codeDir = os.tmpdir();
+describe('test generateRamdomContainerName', () => {
+  it('test generate', () => {
+    const containerName = docker.generateRamdomContainerName();
+    expect(containerName).to.contain('fun_local_');
+  });
+});
 
-  const functionProps = {
-    'Properties': {
-      'Handler': 'index.handler',
-      'CodeUri': codeDir,
-      'Initializer': 'index.initializer',
-      'Description': 'Hello world with python3!',
-      'Runtime': 'python3'
+describe('test resolveNasConfigToMount', () => {
+  const projectDir = os.tmpdir();
+  
+  it('test resolve nas config', async () => {
+    const nasConfig = {
+      UserId: -1,
+      GroupId: -1,
+      MountPoints: [
+        {
+          ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/',
+          MountDir: '/mnt/test'
+        }
+      ]
+    };
+  
+    const mount = await docker.resolveNasConfigToMount(nasConfig, path.posix.join(projectDir, 'template.yml'));
+
+    expect(mount).to.eql({
+      Type: 'bind',
+      Source: path.join(projectDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),
+      Target: '/mnt/test',
+      ReadOnly: false
+    });
+  });
+  
+  it('test resolve nas config subDir not exist', async () => {
+    const nasConfig = {
+      UserId: -1,
+      GroupId: -1,
+      MountPoints: [
+        {
+          ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/subdir',
+          MountDir: '/mnt/test'
+        }
+      ]
+    };
+    
+    try {
+      await docker.resolveNasConfigToMount(nasConfig, path.posix.join(projectDir, 'template.yml'));
+    } catch(e) {
+      expect(e).to.be.an(Error);
     }
-  };
+  });
+  
+  it('test empty nas config', async () => {
+    const mount = await docker.resolveNasConfigToMount(null, null);
+  
+    expect(mount).to.be(null);
+  });
+});
+
+describe('test docker run', async () => {
 
   let restoreProcess;
+  let containerMock;
+  let streamMock;
 
   beforeEach(() => {
-    sandbox.stub(DockerCli.prototype, 'listImages').resolves({
-      length: 1
-    });
 
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
-    sandbox.stub(DockerCli.prototype, 'getContainer').returns({'stop': sandbox.stub()});
+    sandbox.stub(DockerCli.prototype, 'getContainer').returns({ 'stop': sandbox.stub() });
+
+    streamMock = {
+      'write': sandbox.stub(),
+      'end': sandbox.stub()
+    };
+
+    let containerAttachStub = sandbox.stub().resolves(streamMock);
+
+    containerMock = {
+      'attach': containerAttachStub,
+      'modem': {
+        'demuxStream': sandbox.stub()
+      },
+      'start': sandbox.stub(),
+      'wait': sandbox.stub()
+    };
+
+    sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
 
     docker = proxyquire('../lib/docker', {
       'dockerode': DockerCli
     });
-
 
     restoreProcess = setProcess({
       HOME: os.tmpdir(),
@@ -284,99 +408,66 @@ describe('test invokeFunction', async () => {
     process.removeAllListeners('SIGINT');
   });
 
-  it('test invoke function without debug and event', async () => {
-    await docker.invokeFunction('test', 'test', functionProps, null, null);
+  it('test run', async () => {
+    await docker.run({}, 'test_container_name', 'event', process.stdout, process.stderr);
 
-    assert.notCalled(DockerCli.prototype.pull);
-    assert.calledOnce(DockerCli.prototype.listImages);
+    assert.calledWith(DockerCli.prototype.createContainer, {});
 
-    assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:1.1.0',
-      ['-h', 'index.handler', '-i', 'index.initializer'],
+    assert.calledWith(containerMock.attach, {
+      hijack: true,
+      stderr: true,
+      stdin: true,
+      stdout: true,
+      stream: true
+    });
+
+    assert.calledWith(containerMock.modem.demuxStream,
+      streamMock,
       process.stdout,
-      {
-        name: sinon.match.string,
-        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret'],
-        HostConfig: {
-          AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }]
-        }
-      });
-  });
+      process.stderr);
 
-  it('test invoke function with debug and without event', async () => {
-    await docker.invokeFunction('test', 'test', functionProps, 9000, null);
+    assert.calledOnce(containerMock.start);
 
-    assert.notCalled(DockerCli.prototype.pull);
-    assert.calledOnce(DockerCli.prototype.listImages);
+    assert.calledWith(streamMock.write, 'event');
 
-    assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:1.1.0',
-      ['-h', 'index.handler', '-i', 'index.initializer'],
-      process.stdout,
-      {
-        name: sinon.match.string,
-        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
-        ExposedPorts: { '9000/tcp': {} },
-        HostConfig: {
-          AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }],
-          PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
-        }
-      });
-  });
+    assert.calledOnce(streamMock.end);
 
-  it('test invoke function with debug and event', async () => {
-    await docker.invokeFunction('test', 'test', functionProps, 9000, '{"testKey": "testValue"}');
-
-    assert.notCalled(DockerCli.prototype.pull);
-    assert.calledOnce(DockerCli.prototype.listImages);
-
-    assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:1.1.0',
-      ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
-      process.stdout,
-      {
-        name: sinon.match.string,
-        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
-        ExposedPorts: { '9000/tcp': {} },
-        HostConfig: {
-          AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }],
-          PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
-        }
-      });
+    assert.calledOnce(containerMock.wait);
   });
 
   it('test cancel invoke function', async () => {
 
-    DockerCli.prototype.run.restore();
-    sandbox.stub(DockerCli.prototype, 'run').callsFake(async () => {
-      return await sleep(100);
+    containerMock.wait = sandbox.stub().callsFake(async () => {
+      return await sleep(1000);
     });
 
-    docker.invokeFunction('test', 'test', functionProps, 9000, '{"testKey": "testValue"}');
+    docker.run({}, 'test', 'event', process.stdout, process.stderr);
 
-    await sleep(10);
+    await sleep(100);
 
-    assert.notCalled(DockerCli.prototype.pull);
-    assert.calledOnce(DockerCli.prototype.listImages);
-  
-    assert.calledWith(DockerCli.prototype.run,
-      'aliyunfc/runtime-python3.6:1.1.0',
-      ['-h', 'index.handler', '--event', '{"testKey": "testValue"}', '-i', 'index.initializer'],
+    assert.calledWith(DockerCli.prototype.createContainer, {});
+
+    assert.calledWith(containerMock.attach, {
+      hijack: true,
+      stderr: true,
+      stdin: true,
+      stdout: true,
+      stream: true
+    });
+
+    assert.calledWith(containerMock.modem.demuxStream,
+      streamMock,
       process.stdout,
-      {
-        name: sinon.match.string,
-        Env: ['local=true', 'FC_ACCESS_KEY_ID=testKeyId', 'FC_ACCESS_KEY_SECRET=testKeySecret', 'DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait'],
-        ExposedPorts: { '9000/tcp': {} },
-        HostConfig: {
-          AutoRemove: true,
-          Mounts: [{ Source: codeDir, Target: '/code', Type: 'bind', ReadOnly: true }],
-          PortBindings: { '9000/tcp': [{ HostIp: '', HostPort: '9000' }] }
-        }
-      });
-    
+      process.stderr);
+
+    assert.calledOnce(containerMock.start);
+
+    assert.calledWith(streamMock.write, 'event');
+
+    assert.calledOnce(streamMock.end);
+
+    assert.calledOnce(containerMock.wait);
+
     // process.kill(process.pid, 'SIGINT'); // will kill program directly on windows
     process.emit('SIGINT');
 

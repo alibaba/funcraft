@@ -1,0 +1,72 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  local-http-demo:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'local invoke demo'
+    nodejs8:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: nodejs8/
+        Description: 'http trigger demo with nodejs8!'
+        Runtime: nodejs8
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
+    nodejs6:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: nodejs6/
+        Description: 'http trigger demo with nodejs6!'
+        Runtime: nodejs6
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
+    python27:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: python2.7/
+        Description: 'http trigger demo with python2.7!'
+        Runtime: python2.7
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
+    python3:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: python3/
+        Description: 'http trigger demo with python3!'
+        Runtime: python3
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
+    php72:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: php7.2/
+        Description: 'http trigger demo with php7.2!'
+        Runtime: php7.2
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']

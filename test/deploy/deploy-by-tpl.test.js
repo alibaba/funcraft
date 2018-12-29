@@ -60,7 +60,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'MyService',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -88,7 +89,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'fc',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'helloworld'), {
@@ -115,7 +117,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'java',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'java'), {
@@ -134,6 +137,61 @@ describe('deploy', () => {
 
   });
 
+  it('deploy nas', async () => {
+    await deploy('nas');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'fc nas test',
+      internetAccess: null,
+      logConfig: {},
+      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      serviceName: 'nasDemo',
+      vpcConfig: {
+        SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks',
+        VSwitchIds: ['vsw-bp1gitru7oicyyb4uiylj'],
+        VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
+      },
+      nasConfig: {
+        GroupId: -1,
+        UserId: -1,
+        MountPoints: [{
+          MountDir: '/mnt/test',
+          ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
+        }],
+      }
+    });
+
+    assert.calledWith(deploySupport.makeFunction.firstCall,
+      path.join(process.cwd(), 'examples', 'nas'), {
+        codeUri: './read.js',
+        description: undefined,
+        functionName: 'readNas',
+        handler: 'read.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        runtime: 'nodejs8',
+        serviceName: 'nasDemo',
+        timeout: 100,
+        initializationTimeout: undefined,
+        environmentVariables: { ROOT_DIR: '/mnt/test' }
+      });
+
+    assert.calledWith(deploySupport.makeFunction.secondCall,
+      path.join(process.cwd(), 'examples', 'nas'), {
+        codeUri: './write.py',
+        description: undefined,
+        functionName: 'writeNas',
+        handler: 'write.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        runtime: 'python2.7',
+        serviceName: 'nasDemo',
+        timeout: 100,
+        initializationTimeout: undefined,
+        environmentVariables: { ROOT_DIR: '/mnt/test' }
+      });
+  });
+
   it('deploy openid_connect', async () => {
     await deploy('openid_connect');
 
@@ -143,7 +201,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'fc',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {},
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -203,9 +262,10 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'test-tableStore-service',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
-    assert.calledWith(deploySupport.makeFunction, 
+    assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'tablestore-trigger'), {
         codeUri: './',
         handler: 'main.index',
@@ -240,7 +300,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'log-compute',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'sls_demo'), {
@@ -279,7 +340,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'rds-service',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'rds-trigger'), {
@@ -319,7 +381,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'mnsTopic-service',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'mnsTopic-trigger'), {
@@ -355,7 +418,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'pythondemo',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'python'), {
@@ -405,7 +469,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'maas',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -454,7 +519,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'MyService',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'timer'), {
@@ -491,7 +557,8 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'wechat',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
     assert.calledWith(deploySupport.makeFunction.firstCall,
       path.join(process.cwd(), 'examples', 'wechat'), {
@@ -606,9 +673,10 @@ describe('deploy', () => {
       logConfig: {},
       role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'initializerdemo',
-      vpcConfig: undefined
+      vpcConfig: {},
+      nasConfig: {}
     });
-    assert.calledWith(deploySupport.makeFunction, 
+    assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'initializer'), {
         codeUri: './',
         description: 'Hello world with initializer!',
