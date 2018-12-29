@@ -3,6 +3,20 @@
 
 ## Fun Deploy
 
+### NoPermissionError: You are not authorized to do this action. Resource: acs:ram:*:xxxxxxxxxx:role/* Action: ram:GetRole
+
+This problem is caused by executing `fun deploy` through the sub-user withouting grant the AliyunRAMFullAccess permission for sub-user.
+
+The solution is to grant the AliyunRAMFullAccess permission for the sub-user or use the primary account ak.
+
+### FCAccessDeniedError: GET /services/localdemo failed with 403. requestid: a73f4640-0c8d-958c-c248-db0cc70d834e, message: The service or function doesn't belong to you
+
+This problem occurs when fun deploy is configured with an accountId that does not match the accessKeyId:
+
+![](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181229150556.png)
+
+It is possible to write someone else's accountId or mistake the username for accountId.
+
 ### FCInvalidArgumentError: PUT /services/xxxxx failed with 400. requestId: xxxxx, message: VSwitch 'xxxxx' does not exist in VPC 'xxxxx'. The VSwith may not exist or the service role does not have 'vpc:DescribeVSwitchAttributes` permission.
 
 This problem occurs when deploying vpc with `fun deploy`:
