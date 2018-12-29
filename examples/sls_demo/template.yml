@@ -28,7 +28,7 @@ Resources:
   log-com-m:
     Type: 'Aliyun::Serverless::Log'
     Properties:
-      Description: 'just python  log'
+      Description: 'just python log'
     log-com-m:
       Type: 'Aliyun::Serverless::Log::Logstore'
       Properties:
