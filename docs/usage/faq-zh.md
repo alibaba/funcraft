@@ -3,7 +3,21 @@
 
 ## Fun Deploy
 
-## FCINVALIDArgumentError: PUT /services/xxxxx failed with 400. requestId: xxxxx, message: VSwitch 'xxxxx' does not exist in VPC 'xxxxx'. The VSwith may not exist or the service role does not have 'vpc:DescribeVSwitchAttributes` permission.
+### NoPermissionError: You are not authorized to do this action. Resource: acs:ram:*:xxxxxxxxxx:role/* Action: ram:GetRole
+
+这个问题是由于通过子用户执行 `fun deploy`，但是没有给该子用户配置 AliyunRAMFullAccess 权限导致的。
+
+解决方法：为子用户配置 AliyunRAMFullAccess 的权限或者使用主账户 ak。
+
+### FCAccessDeniedError: GET /services/localdemo failed with 403. requestid: a73f4640-0c8d-958c-c248-db0cc70d834e, message: The service or function doesn't belong to you
+
+这个问题发生在 fun deploy 时配置的 accountId 与 accessKeyId 不匹配：
+
+![](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181229150556.png)
+
+有可能是写成了其他人的 accountId，也有可能是将登录名误认为是 accountId。
+
+### FCINVALIDArgumentError: PUT /services/xxxxx failed with 400. requestId: xxxxx, message: VSwitch 'xxxxx' does not exist in VPC 'xxxxx'. The VSwith may not exist or the service role does not have 'vpc:DescribeVSwitchAttributes` permission.
 
 这个问题发生在使用 `fun deploy` 部署配置了 vpc 的函数：
 

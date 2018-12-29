@@ -6,7 +6,7 @@ const util = require('util');
 
 const expect = require('expect.js');
 const yaml = require('js-yaml');
-const mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 
 const getProfile = require('../lib/profile').getProfile;
