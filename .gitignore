@@ -57,6 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
+.fun/
+fun.yml
+
 .settings
 
 node_modules_*.zip

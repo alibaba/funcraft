@@ -1,0 +1,13 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  svc-1:
+    Type: 'Aliyun::Serverless::Service'
+    fun-1:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python2.7
+        Timeout: 60
+        MemorySize: 128
+        CodeUri: ./python2.7

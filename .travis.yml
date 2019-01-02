@@ -10,19 +10,44 @@ node_js:
 - '9'
 - '10'
 
+services:
+  - docker
+
 cache:
   directories:
-  - node_modules
+    - node_modules
+    # - $HOME/docker
+
+before_cache:
+  # Save tagged docker images
+  # - >
+  #   if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  #     mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' 
+  #     | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+  #   fi
+
+before_install:
+  # Load cached docker images
+  # - if [[ "$TRAVIS_OS_NAME" == "linux" && -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+  - > 
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+      docker pull aliyunfc/runtime-python2.7:build-1.2.0
+      docker pull aliyunfc/runtime-python3.6:build-1.2.0
+      docker pull bitnami/minideb:jessie
+    fi
+  # install make for windows
+  - > 
+    if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
+      choco install make
+    fi
 
 script: 
   - |
     if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
-      mocha ./test/ -t 20000  -R spec --recursive -name *.test.js
+      mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep ^Integration::
     else
       make test
     fi
-
-    
 
 deploy:
   provider: npm

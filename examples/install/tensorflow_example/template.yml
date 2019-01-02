@@ -1,0 +1,29 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  tensorflow: # 服务名
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'tensorflow demo'
+      Policies: 
+        - AliyunOSSReadOnlyAccess
+    test: # 函数名
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: loader.handler
+        CodeUri: ./python2.7/
+        Description: 'tensorflow application!'
+        Runtime: python2.7
+        MemorySize: 1024
+        Timeout: 300
+        EnvironmentVariables:
+          Bucket: just-fc-test # 替换为自己的 oss bucket
+          Endpoint: 'https://oss-cn-shanghai-internal.aliyuncs.com' # 替换掉 OSS Endpoint
+          AppLibObject: applib.zip
+          AppLibDir: /tmp/applib
+          ModelObject: model_data.zip
+          ModelDir: /tmp/model
+
+
+#          LD_LIBRARY_PATH: /code/lib/usr/lib:/code:/code/lib:/usr/local/lib
+        

@@ -23,13 +23,13 @@ program
 
 if (!program.args.length) {
   console.error();
-  console.error("  error: missing required argument `%s'", '[service/]function');
+  console.error("  error: missing required argument '%s'", '[service/]function');
   program.help();
 }
 
 if (!program.args.length > 1) {
   console.error();
-  console.error("  error: unexpected argument `%s'", program.args[1]);
+  console.error("  error: unexpected argument '%s'", program.args[1]);
   program.help();
 }
 

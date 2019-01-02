@@ -14,7 +14,7 @@ program
 
 if (program.args.length) {
   console.error();
-  console.error("  error: unexpected argument `%s'", program.args[0]);
+  console.error("  error: unexpected argument '%s'", program.args[0]);
   program.help();
 }
 

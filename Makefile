@@ -9,8 +9,14 @@ SHELL := /bin/bash
 lint:
 	@eslint --fix lib bin test
 
-test: lint
-	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
+integration-test:
+	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive  -name $(TEST_FILES) --grep ^Integration::
+
+unit-test:
+	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES) --grep '^(?!Integration::).*'
+
+test: lint unit-test
+	
 
 test-cov:
 	@nyc --reporter=html --reporter=text mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
