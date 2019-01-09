@@ -28,6 +28,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
   - [开发函数计算的正确姿势 —— 本地运行、调试、发布 NAS 函数](https://yq.aliyun.com/articles/683684):  Demonstrates how to run and debug functions configured with NAS services locally.
   - [开发函数计算的正确姿势 —— Api 本地运行调试](https://yq.aliyun.com/articles/683685):  Demonstrates how to run and debug functions locally through the API.
   - [开发函数计算的正确姿势 —— 开发 WordPress 应用](https://yq.aliyun.com/articles/683686): Demonstrates how to develop and debug a WordPress web application locally.
+  - [开发函数计算的正确姿势 —— 开发 NAS 文件管理应用](https://yq.aliyun.com/articles/685803): Demonstrates how to develop and debug a NAS file manager web application locally.
 - [Specification](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md): Introduces the syntax of the fun's template.yml file.
 - [FAQ](https://github.com/aliyun/fun/blob/master/docs/usage/faq.md): Frequently asked questions and answers when using fun.
 - [More Examples](https://github.com/aliyun/fun/tree/master/examples)

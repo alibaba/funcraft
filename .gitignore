@@ -75,6 +75,9 @@ examples/java/demo/target/
 examples/local/java8/target/*
 !examples/local/java8/target/demo-1.0-SNAPSHOT.jar
 
+examples/nas_browser/src/*
+!examples/nas_browser/src/index.py
+
 .idea/
 .vscode/
 
