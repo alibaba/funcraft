@@ -28,6 +28,7 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
   - [开发函数计算的正确姿势 —— 本地运行、调试、发布 NAS 函数](https://yq.aliyun.com/articles/683684): 介绍了如何在本地运行、单步调试配置了 NAS 服务的函数。
   - [开发函数计算的正确姿势 —— Api 本地运行调试](https://yq.aliyun.com/articles/683685): 介绍了如何在通过 API 在本地运行、单步调试函数。
   - [开发函数计算的正确姿势 —— 开发 WordPress 应用](https://yq.aliyun.com/articles/683686): 通过一个实战场景，介绍了如何利用 Fun 工具本地开发 WordPress Web 应用。
+  - [开发函数计算的正确姿势 —— 开发 NAS 文件管理应用](https://yq.aliyun.com/articles/685803): 介绍了如何使用 Fun Local 开发一个 NAS 文件管理 Web 应用。
 - [Fun 规范文档](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md): 详细介绍了 Fun 规范文档的细节。
 - [常见问题与解答](https://github.com/aliyun/fun/blob/master/docs/usage/faq-zh.md): 使用 Fun 时的常见问题与解答。
 - [更多示例](https://github.com/aliyun/fun/tree/master/examples)

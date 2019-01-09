@@ -12,7 +12,7 @@
 
 ## 示例
 
-下面我们用一个简单的 helloworld 示例演示 fun 如何使用。首先在项目根目录下创建一个 hello.js 文件。
+下面我们用一个简单的 helloworld 示例演示 fun 如何使用。首先在项目根目录下创建一个 helloworld.js 文件。
 
 ```javascript
 exports.handler = function(event, context, callback) {
