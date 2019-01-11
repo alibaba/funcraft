@@ -9,6 +9,7 @@ const program = require('commander');
 program
   .name('fun deploy')
   .description('Deploy a serverless application.')
+  .option('-t, --template [template]', 'path of fun template file.', null)
   .parse(process.argv);
 
 if (program.args.length) {
@@ -17,5 +18,5 @@ if (program.args.length) {
   program.help();
 }
 
-require('../lib/commands/deploy')()
+require('../lib/commands/deploy')(null, program.template)
   .catch(require('../lib/exception-handler'));
