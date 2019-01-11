@@ -361,6 +361,8 @@ describe('test docker run', async () => {
   let restoreProcess;
   let containerMock;
   let streamMock;
+  let logStreamMock;
+  var isWin = process.platform === 'win32';
 
   beforeEach(() => {
 
@@ -373,7 +375,13 @@ describe('test docker run', async () => {
       'end': sandbox.stub()
     };
 
+    logStreamMock = {
+      'write': sandbox.stub(),
+      'end': sandbox.stub()
+    };
+
     let containerAttachStub = sandbox.stub().resolves(streamMock);
+    let containerLogsStub = sandbox.stub().resolves(logStreamMock);
 
     containerMock = {
       'attach': containerAttachStub,
@@ -381,7 +389,8 @@ describe('test docker run', async () => {
         'demuxStream': sandbox.stub()
       },
       'start': sandbox.stub(),
-      'wait': sandbox.stub()
+      'wait': sandbox.stub(),
+      'logs': containerLogsStub
     };
 
     sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
@@ -421,10 +430,17 @@ describe('test docker run', async () => {
       stream: true
     });
 
-    assert.calledWith(containerMock.modem.demuxStream,
-      streamMock,
-      process.stdout,
-      process.stderr);
+    if (isWin) {
+      assert.calledWith(containerMock.modem.demuxStream, 
+        logStreamMock,
+        process.stdout,
+        process.stderr);
+    } else {
+      assert.calledWith(containerMock.modem.demuxStream,
+        streamMock,
+        process.stdout,
+        process.stderr);
+    }
 
     assert.calledOnce(containerMock.start);
 
@@ -455,11 +471,18 @@ describe('test docker run', async () => {
       stream: true
     });
 
-    assert.calledWith(containerMock.modem.demuxStream,
-      streamMock,
-      process.stdout,
-      process.stderr);
-
+    if (isWin) {
+      assert.calledWith(containerMock.modem.demuxStream, 
+        logStreamMock,
+        process.stdout,
+        process.stderr);
+    } else {
+      assert.calledWith(containerMock.modem.demuxStream,
+        streamMock,
+        process.stdout,
+        process.stderr);
+    }
+    
     assert.calledOnce(containerMock.start);
 
     assert.calledWith(streamMock.write, 'event');
