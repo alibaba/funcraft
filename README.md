@@ -21,9 +21,9 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
 - [Installation](https://github.com/aliyun/fun/blob/master/docs/usage/installation.md): Learn how to install Fun on Mac, Linux or Windows.
 - [Getting Started](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started.md): The basic usage of Fun is introduced with a simple example.
 - **Running and debugging locally**: A series on how to run locally, debug functions, and tips on troubleshooting related issues.
-  - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](https://yq.aliyun.com/articles/672623): Introduced the basic usage of Fun Local.
-  - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): How to use the Fun tool to develop a Serverless application from scratch.
-  - [开发函数计算的正确姿势 —— 排查超时问题](https://yq.aliyun.com/articles/672627): Demonstrates how to solve a series of bugs and introduces the tricks of debug
+  - [Guidelines for Function Compute Development - Use Fun Local for Local Running and Debugging](https://yq.aliyun.com/articles/686333): Introduced the basic usage of Fun Local.
+  - [Guidelines for Function Compute Development - Crawler](https://yq.aliyun.com/articles/686340): How to use the Fun tool to develop a Serverless application from scratch.
+  - [Guidelines for Function Compute Development - Troubleshoot Timeout Issues](https://yq.aliyun.com/articles/686349): Demonstrates how to solve a series of bugs and introduces the tricks of debug.
   - [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683):  Demonstrates how to run and debug Http Trigger functions locally.
   - [开发函数计算的正确姿势 —— 本地运行、调试、发布 NAS 函数](https://yq.aliyun.com/articles/683684):  Demonstrates how to run and debug functions configured with NAS services locally.
   - [开发函数计算的正确姿势 —— Api 本地运行调试](https://yq.aliyun.com/articles/683685):  Demonstrates how to run and debug functions locally through the API.
