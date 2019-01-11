@@ -381,6 +381,7 @@ describe('test docker run', async () => {
     };
 
     let containerAttachStub = sandbox.stub().resolves(streamMock);
+    let containerLogsStub = sandbox.stub().resolves(logStreamMock);
 
     containerMock = {
       'attach': containerAttachStub,
@@ -389,7 +390,7 @@ describe('test docker run', async () => {
       },
       'start': sandbox.stub(),
       'wait': sandbox.stub(),
-      'logs': sandbox.stub()
+      'logs': containerLogsStub
     };
 
     sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
