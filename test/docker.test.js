@@ -481,29 +481,8 @@ describe('test docker run', async () => {
       stream: true
     });
 
-    assert.calledWith(containerMock.modem.demuxStream,
-      streamMock,
-      process.stdout,
-      process.stderr);
-
-    assert.calledOnce(containerMock.start);
-
-    assert.calledWith(streamMock.write, 'event');
-
-    assert.calledOnce(streamMock.end);
-
-    assert.calledOnce(containerMock.wait);
-
-    // process.kill(process.pid, 'SIGINT'); // will kill program directly on windows
-    process.emit('SIGINT');
-
-    await sleep(10);
-
-    assert.calledWith(DockerCli.prototype.getContainer, sinon.match.string);
-    assert.calledOnce(DockerCli.prototype.getContainer().stop);
-
     if (isWin) {
-      assert.calledWith(containerMock.modem.demuxStream,
+      assert.calledWith(containerMock.modem.demuxStream, 
         logStreamMock,
         process.stdout,
         process.stderr);
