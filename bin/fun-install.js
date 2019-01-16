@@ -18,7 +18,7 @@ program
   .option('--save', 'add module to fun.yml file.')
   .option('-r, --recursive', 'recursive install fun.yml in subdirectory.')
   .option('-p, --package-type <type>', 'avaliable package type option: module, pip, apt, defautls to \'module\'')
-  .option('-v, --verbose', 'show more detail.')
+  .option('-v', 'show more detail.')
   .arguments('[packageNames...]')
   .description('install dependencies which are described in fun.yml file.')
   .action(async (packageNames, program) => {

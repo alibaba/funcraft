@@ -13,7 +13,7 @@ program
     `The fun command line providers a complete set of commands to define, develop, test
   serverless applications locally, and deploy them to the Alibaba Cloud.`
   )
-  .option('--debug', 'debug output')
+  .option('--verbose', 'verbose output')
   // See git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands.
   // See source code: https://github.com/tj/commander.js/blob/master/index.js#L525-L570.
 
@@ -27,7 +27,7 @@ program
   .command('validate', 'validate a fun template')
   .command('deploy', 'deploy a fun application');
 
-program.on('option:debug', () => {
+program.on('option:verbose', () => {
   debug.enable('*');
 });
 
