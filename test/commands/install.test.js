@@ -37,7 +37,7 @@ chai.use(require('chai-fs'));
   it('init', async () => {
     await init();
 
-    expect(ymlPath).to.be.a.file().with.content('runtime: python2.7\nmodules: []\ntasks: []\n');
+    expect(ymlPath).to.be.a.file().with.content('runtime: python2.7\ntasks: []\n');
   });
 
   it('pip_save', async function () {
@@ -51,7 +51,6 @@ chai.use(require('chai-fs'));
     });
 
     expect(ymlPath).to.be.a.file().with.content(`runtime: python2.7
-modules: []
 tasks:
   - pip: pymssql
     local: true
@@ -78,7 +77,6 @@ tasks:
     });
 
     expect(ymlPath).to.be.a.file().with.content(`runtime: python2.7
-modules: []
 tasks:
   - pip: pymssql
     local: true

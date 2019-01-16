@@ -184,8 +184,8 @@ describe('Integration::docker', () => {
         'TestKey1=TestValue1',
         'TestKey2=TestValue2',
         'LD_LIBRARY_PATH=/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
-        'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
-        'PYTHONPATH=/code/.fun/python/lib/python2.7/site-packages:/code/.fun/python/lib/python3/site-packages'
+        'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        'PYTHONUSERBASE=/code/.fun/python'
       ]);
     });
 
@@ -195,8 +195,8 @@ describe('Integration::docker', () => {
       const envs = docker.generateFunctionEnvs(functionProps);
       expect(envs).to.eql([
         'LD_LIBRARY_PATH=/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
-        'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
-        'PYTHONPATH=/code/.fun/python/lib/python2.7/site-packages:/code/.fun/python/lib/python3/site-packages'
+        'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        'PYTHONUSERBASE=/code/.fun/python'
       ]);
     });
   });

@@ -31,7 +31,7 @@ chai.use(require('chai-fs'));
         
     FunModule.store(ymlPath, funModule);
         
-    expect(ymlPath).to.be.a.file().with.content('runtime: python2.7\nmodules: []\ntasks: []\n');
+    expect(ymlPath).to.be.a.file().with.content('runtime: python2.7\ntasks: []\n');
   });
 
   it('load', () => {
