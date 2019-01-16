@@ -1,0 +1,6 @@
+runtime: python3
+tasks:
+  - apt: libzbar0
+    local: true
+  - pip: Pillow
+    local: true

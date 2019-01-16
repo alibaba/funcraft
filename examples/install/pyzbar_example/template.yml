@@ -1,0 +1,13 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  pyzbar-srv:
+    Type: 'Aliyun::Serverless::Service'
+    pyzbar-fun:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python3
+        Timeout: 60
+        MemorySize: 128
+        CodeUri: .
