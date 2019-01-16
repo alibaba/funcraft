@@ -21,6 +21,7 @@ program
   // (like ./examples/pm) with the name program-command.
   .command('config', 'configure the fun')
   .command('init', 'initialize a new fun project')
+  .command('install', 'install dependencies which are described in fun.yml')
   .command('build', 'build the dependencies')
   .command('local', 'run your serverless application locally')
   .command('validate', 'validate a fun template')
@@ -34,7 +35,7 @@ program.on('option:verbose', () => {
 program.on('command:*', (cmds) => {
   if (!program.commands.map((command) => command.name()).includes(cmds[0])) {
     console.error();
-    console.error("  error: unknown command `%s'", cmds[0]);
+    console.error("  error: unknown command '%s'", cmds[0]);
     program.help();
   }
 });

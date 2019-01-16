@@ -208,7 +208,7 @@ describe('make', () => {
 
   });
 
-  it('makeApiTrigger', async () => {
+  it.skip('makeApiTrigger', async () => {
 
     nock('https://ram.aliyuncs.com:443', { 'encodedQueryParams': true })
       .get('/')
