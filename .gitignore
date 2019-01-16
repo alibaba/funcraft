@@ -58,7 +58,7 @@ typings/
 .env
 
 .fun/
-fun.yml
+/fun.yml
 
 .settings
 
