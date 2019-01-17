@@ -8,12 +8,12 @@ const program = require('commander');
 const debug = require('debug');
 
 program
-  .version(require('../package.json').version, '-v, --version')
+  .version(require('../package.json').version, '--version')
   .description(
     `The fun command line providers a complete set of commands to define, develop, test
   serverless applications locally, and deploy them to the Alibaba Cloud.`
   )
-  .option('--verbose', 'verbose output')
+  .option('-v, --verbose', 'verbose output', (_, total) => total + 1, 0)
   // See git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands.
   // See source code: https://github.com/tj/commander.js/blob/master/index.js#L525-L570.
 
@@ -27,8 +27,14 @@ program
   .command('validate', 'validate a fun template')
   .command('deploy', 'deploy a fun application');
 
+// set default verbose value for subcommand.
+process.env.FUN_VERBOSE = 0
+
 program.on('option:verbose', () => {
-  debug.enable('*');
+  if (program.verbose == 4) {
+    debug.enable('*');
+  }
+  process.env.FUN_VERBOSE = program.verbose;
 });
 
 // Print help information if commands are unknown.
@@ -39,5 +45,5 @@ program.on('command:*', (cmds) => {
     program.help();
   }
 });
- 
+
 program.parse(process.argv);
