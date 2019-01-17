@@ -16,7 +16,7 @@ program
   .usage('[moduleNames...]')
   .option('-r, --runtime <runtime>', 'function runtime, avaliable choice is: python2.7, python3, nodejs6, nodejs8, java8, php7.2')
   .option('--save', 'add module to fun.yml file.')
-  .option('-r, --recursive', 'recursive install fun.yml in subdirectory.')
+  .option('-R, --recursive', 'recursive install fun.yml in subdirectory.')
   .option('-p, --package-type <type>', 'avaliable package type option: module, pip, apt, defautls to \'module\'')
   .arguments('[packageNames...]')
   .description('install dependencies which are described in fun.yml file.')
@@ -53,8 +53,8 @@ program
 program.parse(process.argv);
   
 if (!program.args.length) {
-  installAll({
-    recursive: program.options.recursive,
+  installAll(process.cwd(), {
+    recursive: program.recursive,
     verbose: parseInt(process.env.FUN_VERBOSE) > 0
   }).catch(handler);
 }
