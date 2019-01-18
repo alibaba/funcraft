@@ -4,3 +4,5 @@ tasks:
     local: true
   - pip: Pillow
     local: true
+  - pip: pyzbar
+    local: true
