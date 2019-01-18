@@ -28,10 +28,10 @@ program
   .command('deploy', 'deploy a fun application');
 
 // set default verbose value for subcommand.
-process.env.FUN_VERBOSE = 0
+process.env.FUN_VERBOSE = 0;
 
 program.on('option:verbose', () => {
-  if (program.verbose == 4) {
+  if (program.verbose === 4) {
     debug.enable('*');
   }
   process.env.FUN_VERBOSE = program.verbose;

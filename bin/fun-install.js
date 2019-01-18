@@ -40,12 +40,12 @@ program
     install(packageNames, opts).catch(handler);
   });
 
-  program
+program
   .command('init')
   .description('initialize fun.yml file.')
   .action(init);
 
-  program
+program
   .command('env')
   .description('print environment varables.')
   .action(env);
