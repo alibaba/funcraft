@@ -12,6 +12,7 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const zip = require('../../lib/package/zip');
 
 const expect = require('expect.js');
 
@@ -480,4 +481,46 @@ describe('make invocation role', () => {
 
     expect(role).to.be('generated-role-name');
   });
+});
+
+describe('test getFunCodeAsBase64', () => {
+
+  let restoreProcess;
+
+  beforeEach(async () => {
+
+    sandbox.stub(zip, 'pack').resolves({});
+
+    deploySupport = await proxyquire('../../lib/deploy/deploy-support', {
+      '../package/zip': zip
+    });
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', '/a');
+    assert.calledWith(zip.pack, '/a', null);
+  });
+
+
+  it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', '../');
+    assert.calledWith(zip.pack, '../', null);
+  });
+
+  it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', '/a/b/c');
+    assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
+  });
+
 });
