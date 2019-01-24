@@ -42,7 +42,7 @@ program.on('option:verbose', () => {
 program.on('command:*', (cmds) => {
   if (!program.commands.map((command) => command.name()).includes(cmds[0])) {
     console.error();
-    console.error("  error: unknown command '%s'", cmds[0]);
+    console.error("  error: unknown command `%s'", cmds[0]);
     program.help();
   }
 });
