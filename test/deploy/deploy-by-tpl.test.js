@@ -235,11 +235,11 @@ describe('deploy', () => {
       description: undefined,
       functionName: 'helloworld',
       method: 'get',
-      parameters: [{
+      requestParameters: [{
         location: 'Path',
         apiParameterName: 'token',
-        parameterType: 'REQUIRED',
-        type: 'String'
+        parameterType: 'String',
+        required: 'REQUIRED'
       }],
       requestPath: '/getUserInfo/[token]',
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
@@ -247,7 +247,8 @@ describe('deploy', () => {
       stageName: 'RELEASE',
       visibility: 'PRIVATE',
       serviceTimeout: 3000,
-      constantParameters: undefined,
+      serviceParameters: undefined,
+      serviceParametersMap: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
       requestConfig: {}
     });
@@ -448,7 +449,7 @@ describe('deploy', () => {
       description: undefined,
       functionName: 'hello',
       method: 'get',
-      parameters: undefined,
+      requestParameters: undefined,
       requestPath: '/python/hello',
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'pythondemo',
@@ -456,7 +457,8 @@ describe('deploy', () => {
       visibility: undefined,
       serviceTimeout: 3000,
       requestConfig: {},
-      constantParameters: undefined,
+      serviceParameters: undefined,
+      serviceParametersMap: undefined,      
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
     });
   });
@@ -498,14 +500,15 @@ describe('deploy', () => {
       auth: { config: undefined, type: undefined },
       functionName: 'doSegment',
       method: 'post',
-      parameters: undefined,
+      requestParameters: undefined,
       requestPath: '/do_segment',
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'maas',
       stageName: 'RELEASE',
       visibility: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
-      constantParameters: undefined,
+      serviceParameters: undefined,
+      serviceParametersMap: undefined,
       serviceTimeout: 3000,
       requestConfig: { requestMode: 'PASSTHROUGH', requestProtocol: 'http' }
     });
@@ -584,7 +587,7 @@ describe('deploy', () => {
       functionName: 'get',
       method: 'get',
       description: undefined,
-      parameters: [
+      requestParameters: [
         { apiParameterName: 'encrypt_type' },
         { apiParameterName: 'msg_signature' },
         { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' },
@@ -596,7 +599,8 @@ describe('deploy', () => {
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'wechat',
       stageName: 'RELEASE',
-      constantParameters: undefined,
+      serviceParameters: undefined,
+      serviceParametersMap: undefined,
       visibility: undefined,
       requestConfig: { bodyFormat: 'STREAM', requestMode: 'MAPPING', requestProtocol: 'HTTP' },
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
@@ -623,7 +627,7 @@ describe('deploy', () => {
       functionName: 'post',
       method: 'post',
       description: undefined,
-      parameters: [
+      requestParameters: [
         { location: 'Query', apiParameterName: 'timestamp', required: 'REQUIRED', parameterType: 'String' },
         { location: 'Query', apiParameterName: 'nonce', parameterType: 'String' },
         { location: 'Query', apiParameterName: 'signature', parameterType: 'String' },
@@ -635,7 +639,8 @@ describe('deploy', () => {
       serviceName: 'wechat',
       stageName: 'RELEASE',
       visibility: undefined,
-      constantParameters: undefined,
+      serviceParameters: undefined,
+      serviceParametersMap: undefined,
       requestConfig: { bodyFormat: 'STREAM', requestMode: 'MAPPING', requestProtocol: 'HTTP' },
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
       serviceTimeout: 3000
@@ -703,7 +708,7 @@ describe('deploy', () => {
       description: undefined,
       functionName: 'initializer',
       method: 'get',
-      parameters: undefined,
+      requestParameters: undefined,
       requestPath: '/python/initializer',
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'initializerdemo',
@@ -711,7 +716,8 @@ describe('deploy', () => {
       visibility: undefined,
       serviceTimeout: 3000,
       requestConfig: {},
-      constantParameters: undefined,
+      serviceParameters: undefined,
+      serviceParametersMap: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
     });
   });
