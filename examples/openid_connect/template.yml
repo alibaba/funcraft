@@ -24,8 +24,8 @@ Resources:
             x-aliyun-apigateway-request-parameters:
               - apiParameterName: 'token'
                 location: 'Path'
-                type: 'String'
-                parameterType: 'REQUIRED'
+                parameterType: 'String'
+                required: 'REQUIRED'
             x-aliyun-apigateway-visibility: PRIVATE
             x-aliyun-apigateway-auth-type: 'APPOPENID'
             x-aliyun-apigateway-open-id-connect-config:
