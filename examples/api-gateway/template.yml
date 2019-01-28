@@ -19,28 +19,27 @@ Resources:
       StageName: RELEASE
       DefinitionBody:
         '/':
-          get:
+          get: # more info read: [Chinese](https://help.aliyun.com/document_detail/43623.html), [English](https://www.alibabacloud.com/help/doc-detail/43623.htm)
             x-aliyun-apigateway-api-name: hello_get
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${fc.Arn}/functions/${apigateway.Arn}/
+              timeout: 10000
 
-            # RequestConfig document link: https://help.aliyun.com/document_detail/43985.html
+            # RequestConfig document link: [Chinese](https://help.aliyun.com/document_detail/43985.html), [English](https://www.alibabacloud.com/help/doc-detail/43985.htm)
             x-aliyun-apigateway-request-config: 
               requestMode: "MAPPING" # if dont need care parameters, use `PASSTHROUGH` instead
               requestProtocol: "http"
 
-            # RequestParameter document link: https://help.aliyun.com/document_detail/43986.html
+            # RequestParameter document link: [Chinese](https://help.aliyun.com/document_detail/43986.html), [English](https://www.alibabacloud.com/help/doc-detail/43986.htm)
             # here is a simplest request parameters demo
             # requestMode shoud to be `MAPPING` when specificing query parameters
             x-aliyun-apigateway-request-parameters:
               - apiParameterName: 'token'
                 location: 'Query'
-                type: 'String'
                 parameterType: 'String'
                 required: 'REQUIRED'
               - apiParameterName: 'token2'
                 location: 'Query'
-                type: 'String'
                 parameterType: 'String'
                 required: 'REQUIRED'
                 
@@ -48,27 +47,23 @@ Resources:
             # x-aliyun-apigateway-request-parameters:
             #   - apiParameterName: 'token'
             #     location: 'Query'
-            #     type: 'String'
             #     parameterType: 'String'
             #     required: 'REQUIRED'
             #     defaultValue: 'e'
             # x-aliyun-apigateway-service-parameters:
             #   - serviceParameterName: 'token'
             #     location: 'Query'
-            #     type: 'String'
             #     parameterCatalog: 'CONSTANT'
 
             # here is how to custom service parameters, for example add a SYSTEM parameter
             # x-aliyun-apigateway-request-parameters:
             #   - apiParameterName: 'CaClientIp'
             #     location: 'Query'
-            #     type: 'String'
             #     parameterType: 'String'
             #     required: 'REQUIRED'
             # x-aliyun-apigateway-service-parameters:
             #   - serviceParameterName: 'CaClientIp'
             #     location: 'Query'
-            #     type: 'String'
             #     parameterCatalog: 'SYSTEM'   
 
   # ============================= another exmaple for advanced usage =============================
@@ -89,24 +84,21 @@ Resources:
   #           x-aliyun-apigateway-request-parameters:
   #             - apiParameterName: 'token'
   #               location: 'Query'
-  #               type: 'String'
   #               parameterType: 'String'
   #               required: 'REQUIRED'
   #             - apiParameterName: 'param'
   #               location: 'Query'
-  #               type: 'String'
   #               parameterType: 'String'
   #               required: 'REQUIRED'
   #           x-aliyun-apigateway-service-parameters:
   #             - serviceParameterName: 'renamedToken'
   #               location: 'Query'
-  #               type: 'String'
   #               parameterCatalog: 'REQUEST'
   #             - serviceParameterName: 'renamedParam'
   #               location: 'Query'
-  #               type: 'String'
   #               parameterCatalog: 'REQUEST'
-  #           # ServiceParameterMap document link: https://help.aliyun.com/document_detail/43989.html
+
+  #           # ServiceParameterMap document link: [Chinese](https://help.aliyun.com/document_detail/43989.html), [English](https://www.alibabacloud.com/help/doc-detail/43989.htm)
   #           x-aliyun-apigateway-service-parameters-map:
   #             - requestParameterName: 'token'
   #               serviceParameterName: 'renamedToken'
