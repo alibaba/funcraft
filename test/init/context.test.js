@@ -85,5 +85,66 @@ describe('context', () => {
     });
   });
 
+  it('build context when copyOnlyPaths is foo', async () => { 
+    config.getConfig.returns({ name: 'foo', copyOnlyPaths: 'foo'});
+    renderer.renderContent.returns('foo');
+    fs.readdirSync.returns(['bar', '{{ foo }}']);
+    const context = {outputDir: '/', vars: {}};
+    await contextStub.buildContext('foo', context);
+    expect(context).to.eql({
+      outputDir: '/',
+      repoDir: 'foo',
+      templateDir: '{{ foo }}',
+      config: { name: 'foo' , copyOnlyPaths: 'foo'},
+      vars: { projectName: 'fun-app' }
+    });
+  });
+
+  it('build context when copyOnlyPaths is ["foo", "bar"]', async () => { 
+    config.getConfig.returns({ name: 'foo', copyOnlyPaths: ['foo', 'bar']});
+    renderer.renderContent.returns('foo');
+    fs.readdirSync.returns(['bar', '{{ foo }}']);
+    const context = {outputDir: '/', vars: {}};
+    await contextStub.buildContext('foo', context);
+    expect(context).to.eql({
+      outputDir: '/',
+      repoDir: 'foo',
+      templateDir: '{{ foo }}',
+      config: { name: 'foo' , copyOnlyPaths: 'foo\nbar'},
+      vars: { projectName: 'fun-app' }
+    });
+  });
+
+  it('build context when ignorePaths is foo', async () => { 
+    config.getConfig.returns({ name: 'foo', ignorePaths: 'foo'});
+    renderer.renderContent.returns('foo');
+    fs.readdirSync.returns(['bar', '{{ foo }}']);
+    const context = {outputDir: '/', vars: {}};
+    await contextStub.buildContext('foo', context);
+    expect(context).to.eql({
+      outputDir: '/',
+      repoDir: 'foo',
+      templateDir: '{{ foo }}',
+      config: { name: 'foo' , ignorePaths: 'foo'},
+      vars: { projectName: 'fun-app' }
+    });
+  });
+
+  it('build context when ignorePaths is ["foo", "bar"]', async () => { 
+    config.getConfig.returns({ name: 'foo', ignorePaths: ['foo', 'bar']});
+    renderer.renderContent.returns('foo');
+    fs.readdirSync.returns(['bar', '{{ foo }}']);
+    const context = {outputDir: '/', vars: {}};
+    await contextStub.buildContext('foo', context);
+    expect(context).to.eql({
+      outputDir: '/',
+      repoDir: 'foo',
+      templateDir: '{{ foo }}',
+      config: { name: 'foo' , ignorePaths: 'foo\nbar'},
+      vars: { projectName: 'fun-app' }
+    });
+  });
+
+
 
 });
