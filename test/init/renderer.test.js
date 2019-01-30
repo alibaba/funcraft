@@ -101,11 +101,13 @@ describe('renderer', () => {
     fs.statSync
       .withArgs('foo').returns({ isDirectory: () => true })
       .withArgs('bar').returns({ isDirectory: () => false })
+      .withArgs('cba').returns({ isDirectory: () => false })
       .withArgs('abc').returns({ isDirectory: () => false });
     fs.readFileSync.returns('test {{ foo }}');
-    rendererStub.render({ repoDir: 'foor', templateDir: 'baz', vars: { foo: 'bar' }, config: { copyOnlyPaths: 'abc' } });
+    rendererStub.render({ repoDir: 'foor', templateDir: 'baz', vars: { foo: 'bar' }, config: { copyOnlyPaths: 'abc', ignorePaths: 'cba' } });
     sandbox.assert.calledWith(fs.mkdirSync, 'foo');
     sandbox.assert.calledWith(fs.writeFileSync, 'bar', 'test bar');
+    sandbox.assert.neverCalledWith(fs.writeFileSync, 'cba', 'test bar');
     sandbox.assert.calledOnce(fs.writeFileSync);
     sandbox.assert.calledOnce(fs.createReadStream);
     sandbox.assert.calledWith(fs.createReadStream, 'abc');
@@ -123,6 +125,5 @@ describe('renderer', () => {
     sandbox.assert.calledOnce(yaml.safeDump);
     sandbox.assert.calledWith(yaml.safeDump, realYaml.safeLoad(mergedTemplate));
   });
-
 
 });
