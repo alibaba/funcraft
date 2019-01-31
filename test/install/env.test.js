@@ -10,7 +10,7 @@ describe('install_env', ()=>{
 
     expect(envs).to.have.property('PATH', '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin');
     expect(envs).to.have.property('PYTHONUSERBASE', '/code/.fun/python');
-    expect(envs).to.have.property('LD_LIBRARY_PATH', '/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib');
+    expect(envs).to.have.property('LD_LIBRARY_PATH', '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib');
   });
 
   it('with_LD_LIBRARY_PATH', () => {
@@ -18,7 +18,7 @@ describe('install_env', ()=>{
       'LD_LIBRARY_PATH': '/usr/lib'
     });
 
-    expect(envs).to.have.property('LD_LIBRARY_PATH', '/code/.fun/root/usr/lib/x86_64-linux-gnu:/usr/lib');
+    expect(envs).to.have.property('LD_LIBRARY_PATH', '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/usr/lib');
   });
 
   it('with_PATH', () => {
@@ -26,6 +26,6 @@ describe('install_env', ()=>{
       'PATH': '/usr/bin'
     });
 
-    expect(envs).to.have.property('PATH', '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/bin');
+    expect(envs).to.have.property('PATH', '/usr/bin:/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin');
   });
 });

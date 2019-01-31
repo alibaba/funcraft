@@ -17,7 +17,8 @@ program
   .option('-r, --runtime <runtime>', 'function runtime, avaliable choice is: python2.7, python3, nodejs6, nodejs8, java8, php7.2')
   .option('--save', 'add module to fun.yml file.')
   .option('-R, --recursive', 'recursive install fun.yml in subdirectory.')
-  .option('-p, --package-type <type>', 'avaliable package type option: module, pip, apt, defaults to \'module\'')
+  .option('-p, --package-type <type>', 'avaliable package type option: pip, apt.')
+  .option('-e, --env [env]', 'environment variable, ex. -e PATH=/code/bin', (e, envs) => (envs.push(e), envs), [])
   .arguments('[packageNames...]')
   .description('install dependencies which are described in fun.yml file.')
   .action(async (packageNames, program) => {
@@ -36,6 +37,11 @@ program
     }
 
     opts.verbose = parseInt(process.env.FUN_VERBOSE) > 0;
+
+    // [ 'A=B', 'B=C' ] => { A: 'B', B: 'C' }
+    opts.env = (options.env || []).map( e => _.split(e, '=', 2))
+      .filter( e => e.length === 2 )
+      .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
     install(packageNames, opts).catch(handler);
   });
