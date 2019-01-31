@@ -96,21 +96,48 @@ describe('renderer', () => {
   });
 
   it('render', async () => {
-    fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc']).withArgs('foo').returns([]);
+    fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc', 'cba']).withArgs('foo').returns([]);
     fs.createReadStream.returns({ pipe: () => {} });
     fs.statSync
       .withArgs('foo').returns({ isDirectory: () => true })
       .withArgs('bar').returns({ isDirectory: () => false })
+      .withArgs('cba').returns({ isDirectory: () => false })
       .withArgs('abc').returns({ isDirectory: () => false });
     fs.readFileSync.returns('test {{ foo }}');
-    rendererStub.render({ repoDir: 'foor', templateDir: 'baz', vars: { foo: 'bar' }, config: { copyOnlyPaths: 'abc' } });
+    rendererStub.render({ repoDir: 'foor', templateDir: 'baz', vars: { foo: 'bar' }, config: { copyOnlyPaths: 'abc', ignorePaths: 'cba' } });
     sandbox.assert.calledWith(fs.mkdirSync, 'foo');
     sandbox.assert.calledWith(fs.writeFileSync, 'bar', 'test bar');
+    sandbox.assert.neverCalledWith(fs.writeFileSync, 'cba', 'test bar');
     sandbox.assert.calledOnce(fs.writeFileSync);
     sandbox.assert.calledOnce(fs.createReadStream);
     sandbox.assert.calledWith(fs.createReadStream, 'abc');
     sandbox.assert.calledOnce(fs.createWriteStream);
     sandbox.assert.calledWith(fs.createWriteStream, 'abc');
+  });
+
+  it('render with multi path', async () => {
+    fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc', 'abc2', 'cba2']).withArgs('foo').returns([]);
+    fs.createReadStream.returns({ pipe: () => {} });
+    fs.statSync
+      .withArgs('foo').returns({ isDirectory: () => true })
+      .withArgs('bar').returns({ isDirectory: () => false })
+      .withArgs('cba').returns({ isDirectory: () => false })
+      .withArgs('cba2').returns({ isDirectory: () => false })
+      .withArgs('abc').returns({ isDirectory: () => false })
+      .withArgs('abc2').returns({ isDirectory: () => false });
+    fs.readFileSync.returns('test {{ foo }}');
+    rendererStub.render({ repoDir: 'foor', templateDir: 'baz', vars: { foo: 'bar' }, config: { copyOnlyPaths: 'abc\nabc2', ignorePaths: 'cba\ncba2' } });
+    sandbox.assert.calledWith(fs.mkdirSync, 'foo');
+    sandbox.assert.calledWith(fs.writeFileSync, 'bar', 'test bar');
+    sandbox.assert.neverCalledWith(fs.writeFileSync, 'cba', 'test bar');
+    sandbox.assert.neverCalledWith(fs.writeFileSync, 'cba2', 'test bar');
+    sandbox.assert.calledOnce(fs.writeFileSync);
+    sandbox.assert.calledTwice(fs.createReadStream);
+    sandbox.assert.calledTwice(fs.createWriteStream);
+    sandbox.assert.calledWith(fs.createReadStream, 'abc');
+    sandbox.assert.calledWith(fs.createWriteStream, 'abc');
+    sandbox.assert.calledWith(fs.createReadStream, 'abc2');
+    sandbox.assert.calledWith(fs.createWriteStream, 'abc2');
   });
 
   it('render when merge is true', async () => {
@@ -123,6 +150,5 @@ describe('renderer', () => {
     sandbox.assert.calledOnce(yaml.safeDump);
     sandbox.assert.calledWith(yaml.safeDump, realYaml.safeLoad(mergedTemplate));
   });
-
 
 });
