@@ -76,7 +76,7 @@ chai.use(require('chai-fs'));
 
     const context = await new Context('python3', funTempDir);
 
-    const shellTask = new ShellTask(undefined, 'python3', funTempDir, 'echo \'aa\' > 1.txt', context);
+    const shellTask = new ShellTask(undefined, 'python3', funTempDir, 'echo \'aa\' > 1.txt', '', {}, context);
 
     await shellTask.run();
 

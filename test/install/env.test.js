@@ -18,7 +18,7 @@ describe('install_env', ()=>{
       'LD_LIBRARY_PATH': '/usr/lib'
     });
 
-    expect(envs).to.have.property('LD_LIBRARY_PATH', '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/usr/lib');
+    expect(envs).to.have.property('LD_LIBRARY_PATH', '/usr/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib');
   });
 
   it('with_PATH', () => {
