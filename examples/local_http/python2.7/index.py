@@ -47,7 +47,5 @@ def handler(environ, start_response):
     response_headers = [('Content-type', 'application/json')]
     start_response(status, response_headers)
 
-    sdafafds
-
     # return value must be iterable
     return [json.dumps(response).encode()]
