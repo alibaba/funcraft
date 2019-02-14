@@ -11,14 +11,14 @@ const tpl = {
     'localdemo': {
       'Type': 'Aliyun::Serverless::Service',
       'Properties': {
-        'Description': 'php local invoke demo'
+        'Description': 'php local invoke demo in english'
       },
       'python3': {
         'Type': 'Aliyun::Serverless::Function',
         'Properties': {
           'Handler': 'index.handler',
           'CodeUri': 'python3',
-          'Description': 'Hello world with python3!',
+          'Description': 'Hello world with python3!!',
           'Runtime': 'python3'
         }
       },
