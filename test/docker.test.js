@@ -201,7 +201,7 @@ describe('Integration::docker', () => {
     });
   });
 
-  describe('test generateDockerOpts', () => {
+  describe('test generateLocalInvokeOpts', () => {
     let restoreProcess;
 
     beforeEach(() => {
@@ -224,7 +224,7 @@ describe('Integration::docker', () => {
         'FC_ACCESS_KEY_SECRET=testKeySecret',
         'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000'];
 
-      const opts = await docker.generateDockerOpts('nodejs8', 'test', [{
+      const opts = await docker.generateLocalInvokeOpts('nodejs8', 'test', [{
         Type: 'bind',
         Source: '/test',
         Target: '/code',
@@ -274,7 +274,7 @@ describe('Integration::docker', () => {
     });
 
     it('test generate docker opts without debug port', async () => {
-      const opts = await docker.generateDockerOpts('nodejs8', 'test', [{
+      const opts = await docker.generateLocalInvokeOpts('nodejs8', 'test', [{
         Type: 'bind',
         Source: '/test',
         Target: '/code',

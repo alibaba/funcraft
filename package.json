@@ -35,6 +35,7 @@
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
     "archiver": "^2.0.0",
+    "async-lock": "^1.1.4",
     "colors": "^1.1.2",
     "command-exists": "^1.2.8",
     "commander": "^2.15.1",

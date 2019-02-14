@@ -83,7 +83,7 @@ describe('test invokeFunction', async () => {
     sandbox.stub(docker, 'generateRamdomContainerName').returns(containerName);
     sandbox.stub(docker, 'generateDockerEnvs').resolves(envs);
     sandbox.stub(docker, 'generateDockerCmd').returns(cmd);
-    sandbox.stub(docker, 'generateDockerOpts').resolves(dockerOpts);
+    sandbox.stub(docker, 'generateLocalInvokeOpts').resolves(dockerOpts);
     sandbox.stub(docker, 'showDebugIdeTips').resolves({});
     sandbox.stub(docker, 'run').resolves({});
 
@@ -109,7 +109,7 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(docker.generateRamdomContainerName);
     assert.calledWith(docker.generateDockerEnvs, functionProps.Properties, debugPort, httpParams);
 
-    assert.calledWith(docker.generateDockerOpts, runtime, containerName, 
+    assert.calledWith(docker.generateLocalInvokeOpts, runtime, containerName, 
       [ codeMount, nasMount ], cmd, debugPort, envs, dockerUser);
       
     assert.calledWith(docker.run, dockerOpts, containerName, event, process.stdout, process.stderr);
@@ -128,7 +128,7 @@ describe('test invokeFunction', async () => {
     assert.calledWith(docker.generateDockerCmd, functionProps.Properties, false);
     assert.calledWith(docker.generateDockerEnvs, functionProps.Properties, debugPort, httpParams);
 
-    assert.calledWith(docker.generateDockerOpts, runtime, containerName, 
+    assert.calledWith(docker.generateLocalInvokeOpts, runtime, containerName, 
       [ codeMount ], cmd, debugPort, envs, dockerUser);
       
     assert.calledWith(docker.run, dockerOpts, containerName, event, process.stdout, process.stderr);
@@ -147,7 +147,7 @@ describe('test invokeFunction', async () => {
     assert.calledWith(docker.generateDockerCmd, functionProps.Properties, false);
     assert.calledWith(docker.generateDockerEnvs, functionProps.Properties, null, httpParams);
 
-    assert.calledWith(docker.generateDockerOpts, runtime, containerName, 
+    assert.calledWith(docker.generateLocalInvokeOpts, runtime, containerName, 
       [ codeMount, nasMount ], cmd, null, envs, dockerUser);
       
     assert.calledWith(docker.run, dockerOpts, containerName, event, process.stdout, process.stderr);
@@ -166,7 +166,7 @@ describe('test invokeFunction', async () => {
     assert.calledOnce(docker.generateRamdomContainerName);
     assert.calledWith(docker.generateDockerEnvs, functionProps.Properties, debugPort, httpParams);
 
-    assert.calledWith(docker.generateDockerOpts, runtime, containerName, 
+    assert.calledWith(docker.generateLocalInvokeOpts, runtime, containerName, 
       [ codeMount, nasMount ], cmd, debugPort, envs, dockerUser);
       
     assert.calledWith(docker.run, dockerOpts, containerName, event, process.stdout, process.stderr);
