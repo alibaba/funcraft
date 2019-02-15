@@ -94,10 +94,10 @@ describe('test generateHttpParams', async () => {
   });
 });
 
-describe('test parseHeadersAndBodyAndExecutionInfoAndProcessOutput', async () => {
+describe('test parseOutputStream', async () => {
 
   it('test parse headers and body and executionInfo and process output', async () => {
-    const { headers, body, requestId, billedTime, memoryUsage } = http.parseHeadersAndBodyAndExecutionInfoAndProcessOutput(httpOutputStream);
+    const { headers, body, requestId, billedTime, memoryUsage } = http.parseOutputStream(httpOutputStream);
     expect(headers).to.eql({
       'x-fc-http-params': 'eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19'
     });

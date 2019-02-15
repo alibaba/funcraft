@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 const functionName = 'python3';
 
 const functionRes = {
@@ -88,7 +90,7 @@ const codeMount = {
 
 const nasMounts = [{
   Type: 'bind',
-  Source: '.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/',
+  Source: path.join('.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/'),
   Target: '/mnt/nas',
   ReadOnly: false
 }];
