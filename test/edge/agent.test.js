@@ -1,3 +1,5 @@
+/* eslint-disable callback-return */
+
 'use strict';
 
 const expect = require('expect.js');
