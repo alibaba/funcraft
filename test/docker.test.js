@@ -273,6 +273,7 @@ describe('test docker run', async () => {
     let containerLogsStub = sandbox.stub().resolves(logStreamMock);
 
     containerMock = {
+      'id': 'containerId',
       'attach': containerAttachStub,
       'modem': {
         'demuxStream': sandbox.stub()
@@ -307,7 +308,7 @@ describe('test docker run', async () => {
   });
 
   it('test run', async () => {
-    await docker.run({}, 'test_container_name', 'event', process.stdout, process.stderr);
+    await docker.run({}, 'event', process.stdout, process.stderr);
 
     assert.calledWith(DockerCli.prototype.createContainer, {});
 
@@ -345,7 +346,7 @@ describe('test docker run', async () => {
       return await sleep(1000);
     });
 
-    docker.run({}, 'test', 'event', process.stdout, process.stderr);
+    docker.run({}, 'event', process.stdout, process.stderr);
 
     await sleep(100);
 
@@ -384,7 +385,7 @@ describe('test docker run', async () => {
 
     await sleep(10);
 
-    assert.calledWith(DockerCli.prototype.getContainer, sinon.match.string);
+    assert.calledWith(DockerCli.prototype.getContainer, 'containerId');
     assert.calledOnce(DockerCli.prototype.getContainer().stop);
   });
 });
