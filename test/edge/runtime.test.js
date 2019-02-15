@@ -3,7 +3,6 @@
 const expect = require('expect.js');
 const sinon = require('sinon');
 const path = require('path');
-const util = require('util');
 
 const LocalRuntime = require('../../lib/edge/runtime');
 
