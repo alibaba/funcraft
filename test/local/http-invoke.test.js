@@ -93,7 +93,7 @@ describe('test http response', async () => {
   const projectDir = path.join(tempDir, 'http-invoke-it-dir'); 
   const ymlPath = path.join(projectDir, 'template.yml');
   const index = path.join(projectDir, 'index.py');
-  const serverPort = 8973;
+  const serverPort = 8990;
   const accountId = 'testAccountId';
   const accessKeyId = 'testKeyId';
   const accessKeySecret = 'testKeySecret';
@@ -204,7 +204,7 @@ def handler(environ, start_response):
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);
     });
-        
+
     const headers = {
       'content-type': 'text/plain'
     };

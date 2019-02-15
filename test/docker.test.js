@@ -194,7 +194,7 @@ describe('test generateRamdomContainerName', () => {
   });
 });
 
-describe('test resolveNasConfigToMount', () => {
+describe('test resolveNasConfigToMounts', () => {
   const projectDir = os.tmpdir();
 
   it('test resolve nas config', async () => {
@@ -209,14 +209,14 @@ describe('test resolveNasConfigToMount', () => {
       ]
     };
 
-    const mount = await docker.resolveNasConfigToMount(nasConfig, path.posix.join(projectDir, 'template.yml'));
+    const mount = await docker.resolveNasConfigToMounts(nasConfig, path.posix.join(projectDir, 'template.yml'));
 
-    expect(mount).to.eql({
+    expect(mount).to.eql([{
       Type: 'bind',
       Source: path.join(projectDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),
       Target: '/mnt/test',
       ReadOnly: false
-    });
+    }]);
   });
 
   it('test resolve nas config subDir not exist', async () => {
@@ -232,16 +232,16 @@ describe('test resolveNasConfigToMount', () => {
     };
 
     try {
-      await docker.resolveNasConfigToMount(nasConfig, path.posix.join(projectDir, 'template.yml'));
+      await docker.resolveNasConfigToMounts(nasConfig, path.posix.join(projectDir, 'template.yml'));
     } catch (e) {
       expect(e).to.be.an(Error);
     }
   });
 
   it('test empty nas config', async () => {
-    const mount = await docker.resolveNasConfigToMount(null, null);
+    const mount = await docker.resolveNasConfigToMounts(null, null);
 
-    expect(mount).to.be(null);
+    expect(mount).to.eql([]);
   });
 });
 

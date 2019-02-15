@@ -15,7 +15,7 @@ const { functionName, functionRes,
   functionProps, serviceName,
   serviceRes, serviceResWithNasConfig,
   debugPort, debugIde, tplPath, codeMount,
-  nasMount } = require('./mock-data');
+  nasMounts } = require('./mock-data');
 
 describe('test invoke construct and init', async () => {
 
@@ -73,7 +73,7 @@ describe('test invoke construct and init', async () => {
 
     expect(invoke.nasConfig).to.eql(undefined);
     expect(invoke.dockerUser).to.eql('0:0');
-    expect(invoke.nasMount).to.eql(null);
+    expect(invoke.nasMounts).to.eql([]);
     expect(invoke.codeMount).to.eql(codeMount);
     expect(invoke.mounts).to.eql([codeMount]);
     expect(invoke.containerName).to.contain('fun_local_');
@@ -105,9 +105,9 @@ describe('test invoke construct and init', async () => {
     });
 
     expect(invoke.dockerUser).to.eql('10003:10003');
-    expect(invoke.nasMount).to.eql(nasMount);
+    expect(invoke.nasMounts).to.eql(nasMounts);
     expect(invoke.codeMount).to.eql(codeMount);
-    expect(invoke.mounts).to.eql([codeMount, nasMount]);
+    expect(invoke.mounts).to.eql([codeMount, ...nasMounts]);
     expect(invoke.containerName).to.contain('fun_local_');
     expect(invoke.imageName).to.eql('aliyunfc/runtime-python3.6:1.5.0');
 

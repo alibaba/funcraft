@@ -86,17 +86,17 @@ const codeMount = {
   ReadOnly: false
 };
 
-const nasMount = {
+const nasMounts = [{
   Type: 'bind',
   Source: '.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/',
   Target: '/mnt/nas',
   ReadOnly: false
-};
+}];
 
 module.exports = {
   functionName, functionRes,
   functionProps, serviceName,
   serviceRes, serviceResWithNasConfig,
   debugPort, debugIde, tplPath, codeMount,
-  nasMount, tpl, httpTriggerServiceRes, httpTriggerFunctionRes
+  nasMounts, tpl, httpTriggerServiceRes, httpTriggerFunctionRes
 };
