@@ -406,6 +406,9 @@ describe('deploy', () => {
       triggerType: 'MNSTopic',
       triggerProperties: {
         TopicName: 'test-topic',
+        NotifyContentFormat: 'JSON',
+        NotifyStrategy: 'EXPONENTIAL_DECAY_RETRY',
+        FilterTag : 'testTag'
       },
     });
   });
