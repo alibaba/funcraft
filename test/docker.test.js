@@ -30,7 +30,8 @@ describe('test generateDockerCmd', () => {
     'CodeUri': 'python3',
     'Initializer': 'index.initializer',
     'Description': 'Hello world with python3!',
-    'Runtime': 'python3'
+    'Runtime': 'python3',
+    'InitializationTimeout': 3
   };
 
   it('test generate docker cmd', () => {
@@ -42,7 +43,9 @@ describe('test generateDockerCmd', () => {
       'index.handler',
       '--stdin',
       '-i',
-      'index.initializer'
+      'index.initializer',
+      '--initializationTimeout',
+      '3'
     ]);
   });
 
@@ -55,7 +58,9 @@ describe('test generateDockerCmd', () => {
       '--stdin',
       '--http',
       '-i',
-      'index.initializer'
+      'index.initializer',
+      '--initializationTimeout',
+      '3'
     ]);
   });
 });
