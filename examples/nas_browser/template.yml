@@ -23,8 +23,8 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
-        Runtime: python2.7
-        CodeUri: './src'
+        Runtime: python3
+        CodeUri: './'
         Timeout: 100
         EnvironmentVariables:
           ROOT_DIR: /mnt/nas
