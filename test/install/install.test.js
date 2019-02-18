@@ -38,7 +38,7 @@ chai.use(require('chai-fs'));
       local: true
     });
 
-    expect(path.join(funTempDir, '.fun/root/usr/lib/x86_64-linux-gnu/libzbar.so.0')).to.be.a.path();
+    expect(path.join(funTempDir, '.fun/root/usr/lib/libzbar.so.0')).to.be.a.path();
 
   });
 
@@ -71,7 +71,7 @@ tasks:
 
     await installFromYaml(ymlPath);
 
-    expect(path.join(funTempDir, '.fun/root/usr/lib/x86_64-linux-gnu/libzbar.so.0')).to.be.a.path();
+    expect(path.join(funTempDir, '.fun/root/usr/lib/libzbar.so.0')).to.be.a.path();
     expect(path.join(funTempDir, '1.txt')).to.be.a.path();
 
   });

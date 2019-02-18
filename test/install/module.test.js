@@ -75,7 +75,6 @@ modules:
 tasks:
   - name: install pymssql localy by pip
     pip: pymssql
-    local: true
 `);
   });
 
