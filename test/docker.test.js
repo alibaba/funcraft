@@ -171,10 +171,10 @@ describe('test generateFunctionEnvs', () => {
     };
 
     const envs = docker.generateFunctionEnvs(functionProps);
-    expect(envs).to.eql([
-      'TestKey1=TestValue1',
-      'TestKey2=TestValue2'
-    ]);
+    expect(envs).to.eql({
+      'TestKey1': 'TestValue1',
+      'TestKey2': 'TestValue2'
+    });
   });
 
   it('test generate empty function env', () => {
