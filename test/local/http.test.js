@@ -1,15 +1,14 @@
 'use strict';
 
-const sinon = require('sinon');
-const assert = sinon.assert;
 const expect = require('expect.js');
-const httpSupport = require('../../../lib/commands/local/http-support');
+const http = require('../../lib/local/http');
 
+const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 
 const FC = require('@alicloud/fc2');
 
-const { setProcess } = require('../../test-utils');
+const { setProcess } = require('../test-utils');
 
 const httpOutputStream = `"FC Invoke Start RequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8
 load code for handler:read.handler
@@ -28,49 +27,33 @@ OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
 [0;32mRequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8 	 Billed Duration: 44 ms 	 Memory Size: 1998 MB 	 Max Memory Used: 19 MB[0m
 `;
 
-const httpErrorOutputStream = `--------------------response begin-----------------
-SFRUUC8xLjEgNDAwIE9LCgp0ZXN0Qm9keQ==
---------------------response end-----------------`;
-
-const apiOutputSream = `FC Invoke Start RequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8
-load code for handler:read.handler
---------------------response begin-----------------
-SFRUUC8xLjEgMjAwIE9LCgp0ZXN0Qm9keQ==
---------------------response end-----------------
---------------------execution info begin-----------------
-OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
---------------------execution info end-----------------
-    
-    
-[0;32mRequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8 	 Billed Duration: 44 ms 	 Memory Size: 1998 MB 	 Max Memory Used: 19 MB[0m
-`;
-
 describe('test validateHeader', async () => {
   it('test valid header', () => {
-    const result = httpSupport.validateHeader('headerKey', 'headerValue');
+    const result = http.validateHeader('headerKey', 'headerValue');
     expect(result).to.be(true);
   });
 
   it('test invalid header key', async () => {
-    const result = httpSupport.validateHeader('键', 'headerValue');
+    const result = http.validateHeader('键', 'headerValue');
     expect(result).to.be(false);
   });
 
   it('test invalid header value', async () => {
-    const result = httpSupport.validateHeader('headerKey', '值');
+    const result = http.validateHeader('headerKey', '值');
     expect(result).to.be(false);
   });
 
   it('test valid header value array', async () => {
-    const result = httpSupport.validateHeader('headerKey', ['headerValue1', 'headerValue2']);
+    const result = http.validateHeader('headerKey', ['headerValue1', 'headerValue2']);
     expect(result).to.be(true);
   });
 
   it('test invalid header value array', async () => {
-    const result = httpSupport.validateHeader('headerKey', ['headerValue1', '值']);
+    const result = http.validateHeader('headerKey', ['headerValue1', '值']);
     expect(result).to.be(false);
   });
 });
+
 
 describe('test filterFunctionResponseAndExecutionInfo', async () => {
 
@@ -86,7 +69,7 @@ NjVjYTQ3OGQtYjNjZi00MWQ1LWI2NjgtOWI4OWE0ZDQ4MWQ4CgoxOTk4Cgo=
 `.split('\n');
 
   it('filter response and execution info', async () => {
-    const [httpResponse, executionInfo] = httpSupport.filterFunctionResponseAndExecutionInfo(response);
+    const [httpResponse, executionInfo] = http.filterFunctionResponseAndExecutionInfo(response);
     expect(httpResponse).to.eql(['dGVzdA==']);
     expect(executionInfo).to.eql('NjVjYTQ3OGQtYjNjZi00MWQ1LWI2NjgtOWI4OWE0ZDQ4MWQ4CgoxOTk4Cgo=');
   });
@@ -106,17 +89,17 @@ describe('test generateHttpParams', async () => {
         'testHeader', 'testHeaderValue'
       ]
     };
-    const res = httpSupport.generateHttpParams(req, '/prefix');
+    const res = http.generateHttpParams(req, '/prefix');
     expect(res).to.eql('eyJtZXRob2QiOiJnZXQiLCJwYXRoIjoiL3BhdGgiLCJjbGllbnRJUCI6IjEyNy4wLjAuMSIsInF1ZXJpZXNNYXAiOnsiaG9zdCI6WyJsb2NhbGhvc3Q6ODAwMCJdfSwiaGVhZGVyc01hcCI6eyJ0ZXN0SGVhZGVyIjpbInRlc3RIZWFkZXJWYWx1ZSJdfX0=');
   });
 });
 
-describe('test parseHeadersAndBodyAndExecutionInfoAndProcessOutput', async () => {
+describe('test parseOutputStream', async () => {
 
   it('test parse headers and body and executionInfo and process output', async () => {
-    const { headers, body, requestId, billedTime, memoryUsage } = httpSupport.parseHeadersAndBodyAndExecutionInfoAndProcessOutput(httpOutputStream);
-    expect(headers).to.eql({ 
-      'x-fc-http-params': 'eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19' 
+    const { headers, body, requestId, billedTime, memoryUsage } = http.parseOutputStream(httpOutputStream);
+    expect(headers).to.eql({
+      'x-fc-http-params': 'eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19'
     });
     expect(body).to.eql(Buffer.from('testBody'));
     expect(requestId).to.eql('9c81b53e-ed17-4327-ac77-28dac374e055');
@@ -124,74 +107,6 @@ describe('test parseHeadersAndBodyAndExecutionInfoAndProcessOutput', async () =>
     expect(memoryUsage).to.eql('20');
   });
 });
-
-describe('test responseHttpTrigger', async () => {
-
-  it('test response success http trigger', async () => {
-    const resp = {
-      send: sinon.stub(),
-      status: sinon.stub(),
-      setHeader: sinon.stub()
-    };
-
-    httpSupport.responseHttpTrigger(resp, httpOutputStream, '');
-
-    assert.calledWith(resp.status, 200);
-    assert.calledWith(resp.setHeader, 'content-type', ['application/json']);
-    assert.calledWith(resp.send, Buffer.from('testBody'));
-  });
-
-  it('test response with 4xx invoke http status', async () => {
-    const resp = {
-      send: sinon.stub(),
-      status: sinon.stub(),
-      setHeader: sinon.stub()
-    };
-
-    httpSupport.responseHttpTrigger(resp, httpErrorOutputStream, '');
-
-    assert.calledWith(resp.status, '400');
-    assert.calledWith(resp.send, Buffer.from('testBody'));
-  });
-
-  it('test response error http trigger', async () => {
-    const resp = {
-      send: sinon.stub(),
-      status: sinon.stub(),
-      setHeader: sinon.stub()
-    };
-    
-    httpSupport.responseHttpTrigger(resp, httpErrorOutputStream, 'function invoke error');
-    
-    assert.calledWith(resp.status, '400');
-    assert.calledWith(resp.send, Buffer.from('testBody'));
-  });
-});
-
-describe('test responseApi', async () => {
-  it('test normal resposne', async () => {
-    const resp = {
-      set: sinon.stub(),
-      status: sinon.stub(),
-      send: sinon.stub()
-    };
-
-    httpSupport.responseApi(resp, apiOutputSream, '');
-
-    assert.calledWith(resp.set, {
-      'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
-      'content-type': 'application/octet-stream',
-      'x-fc-invocation-duration': '182',
-      'x-fc-invocation-service-version': 'LATEST',
-      'x-fc-max-memory-usage': '20',
-      'x-fc-request-id': '9c81b53e-ed17-4327-ac77-28dac374e055'
-    });
-    
-    assert.calledWith(resp.send, Buffer.from('testBody'));
-  });
-
-});
-
 
 describe('test validateSignature', async () => {
 
@@ -235,7 +150,7 @@ describe('test validateSignature', async () => {
 
     req.headers['authorization'] = clientSignature;
 
-    const valid = await httpSupport.validateSignature(req, res, method);
+    const valid = await http.validateSignature(req, res, method);
 
     expect(valid).to.be(true);
   });
@@ -245,7 +160,7 @@ describe('test validateSignature', async () => {
 
     req.headers['authorization'] = clientSignature;
 
-    const valid = await httpSupport.validateSignature(req, res, 'POST');
+    const valid = await http.validateSignature(req, res, 'POST');
 
     expect(valid).to.be(false);
   });
@@ -263,21 +178,21 @@ describe('test normalizeMultiValues', async () => {
       'header2': [ 'value2', 'value3' ]
     };
 
-    const normallized = httpSupport.normalizeMultiValues(maps);
+    const normallized = http.normalizeMultiValues(maps);
     expect(normallized).to.eql(expectMaps);
   });
 
   it('test empty', () => {
     const maps = {};
 
-    const normallized = httpSupport.normalizeMultiValues(maps);
+    const normallized = http.normalizeMultiValues(maps);
     expect(normallized).to.eql({});
   });
 
   it('test null', () => {
     const maps = null;
 
-    const normallized = httpSupport.normalizeMultiValues(maps);
+    const normallized = http.normalizeMultiValues(maps);
     expect(normallized).to.eql({});
   });
 });
@@ -287,7 +202,7 @@ describe('test normalizeRawHeaders', async () => {
     const rawHeaders = ['A','A',
       'B','B',
       'A', 'C'];
-    const headers = httpSupport.normalizeRawHeaders(rawHeaders);
+    const headers = http.normalizeRawHeaders(rawHeaders);
     expect(headers).to.eql({
       'A': ['A', 'C'],
       'B': ['B']
