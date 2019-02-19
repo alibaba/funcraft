@@ -30,7 +30,8 @@ describe('test generateDockerCmd', () => {
     'CodeUri': 'python3',
     'Initializer': 'index.initializer',
     'Description': 'Hello world with python3!',
-    'Runtime': 'python3'
+    'Runtime': 'python3',
+    'InitializationTimeout': 3
   };
 
   it('test generate docker cmd', () => {
@@ -42,7 +43,9 @@ describe('test generateDockerCmd', () => {
       'index.handler',
       '--stdin',
       '-i',
-      'index.initializer'
+      'index.initializer',
+      '--initializationTimeout',
+      '3'
     ]);
   });
 
@@ -55,7 +58,9 @@ describe('test generateDockerCmd', () => {
       '--stdin',
       '--http',
       '-i',
-      'index.initializer'
+      'index.initializer',
+      '--initializationTimeout',
+      '3'
     ]);
   });
 });
@@ -166,24 +171,17 @@ describe('test generateFunctionEnvs', () => {
     };
 
     const envs = docker.generateFunctionEnvs(functionProps);
-    expect(envs).to.eql([
-      'TestKey1=TestValue1',
-      'TestKey2=TestValue2',
-      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
-      'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
-      'PYTHONUSERBASE=/code/.fun/python'
-    ]);
+    expect(envs).to.eql({
+      'TestKey1': 'TestValue1',
+      'TestKey2': 'TestValue2'
+    });
   });
 
   it('test generate empty function env', () => {
     const functionProps = {};
 
     const envs = docker.generateFunctionEnvs(functionProps);
-    expect(envs).to.eql([
-      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
-      'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
-      'PYTHONUSERBASE=/code/.fun/python'
-    ]);
+    expect(envs).to.eql([]);
   });
 });
 
@@ -424,7 +422,7 @@ describe('InstallationContainer', async () => {
     });
 
     await runner.exec(['/bin/bash', '-c', 'echo test $VAR'], {
-      env: ['VAR=sdfasdfasdf']
+      env: { 'VAR': 'sdfasdfasdf' }
     });
 
     await runner.stop();

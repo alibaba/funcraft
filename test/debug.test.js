@@ -148,32 +148,32 @@ describe('test generateVscodeDebugConfig', () => {
 describe('test generateDebugEnv', () => {
   it('test python2.7', async function () {
     const env = await generateDebugEnv('python2.7', 9000);
-    expect(env).to.be('DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait');
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '-m ptvsd --host 0.0.0.0 --port 9000 --wait' });
   });
 
   it('test python3', async function () {
     const env = await generateDebugEnv('python3', 9000);
-    expect(env).to.be('DEBUG_OPTIONS=-m ptvsd --host 0.0.0.0 --port 9000 --wait');
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '-m ptvsd --host 0.0.0.0 --port 9000 --wait' });
   });
 
   it('test nodejs6', async function () {
     const env = await generateDebugEnv('nodejs6', 9000);
-    expect(env).to.be('DEBUG_OPTIONS=--debug-brk=9000');
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '--debug-brk=9000' });
   });
 
   it('test nodejs8', async function () {
     const env = await generateDebugEnv('nodejs8', 9000);
-    expect(env).to.be('DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000');
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '--inspect-brk=0.0.0.0:9000' });
   });
 
   it('test php7.2', async function () {
     const env = await generateDebugEnv('php7.2', 9000);
-    expect(env).to.contain('XDEBUG_CONFIG=remote_enable=1 remote_autostart=1 remote_port=9000 remote_host=');
+    expect(env.XDEBUG_CONFIG).to.contain('remote_enable=1 remote_autostart=1 remote_port=9000 remote_host=');
   });
 
   it('test java8', async function () {
     const env = await generateDebugEnv('java8', 9000);
-    expect(env).to.be('DEBUG_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,quiet=y,address=9000');
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,quiet=y,address=9000' });
   });
 
 });

@@ -38,10 +38,12 @@ describe('test generateLocalInvokeOpts', () => {
   });
 
   it('test generate docker opts', async () => {
-    const envs = ['local=true',
-      'FC_ACCESS_KEY_ID=testKeyId',
-      'FC_ACCESS_KEY_SECRET=testKeySecret',
-      'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000'];
+    const envs = {
+      'local': true,
+      'FC_ACCESS_KEY_ID': 'testKeyId',
+      'FC_ACCESS_KEY_SECRET': 'testKeySecret',
+      'DEBUG_OPTIONS': '--inspect-brk=0.0.0.0:9000'
+    };
 
     const opts = await dockerOpts.generateLocalInvokeOpts('nodejs8', 'test', [{
       Type: 'bind',
@@ -58,7 +60,10 @@ describe('test generateLocalInvokeOpts', () => {
         'local=true',
         'FC_ACCESS_KEY_ID=testKeyId',
         'FC_ACCESS_KEY_SECRET=testKeySecret',
-        'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000'
+        'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000',
+        'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+        'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        'PYTHONUSERBASE=/code/.fun/python'
       ],
       'AttachStderr': true,
       'AttachStdin': true,
@@ -102,7 +107,6 @@ describe('test generateLocalInvokeOpts', () => {
 
     expect(opts).to.eql({
       'name': 'test',
-      'Env': null,
       'Cmd': null,
       'AttachStderr': true,
       'AttachStdin': true,
@@ -112,6 +116,11 @@ describe('test generateLocalInvokeOpts', () => {
       'Tty': false,
       'User': null,
       'Image': 'aliyunfc/runtime-nodejs8:1.5.0',
+      'Env': [
+        'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+        'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        'PYTHONUSERBASE=/code/.fun/python'
+      ],
       'HostConfig': {
         'AutoRemove': true,
         'Mounts': [
@@ -125,4 +134,45 @@ describe('test generateLocalInvokeOpts', () => {
       }
     });
   });
+});
+
+describe('test resolveDockerEnv', () => {
+  it('test empty', () => {
+    const envs = [];
+    const resolved = dockerOpts.resolveDockerEnv(envs);
+
+    expect(resolved).to.eql([
+      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+      'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+      'PYTHONUSERBASE=/code/.fun/python'
+    ]);
+  });
+
+  it('test one env', () => {
+    const envs = { 'key': 'value' };
+
+    const resolved = dockerOpts.resolveDockerEnv(envs);
+
+    expect(resolved).to.eql([
+      'key=value',
+      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+      'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+      'PYTHONUSERBASE=/code/.fun/python'
+    ]);
+  });
+
+  it('test two env', () => {
+    const envs = { 'key1': 'value1', 'key2': 'value2' };
+
+    const resolved = dockerOpts.resolveDockerEnv(envs);
+
+    expect(resolved).to.eql([
+      'key1=value1', 
+      'key2=value2',
+      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+      'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+      'PYTHONUSERBASE=/code/.fun/python'
+    ]);
+  });
+
 });

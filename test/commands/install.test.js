@@ -53,7 +53,6 @@ chai.use(require('chai-fs'));
     expect(ymlPath).to.be.a.file().with.content(`runtime: python2.7
 tasks:
   - pip: pymssql
-    local: true
 `);
 
 
@@ -65,7 +64,6 @@ tasks:
 runtime: python2.7
 tasks:
   - pip: pymssql
-    local: true
 `);
 
 
@@ -79,9 +77,7 @@ tasks:
     expect(ymlPath).to.be.a.file().with.content(`runtime: python2.7
 tasks:
   - pip: pymssql
-    local: true
   - apt: libzbar0
-    local: true
 `);
   });
 });
