@@ -4,7 +4,7 @@
 
 ![logo.jpg](https://tan-blog.oss-cn-hangzhou.aliyuncs.com/img/20181123143028.png)
 
-[English](https://github.com/aliyun/fun/blob/master/README.md)
+[English](https://github.com/aliyun/fun/blob/master/README-en.md)
 
 [Fun](https://github.com/aliyun/fun) 是一个用于支持 Serverless 应用部署的工具，能帮助您便捷地管理函数计算、API 网关、日志服务等资源。它通过一个资源配置文件（template.yml），协助您进行开发、构建、部署操作。
 
