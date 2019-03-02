@@ -1,0 +1,16 @@
+{
+  "name": "ots_stream",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cbor": "^3.0.3",
+    "fc-helper": "^2.1.0",
+    "tablestore": "^4.0.14"
+  }
+}

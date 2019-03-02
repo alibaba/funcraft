@@ -1,0 +1,8 @@
+{
+    "helloworld-nodejs8":  "{{ templatePath }}/helloworld-nodejs8",
+    "helloworld-nodejs6":  "{{ templatePath }}/helloworld-nodejs6",
+    "helloworld-python3":  "{{ templatePath }}/helloworld-python3",
+    "helloworld-python2.7":  "{{ templatePath }}/helloworld-python2.7",
+    "helloworld-java8":  "{{ templatePath }}/helloworld-java8",
+    "helloworld-php7.2":  "{{ templatePath }}/helloworld-php7.2"
+}

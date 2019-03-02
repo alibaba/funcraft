@@ -1,0 +1,25 @@
+runtime: python3
+tasks:
+  - apt: libblas3
+  - pip: pandas
+  - name: compile R
+    shell: |-
+      apt-get build-dep -y r-base;
+      curl -L https://fc-demo-public.oss-cn-hangzhou.aliyuncs.com/fun/examples/R-3.5.2.tar.gz | tar -zxf -;
+      cd R-3.5.2 ; 
+      ./configure --prefix=/code/.fun/R/ --enable-R-shlib --with-blas --with-lapack ; 
+      make ; 
+      make install;
+  - pip: rpy2
+    env: 
+      PATH: /code/.fun/R/bin
+      LD_LIBRARY_PATH: /code/.fun/root/usr/lib/libblas
+  - name: silm size
+    shell: |-
+      rm -rf R-3.5.2; 
+      rm -rf .fun/root/usr/share; 
+      rm -rf .fun/R/share; 
+      rm -rf .fun/R/lib/R/doc;
+      rm -rf .fun/python/lib/python3.6/site-packages/pandas/tests;
+      rm -rf .fun/R/lib/R/library/*/{help,demo,html,doc};
+      find .fun -type f -name "*.so" -exec strip --strip-all {} \;

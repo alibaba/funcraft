@@ -33,8 +33,8 @@ describe('validate template', () => {
     expect(await validate()).to.be(true);
   });
 
-  it('validate ots_stream example', async () => {
-    process.chdir('./examples/ots_stream/');
+  it('validate tablestore-trigger example', async () => {
+    process.chdir('./examples/tablestore-trigger/');
     expect(await validate()).to.be(true);
   });
 

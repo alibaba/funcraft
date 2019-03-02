@@ -1,42 +1,49 @@
 #!/usr/bin/env node
 
+/* eslint-disable quotes */
+
 'use strict';
 
-const handle = function (err) {
-  console.error(err.stack);
-  process.exit(-1);
-};
-
 const program = require('commander');
+const debug = require('debug');
 
-program.version(require('../package.json').version, '-v, --version')
-  .description('The fun tool use template.yml to describe the API Gateway & Function Compute things, then publish it online.');
+program
+  .version(require('../package.json').version, '--version')
+  .description(
+    `The fun command line providers a complete set of commands to define, develop, test
+  serverless applications locally, and deploy them to the Alibaba Cloud.`
+  )
+  .option('-v, --verbose', 'verbose output', (_, total) => total + 1, 0)
+  // See git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands.
+  // See source code: https://github.com/tj/commander.js/blob/master/index.js#L525-L570.
 
-program.command('config')
-  .description('Configure the fun')
-  .action(()=> {
-    require('../lib/commands/config')().catch(handle);
-  });
+  // The commander will try to search the executables in the directory of the entry script
+  // (like ./examples/pm) with the name program-command.
+  .command('config', 'configure the fun')
+  .command('init', 'initialize a new fun project')
+  .command('install', 'install dependencies which are described in fun.yml')
+  .command('build', 'build the dependencies')
+  .command('local', 'run your serverless application locally')
+  .command('validate', 'validate a fun template')
+  .command('deploy', 'deploy a fun application');
 
-program.command('validate')
-  .description('Validate a fun template')
-  .option('-t, --template [template]', 'path of fun template file. defaults to \'template.{yaml|yml}\'', 'template.{yaml|yml}')
-  .action((options)=>{
-    require('../lib/commands/validate')(options.template).catch(handle);
-  });
+// set default verbose value for subcommand.
+process.env.FUN_VERBOSE = 0;
 
-program.command('deploy')
-  .description('Deploy a project to AliCloud')
-  .action((stage)=> {
-    require('../lib/commands/deploy')(stage).catch(handle);
-  });
+program.on('option:verbose', () => {
+  if (program.verbose === 4) {
+    debug.enable('*');
+  }
+  process.env.FUN_VERBOSE = program.verbose;
+});
 
-program.command('build')
-  .description('Build the dependencies')
-  .action(()=>{
-    require('../lib/commands/build')().catch(handle);
-  });
+// Print help information if commands are unknown.
+program.on('command:*', (cmds) => {
+  if (!program.commands.map((command) => command.name()).includes(cmds[0])) {
+    console.error();
+    console.error("  error: unknown command '%s'", cmds[0]);
+    program.help();
+  }
+});
 
 program.parse(process.argv);
-
-if (!program.args.length) {program.help();}

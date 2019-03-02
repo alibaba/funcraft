@@ -5,15 +5,24 @@ const exec = util.promisify(require('child_process').exec);
 
 const expect = require('expect.js');
 
+const { setProcess } = require('../test-utils');
+
 const deploy = require('../../lib/commands/deploy');
 
 describe.skip('deploy template', () => {
-  var prevCWD;
+
+  let restoreProcess;
+  
   beforeEach(() => {
-    prevCWD = process.cwd();
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
+   
   });
   afterEach(() => {
-    process.chdir(prevCWD);
+    restoreProcess();
   });
 
   it('deploy datahub example', async () => {
@@ -39,8 +48,8 @@ describe.skip('deploy template', () => {
     expect(await deploy()).to.be(undefined);
   });
 
-  it('deploy ots_stream example', async () => {
-    process.chdir('./examples/ots_stream/');
+  it('deploy tablestore-trigger example', async () => {
+    process.chdir('./examples/tablestore-trigger/');
     expect(await deploy()).to.be(undefined);
   });
 

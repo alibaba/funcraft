@@ -1,0 +1,11 @@
+name: tensorflow
+tasks:
+  - name: install libzbar-dev localy by apt-get
+    apt: libzbar-dev
+    local: true
+  - name: install tensorflow localy by pip
+    pip: tensorflow
+    local: true
+  - name: install opencv-python localy by pip
+    pip: opencv-python
+    local: true

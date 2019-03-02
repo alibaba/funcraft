@@ -57,6 +57,11 @@ typings/
 # dotenv environment variables file
 .env
 
+.fun/
+/fun.yml
+
+.settings
+
 node_modules_*.zip
 node_modules_*.zip.md5
 package_*.zip
@@ -70,9 +75,20 @@ examples/**/node_modules/
 examples/**/package-lock.json
 examples/java/demo.jar
 examples/java/demo/target/
+examples/local/java8/target/*
+!examples/local/java8/target/demo-1.0-SNAPSHOT.jar
+
+examples/nas_browser/src/*
+!examples/nas_browser/src/index.py
 
 .idea/
 .vscode/
 
 output
 .oss_cfg
+
+*.pyc
+*.iml
+*.class
+.DS_Store
+.fun

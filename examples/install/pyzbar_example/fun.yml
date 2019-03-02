@@ -1,0 +1,7 @@
+runtime: python3
+tasks:
+  - apt: libzbar0
+  - shell: ln -sf libzbar.so.0.2.0 libzbar.so
+    cwd: /code/.fun/root/usr/lib
+  - pip: Pillow
+  - pip: pyzbar

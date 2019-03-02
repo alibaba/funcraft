@@ -1,5 +1,5 @@
-TEST_FOLDER = ./test/
-TEST_FILES = *.test.js
+TEST_FOLDER ?= ./test/
+TEST_FILES ?= *.test.js
 REPORTER = spec
 TIMEOUT = 20000
 MOCHA = ./node_modules/mocha/bin/_mocha
@@ -9,8 +9,14 @@ SHELL := /bin/bash
 lint:
 	@eslint --fix lib bin test
 
-test: lint
-	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
+integration-test:
+	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive  -name $(TEST_FILES) --grep ^Integration::
+
+unit-test:
+	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES) --grep '^(?!Integration::).*'
+
+test: lint unit-test
+	
 
 test-cov:
 	@nyc --reporter=html --reporter=text mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)

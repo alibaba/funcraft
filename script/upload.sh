@@ -52,12 +52,19 @@ fi
 
 cd output
 
+files=()
+
 for p in *.zip
 do
     echo $p
     ossutil cp $p oss://oss-attachment/fun/$p --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET
-    echo "uploaded https://gosspublic.alicdn.com/fun/$p"
+    files+=($p)
 done
 
 echo ""
 echo "All uploaded success!"
+echo "====================================="
+for f in "${files[@]}"
+do
+   echo "[$f](https://gosspublic.alicdn.com/fun/$f)"
+done

@@ -1,0 +1,27 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  test-topic:
+    Type: 'Aliyun::Serverless::MNSTopic'
+    Properties:
+      Region: ap-southeast-2
+      MaximumMessageSize: 2048
+      LoggingEnabled: false
+
+  mnsTopic-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties: 
+      Description: 'MnsTopic trigger test'
+
+    mnsTopic-function:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python2.7
+        CodeUri: './'
+      Events:
+        my-mns-trigger:
+          Type: MNSTopic
+          Properties:
+            TopicName: test-topic
+ 

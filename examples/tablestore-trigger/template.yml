@@ -1,0 +1,30 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  fc-test-inst:
+    Type: 'Aliyun::Serverless::TableStore'
+    Properties:
+      ClusterType: HYBRID
+      Description: just for fun test
+    fc_test_tbl:
+      Type: 'Aliyun::Serverless::TableStore::Table'
+      Properties:
+          PrimaryKeyList:
+            - Name: uid
+              Type: STRING
+  test-tableStore-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Stream trigger for TableStore'
+    fun-ots-func:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: main.index
+        Runtime: nodejs8
+        CodeUri: './'
+      Events:
+        my-tablestore-trigger:
+          Type: TableStore
+          Properties:
+            InstanceName: fc-test-inst
+            TableName: fc_test_tbl
