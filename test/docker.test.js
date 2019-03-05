@@ -63,6 +63,19 @@ describe('test generateDockerCmd', () => {
       '3'
     ]);
   });
+
+  it('test generate docker http cmd without initializer', () => {
+    const cmd = docker.generateDockerCmd(functionProps, true, true);
+
+    expect(cmd).to.eql([
+      '-h',
+      'index.handler',
+      '--stdin',
+      '--http',
+      '--initializationTimeout',
+      '3'
+    ]);
+  });
 });
 
 
