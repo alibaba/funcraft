@@ -101,6 +101,7 @@ describe('test http response', async () => {
   let app;
   let server;
   let restoreProcess;
+  let httpInvoke;
   
   beforeEach(async () => {
 
@@ -125,7 +126,7 @@ def handler(environ, start_response):
 `);
   });
     
-  afterEach(async function () {
+  afterEach(async () => {
     rimraf.sync(projectDir);
     restoreProcess();
 
@@ -142,7 +143,7 @@ def handler(environ, start_response):
     const endpointPrefix = `/2016-08-15/proxy/${serviceName}/${functionName}`;
     const endpoint = `${endpointPrefix}*`;
 
-    const httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
+    httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
       functionName, httpTriggerFunctionRes, null, null, ymlPath, 'ANONYMOUS', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
@@ -157,6 +158,8 @@ def handler(environ, start_response):
     const body = await httpx.read(resp, 'utf8');
 
     expect(body).to.contain('Hello world!');
+
+    await httpInvoke.runner.stop();
   });
 
   it('test http local invoke with authType function with invalid signature', async () => {
@@ -170,7 +173,7 @@ def handler(environ, start_response):
     const endpointPrefix = `/2016-08-15/proxy/${serviceName}/${functionName}`;
     const endpoint = `${endpointPrefix}*`;
 
-    const httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
+    httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
       functionName, httpTriggerFunctionRes, null, null, ymlPath, 'FUNCTION', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
@@ -185,6 +188,8 @@ def handler(environ, start_response):
     const body = await httpx.read(resp, 'utf8');
 
     expect(body).to.contain('Signature doesn\'t match, request signature is');
+    
+    await httpInvoke.runner.stop();
   });
 
   it('test http local invoke with authType function with valid signature', async () => {
@@ -222,5 +227,7 @@ def handler(environ, start_response):
     const body = await httpx.read(resp, 'utf8');
 
     expect(body).to.contain('Hello world!');
+    
+    await httpInvoke.runner.stop();
   });
 });
