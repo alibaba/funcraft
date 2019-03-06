@@ -10,7 +10,7 @@ const debug = require('debug');
 program
   .version(require('../package.json').version, '--version')
   .description(
-    `The fun command line providers a complete set of commands to define, develop, test
+    `The fun command line provides a complete set of commands to define, develop, test
   serverless applications locally, and deploy them to the Alibaba Cloud.`
   )
   .option('-v, --verbose', 'verbose output', (_, total) => total + 1, 0)
