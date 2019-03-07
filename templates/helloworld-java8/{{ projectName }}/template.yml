@@ -9,5 +9,6 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: example.App::handleRequest
+        Initializer: example.App::initialize
         Runtime: java8
-        CodeUri: './target/{{ projectName }}-1.0-SNAPSHOT-jar-with-dependencies.jar'
+        CodeUri: './'
