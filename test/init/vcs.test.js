@@ -71,7 +71,7 @@ describe('vcs', () => {
     commandExists.sync.returns(true);
     const repoUrl = 'https://github.com/foo/bar.git';
     const repoDir = await vcsStub.clone(repoUrl, '.');
-    sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', repoUrl], {cmd: repoDir, stdio: 'inherit'});
+    sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', '--depth=1', repoUrl], {cmd: repoDir, stdio: 'inherit'});
     expect(repoDir).to.be('.bar');
 
   });

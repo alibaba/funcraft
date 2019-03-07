@@ -69,7 +69,7 @@
     "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
-    "tablestore": "^4.2.0",
+    "tablestore": "^4.3.0",
     "urlencode": "^1.1.0"
   },
   "files": [
