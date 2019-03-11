@@ -18,24 +18,24 @@ cache:
     - node_modules
 
 before_install:
-  - > 
-    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      docker pull aliyunfc/runtime-python2.7:build-1.2.0
-      docker pull aliyunfc/runtime-python3.6:build-1.2.0
-      docker pull bitnami/minideb:jessie
-    fi
+  # - > 
+  #   if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+  #     docker pull aliyunfc/runtime-python2.7:build-1.2.0
+  #     docker pull aliyunfc/runtime-python3.6:build-1.2.0
+  #     docker pull bitnami/minideb:jessie
+  #   fi
   # install make for windows
-  - > 
-    if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
-      choco install make
-    fi
+  # - > 
+  #   if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
+  #     choco install make
+  #   fi
 
 script: 
   - |
     if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
       mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Integration::).*'
-    else
-      make test
+    # else
+    #   make test
     fi
 
 deploy:
