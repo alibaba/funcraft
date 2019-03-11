@@ -299,10 +299,6 @@ describe('test docker run', async () => {
     sandbox.restore();
 
     restoreProcess();
-
-    // https://stackoverflow.com/questions/40905239/how-write-tests-for-checking-behaviour-during-graceful-shutdown-in-node-js/40909092#40909092
-    // avoid test exit code not 0
-    process.removeAllListeners('SIGINT');
   });
 
   it('test run', async () => {
@@ -385,6 +381,70 @@ describe('test docker run', async () => {
 
     assert.calledWith(DockerCli.prototype.getContainer, 'containerId');
     assert.calledOnce(DockerCli.prototype.getContainer().stop);
+  });
+});
+
+
+describe('start container', async () => {
+
+  let restoreProcess;
+  let containerMock;
+  let logStreamMock;
+
+  beforeEach(() => {
+
+    sandbox.stub(DockerCli.prototype, 'pull').resolves({});
+    sandbox.stub(DockerCli.prototype, 'run').resolves({});
+    sandbox.stub(DockerCli.prototype, 'getContainer').returns({ 'stop': sandbox.stub() });
+
+    logStreamMock = {
+      'write': sandbox.stub(),
+      'end': sandbox.stub()
+    };
+
+    let containerLogsStub = sandbox.stub().resolves(logStreamMock);
+
+    containerMock = {
+      'id': 'containerId',
+      'modem': {
+        'demuxStream': sandbox.stub()
+      },
+      'start': sandbox.stub(),
+      'wait': sandbox.stub(),
+      'logs': containerLogsStub
+    };
+
+    sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
+
+    docker = proxyquire('../lib/docker', {
+      'dockerode': DockerCli
+    });
+
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+
+    restoreProcess();
+  });
+
+  it('test start', async () => {
+    await docker.startContainer({}, process.stdout, process.stderr);
+
+    assert.calledWith(DockerCli.prototype.createContainer, {});
+
+    assert.calledWith(containerMock.modem.demuxStream,
+      logStreamMock,
+      process.stdout,
+      process.stderr);
+
+    assert.calledOnce(containerMock.start);
   });
 });
 
