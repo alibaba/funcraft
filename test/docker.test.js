@@ -445,6 +445,8 @@ describe('start container', async () => {
       process.stderr);
 
     assert.calledOnce(containerMock.start);
+
+    process.emit('SIGINT');
   });
 });
 
