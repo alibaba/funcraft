@@ -65,7 +65,7 @@ describe('test generateDockerCmd', () => {
   });
 
   it('test generate docker http cmd without initializer', () => {
-    const cmd = docker.generateDockerCmd(functionProps, true, true);
+    const cmd = docker.generateDockerCmd(functionProps, true, false);
 
     expect(cmd).to.eql([
       '-h',
