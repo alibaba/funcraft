@@ -4,6 +4,7 @@ const expect = require('expect.js');
 const sinon = require('sinon');
 const Docker = require('dockerode');
 const inquirer = require('inquirer');
+const EventEmitter = require('events');
 const Container = require('../../lib/edge/container');
 
 const TEST_CONTAINER_ID = 'd852359721fe';
@@ -394,16 +395,15 @@ describe('edge/Container', function () {
       const getContainer = sinon.stub(docker, 'getContainer').returns({
         exec: async function () {
           return {
-            start: async function () {
-              return {
-                output: {
-                  on: function (event, handler) {
-                    if (event === 'end') {
-                      handler();
-                    }
-                  }
-                },
-              };
+            start: function (opts, callback) {
+              class Stream extends EventEmitter {
+                end() {
+                  this.emit('end');
+                }
+              }
+              const stream = new Stream();
+              setTimeout(() => stream.end(), 0);
+              callback(null, stream);
             }
           };
         },
