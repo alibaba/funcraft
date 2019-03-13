@@ -63,6 +63,19 @@ describe('test generateDockerCmd', () => {
       '3'
     ]);
   });
+
+  it('test generate docker http cmd without initializer', () => {
+    const cmd = docker.generateDockerCmd(functionProps, true, false);
+
+    expect(cmd).to.eql([
+      '-h',
+      'index.handler',
+      '--stdin',
+      '--http',
+      '--initializationTimeout',
+      '3'
+    ]);
+  });
 });
 
 
@@ -255,7 +268,10 @@ describe('test docker run', async () => {
 
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
-    sandbox.stub(DockerCli.prototype, 'getContainer').returns({ 'stop': sandbox.stub() });
+    sandbox.stub(DockerCli.prototype, 'getContainer').returns({ 
+      'stop': sandbox.stub(),
+      'inspect': sandbox.stub().resolves({})
+    });
 
     streamMock = {
       'write': sandbox.stub(),
@@ -384,6 +400,7 @@ describe('test docker run', async () => {
     await sleep(10);
 
     assert.calledWith(DockerCli.prototype.getContainer, 'containerId');
+    assert.calledOnce(DockerCli.prototype.getContainer().inspect);
     assert.calledOnce(DockerCli.prototype.getContainer().stop);
   });
 });
