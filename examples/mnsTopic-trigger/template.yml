@@ -24,4 +24,7 @@ Resources:
           Type: MNSTopic
           Properties:
             TopicName: test-topic
+            NotifyContentFormat: JSON
+            NotifyStrategy: EXPONENTIAL_DECAY_RETRY
+            FilterTag : testTag
  
