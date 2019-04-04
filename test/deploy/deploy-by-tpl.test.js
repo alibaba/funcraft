@@ -5,13 +5,76 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
-
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
-
 const { setProcess } = require('../test-utils');
 
-describe('deploy', () => {
+describe.only('deploy service role ', async() => {
+  let restoreProcess;
+
+  beforeEach(() => {
+    Object.keys(deploySupport).forEach(m => {
+    sandbox.stub(deploySupport, m).resolves({});
+    });
+
+    Object.keys(ram).forEach(m => {
+      if (m === 'makeRole') {
+        sandbox.stub(ram, m).resolves({
+          'Role': {
+            'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+          }
+        });
+      } else {
+        sandbox.stub(ram, m).resolves({});
+      }
+    });
+  });
+  restoreProcess = setProcess({
+    ACCOUNT_ID: '12384123985012938421',
+    DEFAULT_REGION: 'cn-shanghai',
+    ACCESS_KEY_ID: 'LTAIsgxsdfDokKbBS',
+    ACCESS_KEY_SECRET: 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM',
+  });
+
+  afterEach(() => {
+    restoreProcess();
+    sandbox.restore();
+  });
+
+  async function deploy(example) {
+    await proxyquire('../../lib/deploy/deploy-by-tpl', {
+      './deploy-support': deploySupport,
+      '../ram': ram
+    })(path.join('./examples', example, 'template.yml'));
+  }
+
+  it('all none', async ()=>{
+    await deploy('datahub');
+    assert.callCount(ram.makePolicy,0);
+    assert.callCount(ram.makeRole,0);
+    assert.callCount(ram.makeAndAttachPolicy,0);
+    assert.callCount(ram.attachPolicyToRole,0);    
+  });
+  
+  it('police and  vpc', async() =>{
+    await deploy('nas');
+    assert.callCount(ram.makePolicy,0);
+    assert.callCount(ram.makeRole,1);
+    assert.callCount(ram.attachPolicyToRole,3);    
+    assert.callCount(ram.makeAndAttachPolicy,0);
+  })
+  it('only log', async() =>{
+    // Apigateway is configured in yml, and when deployed,
+    // makeRole and attachPolicyToRole in RAM are called more than once.
+    await deploy('sls_trigger_demo');
+    assert.callCount(ram.makeRole,3);           //+1
+    assert.callCount(ram.makeAndAttachPolicy,2);
+    assert.callCount(ram.attachPolicyToRole,1); //+1
+    assert.callCount(ram.makePolicy,0);
+  })
+});
+
+describe('deploy', async() => {
   let restoreProcess;
 
   beforeEach(() => {
@@ -30,18 +93,17 @@ describe('deploy', () => {
         sandbox.stub(ram, m).resolves({});
       }
     });
-
-    restoreProcess = setProcess({
-      ACCOUNT_ID: 'testAccountId',
-      ACCESS_KEY_ID: 'testKeyId',
-      ACCESS_KEY_SECRET: 'testKeySecret',
-    });
-
+  });
+  restoreProcess = setProcess({
+    ACCOUNT_ID: '12384123985012938421',
+    DEFAULT_REGION: 'cn-shanghai',
+    ACCESS_KEY_ID: 'LTAIsgxsdfDokKbBS',
+    ACCESS_KEY_SECRET: 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM',
   });
 
   afterEach(() => {
-    sandbox.restore();
     restoreProcess();
+    sandbox.restore();
   });
 
   async function deploy(example) {
@@ -58,7 +120,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}

@@ -5,16 +5,16 @@ var nock = require('nock');
 let deploySupport = require('../../lib/deploy/deploy-support');
 
 const ram = require('../../lib/ram');
-
 const { setProcess } = require('../test-utils');
-
 const proxyquire = require('proxyquire');
+const FC = require('@alicloud/fc2');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const zip = require('../../lib/package/zip');
-
 const expect = require('expect.js');
+
+
 
 describe('make', () => {
 
@@ -307,6 +307,73 @@ describe('make', () => {
     });
   });
 
+});
+describe.only('Incorrect environmental variables', ()=> {
+  let restoreProcess;
+
+  beforeEach(async () => {
+    sandbox.stub(FC.prototype, 'getFunction').resolves({});
+    sandbox.stub(FC.prototype, 'test').returns("just mocked method");
+    sandbox.stub(FC.prototype, 'updateFunction').resolves({});
+    sandbox.stub(zip, 'pack').resolves('');
+
+    deploySupport = await proxyquire('../../lib/deploy/deploy-support', {
+      '../package/zip': zip,
+      '@alicloud/fc2': FC
+    });
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: '1984152879328320',
+      ACCESS_KEY_ID: 'LTAIE3emdof8Hf9H',
+      ACCESS_KEY_SECRET: 'afme03g3q4yv1vtew2kIyrjTslbqb4',
+    });
+  });
+
+    afterEach(() => {
+      sandbox.restore();
+      restoreProcess();
+  });
+
+  it('should cast env value to String', async ()=> {
+    let dir = 'D:\\fun\\fun.git\\examples\\local';
+     await deploySupport.makeFunction(dir,{
+      serviceName : 'localdemo',
+      functionName : 'nodejs6',
+      description : 'Hello world with nodejs6!',
+      handler : 'index.handler',
+      initializer : null,
+      timeout :3,
+      initializationTimeout : 3,
+      memorySize : 128,
+      runtime :'nodejs6',
+      codeUri : `${dir}\\nodejs6`,
+      environmentVariables : {"StringTypeValue1":123,"StringTypeValue2":"test"}
+    });    
+    
+    assert.calledWith(
+        FC.prototype.updateFunction,
+       'localdemo',
+       'nodejs6',
+       {
+        description: "Hello world with nodejs6!",
+        handler: "index.handler",
+        initializer: null,
+        timeout: 3,
+        initializationTimeout: 3,
+        memorySize: 128,
+        runtime: "nodejs6",
+        code: {
+            zipFile: ''
+        },
+        environmentVariables: {
+            StringTypeValue1: "123",
+            StringTypeValue2: "test",
+            LD_LIBRARY_PATH: "/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib",
+            PATH: "/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin",
+            PYTHONUSERBASE: "/code/.fun/python"
+        }
+    });
+  })
 });
 
 describe('make invocation role', () => {
