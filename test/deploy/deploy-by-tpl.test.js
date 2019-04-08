@@ -50,14 +50,16 @@ describe('deploy service role ', async() => {
 
   it('all none', async ()=>{
     await deploy('datahub');
-    assert.callCount(ram.makePolicy,0);
-    assert.callCount(ram.makeRole,0);
-    assert.callCount(ram.makeAndAttachPolicy,0);
-    assert.callCount(ram.attachPolicyToRole,0);    
+    assert.notCalled(ram.makeRole);
+    assert.notCalled(ram.makePolicy);
+    assert.notCalled(ram.makeAndAttachPolicy);
+    assert.notCalled(ram.attachPolicyToRole);    
   });
   
   it('police and  vpc', async() =>{
     await deploy('nas');
+    assert.calledWith(ram.makeRole,Promise.resolve({}),true);
+
     assert.callCount(ram.makePolicy,0);
     assert.callCount(ram.makeRole,1);
     assert.callCount(ram.attachPolicyToRole,3);    
@@ -67,6 +69,9 @@ describe('deploy service role ', async() => {
     // Apigateway is configured in yml, and when deployed,
     // makeRole and attachPolicyToRole in RAM are called more than once.
     await deploy('sls_trigger_demo');
+    assert.calledWith(ram.makeRole,Promise.resolve({}),true);
+    assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
+
     assert.callCount(ram.makeRole,3);           //+1
     assert.callCount(ram.makeAndAttachPolicy,2);
     assert.callCount(ram.attachPolicyToRole,1); //+1

@@ -332,8 +332,8 @@ describe('Incorrect environmental variables', ()=> {
       restoreProcess();
   });
 
-  it('should cast env value to String', async ()=> {
-     await deploySupport.makeFunction(path.join(process.cwd(), 'examples', 'local'),{
+  it.only('should cast env value to String', async ()=> {
+     await deploySupport.makeFunction(path.join('examples', 'local'),{
       serviceName : 'localdemo',
       functionName : 'nodejs6',
       description : 'Hello world with nodejs6!',
@@ -343,7 +343,7 @@ describe('Incorrect environmental variables', ()=> {
       initializationTimeout : 3,
       memorySize : 128,
       runtime :'nodejs6',
-      codeUri : path.join(process.cwd(), 'examples', 'local','nodejs6'),
+      codeUri : path.join('examples', 'local','nodejs6'),
       environmentVariables : {"StringTypeValue1":123,"StringTypeValue2":"test"}
     });    
     
