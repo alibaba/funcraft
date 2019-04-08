@@ -30,10 +30,10 @@ describe.only('deploy service role ', async() => {
     });
   });
   restoreProcess = setProcess({
-    ACCOUNT_ID: '12384123985012938421',
+    ACCOUNT_ID: 'ACCOUNT_ID',
     DEFAULT_REGION: 'cn-shanghai',
-    ACCESS_KEY_ID: 'LTAIsgxsdfDokKbBS',
-    ACCESS_KEY_SECRET: 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM',
+    ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+    ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
   });
 
   afterEach(() => {
@@ -72,6 +72,15 @@ describe.only('deploy service role ', async() => {
     assert.callCount(ram.attachPolicyToRole,1); //+1
     assert.callCount(ram.makePolicy,0);
   })
+
+  it.only('only role', async() =>{
+    await deploy('service_role');
+    assert.calledWith(ram.makeRole,'aliyunfcgeneratedrole-fc',false);
+    assert.callCount(ram.makeRole,1); 
+    assert.callCount(ram.makeAndAttachPolicy,0);
+    assert.callCount(ram.attachPolicyToRole,0); //+1
+    assert.callCount(ram.makePolicy,0);
+  })
 });
 
 describe('deploy', async() => {
@@ -95,10 +104,10 @@ describe('deploy', async() => {
     });
   });
   restoreProcess = setProcess({
-    ACCOUNT_ID: '12384123985012938421',
+    ACCOUNT_ID: 'ACCOUNT_ID',
     DEFAULT_REGION: 'cn-shanghai',
-    ACCESS_KEY_ID: 'LTAIsgxsdfDokKbBS',
-    ACCESS_KEY_SECRET: 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM',
+    ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+    ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
   });
 
   afterEach(() => {

@@ -323,9 +323,9 @@ describe.only('Incorrect environmental variables', ()=> {
     });
 
     restoreProcess = setProcess({
-      ACCOUNT_ID: '1984152879328320',
-      ACCESS_KEY_ID: 'LTAIE3emdof8Hf9H',
-      ACCESS_KEY_SECRET: 'afme03g3q4yv1vtew2kIyrjTslbqb4',
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
     });
   });
 
