@@ -308,7 +308,7 @@ describe('make', () => {
   });
 
 });
-describe.only('Incorrect environmental variables', ()=> {
+describe('Incorrect environmental variables', ()=> {
   let restoreProcess;
 
   beforeEach(async () => {

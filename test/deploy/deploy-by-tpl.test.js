@@ -9,7 +9,7 @@ const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
 
-describe.only('deploy service role ', async() => {
+describe('deploy service role ', async() => {
   let restoreProcess;
 
   beforeEach(() => {
@@ -73,7 +73,7 @@ describe.only('deploy service role ', async() => {
     assert.callCount(ram.makePolicy,0);
   })
 
-  it.only('only role', async() =>{
+  it('only role', async() =>{
     await deploy('service_role');
     assert.calledWith(ram.makeRole,'aliyunfcgeneratedrole-fc',false);
     assert.callCount(ram.makeRole,1); 
