@@ -37,8 +37,8 @@ describe('deploy service role ', async() => {
   });
 
   afterEach(() => {
-    restoreProcess();
     sandbox.restore();
+    restoreProcess();
   });
 
   async function deploy(example) {
