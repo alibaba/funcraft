@@ -63,15 +63,10 @@ describe('deploy service role ', async() => {
     assert.notCalled(ram.makeAndAttachPolicy);
   })
   it('only log', async() =>{
-    // Apigateway is configured in yml, and when deployed,
-    // makeRole and attachPolicyToRole in RAM are called more than once.
     await deploy('sls_trigger_demo');
     assert.calledWith(ram.makeRole,Promise.resolve({}),true);
     assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
-
-    assert.callCount(ram.makeRole,3);           //+1
-    assert.callCount(ram.attachPolicyToRole,1); //+1
   })
 
   it('only role', async() =>{
