@@ -59,11 +59,8 @@ describe('deploy service role ', async() => {
   it('police and  vpc', async() =>{
     await deploy('nas');
     assert.calledWith(ram.makeRole,Promise.resolve({}),true);
-
-    assert.callCount(ram.makePolicy,0);
-    assert.callCount(ram.makeRole,1);
-    assert.callCount(ram.attachPolicyToRole,3);    
-    assert.callCount(ram.makeAndAttachPolicy,0);
+    assert.notCalled(ram.makePolicy);
+    assert.notCalled(ram.makeAndAttachPolicy);
   })
   it('only log', async() =>{
     // Apigateway is configured in yml, and when deployed,
@@ -71,20 +68,18 @@ describe('deploy service role ', async() => {
     await deploy('sls_trigger_demo');
     assert.calledWith(ram.makeRole,Promise.resolve({}),true);
     assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
+    assert.notCalled(ram.makePolicy);
 
     assert.callCount(ram.makeRole,3);           //+1
-    assert.callCount(ram.makeAndAttachPolicy,2);
     assert.callCount(ram.attachPolicyToRole,1); //+1
-    assert.callCount(ram.makePolicy,0);
   })
 
   it('only role', async() =>{
     await deploy('service_role');
     assert.calledWith(ram.makeRole,'aliyunfcgeneratedrole-fc',false);
-    assert.callCount(ram.makeRole,1); 
-    assert.callCount(ram.makeAndAttachPolicy,0);
-    assert.callCount(ram.attachPolicyToRole,0); //+1
-    assert.callCount(ram.makePolicy,0);
+    assert.notCalled(ram.makeAndAttachPolicy);
+    assert.notCalled(ram.attachPolicyToRole);
+    assert.notCalled(ram.makePolicy);
   })
 });
 

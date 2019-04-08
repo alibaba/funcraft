@@ -332,7 +332,7 @@ describe('Incorrect environmental variables', ()=> {
       restoreProcess();
   });
 
-  it.only('should cast env value to String', async ()=> {
+  it('should cast env value to String', async ()=> {
      await deploySupport.makeFunction(path.join('examples', 'local'),{
       serviceName : 'localdemo',
       functionName : 'nodejs6',
