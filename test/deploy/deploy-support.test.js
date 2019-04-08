@@ -13,8 +13,7 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const zip = require('../../lib/package/zip');
 const expect = require('expect.js');
-
-
+const path = require('path');
 
 describe('make', () => {
 
@@ -313,7 +312,6 @@ describe('Incorrect environmental variables', ()=> {
 
   beforeEach(async () => {
     sandbox.stub(FC.prototype, 'getFunction').resolves({});
-    sandbox.stub(FC.prototype, 'test').returns("just mocked method");
     sandbox.stub(FC.prototype, 'updateFunction').resolves({});
     sandbox.stub(zip, 'pack').resolves('');
 
@@ -335,8 +333,7 @@ describe('Incorrect environmental variables', ()=> {
   });
 
   it('should cast env value to String', async ()=> {
-    let dir = 'D:\\fun\\fun.git\\examples\\local';
-     await deploySupport.makeFunction(dir,{
+     await deploySupport.makeFunction(path.join(process.cwd(), 'examples', 'local'),{
       serviceName : 'localdemo',
       functionName : 'nodejs6',
       description : 'Hello world with nodejs6!',
@@ -346,7 +343,7 @@ describe('Incorrect environmental variables', ()=> {
       initializationTimeout : 3,
       memorySize : 128,
       runtime :'nodejs6',
-      codeUri : `${dir}\\nodejs6`,
+      codeUri : path.join(process.cwd(), 'examples', 'local','nodejs6'),
       environmentVariables : {"StringTypeValue1":123,"StringTypeValue2":"test"}
     });    
     
