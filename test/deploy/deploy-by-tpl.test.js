@@ -24,7 +24,9 @@ describe('deploy service role ', async() => {
             'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
           }
         });
-      } else {
+      } else if(m === 'normalizeRoleOrPoliceName'){
+        sandbox.stub(ram, 'normalizeRoleOrPoliceName').returns('');
+      }else{
         sandbox.stub(ram, m).resolves({});
       }
     });
@@ -58,13 +60,13 @@ describe('deploy service role ', async() => {
   
   it('police and  vpc', async() =>{
     await deploy('nas');
-    assert.calledWith(ram.makeRole,Promise.resolve({}),true);
+    assert.calledWith(ram.makeRole,'',true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
   })
   it('only log', async() =>{
     await deploy('sls_trigger_demo');
-    assert.calledWith(ram.makeRole,Promise.resolve({}),true);
+    assert.calledWith(ram.makeRole,'',true);
     assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
   })
