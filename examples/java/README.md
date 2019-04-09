@@ -113,21 +113,23 @@ public class App implements StreamRequestHandler
 
 ## 利用 fun 进行部署
 
-完成函数的开发后，就可以通过 fun 的 faas.yaml 文件来配置函数，并实现发布。
+完成函数的开发后，就可以通过 fun 的 template.yaml 文件来配置函数，并实现发布。
 
 ```yaml
-function-compute:
-  region: 'cn-shanghai' # region id
-  services:
-    - name: 'java' # service name
-      description: 'java demo' # service description
-      functions:
-        - name: 'helloworld' # function name
-          description: 'Hello world!' # function description
-          handler: example.App::handleRequest # handler
-          runtime: 'java8' # runtime
-          codes:
-            - 'demo.jar' # which files should be upload to FC
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  java:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'java demo' # service description
+    helloworld:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: example.App::handleRequest # handler
+        Runtime: java8  # runtime
+        Description: 'Hello world!' # function description
+        CodeUri: './demo.jar' # Specify where the code is stored and it should be upload to FC
 ```
 
 接下来通过`fun deploy`即可实现将函数部署到云端。
