@@ -62,5 +62,9 @@ if (!program.args.length) {
   installAll(process.cwd(), {
     recursive: program.recursive,
     verbose: parseInt(process.env.FUN_VERBOSE) > 0
-  }).catch(handler);
+  }).then(() => {
+    // fix windows not auto exit bug after docker operation
+    process.exit(0);
+  })
+  .catch(handler);
 }
