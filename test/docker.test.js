@@ -49,6 +49,23 @@ describe('test generateDockerCmd', () => {
     ]);
   });
 
+  it('test generate docker cmd with event', () => {
+
+    const cmd = docker.generateDockerCmd(functionProps, false, true, 'event');
+
+    expect(cmd).to.eql([
+      '-h',
+      'index.handler',
+      '--event',
+      'ZXZlbnQ=',
+      '--event-decode',
+      '-i',
+      'index.initializer',
+      '--initializationTimeout',
+      '3'
+    ]);
+  });
+
   it('test generate docker http cmd', () => {
     const cmd = docker.generateDockerCmd(functionProps, true);
 

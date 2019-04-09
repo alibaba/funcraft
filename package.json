@@ -55,7 +55,7 @@
     "inquirer": "^5.2.0",
     "inquirer-autocomplete-prompt": "^1.0.1",
     "ip": "^1.1.5",
-    "js-yaml": "^3.9.0",
+    "js-yaml": "^3.13.1",
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
     "lodash": "^4.17.11",
@@ -71,7 +71,7 @@
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
     "single-line-log": "^1.1.2",
-    "tablestore": "^4.3.0",
+    "tablestore": "^4.3.1",
     "urlencode": "^1.1.0"
   },
   "files": [
