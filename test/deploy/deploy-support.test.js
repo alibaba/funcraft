@@ -21,10 +21,10 @@ describe('make', () => {
 
   beforeEach(() => {
     restoreProcess = setProcess({
-      ACCOUNT_ID: '12384123985012938421',
+      ACCOUNT_ID: 'ACCOUNT_ID',
       DEFAULT_REGION: 'cn-shanghai',
-      ACCESS_KEY_ID: 'LTAIsgxsdfDokKbBS',
-      ACCESS_KEY_SECRET: 'Icngqpy03DtasdfasJWvLHDF2C2szm5ZgM',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
     });
 
     if (!nock.isActive()) {
@@ -324,6 +324,7 @@ describe('Incorrect environmental variables', ()=> {
       ACCOUNT_ID: 'ACCOUNT_ID',
       ACCESS_KEY_ID: 'ACCESS_KEY_ID',
       ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
+      DEFAULT_REGION: 'cn-shanghai'
     });
   });
 
@@ -393,6 +394,7 @@ describe('make invocation role', () => {
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
       ACCESS_KEY_SECRET: 'testKeySecret',
+      DEFAULT_REGION: 'cn-shanghai'
     });
   });
 
