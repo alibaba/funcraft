@@ -1,0 +1,19 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  localdemo:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'local invoke demo'
+      Role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+    nodejs6:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: nodejs6
+        Description: 'Hello world with nodejs6!'
+        Runtime: nodejs6
+        EnvironmentVariables:
+          StringTypeValue1: 123
+          StringTypeValue2: 'test'
+       

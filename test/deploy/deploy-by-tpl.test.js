@@ -5,11 +5,80 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
-
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
-
 const { setProcess } = require('../test-utils');
+
+describe('deploy service role ',() => {
+  let restoreProcess;
+
+  beforeEach(() => {
+    Object.keys(deploySupport).forEach(m => {
+    sandbox.stub(deploySupport, m).resolves({});
+    });
+
+    Object.keys(ram).forEach(m => {
+      if (m === 'makeRole') {
+        sandbox.stub(ram, m).resolves({
+          'Role': {
+            'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+          }
+        });
+      } else if(m === 'normalizeRoleOrPoliceName'){
+        sandbox.stub(ram, 'normalizeRoleOrPoliceName').returns('');
+      }else{
+        sandbox.stub(ram, m).resolves({});
+      }
+    });
+    
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      DEFAULT_REGION: 'cn-shanghai',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
+    });
+  });
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  async function deploy(example) {
+    await proxyquire('../../lib/deploy/deploy-by-tpl', {
+      './deploy-support': deploySupport,
+      '../ram': ram
+    })(path.join('./examples', example, 'template.yml'));
+  }
+
+  it('all none', async ()=>{
+    await deploy('datahub');
+    assert.notCalled(ram.makeRole);
+    assert.notCalled(ram.makePolicy);
+    assert.notCalled(ram.makeAndAttachPolicy);
+    assert.notCalled(ram.attachPolicyToRole);    
+  });
+  
+  it('police and  vpc', async() =>{
+    await deploy('nas');
+    assert.calledWith(ram.makeRole,'',true);
+    assert.notCalled(ram.makePolicy);
+    assert.notCalled(ram.makeAndAttachPolicy);
+  })
+  it('only log', async() =>{
+    await deploy('sls_trigger_demo');
+    assert.calledWith(ram.makeRole,'',true);
+    assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
+    assert.notCalled(ram.makePolicy);
+  })
+
+  it('only role', async() =>{
+    await deploy('service_role');
+    assert.calledWith(ram.makeRole,'aliyunfcgeneratedrole-fc',false);
+    assert.notCalled(ram.makeAndAttachPolicy);
+    assert.notCalled(ram.attachPolicyToRole);
+    assert.notCalled(ram.makePolicy);
+  })
+});
 
 describe('deploy', () => {
   let restoreProcess;
@@ -35,6 +104,7 @@ describe('deploy', () => {
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
       ACCESS_KEY_SECRET: 'testKeySecret',
+      DEFAULT_REGION: 'cn-shanghai',
     });
 
   });
@@ -58,7 +128,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}
@@ -87,7 +157,7 @@ describe('deploy', () => {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'fc',
       vpcConfig: {},
       nasConfig: {}
@@ -115,7 +185,7 @@ describe('deploy', () => {
       description: 'java demo',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'java',
       vpcConfig: {},
       nasConfig: {}
@@ -144,7 +214,7 @@ describe('deploy', () => {
       description: 'fc nas test',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
       serviceName: 'nasDemo',
       vpcConfig: {
         SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks',
@@ -199,7 +269,7 @@ describe('deploy', () => {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'fc',
       vpcConfig: {},
       nasConfig: {},
@@ -261,7 +331,7 @@ describe('deploy', () => {
       description: 'Stream trigger for TableStore',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'test-tableStore-service',
       vpcConfig: {},
       nasConfig: {}
@@ -299,7 +369,7 @@ describe('deploy', () => {
       description: 'sls test',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'log-compute',
       vpcConfig: {},
       nasConfig: {}
@@ -339,7 +409,7 @@ describe('deploy', () => {
       description: 'rds trigger test',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'rds-service',
       vpcConfig: {},
       nasConfig: {}
@@ -380,7 +450,7 @@ describe('deploy', () => {
       description: 'MnsTopic trigger test',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'mnsTopic-service',
       vpcConfig: {},
       nasConfig: {}
@@ -420,7 +490,7 @@ describe('deploy', () => {
       description: 'python demo',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'pythondemo',
       vpcConfig: {},
       nasConfig: {}
@@ -472,7 +542,7 @@ describe('deploy', () => {
       description: 'Module as a service',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'maas',
       vpcConfig: {},
       nasConfig: {}
@@ -523,7 +593,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}
@@ -561,7 +631,7 @@ describe('deploy', () => {
       description: 'wechat demo',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'wechat',
       vpcConfig: {},
       nasConfig: {}
@@ -679,7 +749,7 @@ describe('deploy', () => {
       description: 'initializer demo',
       internetAccess: null,
       logConfig: {},
-      role: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
+      role: undefined,
       serviceName: 'initializerdemo',
       vpcConfig: {},
       nasConfig: {}
