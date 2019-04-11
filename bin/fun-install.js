@@ -66,5 +66,5 @@ if (!program.args.length) {
     // fix windows not auto exit bug after docker operation
     process.exit(0);
   })
-  .catch(handler);
+    .catch(handler);
 }
