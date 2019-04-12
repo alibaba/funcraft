@@ -794,4 +794,33 @@ describe('deploy', () => {
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
     });
   });
+
+  it.only('deploy service role', async () => {
+    await deploy('service_role');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'local invoke demo',
+      internetAccess: null,
+      logConfig: {},
+      role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
+      serviceName: 'localdemo',
+      vpcConfig: {},
+      nasConfig: {}
+    });
+
+    assert.calledWith(deploySupport.makeFunction,
+      path.join(process.cwd(), 'examples', 'service_role'), {
+        codeUri: 'nodejs6',
+        description: 'Hello world with nodejs6!',
+        functionName: 'nodejs6',
+        handler: 'index.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        runtime: 'nodejs6',
+        initializationTimeout: undefined,
+        serviceName: 'localdemo',
+        timeout: undefined,
+        environmentVariables: { StringTypeValue1: 123, StringTypeValue2: "test" }
+      });
+  });
 });
