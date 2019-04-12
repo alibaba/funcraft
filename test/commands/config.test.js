@@ -74,5 +74,45 @@ describe('config prompt', () => {
     expect(profYml.endpoint).to.be('https://3333555543.cn-shanghai.fc.aliyuncs.com');
     expect(profYml.access_key_id).to.be('23r2fwefw');
   });
-
 });
+
+describe('config api_version', () => {
+
+  let restoreProcess;
+
+  before(async () => {
+
+    restoreProcess = setProcess({
+      HOME: os.tmpdir(),
+    });
+
+    await mkdirp(`${os.homedir()}/.fcli/`);
+    await writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
+      endpoint: `https://33232.cn-hangzhou.fc.aliyuncs.com`,
+      api_version: '2016-08-15T00:00:00.000Z',       
+      access_key_id: '22222',
+      access_key_secret: '3333333',
+      security_token: '',
+      user_agent: 'fcli-0.1',
+      debug: false,
+      timeout: 60,
+      sls_endpoint: `cn-hangzhou.log.aliyuncs.com`
+    }));
+  });
+
+  after(async () => {
+    rimraf.sync(`${os.homedir()}/.fcli/`);
+    restoreProcess();
+  });
+
+  it('config dateStr', async () => {  
+    mocki({});
+    await config();
+    const profContent = await readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profYml = yaml.safeLoad(profContent,{
+      schema: yaml.JSON_SCHEMA
+    });
+    expect(profYml.api_version).to.be('2016-08-15');
+  });
+});
+
