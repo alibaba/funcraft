@@ -109,8 +109,8 @@ describe('with local ~/.fcli/config.yaml', () => {
   });
 
   it('pattern',()=>{
-    const correctValue= isShortDateStr('2017-09-09');
-    const notCorrectValue= isShortDateStr('2017/09/09');
+    const correctValue = isShortDateStr('2017-09-09');
+    const notCorrectValue = isShortDateStr('2017/09/09');
     expect(correctValue).to.be(true);
     expect(notCorrectValue).to.be(false);
   });
