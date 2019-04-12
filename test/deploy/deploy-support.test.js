@@ -521,7 +521,7 @@ describe('make invocation role', () => {
         Statement: [{
           Action: 'sts:AssumeRole',
           Effect: 'Allow',
-          Principal: { RAM: ['acs:ram::1604337383174619:root'] }        }],
+          Principal: { RAM: ['acs:ram::1604337383174619:root'] } }],
         Version: '1'
       });
 

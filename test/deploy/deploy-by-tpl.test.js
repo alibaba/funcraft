@@ -17,7 +17,7 @@ describe('deploy service role ',() => {
     Object.keys(deploySupport).forEach(m => {
       if (m === 'getTriggerNameList') {
         sandbox.stub(deploySupport, m).resolves([]);
-      }else {
+      } else {
         sandbox.stub(deploySupport, m).resolves({});
       }
     });
@@ -29,9 +29,9 @@ describe('deploy service role ',() => {
             'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
           }
         });
-      } else if(m === 'normalizeRoleOrPoliceName'){
+      } else if (m === 'normalizeRoleOrPoliceName') {
         sandbox.stub(ram, 'normalizeRoleOrPoliceName').returns('');
-      }else{
+      } else {
         sandbox.stub(ram, m).resolves({});
       }
     });
@@ -94,7 +94,7 @@ describe('deploy', () => {
     Object.keys(deploySupport).forEach(m => {
       if (m === 'getTriggerNameList') {
         sandbox.stub(deploySupport, m).resolves(['my_trigger_name']);
-      }else {
+      } else {
         sandbox.stub(deploySupport, m).resolves({});
       }
     });

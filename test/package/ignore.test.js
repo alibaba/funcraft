@@ -6,7 +6,7 @@ const path = require('path'),
 
 describe('funignore', () => {
 
-  it('default ignore',  () => {
+  it('default ignore', () => {
     var funignore = ignore(__dirname);
     
     expect(funignore(path.join(__dirname, '.env'))).to.be.ok();

@@ -41,7 +41,7 @@ describe('prompt', () => {
     const context = {
       input: false, 
       config: { 
-        userPrompt: [{ name: 'foo',  default: 'bar'}, { name: 'baz',  default: 'foo'}] 
+        userPrompt: [{ name: 'foo', default: 'bar'}, { name: 'baz', default: 'foo'}] 
       },
       vars: { bar: 'foo', foo: 'foo' } 
     };
@@ -49,7 +49,7 @@ describe('prompt', () => {
     expect(context).to.eql({
       input: false, 
       config: { 
-        userPrompt: [{ name: 'foo',  default: 'bar'}, { name: 'baz',  default: 'foo'}] 
+        userPrompt: [{ name: 'foo', default: 'bar'}, { name: 'baz', default: 'foo'}] 
       },
       vars: { bar: 'foo', foo: 'foo', baz: 'foo' } 
     });
@@ -59,7 +59,7 @@ describe('prompt', () => {
     const context = {
       input: true, 
       config: { 
-        userPrompt: [{ name: 'foo',  default: 'bar'}, { name: 'baz',  default: 'foo'}] 
+        userPrompt: [{ name: 'foo', default: 'bar'}, { name: 'baz', default: 'foo'}] 
       },
       vars: { bar: 'foo', foo: 'foo' } 
     };
@@ -70,7 +70,7 @@ describe('prompt', () => {
     expect(context).to.eql({
       input: true, 
       config: { 
-        userPrompt: [{ name: 'foo',  default: 'bar'}, { name: 'baz',  default: 'foo'}] 
+        userPrompt: [{ name: 'foo', default: 'bar'}, { name: 'baz', default: 'foo'}] 
       },
       vars: { bar: 'foo', foo: 'foo', baz: 'baz' } 
     });
