@@ -820,7 +820,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         serviceName: 'localdemo',
         timeout: undefined,
-        environmentVariables: { StringTypeValue1: 123, StringTypeValue2: "test" }
+        environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' }
       });
   });
 });
