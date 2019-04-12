@@ -14,7 +14,7 @@ describe('deploy service role ',() => {
 
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-    sandbox.stub(deploySupport, m).resolves({});
+      sandbox.stub(deploySupport, m).resolves({});
     });
 
     Object.keys(ram).forEach(m => {
@@ -63,13 +63,13 @@ describe('deploy service role ',() => {
     assert.calledWith(ram.makeRole,'',true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
-  })
+  });
   it('only log', async() =>{
     await deploy('sls_trigger_demo');
     assert.calledWith(ram.makeRole,'',true);
     assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
-  })
+  });
 
   it('only role', async() =>{
     await deploy('service_role');
@@ -77,7 +77,7 @@ describe('deploy service role ',() => {
     assert.notCalled(ram.makeAndAttachPolicy);
     assert.notCalled(ram.attachPolicyToRole);
     assert.notCalled(ram.makePolicy);
-  })
+  });
 });
 
 describe('deploy', () => {
@@ -128,7 +128,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}
@@ -157,7 +157,7 @@ describe('deploy', () => {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'fc',
       vpcConfig: {},
       nasConfig: {}
@@ -185,7 +185,7 @@ describe('deploy', () => {
       description: 'java demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'java',
       vpcConfig: {},
       nasConfig: {}
@@ -269,7 +269,7 @@ describe('deploy', () => {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'fc',
       vpcConfig: {},
       nasConfig: {},
@@ -331,7 +331,7 @@ describe('deploy', () => {
       description: 'Stream trigger for TableStore',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'test-tableStore-service',
       vpcConfig: {},
       nasConfig: {}
@@ -369,7 +369,7 @@ describe('deploy', () => {
       description: 'sls test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'log-compute',
       vpcConfig: {},
       nasConfig: {}
@@ -409,7 +409,7 @@ describe('deploy', () => {
       description: 'rds trigger test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'rds-service',
       vpcConfig: {},
       nasConfig: {}
@@ -450,7 +450,7 @@ describe('deploy', () => {
       description: 'MnsTopic trigger test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'mnsTopic-service',
       vpcConfig: {},
       nasConfig: {}
@@ -490,7 +490,7 @@ describe('deploy', () => {
       description: 'python demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'pythondemo',
       vpcConfig: {},
       nasConfig: {}
@@ -542,7 +542,7 @@ describe('deploy', () => {
       description: 'Module as a service',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'maas',
       vpcConfig: {},
       nasConfig: {}
@@ -593,7 +593,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}
@@ -631,7 +631,7 @@ describe('deploy', () => {
       description: 'wechat demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'wechat',
       vpcConfig: {},
       nasConfig: {}
@@ -749,7 +749,7 @@ describe('deploy', () => {
       description: 'initializer demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'initializerdemo',
       vpcConfig: {},
       nasConfig: {}
@@ -793,5 +793,34 @@ describe('deploy', () => {
       serviceParametersMap: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
     });
+  });
+
+  it('deploy service role', async () => {
+    await deploy('service_role');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'local invoke demo',
+      internetAccess: null,
+      logConfig: {},
+      role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
+      serviceName: 'localdemo',
+      vpcConfig: {},
+      nasConfig: {}
+    });
+
+    assert.calledWith(deploySupport.makeFunction,
+      path.join(process.cwd(), 'examples', 'service_role'), {
+        codeUri: 'nodejs6',
+        description: 'Hello world with nodejs6!',
+        functionName: 'nodejs6',
+        handler: 'index.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        runtime: 'nodejs6',
+        initializationTimeout: undefined,
+        serviceName: 'localdemo',
+        timeout: undefined,
+        environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' }
+      });
   });
 });

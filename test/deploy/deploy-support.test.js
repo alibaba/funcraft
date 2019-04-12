@@ -328,13 +328,13 @@ describe('Incorrect environmental variables', ()=> {
     });
   });
 
-    afterEach(() => {
-      sandbox.restore();
-      restoreProcess();
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
   });
 
   it('should cast env value to String', async ()=> {
-     await deploySupport.makeFunction(path.join('examples', 'local'),{
+    await deploySupport.makeFunction(path.join('examples', 'local'),{
       serviceName : 'localdemo',
       functionName : 'nodejs6',
       description : 'Hello world with nodejs6!',
@@ -345,33 +345,33 @@ describe('Incorrect environmental variables', ()=> {
       memorySize : 128,
       runtime :'nodejs6',
       codeUri : path.join('examples', 'local','nodejs6'),
-      environmentVariables : {"StringTypeValue1":123,"StringTypeValue2":"test"}
+      environmentVariables : {'StringTypeValue1':123,'StringTypeValue2':'test'}
     });    
     
     assert.calledWith(
-        FC.prototype.updateFunction,
-       'localdemo',
-       'nodejs6',
-       {
-        description: "Hello world with nodejs6!",
-        handler: "index.handler",
+      FC.prototype.updateFunction,
+      'localdemo',
+      'nodejs6',
+      {
+        description: 'Hello world with nodejs6!',
+        handler: 'index.handler',
         initializer: null,
         timeout: 3,
         initializationTimeout: 3,
         memorySize: 128,
-        runtime: "nodejs6",
+        runtime: 'nodejs6',
         code: {
-            zipFile: ''
+          zipFile: ''
         },
         environmentVariables: {
-            StringTypeValue1: "123",
-            StringTypeValue2: "test",
-            LD_LIBRARY_PATH: "/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib",
-            PATH: "/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin",
-            PYTHONUSERBASE: "/code/.fun/python"
+          StringTypeValue1: '123',
+          StringTypeValue2: 'test',
+          LD_LIBRARY_PATH: '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+          PATH: '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+          PYTHONUSERBASE: '/code/.fun/python'
         }
-    });
-  })
+      });
+  });
 });
 
 describe('make invocation role', () => {
