@@ -14,7 +14,7 @@ describe('deploy service role ',() => {
 
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-    sandbox.stub(deploySupport, m).resolves({});
+      sandbox.stub(deploySupport, m).resolves({});
     });
 
     Object.keys(ram).forEach(m => {
@@ -63,13 +63,13 @@ describe('deploy service role ',() => {
     assert.calledWith(ram.makeRole,'',true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
-  })
+  });
   it('only log', async() =>{
     await deploy('sls_trigger_demo');
     assert.calledWith(ram.makeRole,'',true);
     assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
-  })
+  });
 
   it('only role', async() =>{
     await deploy('service_role');
@@ -77,7 +77,7 @@ describe('deploy service role ',() => {
     assert.notCalled(ram.makeAndAttachPolicy);
     assert.notCalled(ram.attachPolicyToRole);
     assert.notCalled(ram.makePolicy);
-  })
+  });
 });
 
 describe('deploy', () => {
