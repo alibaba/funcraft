@@ -795,7 +795,7 @@ describe('deploy', () => {
     });
   });
 
-  it.only('deploy service role', async () => {
+  it('deploy service role', async () => {
     await deploy('service_role');
 
     assert.calledWith(deploySupport.makeService, {
