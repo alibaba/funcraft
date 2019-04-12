@@ -14,6 +14,8 @@ const writeFile = util.promisify(fs.writeFile);
 
 const { setProcess } = require('./test-utils');
 
+const { isShortDateStr } = require('../lib/profile');
+
 describe('without local ~/.fcli/config.yaml', () => {
   
   let restoreProcess;
@@ -104,5 +106,12 @@ describe('with local ~/.fcli/config.yaml', () => {
     expect(profile.defaultRegion).to.be('cn-hangzhou');
     expect(profile.timeout).to.be(60);
     expect(profile.retries).to.be(10);
+  });
+
+  it('pattern',()=>{
+    const correctValue= isShortDateStr('2017-09-09');
+    const notCorrectValue= isShortDateStr('2017/09/09');
+    expect(correctValue).to.be(true);
+    expect(notCorrectValue).to.be(false);
   });
 });

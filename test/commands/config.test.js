@@ -17,9 +17,6 @@ const { setProcess } = require('../test-utils');
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 
-const { isShortDateStr } = require('../../lib/profile');
-
-
 describe('config prompt', () => {
 
   let restoreProcess;
@@ -115,13 +112,6 @@ describe('config api_version', () => {
       schema: yaml.JSON_SCHEMA
     });
     expect(profYml.api_version).to.be('2016-08-15');
-  });
-
-  it('pattern',()=>{
-    const correctValue= isShortDateStr('2017-09-09');
-    const notCorrectValue= isShortDateStr('2017/09/09');
-    expect(correctValue).to.be(true);
-    expect(notCorrectValue).to.be(false);
   });
 });
 
