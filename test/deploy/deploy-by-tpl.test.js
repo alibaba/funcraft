@@ -128,7 +128,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}
@@ -157,7 +157,7 @@ describe('deploy', () => {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'fc',
       vpcConfig: {},
       nasConfig: {}
@@ -185,7 +185,7 @@ describe('deploy', () => {
       description: 'java demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'java',
       vpcConfig: {},
       nasConfig: {}
@@ -269,7 +269,7 @@ describe('deploy', () => {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'fc',
       vpcConfig: {},
       nasConfig: {},
@@ -331,7 +331,7 @@ describe('deploy', () => {
       description: 'Stream trigger for TableStore',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'test-tableStore-service',
       vpcConfig: {},
       nasConfig: {}
@@ -369,7 +369,7 @@ describe('deploy', () => {
       description: 'sls test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'log-compute',
       vpcConfig: {},
       nasConfig: {}
@@ -409,7 +409,7 @@ describe('deploy', () => {
       description: 'rds trigger test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'rds-service',
       vpcConfig: {},
       nasConfig: {}
@@ -450,7 +450,7 @@ describe('deploy', () => {
       description: 'MnsTopic trigger test',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'mnsTopic-service',
       vpcConfig: {},
       nasConfig: {}
@@ -490,7 +490,7 @@ describe('deploy', () => {
       description: 'python demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'pythondemo',
       vpcConfig: {},
       nasConfig: {}
@@ -542,7 +542,7 @@ describe('deploy', () => {
       description: 'Module as a service',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'maas',
       vpcConfig: {},
       nasConfig: {}
@@ -593,7 +593,7 @@ describe('deploy', () => {
       description: undefined,
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'MyService',
       vpcConfig: {},
       nasConfig: {}
@@ -631,7 +631,7 @@ describe('deploy', () => {
       description: 'wechat demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'wechat',
       vpcConfig: {},
       nasConfig: {}
@@ -749,7 +749,7 @@ describe('deploy', () => {
       description: 'initializer demo',
       internetAccess: null,
       logConfig: {},
-      role: undefined,
+      role: '',
       serviceName: 'initializerdemo',
       vpcConfig: {},
       nasConfig: {}
