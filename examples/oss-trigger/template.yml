@@ -1,0 +1,26 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  oss-test-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties: 
+      Description: 'oss trigger test'
+
+    oss-test-function:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: python2.7
+        CodeUri: './'
+      Events:
+        oss-trigger-name:
+          Type: OSS # trigger type
+          Properties:
+            bucketName: coco-superme # oss bucket name
+            events:
+              - oss:ObjectCreated:InitiateMultipartUpload              
+            filter: 
+              key:
+                prefix: source/
+                suffix: .png
+               
