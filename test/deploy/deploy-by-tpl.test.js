@@ -85,7 +85,7 @@ describe('deploy', () => {
 
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-      if (m == 'getTriggerNameList') {
+      if (m === 'getTriggerNameList') {
         sandbox.stub(deploySupport, m).resolves([]);
       }else {
         sandbox.stub(deploySupport, m).resolves({});
