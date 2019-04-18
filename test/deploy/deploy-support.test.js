@@ -547,6 +547,46 @@ describe('make invocation role', () => {
 
     expect(role).to.be('generated-role-name');
   });
+
+  it('makeInvocationRole of oss', async () => {
+    const role = await deploySupport.makeInvocationRole('oss-service_name', 'oss-function_name', 'OSS');
+
+    assert.calledOnce(ram.makeRole);
+    assert.calledWith(ram.makeRole,
+      'FunCreateRole-oss-service-name-oss-function-name',
+      true,
+      'Used for fc invocation',
+      {
+        Statement: [
+          {
+            'Action': 'sts:AssumeRole',
+            'Effect': 'Allow',
+            'Principal': {
+              'Service': [
+                'oss.aliyuncs.com'
+              ]
+            }
+          }
+        ],
+        Version: '1'
+      });
+
+    assert.calledWith(ram.makePolicy, 'FunCreateOSSPolicy-oss-service-name-oss-function-name',
+      {
+        Statement:[{
+          'Action': [
+            'fc:InvokeFunction'
+          ],
+          'Resource': `acs:fc:*:*:services/oss-service_name/functions/*`,
+          'Effect': 'Allow'
+        }],
+        Version: '1'
+      });
+    assert.calledOnce(ram.attachPolicyToRole);
+    assert.calledWith(ram.attachPolicyToRole, 'FunCreateOSSPolicy-oss-service-name-oss-function-name', 'FunCreateRole-oss-service-name-oss-function-name', 'Custom');
+
+    expect(role).to.be('generated-role-name');
+  });
 });
 
 describe('test getFunCodeAsBase64', () => {
