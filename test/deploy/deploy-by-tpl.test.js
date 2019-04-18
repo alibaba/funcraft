@@ -590,7 +590,7 @@ describe('deploy', () => {
       requestConfig: { requestMode: 'PASSTHROUGH', requestProtocol: 'http' }
     });
   });
-  it.only('deploy timer', async () => {
+  it('deploy timer', async () => {
     await deploy('timer');
 
     assert.calledWith(deploySupport.makeService, {
