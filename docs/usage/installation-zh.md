@@ -18,7 +18,7 @@
 
 可以参考官方[教程](https://store.docker.com/editions/community/docker-ce-desktop-windows)。
 
-如果遇到网络问题，可以下载阿里云提供的 [Docker For Windows](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/stable/)。
+如果遇到网络问题，可以下载阿里云提供的 [Docker For Windows](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/beta/)。
 
 ### Linux 安装 docker
 
