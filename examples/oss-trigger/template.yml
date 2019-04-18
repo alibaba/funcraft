@@ -18,7 +18,8 @@ Resources:
           Properties:
             bucketName: coco-superme # oss bucket name
             events:
-              - oss:ObjectCreated:InitiateMultipartUpload              
+              - oss:ObjectCreated:*
+              - oss:ObjectRemoved:DeleteObject        
             filter: 
               key:
                 prefix: source/
