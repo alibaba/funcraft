@@ -14,7 +14,11 @@ describe('deploy service role ',() => {
 
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-      sandbox.stub(deploySupport, m).resolves({});
+      if (m === 'getTriggerNameList') {
+        sandbox.stub(deploySupport, m).resolves([]);
+      }else {
+        sandbox.stub(deploySupport, m).resolves({});
+      }
     });
 
     Object.keys(ram).forEach(m => {
