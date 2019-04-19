@@ -451,6 +451,49 @@ describe('deploy', () => {
     });
   });
 
+  it('deploy oss-trigger', async () => {
+    await deploy('oss-trigger');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'oss trigger test',
+      internetAccess: null,
+      logConfig: {},
+      role: '',
+      serviceName: 'oss-test-service',
+      vpcConfig: {},
+      nasConfig: {}
+    });
+    assert.calledWith(deploySupport.makeFunction,
+      path.join(process.cwd(), 'examples', 'oss-trigger'), {
+        codeUri: './',
+        handler: 'index.handler',
+        initializer: undefined,
+        description: undefined,
+        functionName: 'oss-test-function',
+        memorySize: undefined,
+        runtime: 'python2.7',
+        serviceName: 'oss-test-service',
+        timeout: undefined,
+        initializationTimeout: undefined,
+        environmentVariables: undefined
+      });
+    assert.calledWith(deploySupport.makeTrigger, {
+      serviceName: 'oss-test-service',
+      functionName: 'oss-test-function',
+      triggerName: 'oss-trigger-name',
+      triggerType: 'OSS',
+      triggerProperties: {
+        bucketName: "coco-superme",
+        events: ["oss:ObjectCreated:*", "oss:ObjectRemoved:DeleteObject"],
+        filter: { key: { prefix: "source/", suffix: ".png" }}
+      },
+    });
+    assert.calledWith(deploySupport.getTriggerNameList, {
+      serviceName: 'oss-test-service',
+      functionName: 'oss-test-function'
+    });
+  });
+
   it('deploy mnsTopic-trigger', async () => {
     await deploy('mnsTopic-trigger');
 
