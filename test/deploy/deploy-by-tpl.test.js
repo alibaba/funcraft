@@ -14,7 +14,11 @@ describe('deploy service role ',() => {
 
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-      sandbox.stub(deploySupport, m).resolves({});
+      if (m === 'getTriggerNameList') {
+        sandbox.stub(deploySupport, m).resolves([]);
+      }else {
+        sandbox.stub(deploySupport, m).resolves({});
+      }
     });
 
     Object.keys(ram).forEach(m => {
@@ -85,7 +89,11 @@ describe('deploy', () => {
 
   beforeEach(() => {
     Object.keys(deploySupport).forEach(m => {
-      sandbox.stub(deploySupport, m).resolves({});
+      if (m === 'getTriggerNameList') {
+        sandbox.stub(deploySupport, m).resolves([]);
+      }else {
+        sandbox.stub(deploySupport, m).resolves({});
+      }
     });
 
     Object.keys(ram).forEach(m => {
@@ -440,6 +448,49 @@ describe('deploy', () => {
         Concurrency: 1,
         EventFormat: 'json'
       },
+    });
+  });
+
+  it('deploy oss-trigger', async () => {
+    await deploy('oss-trigger');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'oss trigger test',
+      internetAccess: null,
+      logConfig: {},
+      role: '',
+      serviceName: 'oss-test-service',
+      vpcConfig: {},
+      nasConfig: {}
+    });
+    assert.calledWith(deploySupport.makeFunction,
+      path.join(process.cwd(), 'examples', 'oss-trigger'), {
+        codeUri: './',
+        handler: 'index.handler',
+        initializer: undefined,
+        description: undefined,
+        functionName: 'oss-test-function',
+        memorySize: undefined,
+        runtime: 'python2.7',
+        serviceName: 'oss-test-service',
+        timeout: undefined,
+        initializationTimeout: undefined,
+        environmentVariables: undefined
+      });
+    assert.calledWith(deploySupport.makeTrigger, {
+      serviceName: 'oss-test-service',
+      functionName: 'oss-test-function',
+      triggerName: 'oss-trigger-name',
+      triggerType: 'OSS',
+      triggerProperties: {
+        bucketName: 'coco-superme',
+        events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
+        filter: { key: { prefix: 'source/', suffix: '.png' }}
+      },
+    });
+    assert.calledWith(deploySupport.getTriggerNameList, {
+      serviceName: 'oss-test-service',
+      functionName: 'oss-test-function'
     });
   });
 
