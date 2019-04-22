@@ -875,3 +875,58 @@ describe('deploy', () => {
       });
   });
 });
+
+describe('events test', () => {
+  let restoreProcess;
+
+  beforeEach(() => {
+
+    sandbox.stub(console, 'warn');
+
+    Object.keys(deploySupport).forEach(m => {
+      if (m === 'getTriggerNameList') {
+        sandbox.stub(deploySupport, m).resolves(['my_trigger_name']);
+      }else {
+        sandbox.stub(deploySupport, m).resolves({});
+      }
+    });
+
+    Object.keys(ram).forEach(m => {
+      if (m === 'makeRole') {
+        sandbox.stub(ram, m).resolves({
+          'Role': {
+            'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+          }
+        });
+      } else {
+        sandbox.stub(ram, m).resolves({});
+      }
+    });
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+      DEFAULT_REGION: 'cn-shanghai',
+    });
+
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  async function deploy(example) {
+    await proxyquire('../../lib/deploy/deploy-by-tpl', {
+      './deploy-support': deploySupport,
+      '../ram': ram
+    })(path.join('./examples', example, 'template.yml'));
+  }
+
+  it('no events on local but have onLine',async () =>{
+    await deploy('service_role');
+    assert.notCalled(deploySupport.makeTrigger);
+    assert.calledOnce(console.warn);
+  });
+}); 
