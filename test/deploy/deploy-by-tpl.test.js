@@ -8,6 +8,7 @@ const path = require('path');
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
+const { red } = require('colors');
 
 describe('deploy service role ',() => {
   let restoreProcess;
@@ -88,9 +89,11 @@ describe('deploy', () => {
   let restoreProcess;
 
   beforeEach(() => {
+
+    sandbox.stub(console, 'warn');
     Object.keys(deploySupport).forEach(m => {
       if (m === 'getTriggerNameList') {
-        sandbox.stub(deploySupport, m).resolves([]);
+        sandbox.stub(deploySupport, m).resolves(['my_trigger_name']);
       }else {
         sandbox.stub(deploySupport, m).resolves({});
       }
@@ -873,5 +876,10 @@ describe('deploy', () => {
         timeout: undefined,
         environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' }
       });
+    // add test => no events on local but have onLine 
+    assert.notCalled(deploySupport.makeTrigger);
+    assert.calledOnce(console.warn);
+    assert.calledWith(console.warn,red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
   });
 });
+
