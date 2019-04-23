@@ -235,7 +235,7 @@ describe('edge/Container', function () {
     let hasImage;
     let pullImage;
     beforeEach(function () {
-      docker =  Docker();
+      docker = Docker();
       container = Container.edge(docker);
       hasImage = sinon.stub(container, 'hasImage').resolves(true);
       pullImage = sinon.stub(container, 'pullImage').resolves();
@@ -308,7 +308,7 @@ describe('edge/Container', function () {
   describe('#stop', function () {
     let docker;
     beforeEach(function () {
-      docker =  Docker();
+      docker = Docker();
     });
     afterEach(function () {
       docker = undefined;

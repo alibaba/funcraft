@@ -32,7 +32,7 @@ program
       local: true
     }, optDefaults, options);
 
-    if (opts.recursive){
+    if (opts.recursive) {
       console.error('--recursive option can only be used without arguments.');
     }
 

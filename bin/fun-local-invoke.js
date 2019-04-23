@@ -41,7 +41,7 @@ if (!program.args.length > 1) {
 program.event = program.event || '-';
 
 require('../lib/commands/local/invoke')(program.args[0], program)
-  .then(() =>  {
+  .then(() => {
     // fix windows not auto exit bug after docker.run
     process.exit(0);
   })

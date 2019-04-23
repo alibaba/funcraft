@@ -7,7 +7,10 @@ PATH := ./node_modules/.bin:$(PATH)
 SHELL := /bin/bash
 
 lint:
-	@eslint --fix lib bin test
+	@npm run lint
+
+validate-lint:
+	@npm run validate-lint
 
 integration-test:
 	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive  -name $(TEST_FILES) --grep ^Integration::
