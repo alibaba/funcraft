@@ -21,7 +21,9 @@
     "test": "make test",
     "postinstall": "node ./lib/check-version.js",
     "binary": "make binary",
-    "upload": "make upload"
+    "upload": "make upload",
+    "lint": "eslint --fix lib bin test",
+    "validate-lint": "eslint lib bin test"
   },
   "author": "Jackson Tian",
   "license": "MIT",

@@ -20,8 +20,8 @@ cache:
 before_install:
   - > 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      docker pull aliyunfc/runtime-python2.7:build-1.2.0
-      docker pull aliyunfc/runtime-python3.6:build-1.2.0
+      # docker pull aliyunfc/runtime-python2.7:build-1.5.2
+      # docker pull aliyunfc/runtime-python3.6:build-1.5.2
       docker pull bitnami/minideb:jessie
     fi
   # install make for windows
@@ -30,7 +30,22 @@ before_install:
       choco install make
     fi
 
-before_script: eslint lib bin test
+install: 
+  # Re-checkout files preserving line feeds. This prevents Windows builds from
+  # converting \n to \r\n.
+  # see https://github.com/google/wire/blob/master/.travis.yml#L37
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
+      cd ../..;
+      mv $TRAVIS_REPO_SLUG _old;
+      git config --global core.autocrlf false;
+      git clone _old $TRAVIS_REPO_SLUG;
+      cd $TRAVIS_REPO_SLUG;
+    fi
+  - npm install
+
+before_script: 
+  - env | sort
+  - make validate-lint
 
 script: 
   - |
