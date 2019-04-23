@@ -30,6 +30,8 @@ before_install:
       choco install make
     fi
 
+before_script: eslint lib bin test
+
 script: 
   - |
     if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
