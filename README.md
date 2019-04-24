@@ -41,6 +41,7 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
     - [开发函数计算的正确姿势 —— Api 本地运行调试](https://yq.aliyun.com/articles/683685): 介绍了如何在通过 API 在本地运行、单步调试函数。
   - **部署**：关于如何快速部署云服务的文章。
     - [开发函数计算的正确姿势 —— 部署 API 网关](https://yq.aliyun.com/articles/689185)：介绍了如何部署 API 网关 + 函数计算应用。
+    - [开发函数计算的正确姿势 —— OSS 触发器](https://yq.aliyun.com/articles/699379)：介绍了如何部署 OSS 触发器 + 函数计算应用。
   - **实战**：关于如何利用 init、local、install、deploy 等命令，快速开发一款 Serverless 应用的文章。
     - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): 通过一个实战场景，介绍了如何利用 Fun 工具从头开始开发一个 Serverless 应用。
     - [开发函数计算的正确姿势 —— 排查超时问题](https://yq.aliyun.com/articles/672627): 从一个 bug 出发，介绍了各种排查问题的技巧。
