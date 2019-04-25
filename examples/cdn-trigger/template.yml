@@ -16,9 +16,9 @@ Resources:
         cdn-trigger-name: # trigger name
           Type: CDN # trigger type
           Properties:
-            eventName: LogFileCreated
+            eventName: CachedObjectsRefreshed
             eventVersion: '1.0.0'
             notes: cdn events trigger test
             filter: 
-              domain: ['www.taobao.com','www.tmall.com']
+              domain: ['cdn-trigger.sunfeiyu.top']
                
