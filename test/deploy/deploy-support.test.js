@@ -587,6 +587,46 @@ describe('make invocation role', () => {
 
     expect(role).to.be('generated-role-name');
   });
+
+  it.only('makeInvocationRole of cdn', async () => {
+    const role = await deploySupport.makeInvocationRole('cdn-service_name', 'cdn-function_name', 'CDN');
+
+    assert.calledOnce(ram.makeRole);
+    assert.calledWith(ram.makeRole,
+      'FunCreateRole-cdn-service-name-cdn-function-name',
+      true,
+      'Used for fc invocation',
+      {
+        Statement: [
+          {
+            'Action': 'sts:AssumeRole',
+            'Effect': 'Allow',
+            'Principal': {
+              'Service': [
+                'cdn.aliyuncs.com'
+              ]
+            }
+          }
+        ],
+        Version: '1'
+      });
+
+    assert.calledWith(ram.makePolicy, 'FunCreateCDNPolicy-cdn-service-name-cdn-function-name',
+      {
+        Statement:[{
+          'Action': [
+            'fc:InvokeFunction'
+          ],
+          'Resource': `acs:fc:*:*:services/cdn-service_name/functions/*`,
+          'Effect': 'Allow'
+        }],
+        Version: '1'
+      });
+    assert.calledOnce(ram.attachPolicyToRole);
+    assert.calledWith(ram.attachPolicyToRole, 'FunCreateCDNPolicy-cdn-service-name-cdn-function-name', 'FunCreateRole-cdn-service-name-cdn-function-name', 'Custom');
+
+    expect(role).to.be('generated-role-name');
+  });
 });
 
 describe('test getFunCodeAsBase64', () => {
