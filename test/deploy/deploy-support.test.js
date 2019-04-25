@@ -588,7 +588,7 @@ describe('make invocation role', () => {
     expect(role).to.be('generated-role-name');
   });
 
-  it.only('makeInvocationRole of cdn', async () => {
+  it('makeInvocationRole of cdn', async () => {
     const role = await deploySupport.makeInvocationRole('cdn-service_name', 'cdn-function_name', 'CDN');
 
     assert.calledOnce(ram.makeRole);
