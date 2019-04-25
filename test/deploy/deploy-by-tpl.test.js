@@ -497,6 +497,53 @@ describe('deploy', () => {
     });
   });
 
+  it('deploy cdn-trigger', async () => {
+    await deploy('cdn-trigger');
+
+    assert.calledWith(deploySupport.makeService, {
+      description: 'cdn trigger test',
+      internetAccess: null,
+      logConfig: {},
+      role: '',
+      serviceName: 'cdn-test-service',
+      vpcConfig: {},
+      nasConfig: {}
+    });
+    assert.calledWith(deploySupport.makeFunction,
+      path.join(process.cwd(), 'examples', 'cdn-trigger'), {
+        codeUri: './',
+        handler: 'index.handler',
+        initializer: undefined,
+        description: undefined,
+        functionName: 'cdn-test-function',
+        memorySize: undefined,
+        runtime: 'python2.7',
+        serviceName: 'cdn-test-service',
+        timeout: undefined,
+        initializationTimeout: undefined,
+        environmentVariables: undefined
+      });
+    assert.calledWith(deploySupport.makeTrigger, {
+      serviceName: 'cdn-test-service',
+      functionName: 'cdn-test-function',
+      triggerName: 'cdn-trigger-name',
+      triggerType: 'CDN',
+      triggerProperties: {
+        'eventName': 'CachedObjectsRefreshed',
+        'eventVersion': '1.0.0',
+        'notes': 'cdn events trigger test',
+        'filter': {
+          'domain': [
+            'cdn-trigger.sunfeiyu.top'
+          ]
+        }},
+    });
+    assert.calledWith(deploySupport.getTriggerNameList, {
+      serviceName: 'cdn-test-service',
+      functionName: 'cdn-test-function'
+    });
+  });
+
   it('deploy mnsTopic-trigger', async () => {
     await deploy('mnsTopic-trigger');
 
