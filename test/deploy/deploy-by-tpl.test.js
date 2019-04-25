@@ -529,13 +529,12 @@ describe('deploy', () => {
       triggerName: 'cdn-trigger-name',
       triggerType: 'CDN',
       triggerProperties: {
-        'eventName': 'LogFileCreated',
+        'eventName': 'CachedObjectsRefreshed',
         'eventVersion': '1.0.0',
         'notes': 'cdn events trigger test',
         'filter': {
           'domain': [
-            'www.taobao.com',
-            'www.tmall.com'
+            'cdn-trigger.sunfeiyu.top'
           ]
         }},
     });
