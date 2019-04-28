@@ -10,7 +10,7 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
-        Runtime: python2.7
+        Runtime: nodejs8
         CodeUri: './'
       Events:
         cdn-trigger-name: # trigger name
