@@ -486,9 +486,9 @@ describe('deploy', () => {
       triggerName: 'oss-trigger-name',
       triggerType: 'OSS',
       triggerProperties: {
-        bucketName: 'coco-superme',
-        events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-        filter: { key: { prefix: 'source/', suffix: '.png' }}
+        BucketName: 'coco-superme',
+        Events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
+        Filter: { Key: { Prefix: 'source/', Suffix: '.png' }}
       },
     });
     assert.calledWith(deploySupport.getTriggerNameList, {
@@ -517,7 +517,7 @@ describe('deploy', () => {
         description: undefined,
         functionName: 'cdn-test-function',
         memorySize: undefined,
-        runtime: 'python2.7',
+        runtime: 'nodejs8',
         serviceName: 'cdn-test-service',
         timeout: undefined,
         initializationTimeout: undefined,
@@ -529,11 +529,11 @@ describe('deploy', () => {
       triggerName: 'cdn-trigger-name',
       triggerType: 'CDN',
       triggerProperties: {
-        'eventName': 'CachedObjectsRefreshed',
-        'eventVersion': '1.0.0',
-        'notes': 'cdn events trigger test',
-        'filter': {
-          'domain': [
+        'EventName': 'CachedObjectsRefreshed',
+        'EventVersion': '1.0.0',
+        'Notes': 'cdn events trigger test',
+        'Filter': {
+          'Domain': [
             'cdn-trigger.sunfeiyu.top'
           ]
         }},
