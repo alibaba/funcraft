@@ -486,9 +486,9 @@ describe('deploy', () => {
       triggerName: 'oss-trigger-name',
       triggerType: 'OSS',
       triggerProperties: {
-        bucketName: 'coco-superme',
-        events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-        filter: { key: { prefix: 'source/', suffix: '.png' }}
+        BucketName: 'coco-superme',
+        Events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
+        Filter: { Key: { Prefix: 'source/', Suffix: '.png' }}
       },
     });
     assert.calledWith(deploySupport.getTriggerNameList, {
