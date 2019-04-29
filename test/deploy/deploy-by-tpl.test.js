@@ -517,7 +517,7 @@ describe('deploy', () => {
         description: undefined,
         functionName: 'cdn-test-function',
         memorySize: undefined,
-        runtime: 'python2.7',
+        runtime: 'nodejs8',
         serviceName: 'cdn-test-service',
         timeout: undefined,
         initializationTimeout: undefined,
