@@ -16,9 +16,9 @@ Resources:
         cdn-trigger-name: # trigger name
           Type: CDN # trigger type
           Properties:
-            eventName: CachedObjectsRefreshed
-            eventVersion: '1.0.0'
-            notes: cdn events trigger test
-            filter: 
-              domain: ['cdn-trigger.sunfeiyu.top']
+            EventName: CachedObjectsRefreshed
+            EventVersion: '1.0.0'
+            Notes: cdn events trigger test
+            Filter: 
+              Domain: ['cdn-trigger.sunfeiyu.top']
                

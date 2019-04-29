@@ -529,11 +529,11 @@ describe('deploy', () => {
       triggerName: 'cdn-trigger-name',
       triggerType: 'CDN',
       triggerProperties: {
-        'eventName': 'CachedObjectsRefreshed',
-        'eventVersion': '1.0.0',
-        'notes': 'cdn events trigger test',
-        'filter': {
-          'domain': [
+        'EventName': 'CachedObjectsRefreshed',
+        'EventVersion': '1.0.0',
+        'Notes': 'cdn events trigger test',
+        'Filter': {
+          'Domain': [
             'cdn-trigger.sunfeiyu.top'
           ]
         }},
