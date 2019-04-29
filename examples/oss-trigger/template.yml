@@ -16,12 +16,12 @@ Resources:
         oss-trigger-name:
           Type: OSS # trigger type
           Properties:
-            bucketName: coco-superme # oss bucket name
-            events:
+            BucketName: coco-superme # oss bucket name
+            Events:
               - oss:ObjectCreated:*
               - oss:ObjectRemoved:DeleteObject        
-            filter: 
-              key:
-                prefix: source/
-                suffix: .png
+            Filter: 
+              Key:
+                Prefix: source/
+                Suffix: .png
                
