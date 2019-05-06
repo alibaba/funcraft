@@ -36,6 +36,7 @@
     "@alicloud/pop-core": "^1.6.0",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
+    "ajv-errors": "^1.0.1",
     "archiver": "^2.0.0",
     "async-lock": "^1.1.4",
     "colors": "^1.1.2",
