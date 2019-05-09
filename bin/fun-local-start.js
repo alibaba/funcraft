@@ -6,6 +6,8 @@
 
 const program = require('commander');
 
+const visitor = require('../lib/visitor');
+
 program
   .name('fun local start')
   .description(`
@@ -21,7 +23,7 @@ program
   )
   .usage('[options]')
   .option('-d, --debug-port <port>', 'specify the sandbox container starting in debug' +
-        ' mode, and exposing this port on localhost') 
+    ' mode, and exposing this port on localhost')
   .option('-c, --config <ide/debugger>', 'output ide debug configuration. Options：\'vscode\'')
   .parse(process.argv);
 
@@ -31,5 +33,32 @@ if (program.args.length) {
   program.help();
 }
 
+visitor.pageview('/fun/local/start').send();
+
 require('../lib/commands/local/start')(program)
-  .catch(require('../lib/exception-handler'));
+  .then(() => {
+    visitor.event({
+      ec: 'local start',
+      ea: 'start',
+      el: 'success',
+      dp: '/fun/local/start'
+    }).send();
+
+    // fix windows not auto exit bug after docker.run
+    if (process.platform === 'win32') {
+      // fix windows not auto exit bug after docker operation
+      setTimeout(() => {
+        process.exit(0);
+      }, 1000);
+    }
+  })
+  .catch(error => {
+    visitor.event({
+      ec: 'local start',
+      ea: 'start',
+      el: 'error',
+      dp: '/fun/local/start'
+    }).send();
+
+    require('../lib/exception-handler')(error);
+  });

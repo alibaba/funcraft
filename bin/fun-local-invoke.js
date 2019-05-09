@@ -40,10 +40,32 @@ if (!program.args.length > 1) {
 
 program.event = program.event || '-';
 
+visitor.pageview('/fun/local/invoke').send();
+
 require('../lib/commands/local/invoke')(program.args[0], program)
   .then(() => {
-    // fix windows not auto exit bug after docker.run
-    process.exit(0);
-  })
-  .catch(require('../lib/exception-handler'));
+    visitor.event({
+      ec: 'local invoke',
+      ea: 'invoke',
+      el: 'success',
+      dp: '/fun/local/invoke'
+    }).send();
 
+    // fix windows not auto exit bug after docker.run
+    if (process.platform === 'win32') {
+      // fix windows not auto exit bug after docker operation
+      setTimeout(() => {
+        process.exit(0);
+      }, 1000);
+    }
+  })
+  .catch(error => {
+    visitor.event({
+      ec: 'local invoke',
+      ea: 'invoke',
+      el: 'error',
+      dp: '/fun/local/invoke'
+    }).send();
+
+    require('../lib/exception-handler')(error);
+  });

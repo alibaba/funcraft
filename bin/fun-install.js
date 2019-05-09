@@ -2,10 +2,10 @@
 
 'use strict';
 
-const handler = require('../lib/exception-handler');
 const _ = require('lodash');
 const Command = require('commander').Command;
 const program = new Command('fun install');
+const visitor = require('../lib/visitor');
 const { install, installAll, init, env } = require('../lib/commands/install');
 
 const optDefaults = {
@@ -57,14 +57,36 @@ program
   .action(env);
   
 program.parse(process.argv);
-  
+
 if (!program.args.length) {
+  visitor.pageview('/fun/installAll').send();
+
   installAll(process.cwd(), {
     recursive: program.recursive,
     verbose: parseInt(process.env.FUN_VERBOSE) > 0
   }).then(() => {
-    // fix windows not auto exit bug after docker operation
-    process.exit(0);
+    visitor.event({
+      ec: 'installAll',
+      ea: 'installAll',
+      el: 'success',
+      dp: '/fun/installAll'
+    }).send();
+    
+    if (process.platform === 'win32') {
+      // fix windows not auto exit bug after docker operation
+      setTimeout(() => {
+        // sleep in order visitor request is sent
+        process.exit(0);
+      }, 1000);
+    }
   })
-    .catch(handler);
+    .catch(error => {
+      visitor.event({
+        ec: 'installAll',
+        ea: 'installAll',
+        el: 'error',
+        dp: '/fun/installAll'
+      }).send();
+      require('../lib/exception-handler')(error);
+    });
 }

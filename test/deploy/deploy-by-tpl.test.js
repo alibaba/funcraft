@@ -10,7 +10,7 @@ const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
 const { red } = require('colors');
 
-describe('deploy service role ',() => {
+describe('deploy service role ', () => {
   let restoreProcess;
 
   beforeEach(() => {
@@ -65,20 +65,20 @@ describe('deploy service role ',() => {
   
   it('police and  vpc', async() =>{
     await deploy('nas');
-    assert.calledWith(ram.makeRole,'',true);
+    assert.calledWith(ram.makeRole, '', true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
   });
   it('only log', async() =>{
     await deploy('sls_trigger_demo');
-    assert.calledWith(ram.makeRole,'',true);
-    assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
+    assert.calledWith(ram.makeRole, '', true);
+    assert.calledWith(ram.attachPolicyToRole, 'AliyunFCInvocationAccess', 'AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
   });
 
   it('only role', async() =>{
     await deploy('service_role');
-    assert.calledWith(ram.makeRole,'aliyunfcgeneratedrole-fc',false);
+    assert.calledWith(ram.makeRole, 'aliyunfcgeneratedrole-fc', false);
     assert.notCalled(ram.makeAndAttachPolicy);
     assert.notCalled(ram.attachPolicyToRole);
     assert.notCalled(ram.makePolicy);
@@ -579,7 +579,7 @@ describe('deploy', () => {
         TopicName: 'test-topic',
         NotifyContentFormat: 'JSON',
         NotifyStrategy: 'EXPONENTIAL_DECAY_RETRY',
-        FilterTag : 'testTag'
+        FilterTag: 'testTag'
       },
     });
   });
@@ -926,7 +926,7 @@ describe('deploy', () => {
     // add test => no events on local but have onLine 
     assert.notCalled(deploySupport.makeTrigger);
     assert.calledOnce(console.warn);
-    assert.calledWith(console.warn,red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
+    assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
   });
 });
 

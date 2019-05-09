@@ -6,6 +6,8 @@
 
 const program = require('commander');
 
+const visitor = require('../lib/visitor');
+
 program
   .name('fun validate')
   .description('Validate a fun template.')
@@ -18,5 +20,24 @@ if (program.args.length) {
   program.help();
 }
 
+visitor.pageview('/fun/validate').send();
+
 require('../lib/commands/validate')(program.template)
-  .catch(require('../lib/exception-handler'));
+  .then(() => {
+    visitor.event({
+      ec: 'validate',
+      ea: 'validate',
+      el: 'success',
+      dp: '/fun/validate'
+    }).send();
+  })
+  .catch(error => {
+    visitor.event({
+      ec: 'validate',
+      ea: 'validate',
+      el: 'error',
+      dp: '/fun/validate'
+    }).send();
+
+    require('../lib/exception-handler')(error);
+  });

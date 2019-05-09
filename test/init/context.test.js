@@ -95,7 +95,7 @@ describe('context', () => {
       outputDir: '/',
       repoDir: 'foo',
       templateDir: '{{ foo }}',
-      config: { name: 'foo' , copyOnlyPaths: 'foo'},
+      config: { name: 'foo', copyOnlyPaths: 'foo'},
       vars: { projectName: 'fun-app' }
     });
   });
@@ -110,7 +110,7 @@ describe('context', () => {
       outputDir: '/',
       repoDir: 'foo',
       templateDir: '{{ foo }}',
-      config: { name: 'foo' , copyOnlyPaths: 'foo\nbar'},
+      config: { name: 'foo', copyOnlyPaths: 'foo\nbar'},
       vars: { projectName: 'fun-app' }
     });
   });
@@ -125,7 +125,7 @@ describe('context', () => {
       outputDir: '/',
       repoDir: 'foo',
       templateDir: '{{ foo }}',
-      config: { name: 'foo' , ignorePaths: 'foo'},
+      config: { name: 'foo', ignorePaths: 'foo'},
       vars: { projectName: 'fun-app' }
     });
   });
@@ -140,7 +140,7 @@ describe('context', () => {
       outputDir: '/',
       repoDir: 'foo',
       templateDir: '{{ foo }}',
-      config: { name: 'foo' , ignorePaths: 'foo\nbar'},
+      config: { name: 'foo', ignorePaths: 'foo\nbar'},
       vars: { projectName: 'fun-app' }
     });
   });

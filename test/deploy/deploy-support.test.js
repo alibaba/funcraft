@@ -334,18 +334,18 @@ describe('Incorrect environmental variables', ()=> {
   });
 
   it('should cast env value to String', async ()=> {
-    await deploySupport.makeFunction(path.join('examples', 'local'),{
-      serviceName : 'localdemo',
-      functionName : 'nodejs6',
-      description : 'Hello world with nodejs6!',
-      handler : 'index.handler',
-      initializer : null,
-      timeout :3,
-      initializationTimeout : 3,
-      memorySize : 128,
-      runtime :'nodejs6',
-      codeUri : path.join('examples', 'local','nodejs6'),
-      environmentVariables : {'StringTypeValue1':123,'StringTypeValue2':'test'}
+    await deploySupport.makeFunction(path.join('examples', 'local'), {
+      serviceName: 'localdemo',
+      functionName: 'nodejs6',
+      description: 'Hello world with nodejs6!',
+      handler: 'index.handler',
+      initializer: null,
+      timeout: 3,
+      initializationTimeout: 3,
+      memorySize: 128,
+      runtime: 'nodejs6',
+      codeUri: path.join('examples', 'local', 'nodejs6'),
+      environmentVariables: {'StringTypeValue1': 123, 'StringTypeValue2': 'test'}
     });    
     
     assert.calledWith(
@@ -573,7 +573,7 @@ describe('make invocation role', () => {
 
     assert.calledWith(ram.makePolicy, 'FunCreateOSSPolicy-oss-service-name-oss-function-name',
       {
-        Statement:[{
+        Statement: [{
           'Action': [
             'fc:InvokeFunction'
           ],
@@ -613,7 +613,7 @@ describe('make invocation role', () => {
 
     assert.calledWith(ram.makePolicy, 'FunCreateCDNPolicy-cdn-service-name-cdn-function-name',
       {
-        Statement:[{
+        Statement: [{
           'Action': [
             'fc:InvokeFunction'
           ],

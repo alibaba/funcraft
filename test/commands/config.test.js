@@ -108,7 +108,7 @@ describe('config api_version', () => {
     mocki({});
     await config();
     const profContent = await readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
-    const profYml = yaml.safeLoad(profContent,{
+    const profYml = yaml.safeLoad(profContent, {
       schema: yaml.JSON_SCHEMA
     });
     expect(profYml.api_version).to.be('2016-08-15');
