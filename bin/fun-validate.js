@@ -6,7 +6,7 @@
 
 const program = require('commander');
 
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun validate')
@@ -22,7 +22,8 @@ if (program.args.length) {
 
 visitor.pageview('/fun/validate').send();
 
-require('../lib/commands/validate')(program.template)
+getVisitor().then(visitor => {
+  require('../lib/commands/validate')(program.template)
   .then(() => {
     visitor.event({
       ec: 'validate',
@@ -41,3 +42,4 @@ require('../lib/commands/validate')(program.template)
 
     require('../lib/exception-handler')(error);
   });
+});

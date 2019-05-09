@@ -5,7 +5,7 @@
 'use strict';
 
 const program = require('commander');
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun edge invoke')
@@ -50,10 +50,7 @@ if (program.debug) {
 if (program.debugPort) {
   const debugPort = parseInt(program.debugPort);
   if (Number.isNaN(debugPort)) {
-    console.error();
-    console.error("  error: not a number `%s'", program.debugPort);
-    console.error();
-    process.exit(-1);
+    throw new Error(`\n  error: not a number '${program.debugPort}'\n`);
   }
   program.debugPort = debugPort;
 }
@@ -61,34 +58,34 @@ if (program.debugPort) {
 // Check config values.
 if (program.config) {
   if (program.config !== 'vscode') {
-    console.error();
-    console.error("  error: invalid value `%s'", program.config);
-    console.error();
-    process.exit(-1);
+    throw new Error(`\n  error: invalid value '${program.config}'\n`);
   }
   program.outputDebuggerConfigs = true;
 }
 
 program.event = program.event || '-';
 
-visitor.pageview('/fun/edge/invoke').send();
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/edge/invoke').send();
 
-require('../lib/commands/edge/invoke')(program.args[0], program)
-  .then(() => {
-    visitor.event({
-      ec: 'edge',
-      ea: 'invoke',
-      el: 'success',
-      dp: '/fun/edge'
-    }).send();
-  })
-  .catch(error => {
-    visitor.event({
-      ec: 'edge',
-      ea: 'invoke',
-      el: 'error',
-      dp: '/fun/edge'
-    }).send();
+  require('../lib/commands/edge/invoke')(program.args[0], program)
+    .then(() => {
+      visitor.event({
+        ec: 'edge',
+        ea: 'invoke',
+        el: 'success',
+        dp: '/fun/edge'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'edge',
+        ea: 'invoke',
+        el: 'error',
+        dp: '/fun/edge'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });  
+});
 
-    require('../lib/exception-handler')(error);
-  });

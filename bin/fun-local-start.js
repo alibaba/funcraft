@@ -6,7 +6,7 @@
 
 const program = require('commander');
 
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun local start')
@@ -33,32 +33,35 @@ if (program.args.length) {
   program.help();
 }
 
-visitor.pageview('/fun/local/start').send();
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/local/start').send();
 
-require('../lib/commands/local/start')(program)
-  .then(() => {
-    visitor.event({
-      ec: 'local start',
-      ea: 'start',
-      el: 'success',
-      dp: '/fun/local/start'
-    }).send();
+  require('../lib/commands/local/start')(program)
+    .then(() => {
+      visitor.event({
+        ec: 'local start',
+        ea: 'start',
+        el: 'success',
+        dp: '/fun/local/start'
+      }).send();
+  
+      // fix windows not auto exit bug after docker.run
+      if (process.platform === 'win32') {
+        // fix windows not auto exit bug after docker operation
+        setTimeout(() => {
+          process.exit(0); // eslint-disable-line
+        }, 1000);
+      }
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'local start',
+        ea: 'start',
+        el: 'error',
+        dp: '/fun/local/start'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });
+});
 
-    // fix windows not auto exit bug after docker.run
-    if (process.platform === 'win32') {
-      // fix windows not auto exit bug after docker operation
-      setTimeout(() => {
-        process.exit(0);
-      }, 1000);
-    }
-  })
-  .catch(error => {
-    visitor.event({
-      ec: 'local start',
-      ea: 'start',
-      el: 'error',
-      dp: '/fun/local/start'
-    }).send();
-
-    require('../lib/exception-handler')(error);
-  });

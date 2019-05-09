@@ -5,7 +5,7 @@
 'use strict';
 
 const program = require('commander');
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun config')
@@ -18,9 +18,10 @@ if (program.args.length) {
   program.help();
 }
 
-visitor.pageview('/fun/config').send();
+getVisitor(true).then((visitor) => {
+  visitor.pageview('/fun/config').send();
 
-require('../lib/commands/config')()
+  require('../lib/commands/config')()
   .then(() => {
     visitor.event({
       ec: 'config',
@@ -39,3 +40,6 @@ require('../lib/commands/config')()
 
     require('../lib/exception-handler')(error);
   });
+});
+
+

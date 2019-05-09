@@ -5,7 +5,8 @@
 const _ = require('lodash');
 const Command = require('commander').Command;
 const program = new Command('fun install');
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
+const handler = require('../lib/exception-handler');
 const { install, installAll, init, env } = require('../lib/commands/install');
 
 const optDefaults = {
@@ -39,8 +40,8 @@ program
     opts.verbose = parseInt(process.env.FUN_VERBOSE) > 0;
 
     // [ 'A=B', 'B=C' ] => { A: 'B', B: 'C' }
-    opts.env = (options.env || []).map( e => _.split(e, '=', 2))
-      .filter( e => e.length === 2 )
+    opts.env = (options.env || []).map(e => _.split(e, '=', 2))
+      .filter(e => e.length === 2)
       .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
     install(packageNames, opts).catch(handler);
@@ -55,38 +56,40 @@ program
   .command('env')
   .description('print environment varables.')
   .action(env);
-  
+
 program.parse(process.argv);
 
 if (!program.args.length) {
-  visitor.pageview('/fun/installAll').send();
 
-  installAll(process.cwd(), {
-    recursive: program.recursive,
-    verbose: parseInt(process.env.FUN_VERBOSE) > 0
-  }).then(() => {
-    visitor.event({
-      ec: 'installAll',
-      ea: 'installAll',
-      el: 'success',
-      dp: '/fun/installAll'
-    }).send();
-    
-    if (process.platform === 'win32') {
-      // fix windows not auto exit bug after docker operation
-      setTimeout(() => {
-        // sleep in order visitor request is sent
-        process.exit(0);
-      }, 1000);
-    }
-  })
-    .catch(error => {
+  getVisitor().then(visitor => {
+    visitor.pageview('/fun/installAll').send();
+
+    installAll(process.cwd(), {
+      recursive: program.recursive,
+      verbose: parseInt(process.env.FUN_VERBOSE) > 0
+    }).then(() => {
       visitor.event({
         ec: 'installAll',
         ea: 'installAll',
-        el: 'error',
+        el: 'success',
         dp: '/fun/installAll'
       }).send();
-      require('../lib/exception-handler')(error);
-    });
+
+      if (process.platform === 'win32') {
+        // fix windows not auto exit bug after docker operation
+        setTimeout(() => {
+          // in order visitor request has been sent out
+          process.exit(0); // eslint-disable-line
+        }, 1000);
+      }
+    }).catch(error => {
+        visitor.event({
+          ec: 'installAll',
+          ea: 'installAll',
+          el: 'error',
+          dp: '/fun/installAll'
+        }).send();
+        handler(error);
+      });
+  });
 }

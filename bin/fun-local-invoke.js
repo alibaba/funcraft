@@ -5,6 +5,7 @@
 'use strict';
 
 const program = require('commander');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun local invoke')
@@ -40,32 +41,34 @@ if (!program.args.length > 1) {
 
 program.event = program.event || '-';
 
-visitor.pageview('/fun/local/invoke').send();
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/local/invoke').send();
 
-require('../lib/commands/local/invoke')(program.args[0], program)
-  .then(() => {
-    visitor.event({
-      ec: 'local invoke',
-      ea: 'invoke',
-      el: 'success',
-      dp: '/fun/local/invoke'
-    }).send();
-
-    // fix windows not auto exit bug after docker.run
-    if (process.platform === 'win32') {
-      // fix windows not auto exit bug after docker operation
-      setTimeout(() => {
-        process.exit(0);
-      }, 1000);
-    }
-  })
-  .catch(error => {
-    visitor.event({
-      ec: 'local invoke',
-      ea: 'invoke',
-      el: 'error',
-      dp: '/fun/local/invoke'
-    }).send();
-
-    require('../lib/exception-handler')(error);
-  });
+  require('../lib/commands/local/invoke')(program.args[0], program)
+    .then(() => {
+      visitor.event({
+        ec: 'local invoke',
+        ea: 'invoke',
+        el: 'success',
+        dp: '/fun/local/invoke'
+      }).send();
+  
+      // fix windows not auto exit bug after docker.run
+      if (process.platform === 'win32') {
+        // fix windows not auto exit bug after docker operation
+        setTimeout(() => {
+          process.exit(0); // eslint-disable-line
+        }, 1000);
+      }
+    })
+    .catch(error => {    
+      visitor.event({
+        ec: 'local invoke',
+        ea: 'invoke',
+        el: 'error',
+        dp: '/fun/local/invoke'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });  
+});

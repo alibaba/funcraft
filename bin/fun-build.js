@@ -5,7 +5,7 @@
 'use strict';
 
 const program = require('commander');
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun build')
@@ -18,24 +18,28 @@ if (program.args.length) {
   program.help();
 }
 
-visitor.pageview('/fun/build').send();
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/build').send();
 
-require('../lib/commands/build')()
-  .then(() => {
-    visitor.event({
-      ec: 'buld',
-      ea: 'build',
-      el: 'success',
-      dp: '/fun/build'
-    }).send();
-  })
-  .catch(error => {    
-    visitor.event({
-      ec: 'build',
-      ea: 'build',
-      el: 'error',
-      dp: '/fun/build'
-    }).send();
+  require('../lib/commands/build')()
+    .then(() => {
+      visitor.event({
+        ec: 'buld',
+        ea: 'build',
+        el: 'success',
+        dp: '/fun/build'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'build',
+        ea: 'build',
+        el: 'error',
+        dp: '/fun/build'
+      }).send();
 
-    require('../lib/exception-handler')(error);
-  });
+      require('../lib/exception-handler')(error);
+    });
+});
+
+

@@ -5,7 +5,7 @@
 'use strict';
 
 const program = require('commander');
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun deploy')
@@ -19,24 +19,27 @@ if (program.args.length) {
   program.help();
 }
 
-visitor.pageview('/fun/deploy').send();
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/deploy').send();
 
-require('../lib/commands/deploy')(null, program.template)
-  .then(() => {
-    visitor.event({
-      ec: 'deploy',
-      ea: 'deploy',
-      el: 'success',
-      dp: '/fun/deploy'
-    }).send();
-  })
-  .catch(error => {    
-    visitor.event({
-      ec: 'deploy',
-      ea: 'deploy',
-      el: 'error',
-      dp: '/fun/deploy'
-    }).send();
+  require('../lib/commands/deploy')(null, program.template)
+    .then(() => {
+      visitor.event({
+        ec: 'deploy',
+        ea: 'deploy',
+        el: 'success',
+        dp: '/fun/deploy'
+      }).send();
+    })
+    .catch(error => {    
+      visitor.event({
+        ec: 'deploy',
+        ea: 'deploy',
+        el: 'error',
+        dp: '/fun/deploy'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });
+});
 
-    require('../lib/exception-handler')(error);
-  });

@@ -6,7 +6,7 @@
 
 const program = require('commander');
 
-const visitor = require('../lib/visitor');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 const examples =
   `
@@ -69,24 +69,26 @@ if (program.args.length > 0) {
   context.location = program.args[0];
 }
 
-visitor.pageview('/fun/init').send();
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/init').send();
 
-require('../lib/commands/init')(context)
-  .then(() => {
-    visitor.event({
-      ec: 'init',
-      ea: `init ${context.location}`,
-      el: 'success',
-      dp: '/fun/init'
-    }).send();
-  })
-  .catch(error => {
-    visitor.event({
-      ec: 'init',
-      ea: `init ${context.location}`,
-      el: 'error',
-      dp: '/fun/init'
-    }).send();
-
-    require('../lib/exception-handler')(error);
-  });
+  require('../lib/commands/init')(context)
+    .then(() => {
+      visitor.event({
+        ec: 'init',
+        ea: `init ${context.location}`,
+        el: 'success',
+        dp: '/fun/init'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'init',
+        ea: `init ${context.location}`,
+        el: 'error',
+        dp: '/fun/init'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });
+});
