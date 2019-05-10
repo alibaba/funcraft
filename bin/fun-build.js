@@ -24,7 +24,7 @@ getVisitor().then(visitor => {
   require('../lib/commands/build')()
     .then(() => {
       visitor.event({
-        ec: 'buld',
+        ec: 'build',
         ea: 'build',
         el: 'success',
         dp: '/fun/build'
