@@ -83,13 +83,13 @@ if (!program.args.length) {
         }, 1000);
       }
     }).catch(error => {
-        visitor.event({
-          ec: 'installAll',
-          ea: 'installAll',
-          el: 'error',
-          dp: '/fun/installAll'
-        }).send();
-        handler(error);
-      });
+      visitor.event({
+        ec: 'installAll',
+        ea: 'installAll',
+        el: 'error',
+        dp: '/fun/installAll'
+      }).send();
+      handler(error);
+    });
   });
 }

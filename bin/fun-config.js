@@ -22,24 +22,24 @@ getVisitor(true).then((visitor) => {
   visitor.pageview('/fun/config').send();
 
   require('../lib/commands/config')()
-  .then(() => {
-    visitor.event({
-      ec: 'config',
-      ea: 'config',
-      el: 'success',
-      dp: '/fun/config'
-    }).send();
-  })
-  .catch(error => {
-    visitor.event({
-      ec: 'config',
-      ea: 'config',
-      el: 'error',
-      dp: '/fun/config'
-    }).send();
+    .then(() => {
+      visitor.event({
+        ec: 'config',
+        ea: 'config',
+        el: 'success',
+        dp: '/fun/config'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'config',
+        ea: 'config',
+        el: 'error',
+        dp: '/fun/config'
+      }).send();
 
-    require('../lib/exception-handler')(error);
-  });
+      require('../lib/exception-handler')(error);
+    });
 });
 
 

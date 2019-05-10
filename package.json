@@ -69,6 +69,7 @@
     "node-machine-id": "^1.1.10",
     "node-watch": "^0.6.0",
     "os-locale": "^2.1.0",
+    "os-name": "^3.1.0",
     "promise-retry": "^1.1.1",
     "raw-body": "^2.3.3",
     "require-from-string": "^2.0.2",

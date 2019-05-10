@@ -20,26 +20,26 @@ if (program.args.length) {
   program.help();
 }
 
-visitor.pageview('/fun/validate').send();
-
 getVisitor().then(visitor => {
-  require('../lib/commands/validate')(program.template)
-  .then(() => {
-    visitor.event({
-      ec: 'validate',
-      ea: 'validate',
-      el: 'success',
-      dp: '/fun/validate'
-    }).send();
-  })
-  .catch(error => {
-    visitor.event({
-      ec: 'validate',
-      ea: 'validate',
-      el: 'error',
-      dp: '/fun/validate'
-    }).send();
+  visitor.pageview('/fun/validate').send();
 
-    require('../lib/exception-handler')(error);
-  });
+  require('../lib/commands/validate')(program.template)
+    .then(() => {
+      visitor.event({
+        ec: 'validate',
+        ea: 'validate',
+        el: 'success',
+        dp: '/fun/validate'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'validate',
+        ea: 'validate',
+        el: 'error',
+        dp: '/fun/validate'
+      }).send();
+
+      require('../lib/exception-handler')(error);
+    });
 });
