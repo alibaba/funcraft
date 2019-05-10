@@ -8,6 +8,7 @@ const program = new Command('fun install');
 const getVisitor = require('../lib/visitor').getVisitor;
 const handler = require('../lib/exception-handler');
 const { install, installAll, init, env } = require('../lib/commands/install');
+const unrefTimeout = require('../lib/unref-timeout');
 
 const optDefaults = {
   packageType: 'module'
@@ -77,10 +78,10 @@ if (!program.args.length) {
 
       if (process.platform === 'win32') {
         // fix windows not auto exit bug after docker operation
-        setTimeout(() => {
+        unrefTimeout(() => {
           // in order visitor request has been sent out
           process.exit(0); // eslint-disable-line
-        }, 1000);
+        });
       }
     }).catch(error => {
       visitor.event({
@@ -89,6 +90,7 @@ if (!program.args.length) {
         el: 'error',
         dp: '/fun/installAll'
       }).send();
+      
       handler(error);
     });
   });

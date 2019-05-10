@@ -7,6 +7,7 @@
 const program = require('commander');
 
 const getVisitor = require('../lib/visitor').getVisitor;
+const unrefTimeout = require('../lib/unref-timeout');
 
 program
   .name('fun local start')
@@ -45,13 +46,10 @@ getVisitor().then(visitor => {
         dp: '/fun/local/start'
       }).send();
   
-      // fix windows not auto exit bug after docker.run
-      if (process.platform === 'win32') {
-        // fix windows not auto exit bug after docker operation
-        setTimeout(() => {
-          process.exit(0); // eslint-disable-line
-        }, 1000);
-      }
+      // fix windows not auto exit bug after docker operation
+      unrefTimeout(() => {
+        process.exit(0); // eslint-disable-line
+      }, 1000);
     })
     .catch(error => {
       visitor.event({

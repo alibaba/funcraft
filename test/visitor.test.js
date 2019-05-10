@@ -11,11 +11,9 @@ const util = require('util');
 const yaml = require('js-yaml');
 const proxyquire = require('proxyquire');
 const writeFile = util.promisify(fs.writeFile);
-var ua = require('universal-analytics');
 
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
-const assert = sinon.assert;
 
 describe('test getVisitor', () => {
   
@@ -67,12 +65,12 @@ describe('test getVisitor', () => {
     function uaMock() {
       return {
         pageview: () => {
-          return "real";
+          return 'real';
         },
         set: () => {
 
         }
-      }
+      };
     }
 
     getVisitor = proxyquire('../lib/visitor', {
