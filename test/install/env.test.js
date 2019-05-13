@@ -28,4 +28,12 @@ describe('install_env', ()=>{
 
     expect(envs).to.have.property('PATH', '/usr/bin:/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin');
   });
+
+  it('with_PYTHONUSERBASE', () => {
+    const envs = addEnv({
+      'PYTHONUSERBASE': '/mnt/nas/fun/python'
+    });
+
+    expect(envs).to.have.property('PYTHONUSERBASE', '/mnt/nas/fun/python');
+  });
 });
