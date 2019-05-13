@@ -6,6 +6,8 @@
 
 const program = require('commander');
 
+const getVisitor = require('../lib/visitor').getVisitor;
+
 const examples =
   `
   Examples:
@@ -67,4 +69,26 @@ if (program.args.length > 0) {
   context.location = program.args[0];
 }
 
-require('../lib/commands/init')(context).catch(require('../lib/exception-handler'));
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/init').send();
+
+  require('../lib/commands/init')(context)
+    .then(() => {
+      visitor.event({
+        ec: 'init',
+        ea: `init ${context.location}`,
+        el: 'success',
+        dp: '/fun/init'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'init',
+        ea: `init ${context.location}`,
+        el: 'error',
+        dp: '/fun/init'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });
+});

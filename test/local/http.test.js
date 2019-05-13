@@ -136,7 +136,7 @@ describe('test validateSignature', async () => {
     restoreProcess = setProcess({
       ACCOUNT_ID: accountId,
       ACCESS_KEY_ID: accessKeyId,
-      ACCESS_KEY_SECRET: accessKeySecret,
+      ACCESS_KEY_SECRET: accessKeySecret
     });
   });
 
@@ -199,8 +199,8 @@ describe('test normalizeMultiValues', async () => {
 
 describe('test normalizeRawHeaders', async () => {
   it('test normal', async () => {
-    const rawHeaders = ['A','A',
-      'B','B',
+    const rawHeaders = ['A', 'A',
+      'B', 'B',
       'A', 'C'];
     const headers = http.normalizeRawHeaders(rawHeaders);
     expect(headers).to.eql({

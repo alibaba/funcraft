@@ -11,14 +11,14 @@ describe('edge/Runner', function () {
       Handler: 'index.handler',
       Runtime: 'nodejs8',
       CodeUri: './',
-      Timeout: 60,
-    },
+      Timeout: 60
+    }
   };
   let findFunction;
   let LocalRunner;
   before(function () {
     findFunction = sinon.stub(definition, 'findFunctionInTpl').returns({
-      functionRes: template,
+      functionRes: template
     });
     LocalRunner = require('../../lib/edge/runner');
   });
@@ -34,16 +34,16 @@ describe('edge/Runner', function () {
       template,
       profile: {
         region: 'cn-hangzhou',
-        accountId: 'account_id',
+        accountId: 'account_id'
       },
       debugInfo: {
         debugPort: 5700,
-        outputDebuggerConfigs: true,
-      },
+        outputDebuggerConfigs: true
+      }
     };
     const identifier = {
       serviceName: 'service_name',
-      functionName: 'function_name',
+      functionName: 'function_name'
     };
     let runtimeInvoke;
     beforeEach(function () {

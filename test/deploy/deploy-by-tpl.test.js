@@ -10,7 +10,7 @@ const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
 const { red } = require('colors');
 
-describe('deploy service role ',() => {
+describe('deploy service role ', () => {
   let restoreProcess;
 
   beforeEach(() => {
@@ -65,20 +65,20 @@ describe('deploy service role ',() => {
   
   it('police and  vpc', async() =>{
     await deploy('nas');
-    assert.calledWith(ram.makeRole,'',true);
+    assert.calledWith(ram.makeRole, '', true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
   });
   it('only log', async() =>{
     await deploy('sls_trigger_demo');
-    assert.calledWith(ram.makeRole,'',true);
-    assert.calledWith(ram.attachPolicyToRole,'AliyunFCInvocationAccess','AliyunFcGeneratedApiGatewayRole');
+    assert.calledWith(ram.makeRole, '', true);
+    assert.calledWith(ram.attachPolicyToRole, 'AliyunFCInvocationAccess', 'AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
   });
 
   it('only role', async() =>{
     await deploy('service_role');
-    assert.calledWith(ram.makeRole,'aliyunfcgeneratedrole-fc',false);
+    assert.calledWith(ram.makeRole, 'aliyunfcgeneratedrole-fc', false);
     assert.notCalled(ram.makeAndAttachPolicy);
     assert.notCalled(ram.attachPolicyToRole);
     assert.notCalled(ram.makePolicy);
@@ -115,7 +115,7 @@ describe('deploy', () => {
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
       ACCESS_KEY_SECRET: 'testKeySecret',
-      DEFAULT_REGION: 'cn-shanghai',
+      DEFAULT_REGION: 'cn-shanghai'
     });
 
   });
@@ -238,7 +238,7 @@ describe('deploy', () => {
         MountPoints: [{
           MountDir: '/mnt/test',
           ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
-        }],
+        }]
       }
     });
 
@@ -283,7 +283,7 @@ describe('deploy', () => {
       role: '',
       serviceName: 'fc',
       vpcConfig: {},
-      nasConfig: {},
+      nasConfig: {}
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -369,7 +369,7 @@ describe('deploy', () => {
       triggerProperties: {
         InstanceName: 'fc-test-inst',
         TableName: 'fc_test_tbl'
-      },
+      }
     });
   });
 
@@ -409,7 +409,7 @@ describe('deploy', () => {
         JobConfig: { MaxRetryTime: 1, TriggerInterval: 30 },
         LogConfig: { Logstore: 'log-en-m', Project: 'log-com-m' },
         SourceConfig: { Logstore: 'log-com-m' }
-      },
+      }
     });
   });
 
@@ -450,7 +450,7 @@ describe('deploy', () => {
         Retry: 2,
         Concurrency: 1,
         EventFormat: 'json'
-      },
+      }
     });
   });
 
@@ -489,7 +489,7 @@ describe('deploy', () => {
         BucketName: 'coco-superme',
         Events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
         Filter: { Key: { Prefix: 'source/', Suffix: '.png' }}
-      },
+      }
     });
     assert.calledWith(deploySupport.getTriggerNameList, {
       serviceName: 'oss-test-service',
@@ -536,7 +536,7 @@ describe('deploy', () => {
           'Domain': [
             'cdn-trigger.sunfeiyu.top'
           ]
-        }},
+        }}
     });
     assert.calledWith(deploySupport.getTriggerNameList, {
       serviceName: 'cdn-test-service',
@@ -579,8 +579,8 @@ describe('deploy', () => {
         TopicName: 'test-topic',
         NotifyContentFormat: 'JSON',
         NotifyStrategy: 'EXPONENTIAL_DECAY_RETRY',
-        FilterTag : 'testTag'
-      },
+        FilterTag: 'testTag'
+      }
     });
   });
 
@@ -633,7 +633,7 @@ describe('deploy', () => {
       requestConfig: {},
       serviceParameters: undefined,
       serviceParametersMap: undefined,      
-      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined }
     });
   });
   it('deploy segment', async () => {
@@ -831,13 +831,13 @@ describe('deploy', () => {
         routes: [{
           path: '/a',
           ServiceName: 'serviceA',
-          FunctionName: 'functionA',
+          FunctionName: 'functionA'
         },
         {
           path: '/b',
           ServiceName: 'serviceB',
-          FunctionName: 'functionB',
-        },
+          FunctionName: 'functionB'
+        }
         ]
       }
     });
@@ -892,7 +892,7 @@ describe('deploy', () => {
       requestConfig: {},
       serviceParameters: undefined,
       serviceParametersMap: undefined,
-      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined }
     });
   });
 
@@ -926,7 +926,7 @@ describe('deploy', () => {
     // add test => no events on local but have onLine 
     assert.notCalled(deploySupport.makeTrigger);
     assert.calledOnce(console.warn);
-    assert.calledWith(console.warn,red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
+    assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
   });
 });
 

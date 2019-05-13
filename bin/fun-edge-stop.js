@@ -5,6 +5,7 @@
 'use strict';
 
 const program = require('commander');
+const getVisitor = require('../lib/visitor').getVisitor;
 
 program
   .name('fun edge stop')
@@ -17,5 +18,26 @@ if (program.args.length) {
   program.help();
 }
 
-require('../lib/commands/edge/stop')()
-  .catch(require('../lib/exception-handler'));
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/edge/stop').send();
+
+  require('../lib/commands/edge/stop')()
+    .then(() => {
+      visitor.event({
+        ec: 'edge',
+        ea: 'stop',
+        el: 'success',
+        dp: '/fun/edge'
+      }).send();
+    })
+    .catch(error => {
+      visitor.event({
+        ec: 'edge',
+        ea: 'stop',
+        el: 'error',
+        dp: '/fun/edge'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });  
+});

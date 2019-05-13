@@ -57,7 +57,7 @@ describe('with local ~/.fcli/config.yaml', () => {
   beforeEach(async () => {
 
     restoreProcess = setProcess({
-      HOME: os.tmpdir(),
+      HOME: os.tmpdir()
     });
 
     await mkdirp(`${os.homedir}/.fcli/`);
@@ -108,7 +108,7 @@ describe('with local ~/.fcli/config.yaml', () => {
     expect(profile.retries).to.be(10);
   });
 
-  it('pattern',()=>{
+  it('pattern', ()=>{
     const correctValue = isShortDateStr('2017-09-09');
     const notCorrectValue = isShortDateStr('2017/09/09');
     expect(correctValue).to.be(true);

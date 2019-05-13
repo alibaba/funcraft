@@ -2,11 +2,13 @@
 
 'use strict';
 
-const handler = require('../lib/exception-handler');
 const _ = require('lodash');
 const Command = require('commander').Command;
 const program = new Command('fun install');
+const getVisitor = require('../lib/visitor').getVisitor;
+const handler = require('../lib/exception-handler');
 const { install, installAll, init, env } = require('../lib/commands/install');
+const unrefTimeout = require('../lib/unref-timeout');
 
 const optDefaults = {
   packageType: 'module'
@@ -39,8 +41,8 @@ program
     opts.verbose = parseInt(process.env.FUN_VERBOSE) > 0;
 
     // [ 'A=B', 'B=C' ] => { A: 'B', B: 'C' }
-    opts.env = (options.env || []).map( e => _.split(e, '=', 2))
-      .filter( e => e.length === 2 )
+    opts.env = (options.env || []).map(e => _.split(e, '=', 2))
+      .filter(e => e.length === 2)
       .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
     install(packageNames, opts).catch(handler);
@@ -55,16 +57,41 @@ program
   .command('env')
   .description('print environment varables.')
   .action(env);
-  
+
 program.parse(process.argv);
-  
+
 if (!program.args.length) {
-  installAll(process.cwd(), {
-    recursive: program.recursive,
-    verbose: parseInt(process.env.FUN_VERBOSE) > 0
-  }).then(() => {
-    // fix windows not auto exit bug after docker operation
-    process.exit(0);
-  })
-    .catch(handler);
+
+  getVisitor().then(visitor => {
+    visitor.pageview('/fun/installAll').send();
+
+    installAll(process.cwd(), {
+      recursive: program.recursive,
+      verbose: parseInt(process.env.FUN_VERBOSE) > 0
+    }).then(() => {
+      visitor.event({
+        ec: 'installAll',
+        ea: 'installAll',
+        el: 'success',
+        dp: '/fun/installAll'
+      }).send();
+
+      if (process.platform === 'win32') {
+        // fix windows not auto exit bug after docker operation
+        unrefTimeout(() => {
+          // in order visitor request has been sent out
+          process.exit(0); // eslint-disable-line
+        });
+      }
+    }).catch(error => {
+      visitor.event({
+        ec: 'installAll',
+        ea: 'installAll',
+        el: 'error',
+        dp: '/fun/installAll'
+      }).send();
+      
+      handler(error);
+    });
+  });
 }

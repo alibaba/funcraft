@@ -14,7 +14,7 @@ const fs = {
 const rimraf = { sync: sandbox.stub() };
 
 const inquirer = {
-  prompt: sandbox.stub(),
+  prompt: sandbox.stub()
 };
 
 const promptStub = proxyquire('../../lib/init/prompt', {

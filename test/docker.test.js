@@ -324,7 +324,7 @@ describe('test docker run', async () => {
       HOME: os.tmpdir(),
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
-      ACCESS_KEY_SECRET: 'testKeySecret',
+      ACCESS_KEY_SECRET: 'testKeySecret'
     });
   });
 

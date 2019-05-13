@@ -5,6 +5,8 @@
 'use strict';
 
 const program = require('commander');
+const getVisitor = require('../lib/visitor').getVisitor;
+const unrefTimeout = require('../lib/unref-timeout');
 
 program
   .name('fun local invoke')
@@ -40,10 +42,31 @@ if (!program.args.length > 1) {
 
 program.event = program.event || '-';
 
-require('../lib/commands/local/invoke')(program.args[0], program)
-  .then(() => {
-    // fix windows not auto exit bug after docker.run
-    process.exit(0);
-  })
-  .catch(require('../lib/exception-handler'));
+getVisitor().then(visitor => {
+  visitor.pageview('/fun/local/invoke').send();
 
+  require('../lib/commands/local/invoke')(program.args[0], program)
+    .then(() => {
+      visitor.event({
+        ec: 'local invoke',
+        ea: 'invoke',
+        el: 'success',
+        dp: '/fun/local/invoke'
+      }).send();
+  
+      // fix windows not auto exit bug after docker operation
+      unrefTimeout(() => {
+        process.exit(0); // eslint-disable-line
+      });
+    })
+    .catch(error => {    
+      visitor.event({
+        ec: 'local invoke',
+        ea: 'invoke',
+        el: 'error',
+        dp: '/fun/local/invoke'
+      }).send();
+  
+      require('../lib/exception-handler')(error);
+    });  
+});

@@ -21,7 +21,7 @@ const tpl = {
           'Description': 'Hello world with python3!',
           'Runtime': 'python3'
         }
-      },
+      }
     }
   }
 };
@@ -43,7 +43,7 @@ const tplWithDuplicatedFunction = {
           'Description': 'Hello world with python3!',
           'Runtime': 'python3'
         }
-      },
+      }
     },
     'localdemo2': {
       'Type': 'Aliyun::Serverless::Service',
@@ -58,7 +58,7 @@ const tplWithDuplicatedFunction = {
           'Description': 'Hello world with python3 2!',
           'Runtime': 'python3'
         }
-      },
+      }
     }
   }
 };

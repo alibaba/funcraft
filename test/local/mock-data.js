@@ -42,7 +42,7 @@ const serviceRes = {
   'Properties': {
     'Description': 'python local invoke demo'
   },
-  functionName: functionRes,
+  functionName: functionRes
 };
 
 const httpTriggerServiceRes = {
@@ -50,7 +50,7 @@ const httpTriggerServiceRes = {
   'Properties': {
     'Description': 'python local invoke demo'
   },
-  functionName: httpTriggerFunctionRes,
+  functionName: httpTriggerFunctionRes
 };
 
 const tpl = {
@@ -74,7 +74,7 @@ const serviceResWithNasConfig = {
       ]
     }
   },
-  functionName: functionRes,
+  functionName: functionRes
 };
 
 const debugPort = 8080;
