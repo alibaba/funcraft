@@ -31,7 +31,7 @@ describe('edge/Container', function () {
     });
     it('should return true since find a existing container', async function () {
       listContainers.resolves([{
-        Id: TEST_CONTAINER_ID,
+        Id: TEST_CONTAINER_ID
       }]);
       const container = Container.edge(docker);
       await container.bind();
@@ -52,7 +52,7 @@ describe('edge/Container', function () {
     it('should return false since the container is not running', async function () {
       listContainers.resolves([{
         Id: TEST_CONTAINER_ID,
-        State: 'exited',
+        State: 'exited'
       }]);
       const container = Container.edge(docker);
       await container.bind();
@@ -61,7 +61,7 @@ describe('edge/Container', function () {
     it('should return true since the container is running', async function () {
       listContainers.resolves([{
         Id: TEST_CONTAINER_ID,
-        State: 'running',
+        State: 'running'
       }]);
       const container = Container.edge(docker);
       await container.bind();
@@ -87,7 +87,7 @@ describe('edge/Container', function () {
     it('should return true since find a image locally', async function () {
       listImages.resolves([{
         Id: '4f0cf2cf1be12',
-        ParentId: '',
+        ParentId: ''
       }]);
       const container = Container.edge(docker);
       expect(await container.hasImage()).to.be.ok();
@@ -159,7 +159,7 @@ describe('edge/Container', function () {
     it('should fail since the container already exists', async function () {
       const listContainers = sinon.stub(docker, 'listContainers');
       listContainers.resolves([{
-        Id: TEST_CONTAINER_ID,
+        Id: TEST_CONTAINER_ID
       }]);
       let error;
       try {
@@ -249,7 +249,7 @@ describe('edge/Container', function () {
     it('should skip creating a container since a local one was created', async function () {
       const listContainers = sinon.stub(docker, 'listContainers').resolves([{
         Id: TEST_CONTAINER_ID,
-        State: 'running',
+        State: 'running'
       }]);
       const create = sinon.stub(container, 'create').callsFake(function () {
         return Promise.resolve(TEST_CONTAINER_ID);
@@ -265,7 +265,7 @@ describe('edge/Container', function () {
         return Promise.resolve(TEST_CONTAINER_ID);
       });
       const getContainer = sinon.stub(docker, 'getContainer').returns({
-        start: async function () {},
+        start: async function () {}
       });
       await container.start();
       expect(create.calledOnce).to.be.ok;
@@ -276,13 +276,13 @@ describe('edge/Container', function () {
     it('should skip starting the container since it is running', async function () {
       const listContainers = sinon.stub(docker, 'listContainers').resolves([{
         Id: TEST_CONTAINER_ID,
-        State: 'running',
+        State: 'running'
       }]);
       const spy = sinon.spy();
       const getContainer = sinon.stub(docker, 'getContainer').returns({
         start: async function () {
           spy();
-        },
+        }
       });
       await container.start();
       expect(spy.calledOnce).to.not.be.ok;
@@ -291,13 +291,13 @@ describe('edge/Container', function () {
     });
     it('should start the container since it is not running', async function () {
       const listContainers = sinon.stub(docker, 'listContainers').resolves([{
-        Id: TEST_CONTAINER_ID,
+        Id: TEST_CONTAINER_ID
       }]);
       const spy = sinon.spy();
       const getContainer = sinon.stub(docker, 'getContainer').returns({
         start: async function () {
           spy();
-        },
+        }
       });
       await container.start();
       expect(spy.calledOnce).to.be.ok;
@@ -375,7 +375,7 @@ describe('edge/Container', function () {
     it('should throw since the local container is not running', async function () {
       const listContainers = sinon.stub(docker, 'listContainers').resolves([{
         Id: TEST_CONTAINER_ID,
-        State: 'exited',
+        State: 'exited'
       }]);
       const container = Container.edge(docker);
       let error;
@@ -390,7 +390,7 @@ describe('edge/Container', function () {
     it('should pass since all requirements meet', async function () {
       const listContainers = sinon.stub(docker, 'listContainers').resolves([{
         Id: TEST_CONTAINER_ID,
-        State: 'running',
+        State: 'running'
       }]);
       const getContainer = sinon.stub(docker, 'getContainer').returns({
         exec: async function () {

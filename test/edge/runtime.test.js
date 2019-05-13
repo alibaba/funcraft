@@ -16,12 +16,12 @@ describe('edge/LocalRuntime', function () {
           region: 'ch-hangzhou',
           accountId: 'account_id',
           serviceName: 'service_name',
-          functionName: 'function_name',
+          functionName: 'function_name'
         },
         handler: 'index.handler',
         timeout: 3,
         memory: 128,
-        codeAbsPath: path.resolve(__dirname, '../../examples/helloworld/helloworld.js'),
+        codeAbsPath: path.resolve(__dirname, '../../examples/helloworld/helloworld.js')
       };
     });
 
@@ -105,7 +105,7 @@ describe('edge/LocalRuntime', function () {
       const spy = sinon.spy(console, 'log');
       await runtime.invoke(config, {}, {
         debugPort: 5700,
-        outputDebuggerConfigs: true,
+        outputDebuggerConfigs: true
       });
       expect(spy.calledWith(sinon.match('Attach to Fun (Node.js 8)')));
       spy.restore();
@@ -122,7 +122,7 @@ describe('edge/LocalRuntime', function () {
       const spy = sinon.spy(console, 'log');
       await runtime.invoke(config, {}, {
         debugPort: 5700,
-        outputDebuggerConfigs: true,
+        outputDebuggerConfigs: true
       });
       expect(spy.calledWith(sinon.match('Attach to Fun (Python 3)')));
       spy.restore();

@@ -24,7 +24,7 @@ describe('config prompt', () => {
   before(async () => {
 
     restoreProcess = setProcess({
-      HOME: os.tmpdir(),
+      HOME: os.tmpdir()
     });
 
     await mkdirp(`${os.homedir()}/.fcli/`);
@@ -82,7 +82,7 @@ describe('config api_version', () => {
   before(async () => {
 
     restoreProcess = setProcess({
-      HOME: os.tmpdir(),
+      HOME: os.tmpdir()
     });
 
     await mkdirp(`${os.homedir()}/.fcli/`);

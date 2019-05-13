@@ -136,7 +136,7 @@ describe('test validateSignature', async () => {
     restoreProcess = setProcess({
       ACCOUNT_ID: accountId,
       ACCESS_KEY_ID: accessKeyId,
-      ACCESS_KEY_SECRET: accessKeySecret,
+      ACCESS_KEY_SECRET: accessKeySecret
     });
   });
 

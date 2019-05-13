@@ -22,9 +22,9 @@ const TEST_DEPLOY_FUNCTION = {
   region: 'cn-hangzhou',
   pinned: true,
   envVars: {
-    TEST_ENVIRONMENT: 'test_environment',
+    TEST_ENVIRONMENT: 'test_environment'
   },
-  debugPort: 5700,
+  debugPort: 5700
 };
 
 const TEST_INVOKE_FUNCTION = {
@@ -33,7 +33,7 @@ const TEST_INVOKE_FUNCTION = {
   functionName: 'function_name',
   accountId: 'account_id',
   region: 'cn-hangzhou',
-  event: '{}',
+  event: '{}'
 };
 
 class ClientRequest extends EventEmitter {
@@ -46,7 +46,7 @@ class ServerResponse extends EventEmitter {
   constructor() {
     super();
     this.headers = {
-      'set-cookie': cookie,
+      'set-cookie': cookie
     };
   }
 }
@@ -135,7 +135,7 @@ describe('edge/FunctionComputeClient', function () {
       const end = sinon.stub(clientRequest, 'end').callsFake(function () {
         cb(serverResponse);
         serverResponse.emit('data', JSON.stringify({
-          code: 200,
+          code: 200
         }));
         serverResponse.emit('end');
       });
@@ -160,7 +160,7 @@ describe('edge/FunctionComputeClient', function () {
       const info = Object({}, TEST_DEPLOY_FUNCTION, {
         functionId: undefined,
         serviceName: undefined,
-        functionName: undefined,
+        functionName: undefined
       });
       const client = new agent.FunctionComputeClient();
       let error;
@@ -247,7 +247,7 @@ describe('edge/FunctionComputeClient', function () {
       const client = new agent.FunctionComputeClient();
       const login = sinon.stub(client, 'login').resolves(cookie);
       const info = Object.assign({}, TEST_DEPLOY_FUNCTION, {
-        memory: '128',
+        memory: '128'
       });
       let error;
       try {
@@ -266,7 +266,7 @@ describe('edge/FunctionComputeClient', function () {
       const end = sinon.stub(clientRequest, 'end').callsFake(function () {
         cb(serverResponse);
         serverResponse.emit('data', JSON.stringify({
-          code: 200,
+          code: 200
         }));
         serverResponse.emit('end');
       });
@@ -291,7 +291,7 @@ describe('edge/FunctionComputeClient', function () {
     it('should throw since neither Function id nor serviceName/functionName is provided', async function () {
       const info = {
         accountId: TEST_DEPLOY_FUNCTION.accountId,
-        region: TEST_DEPLOY_FUNCTION.region,
+        region: TEST_DEPLOY_FUNCTION.region
       };
       const client = new agent.FunctionComputeClient();
       let error;
@@ -408,7 +408,7 @@ describe('edge/FunctionComputeClient', function () {
         cb(serverResponse);
         serverResponse.emit('data', JSON.stringify({
           code: 200,
-          data: Buffer.from('result').toString('base64'),
+          data: Buffer.from('result').toString('base64')
         }));
         serverResponse.emit('end');
       });

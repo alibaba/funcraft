@@ -17,7 +17,7 @@ describe.skip('deploy template', () => {
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
-      ACCESS_KEY_SECRET: 'testKeySecret',
+      ACCESS_KEY_SECRET: 'testKeySecret'
     });
    
   });

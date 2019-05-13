@@ -51,7 +51,7 @@ async function promptHandler(prompt, answers, input) {
       answer = {
         key: 'h',
         name: 'Help, list all options',
-        value: 'help',
+        value: 'help'
       };
       break;
     case 'checkbox':

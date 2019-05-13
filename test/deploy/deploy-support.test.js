@@ -24,7 +24,7 @@ describe('make', () => {
       ACCOUNT_ID: 'ACCOUNT_ID',
       DEFAULT_REGION: 'cn-shanghai',
       ACCESS_KEY_ID: 'ACCESS_KEY_ID',
-      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
     });
 
     if (!nock.isActive()) {
@@ -644,7 +644,7 @@ describe('test getFunCodeAsBase64', () => {
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
-      ACCESS_KEY_SECRET: 'testKeySecret',
+      ACCESS_KEY_SECRET: 'testKeySecret'
     });
   });
 

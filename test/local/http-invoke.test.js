@@ -112,7 +112,7 @@ describe('test http response', async () => {
     restoreProcess = setProcess({
       ACCOUNT_ID: accountId,
       ACCESS_KEY_ID: accessKeyId,
-      ACCESS_KEY_SECRET: accessKeySecret,
+      ACCESS_KEY_SECRET: accessKeySecret
     }, projectDir);
 
     console.log('tempDir: %s', projectDir);

@@ -57,7 +57,7 @@ describe('with local ~/.fcli/config.yaml', () => {
   beforeEach(async () => {
 
     restoreProcess = setProcess({
-      HOME: os.tmpdir(),
+      HOME: os.tmpdir()
     });
 
     await mkdirp(`${os.homedir}/.fcli/`);

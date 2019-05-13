@@ -115,7 +115,7 @@ describe('deploy', () => {
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
       ACCESS_KEY_SECRET: 'testKeySecret',
-      DEFAULT_REGION: 'cn-shanghai',
+      DEFAULT_REGION: 'cn-shanghai'
     });
 
   });
@@ -238,7 +238,7 @@ describe('deploy', () => {
         MountPoints: [{
           MountDir: '/mnt/test',
           ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
-        }],
+        }]
       }
     });
 
@@ -283,7 +283,7 @@ describe('deploy', () => {
       role: '',
       serviceName: 'fc',
       vpcConfig: {},
-      nasConfig: {},
+      nasConfig: {}
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -369,7 +369,7 @@ describe('deploy', () => {
       triggerProperties: {
         InstanceName: 'fc-test-inst',
         TableName: 'fc_test_tbl'
-      },
+      }
     });
   });
 
@@ -409,7 +409,7 @@ describe('deploy', () => {
         JobConfig: { MaxRetryTime: 1, TriggerInterval: 30 },
         LogConfig: { Logstore: 'log-en-m', Project: 'log-com-m' },
         SourceConfig: { Logstore: 'log-com-m' }
-      },
+      }
     });
   });
 
@@ -450,7 +450,7 @@ describe('deploy', () => {
         Retry: 2,
         Concurrency: 1,
         EventFormat: 'json'
-      },
+      }
     });
   });
 
@@ -489,7 +489,7 @@ describe('deploy', () => {
         BucketName: 'coco-superme',
         Events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
         Filter: { Key: { Prefix: 'source/', Suffix: '.png' }}
-      },
+      }
     });
     assert.calledWith(deploySupport.getTriggerNameList, {
       serviceName: 'oss-test-service',
@@ -536,7 +536,7 @@ describe('deploy', () => {
           'Domain': [
             'cdn-trigger.sunfeiyu.top'
           ]
-        }},
+        }}
     });
     assert.calledWith(deploySupport.getTriggerNameList, {
       serviceName: 'cdn-test-service',
@@ -580,7 +580,7 @@ describe('deploy', () => {
         NotifyContentFormat: 'JSON',
         NotifyStrategy: 'EXPONENTIAL_DECAY_RETRY',
         FilterTag: 'testTag'
-      },
+      }
     });
   });
 
@@ -633,7 +633,7 @@ describe('deploy', () => {
       requestConfig: {},
       serviceParameters: undefined,
       serviceParametersMap: undefined,      
-      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined }
     });
   });
   it('deploy segment', async () => {
@@ -831,13 +831,13 @@ describe('deploy', () => {
         routes: [{
           path: '/a',
           ServiceName: 'serviceA',
-          FunctionName: 'functionA',
+          FunctionName: 'functionA'
         },
         {
           path: '/b',
           ServiceName: 'serviceB',
-          FunctionName: 'functionB',
-        },
+          FunctionName: 'functionB'
+        }
         ]
       }
     });
@@ -892,7 +892,7 @@ describe('deploy', () => {
       requestConfig: {},
       serviceParameters: undefined,
       serviceParametersMap: undefined,
-      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined },
+      resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined }
     });
   });
 
