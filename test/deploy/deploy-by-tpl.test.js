@@ -949,7 +949,7 @@ describe('deploy', () => {
         }
       }
     });
-    assert.calledWith(deploySupport.makeCustomDomain, 'domainName','HTTP',{
+    assert.calledWith(deploySupport.makeCustomDomain, 'domainName', 'HTTP', {
       'routes': [
         {
           'serviceName': 'serviceA',
