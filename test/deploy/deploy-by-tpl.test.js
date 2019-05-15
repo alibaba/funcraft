@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
+const deployByTpl = require('../../lib/deploy/deploy-by-tpl');
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
@@ -52,7 +53,7 @@ describe('deploy service role ', () => {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
       '../ram': ram
-    })(path.join('./examples', example, 'template.yml'));
+    }).deploy(path.join('./examples', example, 'template.yml'));
   }
 
   it('all none', async ()=>{
@@ -129,7 +130,7 @@ describe('deploy', () => {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
       '../ram': ram
-    })(path.join('./examples', example, 'template.yml'));
+    }).deploy(path.join('./examples', example, 'template.yml'));
   }
 
   it('deploy datahub', async () => {
@@ -927,6 +928,41 @@ describe('deploy', () => {
     assert.notCalled(deploySupport.makeTrigger);
     assert.calledOnce(console.warn);
     assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
+  });
+
+  it.only('lowercase custom domain', async () => {
+    await deployByTpl.deployCustomDomain('domainName', {
+      'Type': 'Aliyun::Serverless::CustomDomain',
+      'Properties': {
+        'Protocol': 'HTTP',
+        'RouteConfig': {
+          'Routes': {
+            '/a': {
+                'serviceName': 'serviceA',
+                'functionName': 'functionA'
+            },
+            '/b': {
+                'serviceName': 'serviceB',
+                'functionName': 'functionB'
+            }
+          }
+        }
+      }
+    });
+    assert.calledWith(deploySupport.makeCustomDomain,'domainName','HTTP',{
+      'routes': [
+        {
+            'serviceName': 'serviceA',
+            'functionName': 'functionA',
+            'path': '/a'
+        },
+        {
+            'serviceName': 'serviceB',
+            'functionName': 'functionB',
+            'path': '/b'
+        }
+      ]
+    });
   });
 });
 
