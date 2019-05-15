@@ -951,7 +951,7 @@ describe('custom domain', () => {
 
   async function customDomain(domainName, domainDefinition) {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
-      './deploy-support': deploySupport,
+      './deploy-support': deploySupport
     }).deployCustomDomain(domainName, domainDefinition);
   }
 
