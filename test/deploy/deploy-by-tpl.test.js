@@ -930,7 +930,7 @@ describe('deploy', () => {
   });
 });
 
-describe.only('custom domain', () => {
+describe('custom domain', () => {
   let restoreProcess;
 
   beforeEach(() => {
