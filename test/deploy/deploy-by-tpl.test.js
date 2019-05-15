@@ -830,13 +830,13 @@ describe('deploy', () => {
       routeConfig: {
         routes: [{
           path: '/a',
-          ServiceName: 'serviceA',
-          FunctionName: 'functionA'
+          serviceName: 'serviceA',
+          functionName: 'functionA'
         },
         {
           path: '/b',
-          ServiceName: 'serviceB',
-          FunctionName: 'functionB'
+          serviceName: 'serviceB',
+          functionName: 'functionB'
         }
         ]
       }
