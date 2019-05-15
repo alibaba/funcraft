@@ -930,7 +930,7 @@ describe('deploy', () => {
   });
 });
 
-describe('deploy service role ', () => {
+describe('custom domain', () => {
   let restoreProcess;
 
   beforeEach(() => {
