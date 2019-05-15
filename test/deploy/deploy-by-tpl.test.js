@@ -930,7 +930,7 @@ describe('deploy', () => {
   });
 });
 
-describe('custom domain', () => {
+describe.only('custom domain', () => {
   let restoreProcess;
 
   beforeEach(() => {
@@ -969,6 +969,42 @@ describe('custom domain', () => {
             '/b': {
               'serviceName': 'serviceB',
               'functionName': 'functionB'
+            }
+          }
+        }
+      }
+    });
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'domainName',
+      protocol: 'HTTP',
+      routeConfig: {
+        routes: [{
+          path: '/a',
+          serviceName: 'serviceA',
+          functionName: 'functionA'
+        },
+        {
+          path: '/b',
+          serviceName: 'serviceB',
+          functionName: 'functionB'
+        }]
+      }
+    });
+  });
+  it('capital custom domain', async () =>{
+    await customDomain('domainName', {
+      'Type': 'Aliyun::Serverless::CustomDomain',
+      'Properties': {
+        'Protocol': 'HTTP',
+        'RouteConfig': {
+          'Routes': {
+            '/a': {
+              'ServiceName': 'serviceA',
+              'FunctionName': 'functionA'
+            },
+            '/b': {
+              'ServiceName': 'serviceB',
+              'FunctionName': 'functionB'
             }
           }
         }
