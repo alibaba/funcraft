@@ -13,11 +13,7 @@ const { setProcess } = require('../test-utils');
 const httpOutputStream = `"FC Invoke Start RequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8
 load code for handler:read.handler
 --------------------response begin-----------------
-SFRUUC8xLjEgMjAwIE9LCngtZmMtaHR0cC1wYXJhbXM6IGV5Snp
-kR0YwZFhNaU9qSXdNQ3dpYUdWaFpHVnljeUk2ZXlKamIyNTBaVz
-UwTFhSNWNHVWlPaUpoY0hCc2FXTmhkR2x2Ymk5cWMyOXVJbjBzS
-W1obFlXUmxjbk5OWVhBaU9uc2lZMjl1ZEdWdWRDMTBlWEJsSWpw
-YkltRndjR3hwWTJGMGFXOXVMMnB6YjI0aVhYMTkKCnRlc3RCb2R5
+SFRUUC8xLjEgMjAwIE9LDQp4LWZjLWh0dHAtcGFyYW1zOiBleUp6ZEdGMGRYTWlPakl3TUN3aWFHVmhaR1Z5Y3lJNmV5SmpiMjUwWlc1MExYUjVjR1VpT2lKaGNIQnNhV05oZEdsdmJpOXFjMjl1SW4wc0ltaGxZV1JsY25OTllYQWlPbnNpWTI5dWRHVnVkQzEwZVhCbElqcGJJbUZ3Y0d4cFkyRjBhVzl1TDJwemIyNGlYWDE5DQoNCnRlc3RCb2R5
 --------------------response end-----------------
 --------------------execution info begin-----------------
 OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
@@ -105,6 +101,29 @@ describe('test parseOutputStream', async () => {
     expect(requestId).to.eql('9c81b53e-ed17-4327-ac77-28dac374e055');
     expect(billedTime).to.eql('182');
     expect(memoryUsage).to.eql('20');
+  });
+});
+
+// response 所包含的 body，是一张简单的图片，原有的 http-string-parser 在 split 时使用 \r?\n 的方式 split 会导致有问题
+describe('test image response', async () => {
+  const responseString = `SFRUUC8xLjEgMjAwIE9LDQpYLVBvd2VyZWQtQnk6IEV4cHJlc3MNCngtZmMtaHR0cC1wYXJhbXM6
+IGV5SnpkR0YwZFhNaU9qSXdNQ3dpYUdWaFpHVnljeUk2ZXlKamIyNTBaVzUwTFhSNWNHVWlPaUpw
+YldGblpTOXdibWNpZlN3aWFHVmhaR1Z5YzAxaGNDSTZleUpqYjI1MFpXNTBMWFI1Y0dVaU9sc2lh
+VzFoWjJVdmNHNW5JbDE5ZlE9PQ0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9vY3RldC1zdHJl
+YW0NCkNvbnRlbnQtTGVuZ3RoOiA5Nw0KRVRhZzogVy8iNjEtTGJKdGZrck01a0NoRnV4cnh4WVNM
+bmZQRHVZIg0KRGF0ZTogV2VkLCAxNSBNYXkgMjAxOSAwNjo0MDo1MiBHTVQNCkNvbm5lY3Rpb246
+IGtlZXAtYWxpdmUNCg0KiVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4
+jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==`;
+
+  it('test parse response', async () => {
+    const rawResponse = Buffer.from(responseString, 'base64').toString('binary');
+
+    const parsedResponse = http.parseResponse(rawResponse);
+
+    console.log('response is ' + parsedResponse.body);
+
+    const base64Body = Buffer.from(parsedResponse.body, 'binary').toString('base64');
+    expect(base64Body).to.eql('iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==');
   });
 });
 
