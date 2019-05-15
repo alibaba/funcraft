@@ -26,11 +26,9 @@ const { setProcess } = require('../test-utils');
 const httpOutputStream = `"FC Invoke Start RequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8
 load code for handler:read.handler
 --------------------response begin-----------------
-SFRUUC8xLjEgMjAwIE9LCngtZmMtaHR0cC1wYXJhbXM6IGV5Snp
-kR0YwZFhNaU9qSXdNQ3dpYUdWaFpHVnljeUk2ZXlKamIyNTBaVz
-UwTFhSNWNHVWlPaUpoY0hCc2FXTmhkR2x2Ymk5cWMyOXVJbjBzS
-W1obFlXUmxjbk5OWVhBaU9uc2lZMjl1ZEdWdWRDMTBlWEJsSWpw
-YkltRndjR3hwWTJGMGFXOXVMMnB6YjI0aVhYMTkKCnRlc3RCb2R5
+${Buffer.from('HTTP/1.1 200 OK\r\n'
+  + 'x-fc-http-params: eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19'
+  + '\r\n\r\ntestBody').toString('base64')}
 --------------------response end-----------------
 --------------------execution info begin-----------------
 OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
@@ -41,7 +39,7 @@ OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
 `;
 
 const httpErrorOutputStream = `--------------------response begin-----------------
-SFRUUC8xLjEgNDAwIE9LCgp0ZXN0Qm9keQ==
+SFRUUC8xLjEgNDAwIE9LDQoNCnRlc3RCb2R5
 --------------------response end-----------------`;
 
 describe('test http response', async () => {
@@ -56,6 +54,8 @@ describe('test http response', async () => {
     };
 
     httpInvoke.response(httpOutputStream, '', resp);
+    console.log(Buffer.from('HTTP/1.1 400 OK\r\n\r\ntestBody').toString('base64'));
+
   
     assert.calledWith(resp.status, 200);
     assert.calledWith(resp.setHeader, 'content-type', ['application/json']);
