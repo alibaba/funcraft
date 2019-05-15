@@ -52,7 +52,7 @@ describe('deploy service role ', () => {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
       '../ram': ram
-    })(path.join('./examples', example, 'template.yml'));
+    }).deploy(path.join('./examples', example, 'template.yml'));
   }
 
   it('all none', async ()=>{
@@ -129,7 +129,7 @@ describe('deploy', () => {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
       '../ram': ram
-    })(path.join('./examples', example, 'template.yml'));
+    }).deploy(path.join('./examples', example, 'template.yml'));
   }
 
   it('deploy datahub', async () => {
@@ -830,13 +830,13 @@ describe('deploy', () => {
       routeConfig: {
         routes: [{
           path: '/a',
-          ServiceName: 'serviceA',
-          FunctionName: 'functionA'
+          serviceName: 'serviceA',
+          functionName: 'functionA'
         },
         {
           path: '/b',
-          ServiceName: 'serviceB',
-          FunctionName: 'functionB'
+          serviceName: 'serviceB',
+          functionName: 'functionB'
         }
         ]
       }
@@ -927,6 +927,105 @@ describe('deploy', () => {
     assert.notCalled(deploySupport.makeTrigger);
     assert.calledOnce(console.warn);
     assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
+  });
+});
+
+describe('custom domain', () => {
+  let restoreProcess;
+
+  beforeEach(() => {
+    Object.keys(deploySupport).forEach(m => {
+      sandbox.stub(deploySupport, m);
+    });
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      DEFAULT_REGION: 'cn-shanghai',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
+    });
+  });
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  async function customDomain(domainName, domainDefinition) {
+    await proxyquire('../../lib/deploy/deploy-by-tpl', {
+      './deploy-support': deploySupport
+    }).deployCustomDomain(domainName, domainDefinition);
+  }
+
+  it('lowercase custom domain', async () =>{
+    await customDomain('domainName', {
+      'Type': 'Aliyun::Serverless::CustomDomain',
+      'Properties': {
+        'Protocol': 'HTTP',
+        'RouteConfig': {
+          'Routes': {
+            '/a': {
+              'serviceName': 'serviceA',
+              'functionName': 'functionA'
+            },
+            '/b': {
+              'serviceName': 'serviceB',
+              'functionName': 'functionB'
+            }
+          }
+        }
+      }
+    });
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'domainName',
+      protocol: 'HTTP',
+      routeConfig: {
+        routes: [{
+          path: '/a',
+          serviceName: 'serviceA',
+          functionName: 'functionA'
+        },
+        {
+          path: '/b',
+          serviceName: 'serviceB',
+          functionName: 'functionB'
+        }]
+      }
+    });
+  });
+  it('capital custom domain', async () =>{
+    await customDomain('domainName', {
+      'Type': 'Aliyun::Serverless::CustomDomain',
+      'Properties': {
+        'Protocol': 'HTTP',
+        'RouteConfig': {
+          'Routes': {
+            '/a': {
+              'ServiceName': 'serviceA',
+              'FunctionName': 'functionA'
+            },
+            '/b': {
+              'ServiceName': 'serviceB',
+              'FunctionName': 'functionB'
+            }
+          }
+        }
+      }
+    });
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'domainName',
+      protocol: 'HTTP',
+      routeConfig: {
+        routes: [{
+          path: '/a',
+          serviceName: 'serviceA',
+          functionName: 'functionA'
+        },
+        {
+          path: '/b',
+          serviceName: 'serviceB',
+          functionName: 'functionB'
+        }]
+      }
+    });
   });
 });
 
