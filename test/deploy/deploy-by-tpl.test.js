@@ -938,28 +938,28 @@ describe('deploy', () => {
         'RouteConfig': {
           'Routes': {
             '/a': {
-                'serviceName': 'serviceA',
-                'functionName': 'functionA'
+              'serviceName': 'serviceA',
+              'functionName': 'functionA'
             },
             '/b': {
-                'serviceName': 'serviceB',
-                'functionName': 'functionB'
+              'serviceName': 'serviceB',
+              'functionName': 'functionB'
             }
           }
         }
       }
     });
-    assert.calledWith(deploySupport.makeCustomDomain,'domainName','HTTP',{
+    assert.calledWith(deploySupport.makeCustomDomain, 'domainName','HTTP',{
       'routes': [
         {
-            'serviceName': 'serviceA',
-            'functionName': 'functionA',
-            'path': '/a'
+          'serviceName': 'serviceA',
+          'functionName': 'functionA',
+          'path': '/a'
         },
         {
-            'serviceName': 'serviceB',
-            'functionName': 'functionB',
-            'path': '/b'
+          'serviceName': 'serviceB',
+          'functionName': 'functionB',
+          'path': '/b'
         }
       ]
     });
