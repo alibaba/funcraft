@@ -5,7 +5,6 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
-const deployByTpl = require('../../lib/deploy/deploy-by-tpl');
 const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
@@ -929,9 +928,35 @@ describe('deploy', () => {
     assert.calledOnce(console.warn);
     assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
   });
+});
 
-  it.only('lowercase custom domain', async () => {
-    await deployByTpl.deployCustomDomain('domainName', {
+describe('deploy service role ', () => {
+  let restoreProcess;
+
+  beforeEach(() => {
+    Object.keys(deploySupport).forEach(m => {
+      sandbox.stub(deploySupport, m);
+    });
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      DEFAULT_REGION: 'cn-shanghai',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
+    });
+  });
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  async function customDomain(domainName, domainDefinition) {
+    await proxyquire('../../lib/deploy/deploy-by-tpl', {
+      './deploy-support': deploySupport,
+    }).deployCustomDomain(domainName, domainDefinition);
+  }
+
+  it('lowercase custom domain', async () =>{
+    await customDomain('domainName', {
       'Type': 'Aliyun::Serverless::CustomDomain',
       'Properties': {
         'Protocol': 'HTTP',
@@ -949,19 +974,21 @@ describe('deploy', () => {
         }
       }
     });
-    assert.calledWith(deploySupport.makeCustomDomain, 'domainName', 'HTTP', {
-      'routes': [
-        {
-          'serviceName': 'serviceA',
-          'functionName': 'functionA',
-          'path': '/a'
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'domainName',
+      protocol: 'HTTP',
+      routeConfig: {
+        routes: [{
+          path: '/a',
+          serviceName: 'serviceA',
+          functionName: 'functionA'
         },
         {
-          'serviceName': 'serviceB',
-          'functionName': 'functionB',
-          'path': '/b'
-        }
-      ]
+          path: '/b',
+          serviceName: 'serviceB',
+          functionName: 'functionB'
+        }]
+      }
     });
   });
 });
