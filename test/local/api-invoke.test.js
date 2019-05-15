@@ -24,7 +24,7 @@ var FCClient = require('@alicloud/fc2');
 const apiOutputSream = `FC Invoke Start RequestId: 65ca478d-b3cf-41d5-b668-9b89a4d481d8
 load code for handler:read.handler
 --------------------response begin-----------------
-SFRUUC8xLjEgMjAwIE9LCgp0ZXN0Qm9keQ==
+${Buffer.from('HTTP/1.1 200 OK\r\n\r\ntestBody').toString('base64')}
 --------------------response end-----------------
 --------------------execution info begin-----------------
 OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
