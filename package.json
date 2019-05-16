@@ -44,6 +44,7 @@
     "conf": "^4.0.2",
     "crc64-ecma182.js": "^1.0.0",
     "debug": "^2.6.8",
+    "detect-mocha": "^0.1.0",
     "dev-null": "^0.1.1",
     "dockerode": "^2.5.7",
     "dotenv": "^6.0.0",
@@ -76,7 +77,7 @@
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
     "single-line-log": "^1.1.2",
-    "tablestore": "^4.3.1",
+    "tablestore": "^4.3.2",
     "universal-analytics": "^0.4.20",
     "urlencode": "^1.1.0"
   },
