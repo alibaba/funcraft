@@ -43,7 +43,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
   - **Deploy**: Articles on how to quickly deploy Function Compute.
     - [开发函数计算的正确姿势 —— 部署 API 网关](https://yq.aliyun.com/articles/689185): Introduce how to deploy the API Gateway + Function Compute application.
     - [Guidelines for Function Compute Development —— OSS Trigger](https://yq.aliyun.com/articles/702667): Introduce how to deploy the OSS Trigger + Function Compute application.
-    - [开发函数计算的正确姿势 —— CDN 触发器](https://yq.aliyun.com/articles/700808)：介绍了如何部署 CDN 触发器 + 函数计算应用。
+    - [开发函数计算的正确姿势 —— CDN 触发器](https://yq.aliyun.com/articles/700808)：Introduce how to deploy the OSS Trigger + Function Compute application.
   - **Fun in action**:
     - [Guidelines for Function Compute Development - Crawler](https://yq.aliyun.com/articles/686340): How to use the Fun tool to develop a Serverless application from scratch.
     - [Guidelines for Function Compute Development - Troubleshoot Timeout Issues](https://yq.aliyun.com/articles/686349): Demonstrates how to solve a series of bugs and introduces the tricks of debug.
