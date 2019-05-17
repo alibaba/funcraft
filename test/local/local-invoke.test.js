@@ -81,7 +81,7 @@ describe('test local invoke init', async () => {
   });
 
   it('default first function when fun local invoke', async () => {
-    var tplPath = path.join('./examples', 'local', 'template.yml')
+    var tplPath = path.join('./examples', 'local', 'template.yml');
     const tplContent = await readFile(tplPath, 'utf8');
     const tpl = yaml.safeLoad(tplContent);
     var firstFuntionName = await funLocalInovke.findFirstFunction(tpl);
