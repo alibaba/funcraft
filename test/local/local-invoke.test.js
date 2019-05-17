@@ -14,6 +14,12 @@ const fs = require('fs');
 const streams = require('memory-streams');
 
 const Inovke = require('../../lib/local/invoke');
+const definition = require('../../lib/definition');
+
+const util = require('util');
+const yaml = require('js-yaml');
+const readFile = util.promisify(fs.readFile);
+
 let LocalInvoke = require('../../lib/local/local-invoke');
 
 const { functionName, functionRes,
@@ -73,8 +79,15 @@ describe('test local invoke init', async () => {
       invoke.envs,
       invoke.dockerUser);
   });
-});
 
+  it('default first function when fun local invoke', async () => {
+    var tplPath = path.join('./examples', 'local', 'template.yml');
+    const tplContent = await readFile(tplPath, 'utf8');
+    const tpl = yaml.safeLoad(tplContent);
+    var firstFuntionName = definition.findFirstFunction(tpl);
+    expect(firstFuntionName).equal('localdemo/php72');
+  });
+});
 
 (hasDocker ? describe : describe.skip)('Integration::invoke', () => {
   
