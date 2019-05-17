@@ -27,6 +27,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
     - **Third-party templates**: Third-party templates that can be quickly initialized directly by `fun init [repo]`.
       - [puppeteer 模板项目](https://github.com/vangie/puppeteer-example/): Screenshot service based on puppeteer deployment on `Function Compute` service.
       - [函数计算 R 语言模板项目](https://github.com/vangie/rlang-example)：Template project for R language, can be used directly.
+      - [开发函数计算的正确姿势——支持 ES6 语法和 webpack 压缩](https://yq.aliyun.com/articles/701714)：Help quickly build a Function-Compute of nodejs project skeleton, support es6 code compiled into es5.
   - **Dependences installation**: Articles on how to use fun install to quickly install  dependencies.
     - [开发函数计算的正确姿势 —— 安装第三方依赖](https://yq.aliyun.com/articles/688062): introduce the basic usage of fun install.
     - [函数运行环境系统动态链接库版本太低？函数计算 fun 神助力分忧解难](https://yq.aliyun.com/articles/690856): Introduce how to use fun install to upgrade the system Dynamic-link libraries.
@@ -41,6 +42,8 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
     - [开发函数计算的正确姿势 —— Api 本地运行调试](https://yq.aliyun.com/articles/683685):  Demonstrates how to run and debug functions locally through the API.
   - **Deploy**: Articles on how to quickly deploy Function Compute.
     - [开发函数计算的正确姿势 —— 部署 API 网关](https://yq.aliyun.com/articles/689185): Introduce how to deploy the API Gateway + Function Compute application.
+    - [Guidelines for Function Compute Development —— OSS Trigger](https://yq.aliyun.com/articles/702667): Introduce how to deploy the OSS Trigger + Function Compute application.
+    - [开发函数计算的正确姿势 —— CDN 触发器](https://yq.aliyun.com/articles/700808)：Introduce how to deploy the OSS Trigger + Function Compute application.
   - **Fun in action**:
     - [Guidelines for Function Compute Development - Crawler](https://yq.aliyun.com/articles/686340): How to use the Fun tool to develop a Serverless application from scratch.
     - [Guidelines for Function Compute Development - Troubleshoot Timeout Issues](https://yq.aliyun.com/articles/686349): Demonstrates how to solve a series of bugs and introduces the tricks of debug.

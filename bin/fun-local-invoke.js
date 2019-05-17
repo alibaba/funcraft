@@ -28,13 +28,7 @@ program
                              reading event from stdin`)
   .parse(process.argv);
 
-if (!program.args.length) {
-  console.error();
-  console.error("  error: missing required argument '%s'", '[service/]function');
-  program.help();
-}
-
-if (!program.args.length > 1) {
+if (program.args.length > 1) {
   console.error();
   console.error("  error: unexpected argument '%s'", program.args[1]);
   program.help();
