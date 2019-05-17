@@ -14,7 +14,7 @@ const fs = require('fs');
 const streams = require('memory-streams');
 
 const Inovke = require('../../lib/local/invoke');
-const funLocalInovke = require('../../lib/commands/local/invoke');
+const definition = require('../../lib/definition');
 
 const util = require('util');
 const yaml = require('js-yaml');
@@ -84,7 +84,7 @@ describe('test local invoke init', async () => {
     var tplPath = path.join('./examples', 'local', 'template.yml');
     const tplContent = await readFile(tplPath, 'utf8');
     const tpl = yaml.safeLoad(tplContent);
-    var firstFuntionName = await funLocalInovke.findFirstFunction(tpl);
+    var firstFuntionName = definition.findFirstFunction(tpl);
     expect(firstFuntionName).equal('localdemo/php72');
   });
 });
