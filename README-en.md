@@ -27,7 +27,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
     - **Third-party templates**: Third-party templates that can be quickly initialized directly by `fun init [repo]`.
       - [puppeteer 模板项目](https://github.com/vangie/puppeteer-example/): Screenshot service based on puppeteer deployment on `Function Compute` service.
       - [函数计算 R 语言模板项目](https://github.com/vangie/rlang-example)：Template project for R language, can be used directly.
-      - [开发函数计算的正确姿势——支持 ES6 语法和 webpack 压缩](https://yq.aliyun.com/articles/701714)：帮助快速搭建一个函数计算 nodejs 项目骨架，支持 es6 代码编译成 es5。
+      - [开发函数计算的正确姿势——支持 ES6 语法和 webpack 压缩](https://yq.aliyun.com/articles/701714)：Help quickly build a Function-Compute of nodejs project skeleton, support es6 code compiled into es5.
   - **Dependences installation**: Articles on how to use fun install to quickly install  dependencies.
     - [开发函数计算的正确姿势 —— 安装第三方依赖](https://yq.aliyun.com/articles/688062): introduce the basic usage of fun install.
     - [函数运行环境系统动态链接库版本太低？函数计算 fun 神助力分忧解难](https://yq.aliyun.com/articles/690856): Introduce how to use fun install to upgrade the system Dynamic-link libraries.
