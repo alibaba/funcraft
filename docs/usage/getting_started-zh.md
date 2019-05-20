@@ -81,7 +81,6 @@ api gateway HelloworldGroup deploy success
 ```shell
 ACCOUNT_ID=xxxxxxxx
 REGION=cn-shanghai
-DEFAULT_REGION=
 ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
 TIMEOUT=10
