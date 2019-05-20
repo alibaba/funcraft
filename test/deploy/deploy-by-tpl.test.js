@@ -63,7 +63,7 @@ describe('deploy service role ', () => {
     assert.notCalled(ram.attachPolicyToRole);    
   });
   
-  it('police and  vpc', async() =>{
+  it('police and vpc', async() =>{
     await deploy('nas');
     assert.calledWith(ram.makeRole, '', true);
     assert.notCalled(ram.makePolicy);
@@ -78,7 +78,7 @@ describe('deploy service role ', () => {
 
   it('only role', async() =>{
     await deploy('service_role');
-    assert.calledWith(ram.makeRole, 'aliyunfcgeneratedrole-fc', false);
+    assert.notCalled(ram.makeRole);
     assert.notCalled(ram.makeAndAttachPolicy);
     assert.notCalled(ram.attachPolicyToRole);
     assert.notCalled(ram.makePolicy);
@@ -1028,4 +1028,3 @@ describe('custom domain', () => {
     });
   });
 });
-
