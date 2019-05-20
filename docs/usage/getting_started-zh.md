@@ -81,8 +81,11 @@ api gateway HelloworldGroup deploy success
 ```shell
 ACCOUNT_ID=xxxxxxxx
 REGION=cn-shanghai
+DEFAULT_REGION=
 ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
+TIMEOUT=10
+RETRIES=3
 ```
 
 建议将 .env 放到 .gitignore 中，避免泄漏重要的账户信息。

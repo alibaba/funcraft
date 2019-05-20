@@ -84,8 +84,11 @@ Create a file named `.env` in the project directory with the following content:
 ```shell
 ACCOUNT_ID=xxxxxxxx
 REGION=cn-shanghai
+DEFAULT_REGION=
 ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
+TIMEOUT=10
+RETRIES=3
 ```
 
 It is recommended to add the `.env` into `.gitignore` file to prevent your account credentials from being checked into code repository.
