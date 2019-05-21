@@ -20,7 +20,10 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
 
 - [Installation](https://github.com/aliyun/fun/blob/master/docs/usage/installation.md): Learn how to install Fun on Mac, Linux or Windows.
 - [Getting Started](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started.md): The basic usage of Fun is introduced with a simple example.
+- [Specification](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md): Introduces the syntax of the fun's template.yml file.
 - **Series articles**:
+  - **Grammar Validation**：Fun provides a powerful grammar validation function, and allows users to easily correct it by accurately reporting error information.
+    - [开发函数计算的正确姿势 —— Fun validate 语法校验排错指南](https://yq.aliyun.com/articles/703144)：介绍了根据报错信息修正 template.yml 中的错误语法描述。
   - **Custom templates**: Articles on how to quickly build a project using `fun init`.
     - [开发函数计算的正确姿势 —— 使用 Fun Init 初始化项目](https://yq.aliyun.com/articles/674363): Introduced the basic usage of `fun init`.
     - [Fun Init 自定义模板](https://yq.aliyun.com/articles/674364): Introduce how to develop a `fun init` template.
@@ -55,7 +58,6 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
     - [用函数计算搭建微服务——云客服访客名片](https://yq.aliyun.com/articles/674378): Introduce how to use the Function Compute to build a micro service of visitor card.
     - [三分钟学会如何在函数计算中使用 puppeteer](https://yq.aliyun.com/articles/602877): Introduce how to use puppeteer in Function Compute.
     - [函数计算部署机器学习遇到的问题和解法](https://yq.aliyun.com/articles/630289)：Some problems that may be encountered when machine learning is deployed to Function Compute and some solutions to related problems.
-- [Specification](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md): Introduces the syntax of the fun's template.yml file.
 - [FAQ](https://github.com/aliyun/fun/blob/master/docs/usage/faq.md): Frequently asked questions and answers when using fun.
 - [More Examples](https://github.com/aliyun/fun/tree/master/examples)
 
