@@ -9,6 +9,16 @@ const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
 const { red } = require('colors');
+const defaultVpcConfig = {
+  securityGroupId: '',
+  vSwitchIds: [],
+  vpcId: ''
+};
+const defaultNasConfig = {
+  UserId: -1,
+  GroupId: -1,
+  MountPoints: []
+};
 
 describe('deploy service role ', () => {
   let restoreProcess;
@@ -141,8 +151,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'MyService',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -170,8 +180,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'fc',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'helloworld'), {
@@ -198,8 +208,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'java',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'java'), {
@@ -282,8 +292,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'fc',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -344,8 +354,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'test-tableStore-service',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'tablestore-trigger'), {
@@ -382,8 +392,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'log-compute',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'sls_demo'), {
@@ -422,8 +432,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'rds-service',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'rds-trigger'), {
@@ -463,8 +473,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'oss-test-service',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'oss-trigger'), {
@@ -506,8 +516,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'cdn-test-service',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'cdn-trigger'), {
@@ -553,8 +563,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'mnsTopic-service',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'mnsTopic-trigger'), {
@@ -593,8 +603,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'pythondemo',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'python'), {
@@ -645,8 +655,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'maas',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
 
     assert.calledWith(deploySupport.makeFunction,
@@ -696,8 +706,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'MyService',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'timer'), {
@@ -734,8 +744,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'wechat',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction.firstCall,
       path.join(process.cwd(), 'examples', 'wechat'), {
@@ -852,8 +862,8 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'initializerdemo',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
     assert.calledWith(deploySupport.makeFunction,
       path.join(process.cwd(), 'examples', 'initializer'), {
@@ -905,8 +915,8 @@ describe('deploy', () => {
       logConfig: {},
       role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
       serviceName: 'localdemo',
-      vpcConfig: {},
-      nasConfig: {}
+      vpcConfig: defaultVpcConfig,
+      nasConfig: defaultNasConfig
     });
 
     assert.calledWith(deploySupport.makeFunction,
