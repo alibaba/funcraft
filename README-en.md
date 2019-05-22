@@ -23,7 +23,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
 - [Specification](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md): Introduces the syntax of the fun's template.yml file.
 - **Series articles**:
   - **Grammar Validation**：Fun provides a powerful grammar validation function, and allows users to easily correct it by accurately reporting error information.
-    - [开发函数计算的正确姿势 —— Fun validate 语法校验排错指南](https://yq.aliyun.com/articles/703144)：介绍了根据报错信息修正 template.yml 中的错误语法描述。
+    - [开发函数计算的正确姿势 —— Fun validate 语法校验排错指南](https://yq.aliyun.com/articles/703144)：Introduced how to modify the error grammar description in template.yml according to the error information.
   - **Custom templates**: Articles on how to quickly build a project using `fun init`.
     - [开发函数计算的正确姿势 —— 使用 Fun Init 初始化项目](https://yq.aliyun.com/articles/674363): Introduced the basic usage of `fun init`.
     - [Fun Init 自定义模板](https://yq.aliyun.com/articles/674364): Introduce how to develop a `fun init` template.
