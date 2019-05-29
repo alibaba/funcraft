@@ -31,6 +31,8 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
       - [puppeteer 模板项目](https://github.com/vangie/puppeteer-example/)：基于 puppeteer 的部署在函数计算上的截图服务。
       - [函数计算 R 语言模板项目](https://github.com/vangie/rlang-example)：R 语言的模板项目，可以直接使用。
       - [开发函数计算的正确姿势——支持 ES6 语法和 webpack 压缩](https://yq.aliyun.com/articles/701714)：帮助快速搭建一个函数计算 nodejs 项目骨架，支持 es6 代码编译成 es5。
+      - [函数计算实现 oss 上传较小 zip 压缩文件的自动解压](https://github.com/coco-super/simple-fc-uncompress-service-for-oss)：快速搭建 oss 上传较小 zip 压缩文件自动解压（简单法）的模板项目。
+      - [函数计算实现 oss 上传较大 zip 压缩文件的自动解压](https://github.com/coco-super/streaming-fc-uncompress-service-for-oss)：快速搭建 oss 上传超大 zip 压缩文件自动解压（流式法）的模板项目。
   - **依赖安装**：关于如何使用 fun install 快速安装函数依赖的文章。
     - [开发函数计算的正确姿势 —— 安装第三方依赖](https://yq.aliyun.com/articles/688062)：介绍了 fun install 的基本用法。
     - [函数运行环境系统动态链接库版本太低？函数计算 fun 神助力分忧解难](https://yq.aliyun.com/articles/690856)：介绍了如何利用 fun install，升级系统动态链接库。
