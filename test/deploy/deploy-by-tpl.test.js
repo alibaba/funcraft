@@ -849,7 +849,8 @@ describe('deploy', () => {
           functionName: 'functionB'
         }
         ]
-      }
+      },
+      certConfig: {}
     });
   });
 
@@ -998,7 +999,8 @@ describe('custom domain', () => {
           serviceName: 'serviceB',
           functionName: 'functionB'
         }]
-      }
+      },
+      certConfig: {}
     });
   });
   it('capital custom domain', async () => {
@@ -1017,7 +1019,7 @@ describe('custom domain', () => {
               'FunctionName': 'functionB'
             }
           }
-        }
+        },
       }
     });
     assert.calledWith(deploySupport.makeCustomDomain, {
@@ -1034,7 +1036,8 @@ describe('custom domain', () => {
           serviceName: 'serviceB',
           functionName: 'functionB'
         }]
-      }
+      },
+      certConfig: {}
     });
   });
   it('https custom domain', async () => {
