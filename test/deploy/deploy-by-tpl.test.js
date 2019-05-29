@@ -1079,7 +1079,7 @@ describe('custom domain', () => {
           functionName: 'functionB'
         }]
       },
-      CertConfig: {
+      certConfig: {
         CertName: 'CertName',
         PrivateKey: 'PrivateKey',
         Certificate: 'Certificate'
