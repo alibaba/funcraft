@@ -1019,7 +1019,7 @@ describe('custom domain', () => {
               'FunctionName': 'functionB'
             }
           }
-        },
+        }
       }
     });
     assert.calledWith(deploySupport.makeCustomDomain, {
