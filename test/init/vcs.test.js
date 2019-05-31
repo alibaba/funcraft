@@ -26,8 +26,12 @@ const child_process = {
 const commandExists = {
   sync: sandbox.stub()
 };
+const uuid = {
+  v1: sandbox.stub()
+};
 
 const vcsStub = proxyquire('../../lib/init/vcs', {
+  'uuid': uuid,
   'fs': fs,
   'path': path,
   './prompt': prompt,
@@ -69,10 +73,12 @@ describe('vcs', () => {
   it('clone with https://github.com/foo/bar.git', async () => {
     fs.existsSync.returns(true);
     commandExists.sync.returns(true);
+    uuid.v1.returns('uuid');
     const repoUrl = 'https://github.com/foo/bar.git';
     const repoDir = await vcsStub.clone(repoUrl, '.');
-    sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', '--depth=1', repoUrl], {cmd: repoDir, stdio: 'inherit'});
-    expect(repoDir).to.be('.bar');
+    console.log('repoDir:'+repoDir);
+    sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', '--depth=1', repoUrl, 'uuid'], {cmd: repoDir, stdio: 'inherit'});
+    expect(repoDir).to.be('.uuid');
 
   });
 
