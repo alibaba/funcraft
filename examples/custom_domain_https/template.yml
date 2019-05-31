@@ -1,0 +1,20 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  sunfeiyu.top:
+    Type: 'Aliyun::Serverless::CustomDomain'
+    Properties:
+      Protocol: HTTP,HTTPS
+      CertConfig:
+        CertName: 'CertName'
+        PrivateKey: './super/privateKey.pem'
+        Certificate: './super/certificate.pem'
+      RouteConfig:
+        Routes: 
+          '/a':
+            ServiceName: serviceA
+            FunctionName: functionA
+          '/b':
+            ServiceName: serviceB
+            FunctionName: functionB
+  
