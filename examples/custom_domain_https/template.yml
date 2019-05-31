@@ -7,8 +7,8 @@ Resources:
       Protocol: HTTP,HTTPS
       CertConfig:
         CertName: 'CertName'
-        PrivateKey: './certificates/privateKey.pem' # Direct posting of PrivateKey content,type string, is also supported
-        Certificate: './certificates/certificate.pem' # Direct posting of certificate content,type string, is also supported
+        PrivateKey: './certificates/privateKey.pem' # Direct posting of PrivateKey content,type string, is also supported.
+        Certificate: './certificates/certificate.pem' # Direct posting of certificate content,type string, is also supported.
       RouteConfig:
         Routes: 
           '/a':
