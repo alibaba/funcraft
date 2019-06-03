@@ -77,7 +77,7 @@ describe('vcs', () => {
     const repoUrl = 'https://github.com/foo/bar.git';
     const repoDir = await vcsStub.clone(repoUrl, '.');
     console.log('repoDir:'+repoDir);
-    sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', '--depth=1', repoUrl, 'fun-init-cache-uuid'], {cmd: repoDir, stdio: 'inherit'});
+    sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', '--depth=1', repoUrl, '.fun-init-cache-uuid'], {cmd: repoDir, stdio: 'inherit'});
     expect(repoDir).to.be('.fun-init-cache-uuid');
 
   });
