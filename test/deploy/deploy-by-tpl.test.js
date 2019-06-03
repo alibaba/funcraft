@@ -850,7 +850,11 @@ describe('deploy', () => {
         }
         ]
       },
-      certConfig: {}
+      certConfig: {
+        CertName: '',
+        Certificate: '',
+        PrivateKey: ''
+      }
     });
   });
 
@@ -1000,7 +1004,11 @@ describe('custom domain', () => {
           functionName: 'functionB'
         }]
       },
-      certConfig: {}
+      certConfig: {
+        CertName: '',
+        Certificate: '',
+        PrivateKey: ''
+      }
     });
   });
   it('capital custom domain', async () => {
@@ -1037,7 +1045,11 @@ describe('custom domain', () => {
           functionName: 'functionB'
         }]
       },
-      certConfig: {}
+      certConfig: {
+        CertName: '',
+        Certificate: '',
+        PrivateKey: ''
+      }
     });
   });
   it('https custom domain', async () => {
