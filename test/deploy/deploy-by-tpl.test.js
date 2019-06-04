@@ -850,11 +850,7 @@ describe('deploy', () => {
         }
         ]
       },
-      certConfig: {
-        CertName: '',
-        Certificate: '',
-        PrivateKey: ''
-      }
+      certConfig: {}
     });
   });
 
@@ -1004,11 +1000,7 @@ describe('custom domain', () => {
           functionName: 'functionB'
         }]
       },
-      certConfig: {
-        CertName: '',
-        Certificate: '',
-        PrivateKey: ''
-      }
+      certConfig: {}
     });
   });
   it('capital custom domain', async () => {
@@ -1045,18 +1037,14 @@ describe('custom domain', () => {
           functionName: 'functionB'
         }]
       },
-      certConfig: {
-        CertName: '',
-        Certificate: '',
-        PrivateKey: ''
-      }
+      certConfig: {}
     });
   });
   it('https custom domain', async () => {
     await customDomain('domainName', {
       'Type': 'Aliyun::Serverless::CustomDomain',
       'Properties': {
-        'Protocol': 'HTTP',
+        'Protocol': 'HTTP,HTTPS',
         'RouteConfig': {
           'Routes': {
             '/a': {
@@ -1078,7 +1066,7 @@ describe('custom domain', () => {
     });
     assert.calledWith(deploySupport.makeCustomDomain, {
       domainName: 'domainName',
-      protocol: 'HTTP',
+      protocol: 'HTTP,HTTPS',
       routeConfig: {
         routes: [{
           path: '/a',
