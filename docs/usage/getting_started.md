@@ -12,16 +12,33 @@ Now you are ready to use the fun command.
 
 ### Example
 
-Here is an example. First, create a `helloworld.js` file in the project root directory:
+Here is an example. First, create a `index.js` file in the project root directory:
 
 ```javascript
-exports.handler = function(event, context, callback) {
-  var response = {
-      isBase64Encoded: false,
-      statusCode: 200,
-      body: 'hello world'
-  };
-  callback(null, response);
+var getRawBody = require('raw-body')
+
+module.exports.initializer = function(context, callback) {
+    console.log("initializer invoked");
+    callback(null, '');
+}
+
+module.exports.handler = function (request, response, context) {    
+    // get request body
+    getRawBody(request, function (err, body) {
+        var respBody = {
+            headers: request.headers,
+            url: request.url,
+            path: request.path,
+            queries: request.queries,
+            method: request.method,
+            clientIP: request.clientIP,
+            body: body.toString()
+        };
+        
+        response.setStatusCode(200);
+        response.setHeader('content-type', 'application/json');
+        response.send(JSON.stringify(respBody, null, 4));
+    });
 };
 ```
 
@@ -31,46 +48,50 @@ Then, let's configure related services. Create a `template.yml` file in the proj
 ROSTemplateFormatVersion: '2015-09-01'
 Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
-  fc: # service name
+  local-http-test:
     Type: 'Aliyun::Serverless::Service'
     Properties:
-      Description: 'fc test'
-    helloworld: # function name
+      Description: 'local invoke demo'
+    nodejs8:
       Type: 'Aliyun::Serverless::Function'
       Properties:
-        Handler: helloworld.handler
+        Handler: index.handler
+        CodeUri: nodejs8/
+        Description: 'http trigger demo with nodejs8!'
         Runtime: nodejs8
-        CodeUri: './'
-        Timeout: 60
-
-  HelloworldGroup: # Api Group
-    Type: 'Aliyun::Serverless::Api'
-    Properties:
-      StageName: RELEASE
-      DefinitionBody:
-        '/': # request path
-          get: # http method
-            x-aliyun-apigateway-api-name: hello_get # api name
-            x-aliyun-apigateway-fc:
-              arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/    
+        Initializer: index.initializer
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']    
 ```
 
 After the template file and code are written, you can use the deploy command to deploy the service, function and api gateway online.
 
 ```shell
-$fun deploy
+$ fun deploy
+using region: cn-shanghai
+using accountId: ***********8320
+using accessKeyId: ***********1EXB
+using timeout: 10
 
-Waiting for service fc to be deployed...
-service fc deploy success
-Waiting for api gateway HelloworldGroup to be deployed...
-    URL: GET http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/
-      stage: RELEASE, deployed, version: 20180627110526681
-      stage: PRE, undeployed
-      stage: TEST, undeployed
-api gateway HelloworldGroup deploy success
+Waiting for service local-http-test to be deployed...
+        Waiting for function nodejs8 to be deployed...
+                Waiting for packaging function nodejs8 code...
+                package function nodejs8 code done
+                Waiting for HTTP trigger http-test to be deployed...
+                methods: GET
+                url: https://1984152879328320.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/local-http-test/nodejs8/
+                function http-test deploy success
+        function nodejs8 deploy success
+service local-http-test deploy success
 ```
 
-Open the browser to access `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/` to view the result.
+Open the browser to access `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/`. Browser access to the function corresponding to HTTP Trigger will force download, please refer to [函数计算常见问题](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header).
+
+If you want to debug and run HTTP trigger functions locally, you can refer to [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683).
 
 ## Configuration
 
