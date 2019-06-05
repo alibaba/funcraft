@@ -3,16 +3,12 @@
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const expect = require('expect.js');
+const path = require('path');
 
 const sandbox = sinon.createSandbox();
 const fs = {
   mkdirSync: sandbox.stub(),
   existsSync: sandbox.stub()
-};
-
-const path = {
-  resolve: (a, b) => a,
-  join: (a, b) => a + b
 };
 
 const prompt = {
@@ -33,7 +29,6 @@ const uuid = {
 const vcsStub = proxyquire('../../lib/init/vcs', {
   'uuid': uuid,
   'fs': fs,
-  'path': path,
   './prompt': prompt,
   'child_process': child_process,
   'command-exists': commandExists
@@ -77,8 +72,6 @@ describe('vcs', () => {
     const repoUrl = 'https://github.com/foo/bar.git';
     const repoDir = await vcsStub.clone(repoUrl, '.');
     sandbox.assert.calledWith(child_process.spawnSync, 'git', ['clone', '--depth=1', repoUrl, '.fun-init-cache-uuid'], {cmd: repoDir, stdio: 'inherit'});
-    expect(repoDir).to.be('..fun-init-cache-uuid');
-
+    expect(repoDir).to.be(path.join(process.cwd(), '.fun-init-cache-uuid'));
   });
-
 });
