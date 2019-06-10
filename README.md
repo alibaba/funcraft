@@ -33,7 +33,7 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
       - [开发函数计算的正确姿势——支持 ES6 语法和 webpack 压缩](https://yq.aliyun.com/articles/701714)：帮助快速搭建一个函数计算 nodejs 项目骨架，支持 es6 代码编译成 es5。
       - [函数计算实现 oss 上传较小 zip 压缩文件的自动解压](https://github.com/coco-super/simple-fc-uncompress-service-for-oss)：快速搭建 oss 上传较小 zip 压缩文件自动解压（简单法）的模板项目。
       - [函数计算实现 oss 上传较大 zip 压缩文件的自动解压](https://github.com/coco-super/streaming-fc-uncompress-service-for-oss)：快速搭建 oss 上传超大 zip 压缩文件自动解压（流式法）的模板项目。
-      - [五言绝句古诗的模板](https://github.com/vangie/poetry)：介绍把一个 TensorFlow CharRNN 训练的自动写五言绝句古诗的模型部署到函数计算。
+      - [函数计算 TensorFlow CharRNN 五言绝句古诗模板](https://github.com/vangie/poetry)：介绍把一个 TensorFlow CharRNN 训练的自动写五言绝句古诗的模型部署到函数计算。
       - [函数计算 selenium chrome java 模板项目](https://github.com/vangie/packed-selenium-java-example)：一个使用 brotli 算法压缩的 selenium chrome java 模板项目。
       - [函数计算 couchbase 模板项目](https://github.com/vangie/couchbase-example)：该项目模板是一个在阿里云函数计算平台 nodejs8 环境下安装并配置 couchbase 的模板项目。
       - [express 项目接入函数计算](https://github.com/muxiangqiu/fc-express-nodejs8)：通过该模板，可以快速将 express 项目接入函数计算。
