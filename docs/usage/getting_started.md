@@ -89,7 +89,7 @@ Waiting for service local-http-test to be deployed...
 service local-http-test deploy success
 ```
 
-Open the browser to access `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/`. Browser access to the function corresponding to HTTP Trigger will force download, please refer to [函数计算常见问题](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header).
+Open the browser to access `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/`. Browser access to the function corresponding to HTTP Trigger will force download, please refer to [FAQ](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header).
 
 If you want to debug and run HTTP trigger functions locally, you can refer to [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683).
 
