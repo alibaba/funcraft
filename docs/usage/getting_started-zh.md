@@ -89,7 +89,7 @@ Waiting for service local-http-test to be deployed...
 service local-http-test deploy success
 ```
 
-打开浏览器访问 `https://1984152879328320.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/local-http-test/nodejs8/` 即可触发函数的执行。浏览器访问 HTTP Trigger 对应的函数会强制下载，原因请参见 [函数计算常见问题](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header)。
+对于 HTTP 触发器，服务端会为 response header 中强制添加 content-disposition: attachment 字段，此字段会使得返回结果在浏览器中以附件的方式打开。此字段无法覆盖，使用自定义域名将不受影响。更多信息请参见 [函数计算常见问题](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header)。
 
 如果想在本地单步调试、运行 http trigger 的函数，可以参考 [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683)。
 
