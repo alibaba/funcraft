@@ -12,16 +12,33 @@
 
 ## 示例
 
-下面我们用一个简单的 helloworld 示例演示 fun 如何使用。首先在项目根目录下创建一个 helloworld.js 文件。
+下面我们用一个简单的 http 触发器示例演示 fun 如何使用。首先在项目根目录下创建一个 index.js 文件。
 
 ```javascript
-exports.handler = function(event, context, callback) {
-  var response = {
-      isBase64Encoded: false,
-      statusCode: 200,
-      body: 'hellow wrold'
-  };
-  callback(null, response);
+var getRawBody = require('raw-body')
+
+module.exports.initializer = function(context, callback) {
+    console.log("initializer invoked");
+    callback(null, '');
+}
+
+module.exports.handler = function (request, response, context) {    
+    // get request body
+    getRawBody(request, function (err, body) {
+        var respBody = {
+            headers: request.headers,
+            url: request.url,
+            path: request.path,
+            queries: request.queries,
+            method: request.method,
+            clientIP: request.clientIP,
+            body: body.toString()
+        };
+        
+        response.setStatusCode(200);
+        response.setHeader('content-type', 'application/json');
+        response.send(JSON.stringify(respBody, null, 4));
+    });
 };
 ```
 
@@ -31,46 +48,50 @@ exports.handler = function(event, context, callback) {
 ROSTemplateFormatVersion: '2015-09-01'
 Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
-  fc: # service name
+  local-http-test:
     Type: 'Aliyun::Serverless::Service'
     Properties:
-      Description: 'fc test'
-    helloworld: # function name
+      Description: 'local invoke demo'
+    nodejs8:
       Type: 'Aliyun::Serverless::Function'
       Properties:
-        Handler: helloworld.handler
+        Handler: index.handler
+        CodeUri: nodejs8/
+        Description: 'http trigger demo with nodejs8!'
         Runtime: nodejs8
-        CodeUri: './'
-        Timeout: 60
-
-  HelloworldGroup: # Api Group
-    Type: 'Aliyun::Serverless::Api'
-    Properties:
-      StageName: RELEASE
-      DefinitionBody:
-        '/': # request path
-          get: # http method
-            x-aliyun-apigateway-api-name: hello_get # api name
-            x-aliyun-apigateway-fc:
-              arn: acs:fc:::services/${fc.Arn}/functions/${helloworld.Arn}/    
+        Initializer: index.initializer
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
 ```
 
 代码以及模板文件编写完成后，就可以使用 `fun deploy` 命令一键将服务部署到线上环境了:
 
 ```shell
 $ fun deploy
+using region: cn-shanghai
+using accountId: ***********8320
+using accessKeyId: ***********1EXB
+using timeout: 10
 
-Waiting for service fc to be deployed...
-service fc deploy success
-Waiting for api gateway HelloworldGroup to be deployed...
-    URL: GET http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/
-      stage: RELEASE, deployed, version: 20180627110526681
-      stage: PRE, undeployed
-      stage: TEST, undeployed
-api gateway HelloworldGroup deploy success
+Waiting for service local-http-test to be deployed...
+        Waiting for function nodejs8 to be deployed...
+                Waiting for packaging function nodejs8 code...
+                package function nodejs8 code done
+                Waiting for HTTP trigger http-test to be deployed...
+                methods: GET
+                url: https://1984152879328320.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/local-http-test/nodejs8/
+                function http-test deploy success
+        function nodejs8 deploy success
+service local-http-test deploy success
 ```
 
-打开浏览器访问 `http://2c2c4629c42f45a1b73000dd2a8b34b2-cn-shanghai.alicloudapi.com/` 这个地址即可预览效果。
+打开浏览器访问 `https://1984152879328320.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/local-http-test/nodejs8/` 即可触发函数的执行。对于 HTTP 触发器，服务端会为 response header 中强制添加 `content-disposition: attachment` 字段，此字段会使得返回结果在浏览器中以附件的方式打开。此字段无法覆盖，使用自定义域名将不受影响。更多信息请参见 [函数计算常见问题](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header)。
+
+如果想在本地单步调试、运行 http trigger 的函数，可以参考 [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683)。
 
 ## 配置
 
