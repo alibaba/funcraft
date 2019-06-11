@@ -1,0 +1,35 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  CustomDomainHttps:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'local invoke demo'
+    NodejsHttps:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: ./
+        Description: 'http trigger demo with nodejs8!'
+        Runtime: nodejs8
+        Initializer: index.initializer
+      Events:
+        functionA:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
+
+  fun.cn-shanghai.1221968287646227.cname-test.fc.aliyun-inc.com:
+    Type: 'Aliyun::Serverless::CustomDomain'
+    Properties:
+      Protocol: HTTP,HTTPS
+      CertConfig: # For details of certificate configuration, please refer to the documentation：https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlesscustomdomain
+        CertName: 'CertName'
+        PrivateKey: './certificates/privateKey.pem'
+        Certificate: './certificates/certificate.pem'
+      RouteConfig:
+        Routes: 
+          '/nodejs':
+            ServiceName: CustomDomainHttps
+            FunctionName: NodejsHttps

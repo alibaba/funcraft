@@ -1,6 +1,7 @@
 'use strict';
 
 const proxyquire = require('proxyquire');
+const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
@@ -849,7 +850,8 @@ describe('deploy', () => {
           functionName: 'functionB'
         }
         ]
-      }
+      },
+      certConfig: {}
     });
   });
 
@@ -998,10 +1000,11 @@ describe('custom domain', () => {
           serviceName: 'serviceB',
           functionName: 'functionB'
         }]
-      }
+      },
+      certConfig: {}
     });
   });
-  it('capital custom domain', async () =>{
+  it('capital custom domain', async () => {
     await customDomain('domainName', {
       'Type': 'Aliyun::Serverless::CustomDomain',
       'Properties': {
@@ -1034,6 +1037,79 @@ describe('custom domain', () => {
           serviceName: 'serviceB',
           functionName: 'functionB'
         }]
+      },
+      certConfig: {}
+    });
+  });
+  it('https custom domain', async () => {
+    await customDomain('domainName', {
+      'Type': 'Aliyun::Serverless::CustomDomain',
+      'Properties': {
+        'Protocol': 'HTTP,HTTPS',
+        'RouteConfig': {
+          'Routes': {
+            '/a': {
+              'ServiceName': 'serviceA',
+              'FunctionName': 'functionA'
+            },
+            '/b': {
+              'ServiceName': 'serviceB',
+              'FunctionName': 'functionB'
+            }
+          }
+        },
+        'CertConfig': {
+          'CertName': 'CertName',
+          'PrivateKey': 'PrivateKey',
+          'Certificate': 'Certificate'
+        }
+      }
+    });
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'domainName',
+      protocol: 'HTTP,HTTPS',
+      routeConfig: {
+        routes: [{
+          path: '/a',
+          serviceName: 'serviceA',
+          functionName: 'functionA'
+        },
+        {
+          path: '/b',
+          serviceName: 'serviceB',
+          functionName: 'functionB'
+        }]
+      },
+      certConfig: {
+        CertName: 'CertName',
+        PrivateKey: 'PrivateKey',
+        Certificate: 'Certificate'
+      }
+    });
+  });
+});
+
+describe('cdn domain capitalization', () => {
+
+  it('Domain->domain', async() => {
+    var capitalConfig = deploySupport.getTriggerConfig('CDN', {
+      'EventName': 'CachedObjectsRefreshed',
+      'EventVersion': '1.0.0',
+      'Notes': 'cdn events trigger test',
+      'Filter': {
+        'Domain': [
+          'cdn-trigger.sunfeiyu.top'
+        ]
+      }
+    });
+    expect(capitalConfig).to.eql({
+      'eventName': 'CachedObjectsRefreshed',
+      'eventVersion': '1.0.0',
+      'notes': 'cdn events trigger test',
+      'filter': {
+        'domain': [
+          'cdn-trigger.sunfeiyu.top'
+        ]
       }
     });
   });
