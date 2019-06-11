@@ -6,6 +6,8 @@
 
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
+const notifier = require('../lib/update-notifier');
+
 
 program
   .name('fun edge invoke')
@@ -64,6 +66,8 @@ if (program.config) {
 }
 
 program.event = program.event || '-';
+
+notifier.notify();
 
 getVisitor().then(visitor => {
   visitor.pageview('/fun/edge/invoke').send();

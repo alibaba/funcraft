@@ -80,6 +80,7 @@
     "single-line-log": "^1.1.2",
     "tablestore": "^4.3.2",
     "universal-analytics": "^0.4.20",
+    "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0"
   },
   "files": [

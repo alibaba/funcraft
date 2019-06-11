@@ -6,6 +6,7 @@
 
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
+const notifier = require('../lib/update-notifier');
 
 program
   .name('fun config')
@@ -17,6 +18,8 @@ if (program.args.length) {
   console.error("  error: unexpected argument '%s'", program.args[0]);
   program.help();
 }
+
+notifier.notify();
 
 getVisitor(true).then((visitor) => {
   visitor.pageview('/fun/config').send();
