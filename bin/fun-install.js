@@ -9,6 +9,7 @@ const getVisitor = require('../lib/visitor').getVisitor;
 const handler = require('../lib/exception-handler');
 const { install, installAll, init, env } = require('../lib/commands/install');
 const unrefTimeout = require('../lib/unref-timeout');
+const notifier = require('../lib/update-notifier');
 
 const optDefaults = {
   packageType: 'module'
@@ -59,6 +60,8 @@ program
   .action(env);
 
 program.parse(process.argv);
+
+notifier.notify();
 
 if (!program.args.length) {
 

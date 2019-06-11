@@ -7,6 +7,7 @@
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const unrefTimeout = require('../lib/unref-timeout');
+const notifier = require('../lib/update-notifier');
 
 program
   .name('fun local invoke')
@@ -34,7 +35,7 @@ if (program.args.length > 1) {
   program.help();
 }
 
-program.event = program.event || '-';
+notifier.notify();
 
 getVisitor().then(visitor => {
   visitor.pageview('/fun/local/invoke').send();

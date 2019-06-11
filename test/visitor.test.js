@@ -30,17 +30,22 @@ describe('test getVisitor', () => {
     sandbox.restore();
   });
 
-  it('test missing report config', async () => {
+  it('test missing .fcli/config.yaml', async () => {
 
-    try {
-      await getVisitor();
-    } catch (err) {
-      expect(err).to.a(Error);
-    }
+    const fake = await getVisitor();
+  
+    expect(fake.pageview().send()).to.eql('fakeMocha');
+    expect(fake.event().send()).to.eql('fakeMocha');
   });
 
   it('test use fake when missing report config', async () => {
+    await mkdirp(`${os.homedir}/.fcli/`);
+    await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+      access_key_id: 'test'
+    }));
+
     const fake = await getVisitor(true);
+
     expect(fake.pageview().send()).to.eql('fake');
     expect(fake.event().send()).to.eql('fake');
   });

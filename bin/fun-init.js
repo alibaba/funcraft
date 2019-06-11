@@ -7,6 +7,7 @@
 const program = require('commander');
 
 const getVisitor = require('../lib/visitor').getVisitor;
+const notifier = require('../lib/update-notifier');
 
 const examples =
   `
@@ -68,6 +69,8 @@ const context = {
 if (program.args.length > 0) {
   context.location = program.args[0];
 }
+
+notifier.notify();
 
 getVisitor().then(visitor => {
   visitor.pageview('/fun/init').send();
