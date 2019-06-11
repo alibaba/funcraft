@@ -88,7 +88,7 @@ Waiting for service local-http-test to be deployed...
         function nodejs8 deploy success
 service local-http-test deploy success
 ```
-For HTTP triggers, server will add a content-disposition: attachment header in the response headers by force, which will cause the browser to download response content as an attachment. This header cannot be overwritten, and using custom domain can avoid this header being added. For more information, please refer to [FAQ](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header).
+Open the browser and visit `https://1984152879328320.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/local-http-test/nodejs8/` to trigger the execution of the function. For HTTP triggers, server will add a `content-disposition: attachment` header in the response headers by force, which will cause the browser to download response content as an attachment. This header cannot be overwritten, and using custom domain can avoid this header being added. For more information, please refer to [FAQ](https://help.aliyun.com/knowledge_detail/56103.html?spm=a2c4g.11186623.6.711.117c28acEBZTtF#HTTP-Trigger-compulsory-header).
 
 If you want to debug and run HTTP trigger functions locally, you can refer to [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683).
 
