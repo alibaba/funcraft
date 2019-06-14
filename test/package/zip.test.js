@@ -47,8 +47,8 @@ describe('zip', () => {
 
   it('.funignore', async function() {
     var basePath = path.join('examples', 'package', 'funignore');
-    var b64string = await zip.pack(basePath, funignore(basePath));
-    var zipfile = await JSZip.loadAsync(b64string, { base64: true });
+    var { base64 } = await zip.pack(basePath, funignore(basePath));
+    var zipfile = await JSZip.loadAsync(base64, { base64: true });
       
     expect(zipfile.files).to.only.have.keys('example.pdf', 'lib/', 'package.json', 'lib/.keep');
   });

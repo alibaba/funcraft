@@ -313,7 +313,7 @@ describe('Incorrect environmental variables', ()=> {
   beforeEach(async () => {
     sandbox.stub(FC.prototype, 'getFunction').resolves({});
     sandbox.stub(FC.prototype, 'updateFunction').resolves({});
-    sandbox.stub(zip, 'pack').resolves('');
+    sandbox.stub(zip, 'pack').resolves({});
 
     deploySupport = await proxyquire('../../lib/deploy/deploy-support', {
       '../package/zip': zip,
@@ -361,7 +361,7 @@ describe('Incorrect environmental variables', ()=> {
         memorySize: 128,
         runtime: 'nodejs6',
         code: {
-          zipFile: ''
+          zipFile: undefined
         },
         environmentVariables: {
           StringTypeValue1: '123',
