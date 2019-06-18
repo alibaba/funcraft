@@ -14,6 +14,7 @@ const assert = sinon.assert;
 const zip = require('../../lib/package/zip');
 const expect = require('expect.js');
 const path = require('path');
+const util = require('util');
 
 describe('make', () => {
 
@@ -637,8 +638,17 @@ describe('test getFunCodeAsBase64', () => {
 
     sandbox.stub(zip, 'pack').resolves({});
 
+    const lstat = sandbox.stub();
+
+    lstat.resolves({
+      isFile: function () { return false; }
+    });
+
+    sandbox.stub(util, 'promisify').returns(lstat);
+
     deploySupport = await proxyquire('../../lib/deploy/deploy-support', {
-      '../package/zip': zip
+      '../package/zip': zip,
+      'util': util
     });
 
     restoreProcess = setProcess({
