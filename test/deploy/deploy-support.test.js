@@ -16,6 +16,7 @@ const expect = require('expect.js');
 const path = require('path');
 const util = require('util');
 
+
 describe('make', () => {
 
   let restoreProcess;
@@ -633,12 +634,13 @@ describe('make invocation role', () => {
 describe('test getFunCodeAsBase64', () => {
 
   let restoreProcess;
+  let lstat;
 
   beforeEach(async () => {
 
     sandbox.stub(zip, 'pack').resolves({});
 
-    const lstat = sandbox.stub();
+    lstat = sandbox.stub();
 
     lstat.resolves({
       isFile: function () { return false; }
@@ -665,17 +667,20 @@ describe('test getFunCodeAsBase64', () => {
 
   it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
     await deploySupport.getFunCodeAsBase64('/a/b', '/a');
+    assert.calledWith(lstat, '/a');
     assert.calledWith(zip.pack, '/a', null);
   });
 
 
   it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
     await deploySupport.getFunCodeAsBase64('/a/b', '../');
+    assert.calledWith(lstat, '../');
     assert.calledWith(zip.pack, '../', null);
   });
 
   it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
     await deploySupport.getFunCodeAsBase64('/a/b', '/a/b/c');
+    assert.calledWith(lstat, '/a/b/c');
     assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
   });
 
