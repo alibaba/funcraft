@@ -14,6 +14,8 @@ const assert = sinon.assert;
 const zip = require('../../lib/package/zip');
 const expect = require('expect.js');
 const path = require('path');
+const util = require('util');
+
 
 describe('make', () => {
 
@@ -632,13 +634,23 @@ describe('make invocation role', () => {
 describe('test getFunCodeAsBase64', () => {
 
   let restoreProcess;
+  let lstat;
 
   beforeEach(async () => {
 
     sandbox.stub(zip, 'pack').resolves({});
 
+    lstat = sandbox.stub();
+
+    lstat.resolves({
+      isFile: function () { return false; }
+    });
+
+    sandbox.stub(util, 'promisify').returns(lstat);
+
     deploySupport = await proxyquire('../../lib/deploy/deploy-support', {
-      '../package/zip': zip
+      '../package/zip': zip,
+      'util': util
     });
 
     restoreProcess = setProcess({
@@ -655,18 +667,34 @@ describe('test getFunCodeAsBase64', () => {
 
   it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
     await deploySupport.getFunCodeAsBase64('/a/b', '/a');
+    assert.calledWith(lstat, '/a');
     assert.calledWith(zip.pack, '/a', null);
   });
 
 
   it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
     await deploySupport.getFunCodeAsBase64('/a/b', '../');
+    assert.calledWith(lstat, '../');
     assert.calledWith(zip.pack, '../', null);
   });
 
   it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
     await deploySupport.getFunCodeAsBase64('/a/b', '/a/b/c');
+    assert.calledWith(lstat, '/a/b/c');
     assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
   });
 
+
+  it('test getFunCodeAsBase64: absolute codeUri path', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', process.cwd() + '/a/b/c/index.js');
+    assert.calledWith(lstat, process.cwd() + '/a/b/c/index.js');
+    assert.calledWith(zip.pack, process.cwd() + '/a/b/c/index.js', null);
+  });
+
+  it('test getFunCodeAsBase64: relative codeUri path', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', './index.js');
+    assert.calledWith(lstat, './index.js');
+    assert.calledWith(zip.pack, './index.js', null);
+  });
+  
 });
