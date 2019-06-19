@@ -684,4 +684,17 @@ describe('test getFunCodeAsBase64', () => {
     assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
   });
 
+
+  it('test getFunCodeAsBase64: absolute codeUri path', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', process.cwd() + '/a/b/c/index.js');
+    assert.calledWith(lstat, process.cwd() + '/a/b/c/index.js');
+    assert.calledWith(zip.pack, process.cwd() + '/a/b/c/index.js', null);
+  });
+
+  it('test getFunCodeAsBase64: relative codeUri path', async () => {
+    await deploySupport.getFunCodeAsBase64('/a/b', './index.js');
+    assert.calledWith(lstat, './index.js');
+    assert.calledWith(zip.pack, './index.js', null);
+  });
+  
 });
