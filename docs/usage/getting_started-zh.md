@@ -17,11 +17,6 @@
 ```javascript
 var getRawBody = require('raw-body')
 
-module.exports.initializer = function(context, callback) {
-    console.log("initializer invoked");
-    callback(null, '');
-}
-
 module.exports.handler = function (request, response, context) {    
     // get request body
     getRawBody(request, function (err, body) {
