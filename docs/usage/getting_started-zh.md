@@ -17,11 +17,6 @@
 ```javascript
 var getRawBody = require('raw-body')
 
-module.exports.initializer = function(context, callback) {
-    console.log("initializer invoked");
-    callback(null, '');
-}
-
 module.exports.handler = function (request, response, context) {    
     // get request body
     getRawBody(request, function (err, body) {
@@ -56,10 +51,9 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
-        CodeUri: nodejs8/
+        CodeUri: './'
         Description: 'http trigger demo with nodejs8!'
         Runtime: nodejs8
-        Initializer: index.initializer
       Events:
         http-test:
           Type: HTTP
