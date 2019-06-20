@@ -19,7 +19,7 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
 为了让您尽快上手，我们准备了一系列教程：
 
 - [安装教程](https://github.com/aliyun/fun/blob/master/docs/usage/installation-zh.md)：介绍了如何在 Mac、Linux 或者 Windows 上安装 Fun。
-- [使用](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started-zh.md)：通过一个简单的示例介绍了 Fun 的基本用法。
+- [快速开始](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started-zh.md)：通过一个简单的示例介绍了 Fun 的基本用法。
 - [Fun 规范文档](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md): 详细介绍了 Fun 规范文档的细节。
 - **系列文章**：
   - **语法校验**：Fun 提供了比较强大的语法校验功能，并通过精准的报错信息，让用户可以方便的将其修正。
