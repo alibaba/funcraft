@@ -56,7 +56,7 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
-        CodeUri: .
+        CodeUri: './'
         Description: 'http trigger demo with nodejs8!'
         Runtime: nodejs8
       Events:
