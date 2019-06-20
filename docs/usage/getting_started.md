@@ -59,7 +59,6 @@ Resources:
         CodeUri: nodejs8/
         Description: 'http trigger demo with nodejs8!'
         Runtime: nodejs8
-        Initializer: index.initializer
       Events:
         http-test:
           Type: HTTP
