@@ -698,3 +698,76 @@ describe('test getFunCodeAsBase64', () => {
   });
   
 });
+
+describe.only('test config invovationRole fot trigger', ()=> {
+  let restoreProcess;
+
+  beforeEach(async () => {
+    sandbox.stub(FC.prototype, 'getTrigger').resolves(undefined);
+    sandbox.stub(FC.prototype, 'createTrigger').resolves({});
+
+    Object.keys(ram).forEach(m => {
+      if (m === 'makeRole') {
+        sandbox.stub(ram, m).resolves({
+          'Role': {
+            'Arn': 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+          }
+        });
+      } else if (m === 'normalizeRoleOrPoliceName') {
+        sandbox.stub(ram, 'normalizeRoleOrPoliceName').returns('');
+      } else {
+        sandbox.stub(ram, m).resolves({});
+      }
+    });
+
+    deploySupport = await proxyquire('../../lib/deploy/deploy-support', {
+      '@alicloud/fc2': FC,
+      '../ram': ram
+    });
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
+      DEFAULT_REGION: 'cn-shanghai'
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  it('invocationRole  ots trigger ', async ()=> {
+    await deploySupport.makeTrigger(
+      {
+        serviceName: 'serviceName', 
+        functionName: 'functionName', 
+        triggerName: 'triggerName', 
+        triggerType: 'TableStore',
+        triggerProperties: {
+          'InstanceName': 'fc-test-inst',
+          'TableName': 'fc_test_tbl',
+          'InvocationRole': 'acs:ram::987:role/invocation-role-test'
+        }
+      });    
+
+    assert.notCalled(ram.makeRole);
+    assert.notCalled(ram.makePolicy);
+    assert.notCalled(ram.makeAndAttachPolicy);
+    assert.notCalled(ram.attachPolicyToRole);  
+
+    assert.calledWith(
+      FC.prototype.createTrigger,
+      'serviceName',
+      'functionName',
+      {
+        'triggerName': 'triggerName',
+        'triggerType': 'tablestore',
+        'triggerConfig': {},
+        'invocationRole': 'acs:ram::987:role/invocation-role-test',
+        'sourceArn': 'acs:ots:cn-shanghai:ACCOUNT_ID:instance/fc-test-inst/table/fc_test_tbl'
+
+      });
+  });
+});
