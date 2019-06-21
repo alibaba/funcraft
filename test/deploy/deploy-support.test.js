@@ -699,7 +699,7 @@ describe('test getFunCodeAsBase64', () => {
   
 });
 
-describe.only('test config invovationRole fot trigger', ()=> {
+describe('test config invovationRole fot trigger', ()=> {
   let restoreProcess;
 
   beforeEach(async () => {
