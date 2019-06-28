@@ -92,3 +92,7 @@ output
 *.class
 .DS_Store
 .fun
+.classpath
+.project
+event.dat
+__pycache__/
