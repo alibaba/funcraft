@@ -1,3 +1,5 @@
+'use strict'; 
+
 const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
@@ -24,12 +26,12 @@ describe('test selectVSwitchZoneId', async () => {
     const fcAllowedzones = ['cn-hangzhou-g'];
     const vpcZones = [
       {
-        "ZoneId": "cn-hangzhou-b",
-        "LocalName": "华东 1 可用区 B"
+        'ZoneId': 'cn-hangzhou-b',
+        'LocalName': '华东 1 可用区 B'
       },
       {
-        "ZoneId": "cn-hangzhou-d",
-        "LocalName": "华东 1 可用区 D"
+        'ZoneId': 'cn-hangzhou-d',
+        'LocalName': '华东 1 可用区 D'
       }
     ];
 
@@ -41,16 +43,16 @@ describe('test selectVSwitchZoneId', async () => {
     const fcAllowedzones = ['cn-hangzhou-g'];
     const vpcZones = [
       {
-        "ZoneId": "cn-hangzhou-b",
-        "LocalName": "华东 1 可用区 B"
+        'ZoneId': 'cn-hangzhou-b',
+        'LocalName': '华东 1 可用区 B'
       },
       {
-        "ZoneId": "cn-hangzhou-d",
-        "LocalName": "华东 1 可用区 D"
+        'ZoneId': 'cn-hangzhou-d',
+        'LocalName': '华东 1 可用区 D'
       },
       {
-        "ZoneId": "cn-hangzhou-g",
-        "LocalName": "华东 1 可用区 G"
+        'ZoneId': 'cn-hangzhou-g',
+        'LocalName': '华东 1 可用区 G'
       }
     ];
 
@@ -76,18 +78,18 @@ describe('test findVSwitchExistByName', async () => {
     const requestStub = sandbox.stub();
 
     const params = {
-      "RegionId": region,
-      "VSwitchId": "vsw-bp1h9eryqi6fjor4qvmor"
+      'RegionId': region,
+      'VSwitchId': 'vsw-bp1h9eryqi6fjor4qvmor'
     };
 
     requestStub.withArgs('DescribeVSwitchAttributes',
       params, requestOption).resolves({
-        "VSwitchName": defualtVSwitchName
-      });
+      'VSwitchName': defualtVSwitchName
+    });
 
     const vpcPopClient = { request: requestStub };
 
-    const vswitchIds = ["vsw-bp1h9eryqi6fjor4qvmor"];
+    const vswitchIds = ['vsw-bp1h9eryqi6fjor4qvmor'];
 
     const searchRs = await vswitch.findVswitchExistByName(vpcPopClient, region, vswitchIds, defualtVSwitchName);
     expect(searchRs).to.eql('vsw-bp1h9eryqi6fjor4qvmor');
@@ -104,20 +106,20 @@ describe('test createVSwitch', async () => {
 
   it('test createVSwitch', async () => {
     const params = {
-      "RegionId": region,
-      "VpcId": vpcId,
-      "ZoneId": hangzhouZoneId,
-      "CidrBlock": "10.20.0.0/16",
-      "VSwitchName": defualtVSwitchName,
-      "Description": "default vswitch created by fc fun"
+      'RegionId': region,
+      'VpcId': vpcId,
+      'ZoneId': hangzhouZoneId,
+      'CidrBlock': '10.20.0.0/16',
+      'VSwitchName': defualtVSwitchName,
+      'Description': 'default vswitch created by fc fun'
     };
 
     const requestStub = sandbox.stub();
 
     requestStub.withArgs('CreateVSwitch',
       params, requestOption).resolves({
-        "VSwitchId": "vsw-25naue4gz"
-      });
+      'VSwitchId': 'vsw-25naue4gz'
+    });
 
     const vpcPopClient = { request: requestStub };
 

@@ -1,7 +1,6 @@
 'use strict';
 
 const proxyquire = require('proxyquire');
-const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
@@ -10,26 +9,27 @@ const deploySupport = require('../../lib/deploy/deploy-support');
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
 const { red } = require('colors');
-const defaultVpcConfig = {
-  securityGroupId: '',
-  vSwitchIds: [],
-  vpcId: ''
-};
-const defaultNasConfig = {
-  UserId: -1,
-  GroupId: -1,
-  MountPoints: []
-};
+const trigger = require('../../lib/trigger');
+const fc = require('../../lib/fc');
 
 describe('deploy service role ', () => {
   let restoreProcess;
 
   beforeEach(() => {
+
     Object.keys(deploySupport).forEach(m => {
+      sandbox.stub(deploySupport, m).resolves({});
+    });
+
+    Object.keys(fc).forEach(m => {
+      sandbox.stub(fc, m).resolves({});
+    });
+
+    Object.keys(trigger).forEach(m => {
       if (m === 'getTriggerNameList') {
-        sandbox.stub(deploySupport, m).resolves([]);
+        sandbox.stub(trigger, m).resolves([]);
       } else {
-        sandbox.stub(deploySupport, m).resolves({});
+        sandbox.stub(trigger, m).resolves({});
       }
     });
 
@@ -62,7 +62,9 @@ describe('deploy service role ', () => {
   async function deploy(example) {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
-      '../ram': ram
+      '../ram': ram,
+      '../fc': fc,
+      '../trigger': trigger
     }).deploy(path.join('./examples', example, 'template.yml'));
   }
 
@@ -102,11 +104,20 @@ describe('deploy', () => {
   beforeEach(() => {
 
     sandbox.stub(console, 'warn');
+
     Object.keys(deploySupport).forEach(m => {
+      sandbox.stub(deploySupport, m).resolves({});
+    });
+
+    Object.keys(fc).forEach(m => {
+      sandbox.stub(fc, m).resolves({});
+    });
+
+    Object.keys(trigger).forEach(m => {
       if (m === 'getTriggerNameList') {
-        sandbox.stub(deploySupport, m).resolves(['my_trigger_name']);
+        sandbox.stub(trigger, m).resolves(['my_trigger_name']);
       } else {
-        sandbox.stub(deploySupport, m).resolves({});
+        sandbox.stub(trigger, m).resolves({});
       }
     });
 
@@ -139,24 +150,26 @@ describe('deploy', () => {
   async function deploy(example) {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport,
-      '../ram': ram
+      '../ram': ram,
+      '../fc': fc,
+      '../trigger': trigger
     }).deploy(path.join('./examples', example, 'template.yml'));
   }
 
   it('deploy datahub', async () => {
     await deploy('datahub');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: undefined,
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'MyService',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
 
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'datahub'), {
         codeUri: 'datahub.js',
         description: undefined,
@@ -175,16 +188,16 @@ describe('deploy', () => {
   it('deploy helloworld', async () => {
     await deploy('helloworld');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'fc',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'helloworld'), {
         codeUri: './',
         description: undefined,
@@ -203,16 +216,16 @@ describe('deploy', () => {
   it('deploy java', async () => {
     await deploy('java');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'java demo',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'java',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'java'), {
         codeUri: './demo.jar',
         description: 'Hello world!',
@@ -232,7 +245,7 @@ describe('deploy', () => {
   it('deploy nas', async () => {
     await deploy('nas');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'fc nas test',
       internetAccess: null,
       logConfig: {},
@@ -253,7 +266,7 @@ describe('deploy', () => {
       }
     });
 
-    assert.calledWith(deploySupport.makeFunction.firstCall,
+    assert.calledWith(fc.makeFunction.firstCall,
       path.join(process.cwd(), 'examples', 'nas'), {
         codeUri: './read.js',
         description: undefined,
@@ -268,7 +281,7 @@ describe('deploy', () => {
         environmentVariables: { ROOT_DIR: '/mnt/test' }
       });
 
-    assert.calledWith(deploySupport.makeFunction.secondCall,
+    assert.calledWith(fc.makeFunction.secondCall,
       path.join(process.cwd(), 'examples', 'nas'), {
         codeUri: './write.py',
         description: undefined,
@@ -287,17 +300,17 @@ describe('deploy', () => {
   it('deploy openid_connect', async () => {
     await deploy('openid_connect');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'fc test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'fc',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
 
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'openid_connect'), {
         codeUri: './',
         description: 'Hello world!',
@@ -349,16 +362,16 @@ describe('deploy', () => {
   it('deploy tablestore-trigger', async () => {
     await deploy('tablestore-trigger');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'Stream trigger for TableStore',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'test-tableStore-service',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'tablestore-trigger'), {
         codeUri: './',
         handler: 'main.index',
@@ -372,7 +385,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       serviceName: 'test-tableStore-service',
       functionName: 'fun-ots-func',
       triggerName: 'my-tablestore-trigger',
@@ -387,16 +400,16 @@ describe('deploy', () => {
   it('deploy sls_demo', async () => {
     await deploy('sls_demo');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'sls test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'log-compute',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'sls_demo'), {
         codeUri: './',
         handler: 'index.handler',
@@ -410,7 +423,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       serviceName: 'log-compute',
       functionName: 'log-compute',
       triggerName: 'log-stream',
@@ -427,16 +440,16 @@ describe('deploy', () => {
   it('deploy rds-trigger', async () => {
     await deploy('rds-trigger');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'rds trigger test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'rds-service',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'rds-trigger'), {
         codeUri: './',
         handler: 'index.handler',
@@ -450,7 +463,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       serviceName: 'rds-service',
       functionName: 'rds-function',
       triggerName: 'my-rds-trigger',
@@ -468,16 +481,16 @@ describe('deploy', () => {
   it('deploy oss-trigger', async () => {
     await deploy('oss-trigger');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'oss trigger test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'oss-test-service',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'oss-trigger'), {
         codeUri: './',
         handler: 'index.handler',
@@ -491,7 +504,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       serviceName: 'oss-test-service',
       functionName: 'oss-test-function',
       triggerName: 'oss-trigger-name',
@@ -502,7 +515,7 @@ describe('deploy', () => {
         Filter: { Key: { Prefix: 'source/', Suffix: '.png' }}
       }
     });
-    assert.calledWith(deploySupport.getTriggerNameList, {
+    assert.calledWith(trigger.getTriggerNameList, {
       serviceName: 'oss-test-service',
       functionName: 'oss-test-function'
     });
@@ -511,16 +524,16 @@ describe('deploy', () => {
   it('deploy cdn-trigger', async () => {
     await deploy('cdn-trigger');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'cdn trigger test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'cdn-test-service',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'cdn-trigger'), {
         codeUri: './',
         handler: 'index.handler',
@@ -534,7 +547,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       serviceName: 'cdn-test-service',
       functionName: 'cdn-test-function',
       triggerName: 'cdn-trigger-name',
@@ -549,7 +562,7 @@ describe('deploy', () => {
           ]
         }}
     });
-    assert.calledWith(deploySupport.getTriggerNameList, {
+    assert.calledWith(trigger.getTriggerNameList, {
       serviceName: 'cdn-test-service',
       functionName: 'cdn-test-function'
     });
@@ -558,16 +571,16 @@ describe('deploy', () => {
   it('deploy mnsTopic-trigger', async () => {
     await deploy('mnsTopic-trigger');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'MnsTopic trigger test',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'mnsTopic-service',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'mnsTopic-trigger'), {
         codeUri: './',
         handler: 'index.handler',
@@ -581,7 +594,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       serviceName: 'mnsTopic-service',
       functionName: 'mnsTopic-function',
       triggerName: 'my-mns-trigger',
@@ -598,16 +611,16 @@ describe('deploy', () => {
   it('deploy python', async () => {
     await deploy('python');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'python demo',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'pythondemo',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'python'), {
         codeUri: './',
         description: 'Hello world with python!',
@@ -650,17 +663,17 @@ describe('deploy', () => {
   it('deploy segment', async () => {
     await deploy('segment');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'Module as a service',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'maas',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
 
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'segment'), {
         codeUri: './',
         description: 'do segment',
@@ -701,16 +714,16 @@ describe('deploy', () => {
   it('deploy timer', async () => {
     await deploy('timer');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: undefined,
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'MyService',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'timer'), {
         codeUri: './',
         description: 'send hangzhou weather',
@@ -724,7 +737,7 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined
       });
-    assert.calledWith(deploySupport.makeTrigger, {
+    assert.calledWith(trigger.makeTrigger, {
       functionName: 'MyFunction',
       serviceName: 'MyService',
       triggerName: 'TmTrigger',
@@ -739,16 +752,16 @@ describe('deploy', () => {
   it('deploy wechat', async () => {
     await deploy('wechat');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'wechat demo',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'wechat',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction.firstCall,
+    assert.calledWith(fc.makeFunction.firstCall,
       path.join(process.cwd(), 'examples', 'wechat'), {
         codeUri: './',
         description: 'Wechat get handler',
@@ -792,7 +805,7 @@ describe('deploy', () => {
       serviceTimeout: 3000
     });
 
-    assert.calledWith(deploySupport.makeFunction.secondCall,
+    assert.calledWith(fc.makeFunction.secondCall,
       path.join(process.cwd(), 'examples', 'wechat'), {
         codeUri: './',
         description: 'Wechat post handler',
@@ -858,16 +871,16 @@ describe('deploy', () => {
   it('deploy initializer', async () => {
     await deploy('initializer');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'initializer demo',
       internetAccess: null,
       logConfig: {},
       role: '',
       serviceName: 'initializerdemo',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'initializer'), {
         codeUri: './',
         description: 'Hello world with initializer!',
@@ -911,17 +924,17 @@ describe('deploy', () => {
   it('deploy service role', async () => {
     await deploy('service_role');
 
-    assert.calledWith(deploySupport.makeService, {
+    assert.calledWith(fc.makeService, {
       description: 'local invoke demo',
       internetAccess: null,
       logConfig: {},
       role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
       serviceName: 'localdemo',
-      vpcConfig: defaultVpcConfig,
-      nasConfig: defaultNasConfig
+      vpcConfig: undefined,
+      nasConfig: undefined
     });
 
-    assert.calledWith(deploySupport.makeFunction,
+    assert.calledWith(fc.makeFunction,
       path.join(process.cwd(), 'examples', 'service_role'), {
         codeUri: 'nodejs6',
         description: 'Hello world with nodejs6!',
@@ -936,7 +949,7 @@ describe('deploy', () => {
         environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' }
       });
     // add test => no events on local but have onLine 
-    assert.notCalled(deploySupport.makeTrigger);
+    assert.notCalled(trigger.makeTrigger);
     assert.calledOnce(console.warn);
     assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
   });
@@ -949,6 +962,7 @@ describe('custom domain', () => {
     Object.keys(deploySupport).forEach(m => {
       sandbox.stub(deploySupport, m);
     });
+
     restoreProcess = setProcess({
       ACCOUNT_ID: 'ACCOUNT_ID',
       DEFAULT_REGION: 'cn-shanghai',
@@ -956,6 +970,7 @@ describe('custom domain', () => {
       ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
     });
   });
+
   afterEach(() => {
     sandbox.restore();
     restoreProcess();
@@ -1084,32 +1099,6 @@ describe('custom domain', () => {
         CertName: 'CertName',
         PrivateKey: 'PrivateKey',
         Certificate: 'Certificate'
-      }
-    });
-  });
-});
-
-describe('cdn domain capitalization', () => {
-
-  it('Domain->domain', async() => {
-    var capitalConfig = deploySupport.getTriggerConfig('CDN', {
-      'EventName': 'CachedObjectsRefreshed',
-      'EventVersion': '1.0.0',
-      'Notes': 'cdn events trigger test',
-      'Filter': {
-        'Domain': [
-          'cdn-trigger.sunfeiyu.top'
-        ]
-      }
-    });
-    expect(capitalConfig).to.eql({
-      'eventName': 'CachedObjectsRefreshed',
-      'eventVersion': '1.0.0',
-      'notes': 'cdn events trigger test',
-      'filter': {
-        'domain': [
-          'cdn-trigger.sunfeiyu.top'
-        ]
       }
     });
   });

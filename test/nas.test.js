@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const expect = require('expect.js');
 let nas = require('../lib/nas');
@@ -22,20 +22,20 @@ describe('test findNasFileSystem', async () => {
     const description = 'test';
 
     const params = {
-      "RegionId": region,
-      "PageSize": 1000
+      'RegionId': region,
+      'PageSize': 1000
     };
 
     const requestStub = sandbox.stub();
     
     requestStub.withArgs('DescribeFileSystems', params, requestOption).resolves({
-      "FileSystems": {
-        "FileSystem": [
+      'FileSystems': {
+        'FileSystem': [
           {
-            "Description": description,
-            "FileSystemId": "109c042666",
-            "RegionId": "cn-hangzhou",
-            "MeteredSize": 1611661312
+            'Description': description,
+            'FileSystemId': '109c042666',
+            'RegionId': 'cn-hangzhou',
+            'MeteredSize': 1611661312
           }
         ]
       }
@@ -60,24 +60,24 @@ describe('test findMountTarget', async () => {
 
   it('test', async () => {
     const fileSystemId = '123';
-    const vpcId = "vpc-bp1me4doa1zk2mwhksx4q";
-    const vswId = "vpc-bp1me4doa1zk2mwhksx4q";
+    const vpcId = 'vpc-bp1me4doa1zk2mwhksx4q';
+    const vswId = 'vpc-bp1me4doa1zk2mwhksx4q';
     const mountTargetDomain = '0d2574b319-doo72.cn-hangzhou.nas.aliyuncs.com';
 
     const params = {
-      "RegionId": region,
-      "FileSystemId": fileSystemId
+      'RegionId': region,
+      'FileSystemId': fileSystemId
     };
 
     const requestStub = sandbox.stub();
     
     requestStub.withArgs('DescribeMountTargets', params, requestOption).resolves({
-      "MountTargets": {
-        "MountTarget": [
+      'MountTargets': {
+        'MountTarget': [
           {
-            "VswId": vswId,
-            "VpcId": vpcId,
-            "MountTargetDomain": mountTargetDomain
+            'VswId': vswId,
+            'VpcId': vpcId,
+            'MountTargetDomain': mountTargetDomain
           }
         ]
       }
@@ -101,23 +101,23 @@ describe('test createMountTarget', async () => {
 
   it('test', async () => {
     const fileSystemId = '123';
-    const vpcId = "vpc-bp1me4doa1zk2mwhksx4q";
-    const vswId = "vpc-bp1me4doa1zk2mwhksx4q";
+    const vpcId = 'vpc-bp1me4doa1zk2mwhksx4q';
+    const vswId = 'vpc-bp1me4doa1zk2mwhksx4q';
     const mountTargetDomain = '0d2574b319-doo72.cn-hangzhou.nas.aliyuncs.com';
 
     const params = {
-      "RegionId": region,
-      "NetworkType": "Vpc",
-      "FileSystemId": fileSystemId,
-      "AccessGroupName": "DEFAULT_VPC_GROUP_NAME",
-      "VpcId": vpcId,
-      "VSwitchId": vswId
+      'RegionId': region,
+      'NetworkType': 'Vpc',
+      'FileSystemId': fileSystemId,
+      'AccessGroupName': 'DEFAULT_VPC_GROUP_NAME',
+      'VpcId': vpcId,
+      'VSwitchId': vswId
     };
 
     const requestStub = sandbox.stub();
     
     requestStub.withArgs('CreateMountTarget', params, requestOption).resolves({
-      "MountTargetDomain": "0d2574b319-doo72.cn-hangzhou.nas.aliyuncs.com"
+      'MountTargetDomain': '0d2574b319-doo72.cn-hangzhou.nas.aliyuncs.com'
     });
 
     const nasPopClient = { request: requestStub };

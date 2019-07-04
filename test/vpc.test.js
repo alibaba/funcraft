@@ -2,7 +2,6 @@
 
 const vpc = require('../lib/vpc');
 const expect = require('expect.js');
-const nas = require('../lib/nas');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
@@ -23,24 +22,24 @@ describe('test findVpc', () => {
 
   it('test find in first page', async () => {
     var params = {
-      "RegionId": region,
-      "PageSize": 50,
-      "PageNumber": 1
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 1
     };
 
     const requestStub = sandbox.stub();
 
     requestStub.withArgs('DescribeVpcs', params, requestOption).resolves({
-      "PageNumber": 1,
-      "Vpcs": {
-        "Vpc": [
+      'PageNumber': 1,
+      'Vpcs': {
+        'Vpc': [
           {
-            "VpcName": vpcName
+            'VpcName': vpcName
           }
         ]
       },
-      "TotalCount": 3,
-      "PageSize": 10
+      'TotalCount': 3,
+      'PageSize': 10
     });
 
     const vpcPopClient = { request: requestStub };
@@ -52,43 +51,43 @@ describe('test findVpc', () => {
 
   it('test find in second page', async () => {
     var firstPageParams = {
-      "RegionId": region,
-      "PageSize": 50,
-      "PageNumber": 1
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 1
     };
 
     var secondPageParams = {
-      "RegionId": region,
-      "PageSize": 50,
-      "PageNumber": 2
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 2
     };
 
     const requestStub = sandbox.stub();
 
     requestStub.withArgs('DescribeVpcs', firstPageParams, requestOption).resolves({
-      "PageNumber": 1,
-      "Vpcs": {
-        "Vpc": [
+      'PageNumber': 1,
+      'Vpcs': {
+        'Vpc': [
           {
-            "VpcName": 'notfound'
+            'VpcName': 'notfound'
           }
         ]
       },
-      "TotalCount": 60,
-      "PageSize": 50
+      'TotalCount': 60,
+      'PageSize': 50
     });
 
     requestStub.withArgs('DescribeVpcs', secondPageParams, requestOption).resolves({
-      "PageNumber": 2,
-      "Vpcs": {
-        "Vpc": [
+      'PageNumber': 2,
+      'Vpcs': {
+        'Vpc': [
           {
-            "VpcName": vpcName
+            'VpcName': vpcName
           }
         ]
       },
-      "TotalCount": 60,
-      "PageSize": 50
+      'TotalCount': 60,
+      'PageSize': 50
     });
 
     const vpcPopClient = { request: requestStub };
@@ -104,43 +103,43 @@ describe('test findVpc', () => {
 
   it('test not found', async () => {
     var firstPageParams = {
-      "RegionId": region,
-      "PageSize": 50,
-      "PageNumber": 1
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 1
     };
 
     var secondPageParams = {
-      "RegionId": region,
-      "PageSize": 50,
-      "PageNumber": 2
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 2
     };
 
     const requestStub = sandbox.stub();
 
     requestStub.withArgs('DescribeVpcs', firstPageParams, requestOption).resolves({
-      "PageNumber": 1,
-      "Vpcs": {
-        "Vpc": [
+      'PageNumber': 1,
+      'Vpcs': {
+        'Vpc': [
           {
-            "VpcName": 'notfound'
+            'VpcName': 'notfound'
           }
         ]
       },
-      "TotalCount": 60,
-      "PageSize": 50
+      'TotalCount': 60,
+      'PageSize': 50
     });
 
     requestStub.withArgs('DescribeVpcs', secondPageParams, requestOption).resolves({
-      "PageNumber": 2,
-      "Vpcs": {
-        "Vpc": [
+      'PageNumber': 2,
+      'Vpcs': {
+        'Vpc': [
           {
-            "VpcName": 'not found'
+            'VpcName': 'not found'
           }
         ]
       },
-      "TotalCount": 60,
-      "PageSize": 50
+      'TotalCount': 60,
+      'PageSize': 50
     });
 
     const vpcPopClient = { request: requestStub };
@@ -161,39 +160,39 @@ describe('test createVpc', async () => {
 
   it('test create vpc', async () => {
     var createParams = {
-      "RegionId": region,
-      "CidrBlock": "10.0.0.0/8",
-      "EnableIpv6": false,
-      "VpcName": vpcName,
-      "Description": "default vpc created by fc fun"
+      'RegionId': region,
+      'CidrBlock': '10.0.0.0/8',
+      'EnableIpv6': false,
+      'VpcName': vpcName,
+      'Description': 'default vpc created by fc fun'
     };
 
     const requestStub = sandbox.stub();
 
     requestStub.withArgs('CreateVpc', createParams, requestOption).resolves({
-      "VpcId": vpcId
+      'VpcId': vpcId
     });
 
     const describeParms = {
-      "RegionId": region,
-      "VpcId": vpcId 
+      'RegionId': region,
+      'VpcId': vpcId 
     };
 
     requestStub.withArgs('DescribeVpcs', describeParms, requestOption)
       .onCall(0).resolves({
-        "Vpcs": {
-          "Vpc": [
+        'Vpcs': {
+          'Vpc': [
             {
-              "Status": "Pending"
+              'Status': 'Pending'
             }
           ]
         }
       })
       .onCall(1).resolves({
-        "Vpcs": {
-          "Vpc": [
+        'Vpcs': {
+          'Vpc': [
             {
-              "Status": "Available"
+              'Status': 'Available'
             }
           ]
         }
