@@ -120,12 +120,41 @@ describe('test createMountTarget', async () => {
       'MountTargetDomain': '0d2574b319-doo72.cn-hangzhou.nas.aliyuncs.com'
     });
 
+    const describeParms = {
+      'RegionId': region, 
+      'FileSystemId': fileSystemId,
+      'MountTargetDomain': mountTargetDomain
+    };
+    
+
+    requestStub.withArgs('DescribeMountTargets', describeParms, requestOption)
+      .onCall(0).resolves({
+        'MountTargets': {
+          'MountTarget': [
+            {
+              'Status': 'Pending'
+            }
+          ]
+        }
+      })
+      .onCall(1).resolves({
+        'MountTargets': {
+          'MountTarget': [
+            {
+              'Status': 'Active'
+            }
+          ]
+        }
+      });
+
     const nasPopClient = { request: requestStub };
 
     const mountTarget = await nas.createMountTarget(nasPopClient, region, fileSystemId, vpcId, vswId);
     
     expect(mountTarget).to.eql(mountTargetDomain);
 
-    assert.calledWith(requestStub, 'CreateMountTarget', params, requestOption);  
+    assert.calledWith(requestStub.firstCall, 'CreateMountTarget', params, requestOption);  
+    assert.calledWith(requestStub.secondCall, 'DescribeMountTargets', describeParms, requestOption);
+    assert.calledWith(requestStub.thirdCall, 'DescribeMountTargets', describeParms, requestOption);
   });
 });
