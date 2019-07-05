@@ -96,6 +96,7 @@ describe('with local ~/.fcli/config.yaml', () => {
     expect(profile.defaultRegion).to.be(process.env.DEFAULT_REGION);
     expect(profile.timeout).to.be(process.env.TIMEOUT);
     expect(profile.retries).to.be(process.env.RETRIES);
+    expect(profile.protocol).to.be('https');
   });
 
   it('without env', async () => {
@@ -106,6 +107,7 @@ describe('with local ~/.fcli/config.yaml', () => {
     expect(profile.defaultRegion).to.be('cn-hangzhou');
     expect(profile.timeout).to.be(60);
     expect(profile.retries).to.be(10);
+    expect(profile.protocol).to.be('https');
   });
 
   it('pattern', ()=>{
