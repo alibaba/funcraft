@@ -114,9 +114,7 @@ cp() {
                 $FC_URL"upload?file_hash=${fileHashArr[$seq]}&chunk_id=$seq&chunk_sum=$len&dst=$dstFile&task_id=$absSrcFileHash" \
                 -F "file=@$sf") 
             
-            upload_http_body=$(echo $upload_http_response | sed -e 's/upload_http_status\:.*//g')
             upload_http_status=$(echo $upload_http_response | tr -d '\n' | sed -e 's/.*upload_http_status://')
-            echo $upload_http_body
             
             if [ $upload_http_status -ne 200 ]; then
                 upload_fail=1
