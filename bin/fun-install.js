@@ -46,7 +46,15 @@ program
       .filter(e => e.length === 2)
       .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
-    install(packageNames, opts).catch(handler);
+    install(packageNames, opts).then(() => {
+      if (process.platform === 'win32') {
+        // fix windows not auto exit bug after docker operation
+        unrefTimeout(() => {
+          // in order visitor request has been sent out
+          process.exit(0); // eslint-disable-line
+        });
+      }
+    }).catch(handler);
   });
 
 program
