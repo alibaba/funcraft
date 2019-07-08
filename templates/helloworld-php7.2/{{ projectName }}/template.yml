@@ -10,4 +10,4 @@ Resources:
       Properties:
         Handler: index.handler
         Runtime: php7.2
-        CodeUri: 'index.php'
+        CodeUri: './'

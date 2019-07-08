@@ -10,4 +10,4 @@ Resources:
       Properties:
         Handler: index.handler
         Runtime: nodejs6
-        CodeUri: 'index.js'
+        CodeUri: './'
