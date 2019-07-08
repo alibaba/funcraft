@@ -175,7 +175,7 @@ describe('test createVpc', async () => {
 
     const describeParms = {
       'RegionId': region,
-      'VpcId': vpcId 
+      'VpcId': vpcId
     };
 
     requestStub.withArgs('DescribeVpcs', describeParms, requestOption)
@@ -207,6 +207,50 @@ describe('test createVpc', async () => {
     assert.calledWith(requestStub.firstCall, 'CreateVpc', createParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'DescribeVpcs', describeParms, requestOption);
     assert.calledWith(requestStub.thirdCall, 'DescribeVpcs', describeParms, requestOption);
+  });
+
+  it('test create vpc timeout', async () => {
+    var createParams = {
+      'RegionId': region,
+      'CidrBlock': '10.0.0.0/8',
+      'EnableIpv6': false,
+      'VpcName': vpcName,
+      'Description': 'default vpc created by fc fun'
+    };
+
+    const requestStub = sandbox.stub();
+
+    requestStub.withArgs('CreateVpc', createParams, requestOption).resolves({
+      'VpcId': vpcId
+    });
+
+    const describeParms = {
+      'RegionId': region,
+      'VpcId': vpcId
+    };
+
+    requestStub.withArgs('DescribeVpcs', describeParms, requestOption)
+      .resolves({
+        'Vpcs': {
+          'Vpc': [
+            {
+              'Status': 'Pending'
+            }
+          ]
+        }
+      });
+
+    const vpcPopClient = { request: requestStub };
+
+    try {
+      await vpc.createVpc(vpcPopClient, region, vpcName);
+      assert.fail('create vpc should not success');
+    } catch (e) {
+      expect(e.message).to.eql(`Timeout while waiting for vpc vpc-bp1dkyqjiu7hecg8j7jhe status to be 'Available'`);
+
+      assert.calledWith(requestStub.firstCall, 'CreateVpc', createParams, requestOption);
+      assert.callCount(requestStub, 1 + 15); // 1 CreateVpc, 15 DescribeVpcs
+    }
   });
 });
 
