@@ -72,7 +72,7 @@ describe('test invoke construct and init', async () => {
     await invoke.init();
 
     expect(invoke.nasConfig).to.eql(undefined);
-    expect(invoke.dockerUser).to.eql('10007:10007');
+    expect(invoke.dockerUser).to.eql('10003:10003');
     expect(invoke.nasMounts).to.eql([]);
     expect(invoke.codeMount).to.eql(codeMount);
     expect(invoke.mounts).to.eql([codeMount]);
