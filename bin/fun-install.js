@@ -15,6 +15,16 @@ const optDefaults = {
   packageType: 'module'
 };
 
+const autoExitOnWindows = () => {
+  if (process.platform === 'win32') {
+    // fix windows not auto exit bug after docker operation
+    unrefTimeout(() => {
+      // in order visitor request has been sent out
+      process.exit(0); // eslint-disable-line
+    });
+  }
+};
+
 program
   .usage('[moduleNames...]')
   .option('-r, --runtime <runtime>', 'function runtime, avaliable choice is: python2.7, python3, nodejs6, nodejs8, java8, php7.2')
@@ -46,15 +56,26 @@ program
       .filter(e => e.length === 2)
       .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
-    install(packageNames, opts).then(() => {
-      if (process.platform === 'win32') {
-        // fix windows not auto exit bug after docker operation
-        unrefTimeout(() => {
-          // in order visitor request has been sent out
-          process.exit(0); // eslint-disable-line
-        });
-      }
-    }).catch(handler);
+    getVisitor().then(visitor => {
+
+      visitor.pageview('/fun/install').send();
+
+      install(packageNames, opts).then(() => {
+
+        autoExitOnWindows();
+  
+      }).catch(error => {
+  
+        visitor.event({
+          ec: 'install',
+          ea: 'install',
+          el: 'error',
+          dp: '/fun/install'
+        }).send();
+  
+        handler(error);
+      });
+    });
   });
 
 program
@@ -65,7 +86,13 @@ program
 program
   .command('env')
   .description('print environment varables.')
-  .action(env);
+  .action(async () => {
+    await env().then(() => {      
+
+      autoExitOnWindows();
+
+    }).catch(handler);
+  });
 
 program.parse(process.argv);
 
@@ -87,13 +114,8 @@ if (!program.args.length) {
         dp: '/fun/installAll'
       }).send();
 
-      if (process.platform === 'win32') {
-        // fix windows not auto exit bug after docker operation
-        unrefTimeout(() => {
-          // in order visitor request has been sent out
-          process.exit(0); // eslint-disable-line
-        });
-      }
+      autoExitOnWindows();
+
     }).catch(error => {
       visitor.event({
         ec: 'installAll',
