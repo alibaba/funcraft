@@ -56,26 +56,11 @@ program
       .filter(e => e.length === 2)
       .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
-    getVisitor().then(visitor => {
+    install(packageNames, opts).then(() => {
 
-      visitor.pageview('/fun/install').send();
+      autoExitOnWindows();
 
-      install(packageNames, opts).then(() => {
-
-        autoExitOnWindows();
-  
-      }).catch(error => {
-  
-        visitor.event({
-          ec: 'install',
-          ea: 'install',
-          el: 'error',
-          dp: '/fun/install'
-        }).send();
-  
-        handler(error);
-      });
-    });
+    }).catch(handler);
   });
 
 program
