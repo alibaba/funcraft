@@ -19,10 +19,7 @@ const { hasDocker } = require('./conditions');
 
 const util = require('util');
 const path = require('path');
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+const { sleep } = require('../lib/time');
 
 describe('test generateDockerCmd', () => {
   const functionProps = {
