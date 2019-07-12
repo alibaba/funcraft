@@ -4,6 +4,17 @@ const path = require('path');
 
 const functionName = 'python3';
 
+const triggerName = 'http-test';
+
+const triggerRes = {
+  'Type': 'HTTP',
+  'Properties': {
+    'AuthType': 'ANONYMOUS',
+    'Methods': ['GET', 'POST', 'PUT']
+  }
+};
+
+
 const functionRes = {
   'Type': 'Aliyun::Serverless::Function',
   'Properties': {
@@ -23,13 +34,7 @@ const httpTriggerFunctionRes = {
     'Runtime': 'python3'
   },
   'Events': {
-    'http-test': {
-      'Type': 'HTTP',
-      'Properties': {
-        'AuthType': 'ANONYMOUS',
-        'Methods': ['GET', 'POST', 'PUT']
-      }
-    }
+    triggerName: triggerRes
   }
 };
 
@@ -100,5 +105,6 @@ module.exports = {
   functionProps, serviceName,
   serviceRes, serviceResWithNasConfig,
   debugPort, debugIde, tplPath, codeMount,
-  nasMounts, tpl, httpTriggerServiceRes, httpTriggerFunctionRes
+  nasMounts, tpl, httpTriggerServiceRes, httpTriggerFunctionRes,
+  triggerName, triggerRes
 };
