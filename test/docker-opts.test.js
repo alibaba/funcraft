@@ -2,9 +2,13 @@
 
 const expect = require('expect.js');
 
-const dockerOpts = require('../lib/docker-opts');
+let dockerOpts = require('../lib/docker-opts');
 const { setProcess } = require('./test-utils');
 const os = require('os');
+const DockerCli = require('dockerode');
+const sinon = require('sinon');
+const sandbox = sinon.createSandbox();
+const proxyquire = require('proxyquire');
 
 describe('test resolveRuntimeToDockerImage', () => {
   it('test find not python image', () => {
@@ -25,6 +29,12 @@ describe('test generateLocalInvokeOpts', () => {
 
   beforeEach(() => {
 
+    sandbox.stub(DockerCli.prototype, 'info').resolves({});
+
+    dockerOpts = proxyquire('../lib/docker-opts', {
+      'dockerode': DockerCli
+    });
+
     restoreProcess = setProcess({
       HOME: os.tmpdir(),
       ACCOUNT_ID: 'testAccountId',
@@ -34,6 +44,7 @@ describe('test generateLocalInvokeOpts', () => {
   });
 
   afterEach(() => {
+    sandbox.restore();
     restoreProcess();
   });
 
