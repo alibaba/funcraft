@@ -282,7 +282,6 @@ describe('test docker run', async () => {
 
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
-    sandbox.stub(DockerCli.prototype, 'info').resolves({});
     sandbox.stub(DockerCli.prototype, 'getContainer').returns({ 
       'stop': sandbox.stub(),
       'inspect': sandbox.stub().resolves({})
@@ -368,8 +367,6 @@ describe('test docker run', async () => {
     assert.calledOnce(streamMock.end);
 
     assert.calledOnce(containerMock.wait);
-
-    assert.calledOnce(DockerCli.prototype.info);
 
   });
 
