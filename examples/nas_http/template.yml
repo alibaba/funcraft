@@ -11,7 +11,7 @@ Resources:
       VpcConfig:
         VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
         VSwitchIds: [ 'vsw-bp1gitru7oicyyb4uiylj' ]
-        SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks'
+        SecurityGroupId: 'sg-bp1hxp0cmozjepfiy9iu'
       NasConfig: 
         UserId: -1
         GroupId: -1
@@ -34,7 +34,7 @@ Resources:
           Properties:
               AuthType: ANONYMOUS
               Methods: ['GET', 'POST', 'PUT']
-
+              
     writeNas:
       Type: 'Aliyun::Serverless::Function'
       Properties:
