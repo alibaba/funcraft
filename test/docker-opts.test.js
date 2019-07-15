@@ -7,6 +7,7 @@ const { setProcess } = require('./test-utils');
 const os = require('os');
 const DockerCli = require('dockerode');
 const sinon = require('sinon');
+const assert = sinon.assert;
 const sandbox = sinon.createSandbox();
 const proxyquire = require('proxyquire');
 
@@ -63,6 +64,8 @@ describe('test generateLocalInvokeOpts', () => {
       ReadOnly: true
     }], 'cmd', 9000, envs, '1000:1000');
 
+    assert.calledOnce(DockerCli.prototype.info);
+
     expect(opts).to.eql({
       'name': 'test',
       'Cmd': 'cmd',
@@ -115,6 +118,8 @@ describe('test generateLocalInvokeOpts', () => {
       Target: '/code',
       ReadOnly: true
     }], null, null, null, null);
+
+    assert.calledOnce(DockerCli.prototype.info);
 
     expect(opts).to.eql({
       'name': 'test',
