@@ -190,5 +190,14 @@ describe('test resolveDockerEnv', () => {
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
   });
+});
 
+describe('test pathTransformationToVirtualBox', () => {
+  it('test default host machine path', async () => {
+
+    const source = 'C:\\Users\\nas\\read.js';
+    const result = await dockerOpts.pathTransformationToVirtualBox(source);
+    expect(result).to.be('/c/Users/nas/read.js');
+
+  });
 });
