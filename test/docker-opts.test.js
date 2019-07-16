@@ -192,12 +192,12 @@ describe('test resolveDockerEnv', () => {
   });
 });
 
-describe('test pathTransformationToVirtualBox', () => {
+describe.only('test pathTransformationToVirtualBox', () => {
   it('test default host machine path', async () => {
-
-    const source = 'C:\\Users\\nas\\read.js';
-    const result = await dockerOpts.pathTransformationToVirtualBox(source);
-    expect(result).to.eql('/c/Users/nas/read.js');
-
+    if(process.platform === 'win32') {
+      const source = 'C:\\Users\\WB-SFY~1\\AppData\\Local\\Temp';
+      const result = await dockerOpts.pathTransformationToVirtualBox(source);
+      expect(result).to.eql('/c/Users/WB-SFY~1/AppData/Local/Temp');
+    }
   });
 });
