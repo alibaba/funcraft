@@ -194,7 +194,7 @@ describe('test resolveDockerEnv', () => {
 
 describe('test pathTransformationToVirtualBox', () => {
   it('test default host machine path', async () => {
-    if(process.platform === 'win32') {
+    if (process.platform === 'win32') {
       const source = 'C:\\Users\\WB-SFY~1\\AppData\\Local\\Temp';
       const result = await dockerOpts.pathTransformationToVirtualBox(source);
       expect(result).to.eql('/c/Users/WB-SFY~1/AppData/Local/Temp');
