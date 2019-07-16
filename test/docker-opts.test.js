@@ -197,7 +197,7 @@ describe('test pathTransformationToVirtualBox', () => {
 
     const source = 'C:\\Users\\nas\\read.js';
     const result = await dockerOpts.pathTransformationToVirtualBox(source);
-    expect(result).to.be('/c/Users/nas/read.js');
+    expect(result).to.eql('/c/Users/nas/read.js');
 
   });
 });
