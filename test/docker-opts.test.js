@@ -192,7 +192,7 @@ describe('test resolveDockerEnv', () => {
   });
 });
 
-describe.only('test pathTransformationToVirtualBox', () => {
+describe('test pathTransformationToVirtualBox', () => {
   it('test default host machine path', async () => {
     if(process.platform === 'win32') {
       const source = 'C:\\Users\\WB-SFY~1\\AppData\\Local\\Temp';
