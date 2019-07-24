@@ -65,7 +65,7 @@ describe('deploy service role ', () => {
       '../ram': ram,
       '../fc': fc,
       '../trigger': trigger
-    }).deploy(path.join('./examples', example, 'template.yml'));
+    }).deploy(path.join('./examples', example, 'template.yml'), {});
   }
 
   it('all none', async ()=>{
@@ -153,7 +153,7 @@ describe('deploy', () => {
       '../ram': ram,
       '../fc': fc,
       '../trigger': trigger
-    }).deploy(path.join('./examples', example, 'template.yml'));
+    }).deploy(path.join('./examples', example, 'template.yml'), {});
   }
 
   it('deploy datahub', async () => {
