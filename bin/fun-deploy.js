@@ -12,20 +12,24 @@ program
   .name('fun deploy')
   .description('Deploy a serverless application.')
   .option('-t, --template [template]', 'path of fun template file.', null)
+  .option('-u, --update-config', 'Update only configuration flags')
   .parse(process.argv);
 
-if (program.args.length) {
-  console.error();
-  console.error("  error: unexpected argument '%s'", program.args[0]);
-  program.help();
-}
+
+validateCommandParameters(program);
+
+const context = {
+  resourceName: program.args[0],
+  updateConfig: program.updateConfig || false,
+  template: program.template
+};
 
 notifier.notify();
 
 getVisitor().then(visitor => {
   visitor.pageview('/fun/deploy').send();
 
-  require('../lib/commands/deploy')(null, program.template)
+  require('../lib/commands/deploy')(null, context)
     .then(() => {
       visitor.event({
         ec: 'deploy',
@@ -45,4 +49,20 @@ getVisitor().then(visitor => {
       require('../lib/exception-handler')(error);
     });
 });
+
+
+function validateCommandParameters(program) {
+
+  if (program.updateConfig !== true && program.updateConfig !== false && program.updateConfig !== undefined) {
+    console.error();
+    console.error("  error: unexpected argument '%s'", program.updateConfig);
+    program.help();
+  }
+    
+  if (program.args.length > 1) {
+    console.error();
+    console.error("  error: unexpected argument '%s'", program.args[1]);
+    program.help();
+  }
+}
 
