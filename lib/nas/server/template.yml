@@ -1,0 +1,25 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  demo-service: # service name
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: ''
+      Policies:
+        - AliyunOSSFullAccess
+      NasConfig: Auto
+    demo: # function name
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs8
+        CodeUri: './dist'
+        Timeout: 60
+        EnvironmentVariables: 
+          PATH: '/code/.fun/root/usr/bin'
+      Events:
+        httpTrigger:
+          Type: HTTP
+          Properties:
+            AuthType: FUNCTION
+            Methods: ['POST', 'GET']

@@ -37,5 +37,6 @@ binary: clean
 
 upload: 
 	@script/upload.sh
+	make -C lib/nas/server package upload
 
 .PHONY: test clean binary

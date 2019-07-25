@@ -1,0 +1,16 @@
+.DS_Store
+node_modules
+build
+lib
+*.log
+.idea
+.metadata
+*.iml
+jdt.ls-java-project
+.nyc_output
+**/docs/api
+.history
+.Trash-*
+.fun
+dist
+
