@@ -2,9 +2,14 @@
 
 const expect = require('expect.js');
 
-const dockerOpts = require('../lib/docker-opts');
+let dockerOpts = require('../lib/docker-opts');
 const { setProcess } = require('./test-utils');
 const os = require('os');
+const DockerCli = require('dockerode');
+const sinon = require('sinon');
+const assert = sinon.assert;
+const sandbox = sinon.createSandbox();
+const proxyquire = require('proxyquire');
 
 describe('test resolveRuntimeToDockerImage', () => {
   it('test find not python image', () => {
@@ -25,6 +30,12 @@ describe('test generateLocalInvokeOpts', () => {
 
   beforeEach(() => {
 
+    sandbox.stub(DockerCli.prototype, 'info').resolves({});
+
+    dockerOpts = proxyquire('../lib/docker-opts', {
+      'dockerode': DockerCli
+    });
+
     restoreProcess = setProcess({
       HOME: os.tmpdir(),
       ACCOUNT_ID: 'testAccountId',
@@ -34,6 +45,7 @@ describe('test generateLocalInvokeOpts', () => {
   });
 
   afterEach(() => {
+    sandbox.restore();
     restoreProcess();
   });
 
@@ -51,6 +63,8 @@ describe('test generateLocalInvokeOpts', () => {
       Target: '/code',
       ReadOnly: true
     }], 'cmd', 9000, envs, '1000:1000');
+
+    assert.calledOnce(DockerCli.prototype.info);
 
     expect(opts).to.eql({
       'name': 'test',
@@ -104,6 +118,8 @@ describe('test generateLocalInvokeOpts', () => {
       Target: '/code',
       ReadOnly: true
     }], null, null, null, null);
+
+    assert.calledOnce(DockerCli.prototype.info);
 
     expect(opts).to.eql({
       'name': 'test',
@@ -174,5 +190,14 @@ describe('test resolveDockerEnv', () => {
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
   });
+});
 
+describe('test pathTransformationToVirtualBox', () => {
+  it('test default host machine path', async () => {
+    if (process.platform === 'win32') {
+      const source = 'C:\\Users\\WB-SFY~1\\AppData\\Local\\Temp';
+      const result = await dockerOpts.pathTransformationToVirtualBox(source);
+      expect(result).to.eql('/c/Users/WB-SFY~1/AppData/Local/Temp');
+    }
+  });
 });
