@@ -367,6 +367,7 @@ describe('test docker run', async () => {
     assert.calledOnce(streamMock.end);
 
     assert.calledOnce(containerMock.wait);
+
   });
 
   it('test cancel invoke function', async () => {

@@ -72,6 +72,7 @@
     "node-watch": "^0.6.0",
     "os-locale": "^2.1.0",
     "os-name": "^3.1.0",
+    "progress": "^2.0.3",
     "promise-retry": "^1.1.1",
     "raw-body": "^2.3.3",
     "require-from-string": "^2.0.2",
@@ -80,6 +81,7 @@
     "single-line-log": "^1.1.2",
     "tablestore": "^4.3.2",
     "universal-analytics": "^0.4.20",
+    "unzipper": "^0.10.1",
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0"
   },
