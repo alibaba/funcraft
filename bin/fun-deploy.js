@@ -20,7 +20,7 @@ validateCommandParameters(program);
 
 const context = {
   resourceName: program.args[0],
-  updateConfig: program.updateConfig || false,
+  onlyConfig: program.updateConfig || false,
   template: program.template
 };
 
