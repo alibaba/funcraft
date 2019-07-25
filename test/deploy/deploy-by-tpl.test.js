@@ -4,13 +4,19 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const expect = require('expect.js');
+
 const path = require('path');
 const deploySupport = require('../../lib/deploy/deploy-support');
+
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
 const { red } = require('colors');
 const trigger = require('../../lib/trigger');
 const fc = require('../../lib/fc');
+const prompt = require('../../lib/init/prompt');
+
+const { tpl } = require('../tpl-mock-data');
 
 describe('deploy service role ', () => {
   let restoreProcess;
@@ -1101,5 +1107,49 @@ describe('custom domain', () => {
         Certificate: 'Certificate'
       }
     });
+  });
+});
+
+
+
+describe('test partical deploy', () => {
+  
+  beforeEach(() => {
+
+    Object.keys(prompt).forEach(m => {
+      if (m === 'promptForSameFunction') {
+        sandbox.stub(prompt, m).resolves('localdemo/python3');
+      } else {
+        sandbox.stub(prompt, m).resolves({});
+      }
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  async function partialDeployment(sourceName, tpl) {
+    return await proxyquire('../../lib/deploy/deploy-by-tpl', {
+      '../../lib/init/prompt': prompt
+    }).partialDeployment({
+      resourceName: sourceName
+    }, tpl);
+  }
+
+  it('single functionName', async () => {
+
+    const {serviceName, serviceRes} = await partialDeployment('python3', tpl);
+
+    expect(serviceName).to.be('localdemo');
+    expect(serviceRes).to.be(tpl.Resources.localdemo);
+  });
+
+  it('serviceName/functionName', async () => {
+
+    const {serviceName, serviceRes} = await partialDeployment('localdemo/python3', tpl);
+    
+    expect(serviceName).to.be('localdemo');
+    expect(serviceRes).to.be(tpl.Resources.localdemo);
   });
 });
