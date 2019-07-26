@@ -10,9 +10,18 @@ const notifier = require('../lib/update-notifier');
 
 program
   .name('fun deploy')
-  .description('Deploy a serverless application.')
+  .usage('[options] [resource]') 
+  .description(`
+  Deploy a serverless application.
+
+  use 'fun deploy' to deploy all resources
+  use 'fun deploy serviceName' to deploy all functions under a service
+  use 'fun deploy functionName' to deploy only a function resource
+
+  with '--only-config' parameter, will only update resource config, without updating the function code`)
+
   .option('-t, --template [template]', 'path of fun template file.', null)
-  .option('-u, --only-config', 'Update only configuration flags')
+  .option('-c, --only-config', 'Update only configuration flags')
   .parse(process.argv);
 
 
