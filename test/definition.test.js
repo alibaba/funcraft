@@ -91,7 +91,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find certain function by service and functionName', async function () {
 
-    let {serviceName, serviceRes} = await definition.findCertainFunctionByServiceAndFunctionName(tpl.Resources, 'localdemo', 'python3' );
+    let {serviceName, serviceRes} = await definition.findServiceByCertainServiceAndFunctionName(tpl.Resources, 'localdemo', 'python3' );
 
     expect(serviceName).to.be('localdemo');
     expect(serviceRes).to.be(tpl.Resources.localdemo);
@@ -99,7 +99,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find certain function by service and functionName on duplicated function', async function () {
 
-    let {serviceName, serviceRes} = await definition.findCertainFunctionByServiceAndFunctionName(tplWithDuplicatedFunction.Resources, 'localdemo2', 'python3' );
+    let {serviceName, serviceRes} = await definition.findServiceByCertainServiceAndFunctionName(tplWithDuplicatedFunction.Resources, 'localdemo2', 'python3' );
 
     expect(serviceName).to.be('localdemo2');
     expect(serviceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo2);
