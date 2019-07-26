@@ -18,7 +18,7 @@ program
 
 const context = {
   name: program.name,
-  recurs: program.recursive,
+  recursive: program.recursive,
   force: program.force
 };
 

@@ -13,7 +13,6 @@ program
   .description(
     `The fun nas command line provides a set of commands to manage remote NAS  locally.`
   )
-  .option('-v, --verbose', 'verbose output', (_, total) => total + 1, 0)
   // See git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands.
   // See source code: https://github.com/tj/commander.js/blob/master/index.js#L525-L570.
 

@@ -1,3 +1,4 @@
 #!/bin/bash
 
-fun local start
+npm run dev
+fun local start -d 3000

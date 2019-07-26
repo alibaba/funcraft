@@ -20,12 +20,12 @@ program
 
 const context = {
   name: program.name,
-  recurs: program.recursive,
+  recursive: program.recursive,
   force: program.force,
   skip: program.next
 };
 
-if (program.args.length > 0) {
+if (program.args.length > 1) {
   context.src = program.args[0];
   context.dst = program.args[1];
 } else {
