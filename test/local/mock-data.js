@@ -34,7 +34,7 @@ const httpTriggerFunctionRes = {
     'Runtime': 'python3'
   },
   'Events': {
-    triggerName: triggerRes
+    [triggerName]: triggerRes
   }
 };
 
@@ -47,7 +47,7 @@ const serviceRes = {
   'Properties': {
     'Description': 'python local invoke demo'
   },
-  functionName: functionRes
+  [functionName]: functionRes
 };
 
 const httpTriggerServiceRes = {
@@ -55,13 +55,15 @@ const httpTriggerServiceRes = {
   'Properties': {
     'Description': 'python local invoke demo'
   },
-  functionName: httpTriggerFunctionRes
+  [functionName]: httpTriggerFunctionRes
 };
 
 const tpl = {
   'ROSTemplateFormatVersion': '2015-09-01',
   'Transform': 'Aliyun::Serverless-2018-04-03',
-  'Resources': serviceRes
+  'Resources': {
+    [serviceName]: serviceRes
+  }
 };
 
 const serviceResWithNasConfig = {
@@ -79,7 +81,7 @@ const serviceResWithNasConfig = {
       ]
     }
   },
-  functionName: functionRes
+  [functionName]: functionRes
 };
 
 const debugPort = 8080;

@@ -74,7 +74,6 @@ tasks:
 
     expect(path.join(funTempDir, '.fun/root/usr/lib/libzbar.so.0')).to.be.a.path();
     expect(path.join(funTempDir, '1.txt')).to.be.a.path();
-
   });
 
 

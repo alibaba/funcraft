@@ -51,7 +51,7 @@ describe('test registerHttpTriggers', () => {
       triggerRes: triggerRes
     }];
 
-    await httpSupport.registerHttpTriggers(app, 8080, triggers, null, null, tplPath);
+    await httpSupport.registerHttpTriggers(app, 8080, triggers, null, null, path.dirname(tplPath));
 
     assert.calledWith(fc.detectLibrary, 
       httpTriggerFunctionRes.Properties.CodeUri, 
@@ -85,7 +85,8 @@ describe('test registerApis', () => {
       'post': sandbox.stub()
     };
 
-    const tplPath = os.tmpdir();
+    const tplPath = path.join(os.tmpdir(), 'template.yml');
+    const baseDir = path.dirname(tplPath);
 
     const functions = [{
       serviceName,
@@ -94,12 +95,12 @@ describe('test registerApis', () => {
       functionRes
     }];
 
-    await httpSupport.registerApis(app, 8080, functions, null, null, tplPath);
+    await httpSupport.registerApis(app, 8080, functions, null, null, baseDir);
 
     assert.calledWith(fc.detectLibrary, 
       httpTriggerFunctionRes.Properties.CodeUri, 
       httpTriggerFunctionRes.Properties.Runtime,
-      path.dirname(tplPath));
+      baseDir);
 
     assert.calledWith(app.post, `/2016-08-15/services/${serviceName}/functions/${functionName}/invocations`, sinon.match.func);
   });

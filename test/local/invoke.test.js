@@ -15,8 +15,10 @@ const proxyquire = require('proxyquire');
 const { functionName, functionRes,
   functionProps, serviceName,
   serviceRes, serviceResWithNasConfig,
-  debugPort, debugIde, tplPath, codeMount,
+  debugPort, debugIde, codeMount,
   nasMounts } = require('./mock-data');
+
+const baseDir = '.';
 
 describe('test invoke construct and init', async () => {
 
@@ -44,20 +46,20 @@ describe('test invoke construct and init', async () => {
     expect(invoke.functionProps).to.eql(functionProps);
     expect(invoke.debugPort).to.eql(debugPort);
     expect(invoke.debugIde).to.eql(debugIde);
-    expect(invoke.tplPath).to.eql(tplPath);
+    expect(invoke.baseDir).to.eql(baseDir);
 
     expect(invoke.runtime).to.eql(functionProps.Runtime);
     expect(invoke.codeUri).to.eql(process.cwd());
   }
 
-  it('test construct', async () => {
+  it('test construct', async () => {    
     const invoke = new Invoke(serviceName,
       serviceRes,
       functionName,
       functionRes,
       debugPort,
       debugIde,
-      tplPath);
+      baseDir);
 
     expectConstructConfigs(invoke);
   });
@@ -70,7 +72,7 @@ describe('test invoke construct and init', async () => {
       functionRes,
       debugPort,
       debugIde,
-      tplPath);
+      baseDir);
 
     await invoke.init();
 
@@ -93,7 +95,7 @@ describe('test invoke construct and init', async () => {
       functionRes,
       debugPort,
       debugIde,
-      tplPath);
+      baseDir);
 
     await invoke.init();
 
@@ -143,7 +145,7 @@ describe('test showDebugIdeTips', async () => {
       functionRes,
       null,
       debugIde,
-      tplPath);
+      baseDir);
 
     await invoke.showDebugIdeTips();
     
@@ -157,7 +159,7 @@ describe('test showDebugIdeTips', async () => {
       functionRes,
       debugPort,
       null,
-      tplPath);
+      baseDir);
 
     await invoke.showDebugIdeTips();
     
@@ -172,7 +174,7 @@ describe('test showDebugIdeTips', async () => {
       functionRes,
       null,
       null,
-      tplPath);
+      baseDir);
 
     await invoke.showDebugIdeTips();
     
@@ -186,7 +188,7 @@ describe('test showDebugIdeTips', async () => {
       functionRes,
       debugPort,
       debugIde,
-      tplPath);
+      baseDir);
 
     await invoke.init();
     

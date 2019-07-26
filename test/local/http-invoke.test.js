@@ -96,7 +96,6 @@ describe('test http response', async () => {
 
 (hasDocker ? describe : describe.skip)('Integration::http-invoke', () => {
   const projectDir = path.join(tempDir, 'http-invoke-it-dir'); 
-  const ymlPath = path.join(projectDir, 'template.yml');
   const index = path.join(projectDir, 'index.py');
   const serverPort = 8990;
   const accountId = 'testAccountId';
@@ -149,7 +148,7 @@ def handler(environ, start_response):
     const endpoint = `${endpointPrefix}*`;
 
     httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
-      functionName, httpTriggerFunctionRes, null, null, ymlPath, 'ANONYMOUS', endpointPrefix);
+      functionName, httpTriggerFunctionRes, null, null, projectDir, 'ANONYMOUS', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);
@@ -179,7 +178,7 @@ def handler(environ, start_response):
     const endpoint = `${endpointPrefix}*`;
 
     httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
-      functionName, httpTriggerFunctionRes, null, null, ymlPath, 'FUNCTION', endpointPrefix);
+      functionName, httpTriggerFunctionRes, null, null, projectDir, 'FUNCTION', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);
@@ -209,7 +208,7 @@ def handler(environ, start_response):
     const endpoint = `${endpointPrefix}*`;
 
     const httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
-      functionName, httpTriggerFunctionRes, null, null, ymlPath, 'FUNCTION', endpointPrefix);
+      functionName, httpTriggerFunctionRes, null, null, projectDir, 'FUNCTION', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);

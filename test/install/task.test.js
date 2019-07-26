@@ -55,6 +55,7 @@ describe('test PipTask', () => {
 
 
 (hasDocker ? describe : describe.skip)('Integration::task', () => {
+
   const funTempDir = path.join(tempDir, 'funtemp');
   const cleanTask = new ShellTask('clean task', 'python2.7', funTempDir, 'rm -rf ./{*,.[!.]*}');
 
@@ -84,7 +85,7 @@ describe('test PipTask', () => {
   it('pip_gloabl', async function () {
     this.timeout(10000);
     const context = await new Context('python2.7', funTempDir);
-    const pipTask = new PipTask('install pymssql', 'python2.7', funTempDir, 'pymssql', false, null, context);
+    const pipTask = new PipTask('install pymssql', 'python2.7', funTempDir, 'pymssql', false, null, null, context);
     await pipTask.run();
 
     await context.teardown();

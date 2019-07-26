@@ -16,6 +16,7 @@ program
   almost identically. You can pass in the event body via stdin or by using the -e (--event)
   parameter.`)
   .usage('[options] <[service/]function>')
+  .option('-t, --template [template]', 'path of fun template file.')
   .option('-d, --debug-port <port>',
     `specify the sandboxed container starting in debug mode,
                              and exposing this port on localhost`)

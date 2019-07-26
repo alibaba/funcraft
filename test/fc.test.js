@@ -50,8 +50,8 @@ describe('test getFunCodeAsBase64', () => {
 
   it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
     await fc.getFunCodeAsBase64('/a/b', '../');
-    assert.calledWith(fs.lstat, '../');
-    assert.calledWith(zip.pack, '../', null);
+    assert.calledWith(fs.lstat, '/a');
+    assert.calledWith(zip.pack, '/a', null);
   });
 
   it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
@@ -62,15 +62,15 @@ describe('test getFunCodeAsBase64', () => {
 
 
   it('test getFunCodeAsBase64: absolute codeUri path', async () => {
-    await fc.getFunCodeAsBase64('/a/b', process.cwd() + '/a/b/c/index.js');
-    assert.calledWith(fs.lstat, process.cwd() + '/a/b/c/index.js');
-    assert.calledWith(zip.pack, process.cwd() + '/a/b/c/index.js', null);
+    await fc.getFunCodeAsBase64('/a/b', '/a/b/c/index.js');
+    assert.calledWith(fs.lstat, '/a/b/c/index.js');
+    assert.calledWith(zip.pack, '/a/b/c/index.js', sinon.match.func);
   });
 
   it('test getFunCodeAsBase64: relative codeUri path', async () => {
     await fc.getFunCodeAsBase64('/a/b', './index.js');
-    assert.calledWith(fs.lstat, './index.js');
-    assert.calledWith(zip.pack, './index.js', null);
+    assert.calledWith(fs.lstat, '/a/b/index.js');
+    assert.calledWith(zip.pack, '/a/b/index.js', sinon.match.func);
   });
 
   it('test getFunCodeAsBase64: relative codeUri for war', async () => {

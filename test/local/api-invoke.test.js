@@ -63,7 +63,6 @@ describe('test responseApi', async () => {
 (hasDocker ? describe : describe.skip)('Integration::api-invoke', () => {
   
   const projectDir = path.join(tempDir, 'api-invoke-it-dir'); 
-  const ymlPath = path.join(projectDir, 'template.yml');
   const index = path.join(projectDir, 'index.py');
   const serverPort = 8973;
   
@@ -103,7 +102,7 @@ def handler(event, context):
   it('test api local invoke', async () => {
 
     const apiInvoke = new ApiInvoke(serviceName, serviceRes,
-      functionName, functionRes, null, null, ymlPath);
+      functionName, functionRes, null, null, projectDir);
 
     const client = new FCClient('testAccountId', { 
       accessKeyID: 'testKeyId', 

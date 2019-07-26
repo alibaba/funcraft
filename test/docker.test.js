@@ -21,6 +21,8 @@ const util = require('util');
 const path = require('path');
 const { sleep } = require('../lib/time');
 
+const baseDir = path.resolve('/');
+
 describe('test generateDockerCmd', () => {
   const functionProps = {
     'Handler': 'index.handler',
@@ -165,7 +167,7 @@ describe('test resolveCodeUriToMount', () => {
 
   it('test resolve code uri', async () => {
 
-    const mount = await docker.resolveCodeUriToMount(dirPath);
+    const mount = await docker.resolveCodeUriToMount(path.resolve(baseDir, dirPath));
 
     expect(mount).to.eql({
       Type: 'bind',
@@ -177,7 +179,7 @@ describe('test resolveCodeUriToMount', () => {
 
   it('test resolve jar code uri', async () => {
 
-    const mount = await docker.resolveCodeUriToMount(jarPath);
+    const mount = await docker.resolveCodeUriToMount(path.resolve(baseDir, jarPath));
 
     expect(mount).to.eql({
       Type: 'bind',
@@ -234,7 +236,7 @@ describe('test resolveNasConfigToMounts', () => {
       ]
     };
 
-    const mount = await docker.resolveNasConfigToMounts('', nasConfig, path.posix.join(projectDir, 'template.yml'));
+    const mount = await docker.resolveNasConfigToMounts('', nasConfig, projectDir);
 
     expect(mount).to.eql([{
       Type: 'bind',
@@ -451,6 +453,7 @@ describe('InstallationContainer', async () => {
 
   (hasDocker ? it : it.skip)('startInstallationContainer', async () => {
     const runner = await docker.startInstallationContainer({
+      baseDir,
       runtime: 'python2.7',
       imageName: 'bitnami/minideb:jessie',
       codeUri: tempDir
@@ -461,6 +464,7 @@ describe('InstallationContainer', async () => {
 
   (hasDocker ? it : it.skip)('exec installation container', async () => {
     const runner = await docker.startInstallationContainer({
+      baseDir,
       runtime: 'python2.7',
       imageName: 'bitnami/minideb:jessie',
       codeUri: tempDir

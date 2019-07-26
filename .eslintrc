@@ -48,7 +48,8 @@
     "no-process-exit": 2,
     "comma-spacing": 2,
     "key-spacing": 2,
-    "comma-dangle": 2
+    "comma-dangle": 2,
+    "space-infix-ops": 2
   },
   "env": {
     "es6": true,

@@ -117,7 +117,7 @@ def handler(event, context):
 
   it('test local invoke', async () => {
     const localInvoke = new LocalInvoke(serviceName, serviceRes,
-      functionName, functionRes, null, null, ymlPath);
+      functionName, functionRes, null, null, projectDir);
 
     const outputStream = new streams.WritableStream();
       
