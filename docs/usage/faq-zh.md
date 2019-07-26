@@ -86,8 +86,6 @@ Resources:
 
 如果在您的 windows 系统上安装的是 `docker toolbox`，在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_toolbox.png)
 
-只能挂载c盘当前用户的目录，挂载其他盘都不会生效。
-
 提示默认主机路径为 `C:\Users`，`docker toolbox` 只能挂载 c 盘当前用户的目录，挂载其它盘都不会生效。错误信息中路径为 `D:\image_crawler`，所以失败。<br />如果想挂载其它盘符的路径，步骤如下：<br />1.打开 `Oracle VM VirtualBox`：
 
 ![image.png](/figures/virtual-box.png)
@@ -96,4 +94,6 @@ Resources:
 
 ![image.png](/figures/steps.png)
 
-**注**： step 5 中的**共享文件夹名称**应按照上述格式手动填写。盘符小写，且以 `/` 为分隔符，同时保证路径完整性。例如：`d/fun/demo`，`e/fun/work` ...<br />由于 `docker toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 `docker for windows`。
+**注**： step 5 中的**共享文件夹名称**应按照上述格式手动填写。盘符小写，且以 `/` 为分隔符，同时保证路径完整性。例如：`d/fun/demo`，`e/fun/work` ...
+
+由于 `docker toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 `docker for windows`。
