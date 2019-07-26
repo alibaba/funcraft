@@ -18,7 +18,7 @@ program
   use 'fun deploy serviceName' to deploy all functions under a service
   use 'fun deploy functionName' to deploy only a function resource
 
-  with '--only-config' parameter, will only update resource config, without updating the function code`)
+  with '--only-config' parameter, will only update resource config without updating the function code`)
 
   .option('-t, --template [template]', 'path of fun template file.', null)
   .option('-c, --only-config', 'Update only configuration flags')
