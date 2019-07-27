@@ -5,9 +5,23 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: ''
+      #Policies:
+      #  - AliyunOSSFullAccess
+      #NasConfig: Auto
       Policies:
+        - AliyunECSNetworkInterfaceManagementAccess
         - AliyunOSSFullAccess
-      NasConfig: Auto
+      VpcConfig:
+        VpcId: vpc-uf6p2abfodpmpmzu6onhy
+        VSwitchIds:
+          - vsw-uf6074gzypzsc95idtxk8
+        SecurityGroupId: sg-uf6h3g45f2fo5lr04akb
+      NasConfig:
+        UserId: 10003
+        GroupId: 10003
+        MountPoints:
+          - ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/'
+            MountDir: /mnt/nas
     demo: # function name
       Type: 'Aliyun::Serverless::Function'
       Properties:
@@ -21,5 +35,6 @@ Resources:
         httpTrigger:
           Type: HTTP
           Properties:
-            AuthType: FUNCTION
+            #AuthType: FUNCTION
+            AuthType: ANONYMOUS
             Methods: ['POST', 'GET']

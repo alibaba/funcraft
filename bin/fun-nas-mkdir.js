@@ -39,7 +39,7 @@ getVisitor(true).then((visitor) => {
     .then(() => {
       visitor.event({
         ec: 'mkdir',
-        ea: 'mkdir',
+        ea: `mkdir ${context.nasDir}`,
         el: 'success',
         dp: '/fun/nas/mkdir'
       }).send();
@@ -47,7 +47,7 @@ getVisitor(true).then((visitor) => {
     .catch(error => {
       visitor.event({
         ec: 'mkdir',
-        ea: 'mkdir',
+        ea: `mkdir ${context.nasDir}`,
         el: 'error',
         dp: '/fun/nas/mkdir'
       }).send();

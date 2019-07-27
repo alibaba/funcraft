@@ -37,7 +37,7 @@ getVisitor(true).then((visitor) => {
     .then(() => {
       visitor.event({
         ec: 'ls',
-        ea: 'ls',
+        ea: `ls ${context.nasDir}`,
         el: 'success',
         dp: '/fun/nas/ls'
       }).send();
@@ -45,7 +45,7 @@ getVisitor(true).then((visitor) => {
     .catch(error => {
       visitor.event({
         ec: 'ls',
-        ea: 'ls',
+        ea: `ls ${context.nasDir}`,
         el: 'error',
         dp: '/fun/nas/ls'
       }).send();

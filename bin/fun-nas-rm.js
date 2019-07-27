@@ -38,7 +38,7 @@ getVisitor(true).then((visitor) => {
     .then(() => {
       visitor.event({
         ec: 'rm',
-        ea: 'rm',
+        ea: `rm ${context.nasTarget}`,
         el: 'success',
         dp: '/fun/nas/rm'
       }).send();
@@ -46,7 +46,7 @@ getVisitor(true).then((visitor) => {
     .catch(error => {
       visitor.event({
         ec: 'rm',
-        ea: 'rm',
+        ea: `rm ${context.nasTarget}`,
         el: 'error',
         dp: '/fun/nas/rm'
       }).send();

@@ -41,7 +41,7 @@ getVisitor(true).then((visitor) => {
     .then(() => {
       visitor.event({
         ec: 'unzip',
-        ea: 'unzip',
+        ea: `unzip ${context.zipSrc}`,
         el: 'success',
         dp: '/fun/nas/unzip'
       }).send();
@@ -49,7 +49,7 @@ getVisitor(true).then((visitor) => {
     .catch(error => {
       visitor.event({
         ec: 'unzip',
-        ea: 'unzip',
+        ea: `unzip ${context.zipSrc}`,
         el: 'error',
         dp: '/fun/nas/unzip'
       }).send();
