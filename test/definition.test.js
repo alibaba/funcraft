@@ -111,7 +111,7 @@ describe('test matching function', () => {
   beforeEach(() => {
 
     Object.keys(prompt).forEach(m => {
-      if (m === 'promptForSameFunction') {
+      if (m === 'promptForFunctionSelection') {
         sandbox.stub(prompt, m).resolves('localdemo/python3');
       } else {
         sandbox.stub(prompt, m).resolves({});
@@ -123,15 +123,15 @@ describe('test matching function', () => {
     sandbox.restore();
   });
 
-  async function matchingFuntion(sourceName, resources) {
+  async function matchingFuntion(resources, sourceName) {
     return await proxyquire('../lib/definition', {
       '../lib/init/prompt': prompt
-    }).matchingFuntionUnderServiceBySourceName(sourceName, resources);
+    }).matchingFuntionUnderServiceBySourceName(resources, sourceName);
   }
 
   it('test matching function by sourceName on tpl with duplicated function', async () => {
 
-    let {serviceName, serviceRes} = await matchingFuntion('python3', tplWithDuplicatedFunction.Resources);
+    let {serviceName, serviceRes} = await matchingFuntion(tplWithDuplicatedFunction.Resources, 'python3');
 
     expect(serviceName).to.be('localdemo');
     expect(serviceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
