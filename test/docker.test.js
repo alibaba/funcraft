@@ -269,7 +269,7 @@ describe('test resolveNasConfigToMounts', () => {
     expect(mount).to.eql([]);
   });
 
-  it("test NasConfig: Auto", async () => {
+  it('test NasConfig: Auto', async () => {
     const nasConfig = 'Auto';
     
     const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, path.posix.join(projectDir, 'template.yml'));
