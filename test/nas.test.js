@@ -12,7 +12,7 @@ var requestOption = {
   method: 'POST'
 };
 
-describe.only('test findNasFileSystem', async () => {
+describe('test findNasFileSystem', async () => {
 
   afterEach(() => {
     sandbox.restore();
@@ -81,7 +81,7 @@ describe.only('test findNasFileSystem', async () => {
       },
       'TotalCount': 60,
       'PageSize': 50,
-      'PageNumber': 1  
+      'PageNumber': 1
     });
 
     requestStub.withArgs('DescribeFileSystems', secondPageParams, requestOption).resolves({
@@ -137,7 +137,7 @@ describe.only('test findNasFileSystem', async () => {
       },
       'TotalCount': 60,
       'PageSize': 50,
-      'PageNumber': 1  
+      'PageNumber': 1
     });
 
     requestStub.withArgs('DescribeFileSystems', secondPageParams, requestOption).resolves({
@@ -321,4 +321,20 @@ describe('test createMountTarget', async () => {
       assert.callCount(requestStub, 1 + 15); // 1 CreateMountTarget, 15 DescribeVpcs
     }
   });
+});
+
+describe('test resolveMountPoint', () => {
+
+  it('test resolveMountPoint', () => {
+    const { mountSource, mountDir, serverPath, serverAddr } = nas.resolveMountPoint({
+      ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/',
+      MountDir: '/mnt/test'
+    });
+
+    expect(mountSource).to.eql('/');
+    expect(mountDir).to.eql('/mnt/test');
+    expect(serverPath).to.eql('012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
+    expect(serverAddr).to.eql('012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/');
+  });
+
 });

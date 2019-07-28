@@ -179,3 +179,26 @@ describe('test findHttpTriggersInFunction', () => {
     }]);
   });
 });
+
+describe('test isNasAutoConfig', () => {
+  
+  it('test nasConfig is obj', () => {
+    const nasConfig = {};
+
+    expect(definition.isNasAutoConfig(nasConfig)).to.be(false);
+    
+  });
+
+    
+  it('isNasAutoConfig is null', () => {
+    const nasConfig = null;
+
+    expect(definition.isNasAutoConfig(nasConfig)).to.be(false);
+  });
+
+  it('isNasAutoConfig is Auto', () => {
+    const nasConfig = 'Auto';
+
+    expect(definition.isNasAutoConfig(nasConfig)).to.be(true);
+  });
+});

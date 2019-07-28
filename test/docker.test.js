@@ -276,7 +276,7 @@ describe('test resolveNasConfigToMounts', () => {
 
     expect(mount).to.eql([{
       Type: 'bind',
-      Source: path.join(projectDir, '.fun', 'nas', 'auto', 'serviceName'),
+      Source: path.join(projectDir, '.fun', 'nas', 'auto-default', 'serviceName'),
       Target: '/mnt/auto',
       ReadOnly: false
     }]);
@@ -471,5 +471,26 @@ describe('InstallationContainer', async () => {
     });
 
     await runner.stop();
+  });
+});
+
+describe('test resolveInstallTargetsToMounts', () => {
+  it('test resolveInstallTargetsToMounts', () => {
+    const installTargets = [
+      {
+        hostPath: '.',
+        containerPath: '/container'
+      }
+    ];
+
+    const mounts = docker.resolveInstallTargetsToMounts(installTargets);
+    expect(mounts).to.eql([
+      {
+        Type: 'bind',
+        Source: '.',
+        ReadOnly: false,
+        Target: '/container'
+      }
+    ])
   });
 });
