@@ -119,7 +119,7 @@ describe('prompt', () => {
 
   it('for same function', async () => {
     inquirer.prompt.returns(Promise.resolve({function: 'service/function'}));
-    const func = await promptStub.promptForSameFunction(['service/function', 'service1/function1']);
+    const func = await promptStub.promptForFunctionSelection(['service/function', 'service1/function1']);
     expect(func).to.be('service/function');
   });
 });

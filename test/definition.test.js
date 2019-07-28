@@ -75,7 +75,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test matching service by sourceName', async function () {
 
-    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName('localdemo', tpl.Resources);
+    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName(tpl.Resources, 'localdemo');
 
     expect(serviceName).to.be('localdemo');
     expect(serviceRes).to.be(tpl.Resources.localdemo);
@@ -83,7 +83,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test matching function by sourceName', async function () {
 
-    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName('python3', tpl.Resources);
+    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName(tpl.Resources, 'python3');
 
     expect(serviceName).to.be('localdemo');
     expect(serviceRes).to.be(tpl.Resources.localdemo);
