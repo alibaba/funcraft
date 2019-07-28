@@ -12,18 +12,19 @@ var requestOption = {
   method: 'POST'
 };
 
-describe('test findNasFileSystem', async () => {
+describe.only('test findNasFileSystem', async () => {
 
   afterEach(() => {
     sandbox.restore();
   });
 
-  it('test', async () => {
+  it('test find in first page', async () => {
     const description = 'test';
 
     const params = {
       'RegionId': region,
-      'PageSize': 1000
+      'PageSize': 50,
+      'PageNumber': 1
     };
 
     const requestStub = sandbox.stub();
@@ -38,7 +39,10 @@ describe('test findNasFileSystem', async () => {
             'MeteredSize': 1611661312
           }
         ]
-      }
+      },
+      'TotalCount': 3,
+      'PageSize': 10,
+      'PageNumber': 1
     });
 
     const nasPopClient = { request: requestStub };
@@ -48,6 +52,115 @@ describe('test findNasFileSystem', async () => {
     expect(findSystemId).to.eql('109c042666');
 
     assert.calledWith(requestStub, 'DescribeFileSystems', params, requestOption);
+  });
+
+  it('test find in second page', async () => {
+    const description = 'test';
+
+    var firstPageParams = {
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 1
+    };
+
+    var secondPageParams = {
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 2
+    };
+
+    const requestStub = sandbox.stub();
+
+    requestStub.withArgs('DescribeFileSystems', firstPageParams, requestOption).resolves({
+      'FileSystems': {
+        'FileSystem': [
+          {
+            'Description': 'not found'
+          }
+        ]
+      },
+      'TotalCount': 60,
+      'PageSize': 50,
+      'PageNumber': 1  
+    });
+
+    requestStub.withArgs('DescribeFileSystems', secondPageParams, requestOption).resolves({
+      'FileSystems': {
+        'FileSystem': [
+          {
+            'Description': description,
+            'FileSystemId': '109c042666',
+            'RegionId': 'cn-hangzhou',
+            'MeteredSize': 1611661312
+          }
+        ]
+      },
+      'TotalCount': 60,
+      'PageSize': 50,
+      'PageNumber': 2
+    });
+
+    const nasPopClient = { request: requestStub };
+
+    const findSystemId = await nas.findNasFileSystem(nasPopClient, region, description);
+
+    expect(findSystemId).to.eql('109c042666');
+
+    assert.calledWith(requestStub.firstCall, 'DescribeFileSystems', firstPageParams, requestOption);
+    assert.calledWith(requestStub.secondCall, 'DescribeFileSystems', secondPageParams, requestOption);
+  });
+
+  it('test find not found', async () => {
+    const description = 'test';
+
+    var firstPageParams = {
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 1
+    };
+
+    var secondPageParams = {
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 2
+    };
+
+    const requestStub = sandbox.stub();
+
+    requestStub.withArgs('DescribeFileSystems', firstPageParams, requestOption).resolves({
+      'FileSystems': {
+        'FileSystem': [
+          {
+            'Description': 'not found'
+          }
+        ]
+      },
+      'TotalCount': 60,
+      'PageSize': 50,
+      'PageNumber': 1  
+    });
+
+    requestStub.withArgs('DescribeFileSystems', secondPageParams, requestOption).resolves({
+      'FileSystems': {
+        'FileSystem': [
+          {
+            'Description': 'not found'
+          }
+        ]
+      },
+      'TotalCount': 60,
+      'PageSize': 50,
+      'PageNumber': 2
+    });
+
+    const nasPopClient = { request: requestStub };
+
+    const findSystemId = await nas.findNasFileSystem(nasPopClient, region, description);
+
+    expect(findSystemId).to.eql(undefined);
+
+    assert.calledWith(requestStub.firstCall, 'DescribeFileSystems', firstPageParams, requestOption);
+    assert.calledWith(requestStub.secondCall, 'DescribeFileSystems', secondPageParams, requestOption);
   });
 
 });
