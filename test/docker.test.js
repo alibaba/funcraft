@@ -474,8 +474,8 @@ describe('InstallationContainer', async () => {
   });
 });
 
-describe('test resolveInstallTargetsToMounts', () => {
-  it('test resolveInstallTargetsToMounts', () => {
+describe('test conventInstallTargetsToMounts', () => {
+  it('test conventInstallTargetsToMounts', () => {
     const installTargets = [
       {
         hostPath: '.',
@@ -483,7 +483,7 @@ describe('test resolveInstallTargetsToMounts', () => {
       }
     ];
 
-    const mounts = docker.resolveInstallTargetsToMounts(installTargets);
+    const mounts = docker.conventInstallTargetsToMounts(installTargets);
     expect(mounts).to.eql([
       {
         Type: 'bind',
