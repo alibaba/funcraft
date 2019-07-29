@@ -491,6 +491,6 @@ describe('test resolveInstallTargetsToMounts', () => {
         ReadOnly: false,
         Target: '/container'
       }
-    ])
+    ]);
   });
 });
