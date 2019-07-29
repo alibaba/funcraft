@@ -9,7 +9,7 @@ const prompt = require('../lib/init/prompt');
 
 const proxyquire = require('proxyquire');
 
-const { tpl, tplWithDuplicatedFunction} = require('./tpl-mock-data');
+const { tpl, tplWithDuplicatedFunction, tplWithDuplicatedFunctionsInService } = require('./tpl-mock-data');
 
 describe('test findFunctionByServiceAndFunctionName', () => {
 
@@ -79,6 +79,18 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
     expect(serviceName).to.be('localdemo');
     expect(serviceRes).to.be(tpl.Resources.localdemo);
+  });
+
+  it('test more than one function under a service', async function () {
+
+    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName(tplWithDuplicatedFunctionsInService.Resources, 'nodejs6');
+
+    expect(serviceName).to.be('localdemo');
+    expect(serviceRes).to.eql(definition.deleteUnmatchFunctionsUnderServiceRes({
+      serviceName: 'localdemo',
+      serviceRes: tplWithDuplicatedFunctionsInService.Resources.localdemo,
+      funcName: 'nodejs6'
+    }));
   });
 
   it('test matching function by sourceName', async function () {
