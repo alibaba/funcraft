@@ -52,7 +52,7 @@ describe('deploy service role ', () => {
         sandbox.stub(ram, m).resolves({});
       }
     });
-    
+
     restoreProcess = setProcess({
       ACCOUNT_ID: 'ACCOUNT_ID',
       DEFAULT_REGION: 'cn-shanghai',
@@ -74,28 +74,28 @@ describe('deploy service role ', () => {
     }).deploy(path.join('./examples', example, 'template.yml'), {});
   }
 
-  it('all none', async ()=>{
+  it('all none', async () => {
     await deploy('datahub');
     assert.notCalled(ram.makeRole);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
-    assert.notCalled(ram.attachPolicyToRole);    
+    assert.notCalled(ram.attachPolicyToRole);
   });
-  
-  it('police and vpc', async() =>{
+
+  it('police and vpc', async () => {
     await deploy('nas');
     assert.calledWith(ram.makeRole, '', true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
   });
-  it('only log', async() =>{
+  it('only log', async () => {
     await deploy('sls_trigger_demo');
     assert.calledWith(ram.makeRole, '', true);
     assert.calledWith(ram.attachPolicyToRole, 'AliyunFCInvocationAccess', 'AliyunFcGeneratedApiGatewayRole');
     assert.notCalled(ram.makePolicy);
   });
 
-  it('only role', async() =>{
+  it('only role', async () => {
     await deploy('service_role');
     assert.notCalled(ram.makeRole);
     assert.notCalled(ram.makeAndAttachPolicy);
@@ -187,7 +187,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         serviceName: 'MyService',
         timeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
   });
 
@@ -215,7 +216,8 @@ describe('deploy', () => {
         serviceName: 'fc',
         timeout: 60,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
   });
 
@@ -243,7 +245,8 @@ describe('deploy', () => {
         serviceName: 'java',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
 
   });
@@ -284,7 +287,15 @@ describe('deploy', () => {
         serviceName: 'nasDemo',
         timeout: 100,
         initializationTimeout: undefined,
-        environmentVariables: { ROOT_DIR: '/mnt/test' }
+        environmentVariables: { ROOT_DIR: '/mnt/test' },
+        nasConfig: {
+          GroupId: -1,
+          UserId: -1,
+          MountPoints: [{
+            MountDir: '/mnt/test',
+            ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
+          }]
+        }
       });
 
     assert.calledWith(fc.makeFunction.secondCall,
@@ -299,7 +310,15 @@ describe('deploy', () => {
         serviceName: 'nasDemo',
         timeout: 100,
         initializationTimeout: undefined,
-        environmentVariables: { ROOT_DIR: '/mnt/test' }
+        environmentVariables: { ROOT_DIR: '/mnt/test' },
+        nasConfig: {
+          GroupId: -1,
+          UserId: -1,
+          MountPoints: [{
+            MountDir: '/mnt/test',
+            ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
+          }]
+        }
       });
   });
 
@@ -328,7 +347,8 @@ describe('deploy', () => {
         serviceName: 'fc',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(deploySupport.makeGroup, {
       name: 'aliyunfcdemo2',
@@ -389,7 +409,8 @@ describe('deploy', () => {
         serviceName: 'test-tableStore-service',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'test-tableStore-service',
@@ -427,7 +448,8 @@ describe('deploy', () => {
         serviceName: 'log-compute',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'log-compute',
@@ -467,7 +489,8 @@ describe('deploy', () => {
         serviceName: 'rds-service',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'rds-service',
@@ -508,7 +531,8 @@ describe('deploy', () => {
         serviceName: 'oss-test-service',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'oss-test-service',
@@ -518,7 +542,7 @@ describe('deploy', () => {
       triggerProperties: {
         BucketName: 'coco-superme',
         Events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
-        Filter: { Key: { Prefix: 'source/', Suffix: '.png' }}
+        Filter: { Key: { Prefix: 'source/', Suffix: '.png' } }
       }
     });
     assert.calledWith(trigger.getTriggerNameList, {
@@ -551,7 +575,8 @@ describe('deploy', () => {
         serviceName: 'cdn-test-service',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'cdn-test-service',
@@ -566,7 +591,8 @@ describe('deploy', () => {
           'Domain': [
             'cdn-trigger.sunfeiyu.top'
           ]
-        }}
+        }
+      }
     });
     assert.calledWith(trigger.getTriggerNameList, {
       serviceName: 'cdn-test-service',
@@ -598,7 +624,8 @@ describe('deploy', () => {
         serviceName: 'mnsTopic-service',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'mnsTopic-service',
@@ -638,7 +665,8 @@ describe('deploy', () => {
         serviceName: 'pythondemo',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
@@ -662,7 +690,7 @@ describe('deploy', () => {
       serviceTimeout: 3000,
       requestConfig: {},
       serviceParameters: undefined,
-      serviceParametersMap: undefined,      
+      serviceParametersMap: undefined,
       resultConfig: { failResultSample: undefined, resultSample: undefined, resultType: undefined }
     });
   });
@@ -691,7 +719,8 @@ describe('deploy', () => {
         serviceName: 'maas',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
 
     assert.calledWith(deploySupport.makeGroup, {
@@ -741,7 +770,8 @@ describe('deploy', () => {
         serviceName: 'MyService',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(trigger.makeTrigger, {
       functionName: 'MyFunction',
@@ -779,7 +809,8 @@ describe('deploy', () => {
         serviceName: 'wechat',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.alwaysCalledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
@@ -823,7 +854,8 @@ describe('deploy', () => {
         serviceName: 'wechat',
         timeout: undefined,
         initializationTimeout: undefined,
-        environmentVariables: undefined
+        environmentVariables: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(deploySupport.makeApi.secondCall, {}, {
       apiName: 'wechat_post',
@@ -898,7 +930,8 @@ describe('deploy', () => {
         memorySize: undefined,
         runtime: 'python2.7',
         serviceName: 'initializerdemo',
-        timeout: undefined
+        timeout: undefined,
+        nasConfig: undefined
       });
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
@@ -952,7 +985,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         serviceName: 'localdemo',
         timeout: undefined,
-        environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' }
+        environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' },
+        nasConfig: undefined
       });
     // add test => no events on local but have onLine 
     assert.notCalled(trigger.makeTrigger);
@@ -988,7 +1022,7 @@ describe('custom domain', () => {
     }).deployCustomDomain(domainName, domainDefinition);
   }
 
-  it('lowercase custom domain', async () =>{
+  it('lowercase custom domain', async () => {
     await customDomain('domainName', {
       'Type': 'Aliyun::Serverless::CustomDomain',
       'Properties': {
