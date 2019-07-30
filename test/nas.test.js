@@ -443,5 +443,8 @@ describe('test convertMountPointToLocal', () => {
 
 describe('test generateAutoNasConfig', () => {
   const serviceName = 'service_test';
+  const getProfile = sandbox.stub();
+  const getNasPopClient = sandbox.stub();
 
+  
 });
