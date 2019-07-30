@@ -2,6 +2,7 @@
 
 const expect = require('expect.js');
 let nas = require('../lib/nas');
+const fs = require('fs-extra');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
@@ -336,5 +337,111 @@ describe('test resolveMountPoint', () => {
     expect(serverPath).to.eql('012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(serverAddr).to.eql('012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/');
   });
+});
+
+describe('test convertMountPointToLocal', () => {
+  let fsPathExists;
+  let fsEnsureDir;
+  beforeEach (() => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
+    fsEnsureDir = sandbox.stub(fs, 'ensureDir');
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+  const MountPoint = {
+    ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/',
+    MountDir: '/mnt/test'
+  };
+
+  const baseDir = '/service_test';
+
+  it('nas dir not exist and local nas dir exists', async () => {
+    fsPathExists.onCall(0).resolves(false);
+    fsPathExists.onCall(1).resolves(true);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+
+    expect(localNasDir).to.eql('/service_test/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/');
+    expect(remoteNasDir).to.eql('/mnt/test');
+    sandbox.assert.calledOnce(fsEnsureDir);
+    sandbox.assert.callCount(fsPathExists, 2);
+  });
+
+  it('nas dir exist and local nas dir not exist', async () => {
+    fsPathExists.onCall(0).resolves(true);
+    fsPathExists.onCall(1).resolves(false);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+
+    expect(localNasDir).to.eql('/service_test/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/');
+    expect(remoteNasDir).to.eql('/mnt/test');
+    sandbox.assert.calledOnce(fsEnsureDir);
+    sandbox.assert.callCount(fsPathExists, 2);
+  });
+
+  it('nas dir exists and local nas dir exists', async () => {
+    fsPathExists.onCall(0).resolves(true);
+    fsPathExists.onCall(1).resolves(true);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+
+    expect(localNasDir).to.eql('/service_test/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/');
+    expect(remoteNasDir).to.eql('/mnt/test');
+    sandbox.assert.notCalled(fsEnsureDir);
+    sandbox.assert.callCount(fsPathExists, 2);
+  });
+
+  it('nas dir not exist and local nas dir not exist', async () => {
+    fsPathExists.onCall(0).resolves(false);
+    fsPathExists.onCall(1).resolves(false);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+
+    expect(localNasDir).to.eql('/service_test/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/');
+    expect(remoteNasDir).to.eql('/mnt/test');
+    sandbox.assert.callCount(fsEnsureDir, 2);
+    sandbox.assert.callCount(fsPathExists, 2);
+  });
+
+  it('empty mount point', async () => {
+    const mountPointEmpty = {};
+    let err;
+    try {
+      await nas.convertMountPointToLocal(baseDir, mountPointEmpty);
+    } catch (error) {
+      err = error;
+    }
+    expect(err).to.eql(new Error(`NasConfig's nas server address 'undefined' doesn't match expected format (allowed: '^[a-z0-9-.]*.nas.[a-z]+.com:/')`));
+    sandbox.assert.notCalled(fsEnsureDir);
+    sandbox.assert.notCalled(fsPathExists);
+  });
+
+  it('mount point without ServerAddr', async () => {
+    const mountPointServerAddrEmpty = { MountDir: '/mnt/test' };
+    let err;
+    try {
+      await nas.convertMountPointToLocal(baseDir, mountPointServerAddrEmpty);
+    } catch (error) {
+      err = error;
+    }
+    expect(err).to.eql(new Error(`NasConfig's nas server address 'undefined' doesn't match expected format (allowed: '^[a-z0-9-.]*.nas.[a-z]+.com:/')`));
+
+    sandbox.assert.notCalled(fsPathExists);
+    sandbox.assert.notCalled(fsEnsureDir);
+  });
+
+  it('mount point without MountDir', async () => {
+    const mountPointMountDirEmpty = { ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/' };
+    fsPathExists.onCall(0).resolves(true);
+    fsPathExists.onCall(1).resolves(true);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, mountPointMountDirEmpty);
+    expect(localNasDir).to.eql('/service_test/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/');
+    expect(remoteNasDir).to.eql(undefined);
+
+    sandbox.assert.callCount(fsPathExists, 2);
+    sandbox.assert.notCalled(fsEnsureDir);
+  });
+});
+
+describe('test generateAutoNasConfig', () => {
+  const serviceName = 'service_test';
 
 });
