@@ -5,8 +5,10 @@ let nas = require('../lib/nas');
 const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
+const yaml = require('js-yaml');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+
 
 const region = 'cn-hangzhou';
 
@@ -449,7 +451,125 @@ describe('test convertMountPointToLocal', () => {
   });
 });
 
-describe('test convertMountPointToLocal', () => {
+describe('test convertNasConfigToNasMappings', () => {
+  const baseDir = '/service_test';
+  const serviceName = 'demo_service';
+  let fsPathExists;
+  let fsEnsureDir;
+  beforeEach(() => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
+    fsEnsureDir = sandbox.stub(fs, 'ensureDir');
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+  it('empty nas config', async () => {
+    const nasConfig = '';
+    const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
+    expect(res).to.eql([]);
+    
+  });
+
+  it('nas config auto', async () => {
+    const nasConfig = 'Auto';
+    const nasDir = path.join(baseDir, '.fun', 'nas', 'auto-default');
+
+    fsPathExists.resolves(false);
+    const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
+
+    expect(res[0].localNasDir).to.eql(path.join(nasDir, serviceName));
+    expect(res[0].remoteNasDir).to.eql('/mnt/auto');
+
+    assert.calledWith(fsPathExists, res[0].localNasDir);
+    assert.calledWith(fsEnsureDir, res[0].localNasDir);
+    
+  });
   
-  
+  it('nas config not auto', async () => {
+    const nasConfig = {
+      UserId: 10003,
+      GroupId: 10003,
+      MountPoints: [{
+        ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        MountDir: '/mnt/nas'
+      }] 
+    };
+
+    const nasDir = path.join(baseDir, '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com');
+    const localNasDir = path.join(nasDir, '/');
+    const remoteNasDir = '/mnt/nas';
+
+    fsPathExists.onCall(0).resolves(true);
+    fsPathExists.onCall(1).resolves(true);
+    
+    const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
+    
+    expect(res[0].localNasDir).to.eql(localNasDir);
+    expect(res[0].remoteNasDir).to.eql(remoteNasDir);
+  });
+});
+
+describe('test convertTplToServiceNasMappings', () => {
+  const baseDir = '/service_test';
+  let fsPathExists;
+  let fsEnsureDir;
+  beforeEach(() => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
+    fsEnsureDir = sandbox.stub(fs, 'ensureDir');
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('empty tpl resource', async () => {
+    const tpl = {
+      ROSTemplateFormatVersion: '2015-09-01',
+      Transform: 'Aliyun::Serverless-2018-04-03',
+      Resources: {}
+    };
+
+    const serviceNasMappings = await nas.convertTplToServiceNasMappings(baseDir, tpl);
+    expect(serviceNasMappings).to.eql({});
+    assert.notCalled(fsPathExists);
+    assert.notCalled(fsEnsureDir);
+  });
+
+  it('normal tpl', async () => {
+    
+    const nasConfig = {
+      UserId: 10003,
+      GroupId: 10003,
+      MountPoints: [{
+        ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        MountDir: '/mnt/nas'
+      }] 
+    };
+    const tpl = {
+      ROSTemplateFormatVersion: '2015-09-01',
+      Transform: 'Aliyun::Serverless-2018-04-03',
+      Resources: {
+        'fun-nas-test': {
+          Type: 'Aliyun::Serverless::Service',
+          Properties: {
+            NasConfig: nasConfig
+          }
+        }
+      }
+    };
+    const serviceName = 'fun-nas-test';
+    console.log(yaml.safeDump(tpl));
+    const nasDir = path.join(baseDir, '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com');
+    const localNasDir = path.join(nasDir, '/');
+    const remoteNasDir = '/mnt/nas';
+
+    fsPathExists.onCall(0).resolves(true);
+    fsPathExists.onCall(1).resolves(true);
+    console.log();
+    const res = await nas.convertTplToServiceNasMappings(baseDir, tpl);
+
+    expect(res[serviceName]).to.eql([{localNasDir, remoteNasDir}]);
+    
+  });
+
 });
