@@ -369,9 +369,9 @@ describe('test convertMountPointToLocal', () => {
     
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
-    sandbox.assert.calledWith(fsEnsureDir, nasDir);
-    sandbox.assert.calledWith(fsPathExists.firstCall, nasDir);
-    sandbox.assert.calledWith(fsPathExists.secondCall, localNasDir);
+    assert.calledWith(fsEnsureDir, nasDir);
+    assert.calledWith(fsPathExists.firstCall, nasDir);
+    assert.calledWith(fsPathExists.secondCall, localNasDir);
   });
 
   it('nas dir exist and local nas dir not exist', async () => {
@@ -381,9 +381,9 @@ describe('test convertMountPointToLocal', () => {
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
-    sandbox.assert.calledWith(fsEnsureDir, localNasDir);
-    sandbox.assert.calledWith(fsPathExists.firstCall, nasDir);
-    sandbox.assert.calledWith(fsPathExists.secondCall, localNasDir);
+    assert.calledWith(fsEnsureDir, localNasDir);
+    assert.calledWith(fsPathExists.firstCall, nasDir);
+    assert.calledWith(fsPathExists.secondCall, localNasDir);
   });
 
   it('nas dir exists and local nas dir exists', async () => {
@@ -394,8 +394,8 @@ describe('test convertMountPointToLocal', () => {
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
     sandbox.assert.notCalled(fsEnsureDir);
-    sandbox.assert.calledWith(fsPathExists.firstCall, nasDir);
-    sandbox.assert.calledWith(fsPathExists.secondCall, localNasDir);
+    assert.calledWith(fsPathExists.firstCall, nasDir);
+    assert.calledWith(fsPathExists.secondCall, localNasDir);
   });
 
   it('nas dir not exist and local nas dir not exist', async () => {
@@ -405,10 +405,10 @@ describe('test convertMountPointToLocal', () => {
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
-    sandbox.assert.calledWith(fsEnsureDir.firstCall, nasDir);
-    sandbox.assert.calledWith(fsEnsureDir.secondCall, localNasDir);
-    sandbox.assert.calledWith(fsPathExists.firstCall, nasDir);
-    sandbox.assert.calledWith(fsPathExists.secondCall, localNasDir);
+    assert.calledWith(fsEnsureDir.firstCall, nasDir);
+    assert.calledWith(fsEnsureDir.secondCall, localNasDir);
+    assert.calledWith(fsPathExists.firstCall, nasDir);
+    assert.calledWith(fsPathExists.secondCall, localNasDir);
   });
 
   it('empty mount point', async () => {
@@ -447,8 +447,8 @@ describe('test convertMountPointToLocal', () => {
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql(undefined);
 
-    sandbox.assert.calledWith(fsPathExists.firstCall, nasDir);
-    sandbox.assert.calledWith(fsPathExists.secondCall, localNasDir);
+    assert.calledWith(fsPathExists.firstCall, nasDir);
+    assert.calledWith(fsPathExists.secondCall, localNasDir);
     sandbox.assert.notCalled(fsEnsureDir);
   });
 });
