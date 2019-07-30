@@ -443,7 +443,7 @@ describe('test convertMountPointToLocal', () => {
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
     const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, mountPointMountDirEmpty);
-    let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/');
+    let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql(undefined);
 
