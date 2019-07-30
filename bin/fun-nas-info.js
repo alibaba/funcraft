@@ -11,7 +11,11 @@ const notifier = require('../lib/update-notifier');
 program
   .name('fun nas info')
   .description('Print nas config information, such as local temp directory of NAS.')
+<<<<<<< HEAD
   .option('-t, --template [template]', 'path of fun template file.', null)
+=======
+  .option('-t, --template [template]', 'path of fun template file.')
+>>>>>>> fe77b0549827d26dcb78fbaa26695116cdd3b79f
   .parse(process.argv);
 
 if (program.args.length) {
@@ -25,7 +29,11 @@ notifier.notify();
 getVisitor(true).then((visitor) => {
   visitor.pageview('/fun/nas/info').send();
 
+<<<<<<< HEAD
   require('../lib/commands/nas/info')(null, program.template)
+=======
+  require('../lib/commands/nas/info')(program.template)
+>>>>>>> fe77b0549827d26dcb78fbaa26695116cdd3b79f
     .then(() => {
       visitor.event({
         ec: 'info',

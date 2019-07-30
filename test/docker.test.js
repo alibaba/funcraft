@@ -234,7 +234,7 @@ describe('test resolveNasConfigToMounts', () => {
       ]
     };
 
-    const mount = await docker.resolveNasConfigToMounts(nasConfig, path.posix.join(projectDir, 'template.yml'));
+    const mount = await docker.resolveNasConfigToMounts('', nasConfig, path.posix.join(projectDir, 'template.yml'));
 
     expect(mount).to.eql([{
       Type: 'bind',
@@ -264,9 +264,22 @@ describe('test resolveNasConfigToMounts', () => {
   });
 
   it('test empty nas config', async () => {
-    const mount = await docker.resolveNasConfigToMounts(null, null);
+    const mount = await docker.resolveNasConfigToMounts(null, null, null);
 
     expect(mount).to.eql([]);
+  });
+
+  it('test NasConfig: Auto', async () => {
+    const nasConfig = 'Auto';
+    
+    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, path.posix.join(projectDir, 'template.yml'));
+
+    expect(mount).to.eql([{
+      Type: 'bind',
+      Source: path.join(projectDir, '.fun', 'nas', 'auto-default', 'serviceName'),
+      Target: '/mnt/auto',
+      ReadOnly: false
+    }]);
   });
 });
 
@@ -458,5 +471,26 @@ describe('InstallationContainer', async () => {
     });
 
     await runner.stop();
+  });
+});
+
+describe('test conventInstallTargetsToMounts', () => {
+  it('test conventInstallTargetsToMounts', () => {
+    const installTargets = [
+      {
+        hostPath: '.',
+        containerPath: '/container'
+      }
+    ];
+
+    const mounts = docker.conventInstallTargetsToMounts(installTargets);
+    expect(mounts).to.eql([
+      {
+        Type: 'bind',
+        Source: '.',
+        ReadOnly: false,
+        Target: '/container'
+      }
+    ]);
   });
 });
