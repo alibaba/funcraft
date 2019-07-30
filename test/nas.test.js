@@ -465,7 +465,7 @@ describe('test convertNasConfigToNasMappings', () => {
     sandbox.restore();
   });
   it('empty nas config', async () => {
-    const nasConfig = '';
+    const nasConfig = {};
     const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
     expect(res).to.eql([]);
     
