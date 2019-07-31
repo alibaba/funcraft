@@ -40,21 +40,24 @@ const context = {
 notifier.notify();
 
 getVisitor().then(visitor => {
+
+  const ea = context.resourceName ? `deploy ${ context.resourceName }` : 'deploy';
+
   visitor.pageview('/fun/deploy').send();
 
   require('../lib/commands/deploy')(null, context)
     .then(() => {
       visitor.event({
         ec: 'deploy',
-        ea: 'deploy',
+        ea,
         el: 'success',
         dp: '/fun/deploy'
       }).send();
     })
-    .catch(error => {    
+    .catch(error => {
       visitor.event({
         ec: 'deploy',
-        ea: 'deploy',
+        ea,
         el: 'error',
         dp: '/fun/deploy'
       }).send();
