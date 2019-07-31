@@ -345,12 +345,12 @@ describe('test resolveMountPoint', () => {
 describe('test convertMountPointToNasMapping', () => {
   let fsPathExists;
   let fsEnsureDir;
-  beforeEach (() => {
+  before (() => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
 
-  afterEach(() => {
+  after(() => {
     sandbox.restore();
   });
   const MountPoint = {
@@ -458,12 +458,12 @@ describe('test convertNasConfigToNasMappings', () => {
   const serviceName = 'demo_service';
   let fsPathExists;
   let fsEnsureDir;
-  beforeEach(() => {
+  before(() => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
 
-  afterEach(() => {
+  after(() => {
     sandbox.restore();
   });
   it('empty nas config', async () => {
@@ -516,11 +516,11 @@ describe('test convertTplToServiceNasMappings', () => {
   const baseDir = '/service_test';
   let fsPathExists;
   let fsEnsureDir;
-  beforeEach(() => {
+  before(() => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
-  afterEach(() => {
+  after(() => {
     sandbox.restore();
   });
 

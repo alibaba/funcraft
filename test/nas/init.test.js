@@ -27,10 +27,10 @@ const proflieRes = {
 };
 describe('test fun nas init', () => {
   let fsPathExists;
-  beforeEach(() => {
+  before(() => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
   });
-  afterEach(() => {
+  after(() => {
     sandbox.reset();
   });
 
