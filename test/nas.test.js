@@ -350,8 +350,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   afterEach(() => {
-    sandbox.restore(fsPathExists);
-    sandbox.restore(fsEnsureDir);
+    sandbox.restore();
   });
   const MountPoint = {
     ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/',
@@ -478,8 +477,7 @@ describe('test convertNasConfigToNasMappings', () => {
   });
 
   afterEach(() => {
-    sandbox.restore(fsPathExists);
-    sandbox.restore(fsEnsureDir);
+    sandbox.restore();
   });
   it('empty nas config', async () => {
     const nasConfig = {};
@@ -539,8 +537,7 @@ describe('test convertTplToServiceNasMappings', () => {
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
   afterEach(() => {
-    sandbox.restore(fsPathExists);
-    sandbox.restore(fsEnsureDir);
+    sandbox.restore();
   });
 
   it('empty tpl resource', async () => {
