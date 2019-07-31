@@ -351,6 +351,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   after(() => {
+    fs.pathExists.restore();
     sandbox.restore();
   });
   const MountPoint = {
@@ -464,6 +465,7 @@ describe('test convertNasConfigToNasMappings', () => {
   });
 
   after(() => {
+    fs.pathExists.restore();
     sandbox.restore();
   });
   it('empty nas config', async () => {
@@ -521,6 +523,7 @@ describe('test convertTplToServiceNasMappings', () => {
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
   after(() => {
+    fs.pathExists.restore();
     sandbox.restore();
   });
 

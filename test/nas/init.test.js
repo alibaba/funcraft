@@ -31,6 +31,7 @@ describe('test fun nas init', () => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
   });
   after(() => {
+    fs.pathExists.restore();
     sandbox.reset();
   });
 
