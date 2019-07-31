@@ -33,6 +33,7 @@ describe('test fun nas init', () => {
 
   it('function deployNasService', async () => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
+
     const nasConfig = {
       UserId: 10003,
       GroupId: 10003,
@@ -102,7 +103,7 @@ describe('test fun nas init', () => {
 
     assert.calledWith(fsPathExists, zipCodePath);
     assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes);
-    fsPathExists.restore();
+    
   });
     
 }); 
