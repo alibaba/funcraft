@@ -102,6 +102,7 @@ describe('test fun nas init', () => {
 
     assert.calledWith(fsPathExists, zipCodePath);
     assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes);
+    fsPathExists.restore();
   });
     
 }); 

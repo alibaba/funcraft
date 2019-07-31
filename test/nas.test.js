@@ -372,6 +372,8 @@ describe('test convertMountPointToNasMapping', () => {
     assert.calledWith(fsEnsureDir, nasDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+
+    fsPathExists.restore();
   });
 
   it('nas dir exist and local nas dir not exist', async () => {
@@ -385,6 +387,7 @@ describe('test convertMountPointToNasMapping', () => {
     assert.calledWith(fsEnsureDir, localNasDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+    fsPathExists.restore();
   });
 
   it('nas dir exists and local nas dir exists', async () => {
@@ -398,6 +401,7 @@ describe('test convertMountPointToNasMapping', () => {
     sandbox.assert.notCalled(fsEnsureDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+    fsPathExists.restore();
   });
 
   it('nas dir not exist and local nas dir not exist', async () => {
@@ -412,6 +416,7 @@ describe('test convertMountPointToNasMapping', () => {
     assert.calledWith(fsEnsureDir.secondCall, localNasDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+    fsPathExists.restore();
   });
 
   it('empty mount point', async () => {
@@ -426,6 +431,7 @@ describe('test convertMountPointToNasMapping', () => {
     expect(err).to.eql(new Error(`NasConfig's nas server address 'undefined' doesn't match expected format (allowed: '^[a-z0-9-.]*.nas.[a-z]+.com:/')`));
     sandbox.assert.notCalled(fsEnsureDir);
     sandbox.assert.notCalled(fsPathExists);
+    fsPathExists.restore();
   });
 
   it('mount point without ServerAddr', async () => {
@@ -441,6 +447,7 @@ describe('test convertMountPointToNasMapping', () => {
 
     sandbox.assert.notCalled(fsPathExists);
     sandbox.assert.notCalled(fsEnsureDir);
+    fsPathExists.restore();
   });
 
   it('mount point without MountDir', async () => {
@@ -456,6 +463,7 @@ describe('test convertMountPointToNasMapping', () => {
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
     sandbox.assert.notCalled(fsEnsureDir);
+    fsPathExists.restore();
   });
 });
 
@@ -491,7 +499,7 @@ describe('test convertNasConfigToNasMappings', () => {
 
     assert.calledWith(fsPathExists, res[0].localNasDir);
     assert.calledWith(fsEnsureDir, res[0].localNasDir);
-    
+    fsPathExists.restore();
   });
   
   it('nas config not auto', async () => {
@@ -516,6 +524,7 @@ describe('test convertNasConfigToNasMappings', () => {
     
     expect(res[0].localNasDir).to.eql(localNasDir);
     expect(res[0].remoteNasDir).to.eql(remoteNasDir);
+    fsPathExists.restore();
   });
 });
 
@@ -543,6 +552,7 @@ describe('test convertTplToServiceNasMappings', () => {
     expect(serviceNasMappings).to.eql({});
     assert.notCalled(fsPathExists);
     assert.notCalled(fsEnsureDir);
+    fsPathExists.restore();
   });
 
   it('normal tpl', async () => {
@@ -579,7 +589,7 @@ describe('test convertTplToServiceNasMappings', () => {
     const res = await nas.convertTplToServiceNasMappings(baseDir, tpl);
 
     expect(res[serviceName]).to.eql([{localNasDir, remoteNasDir}]);
-    
+    fsPathExists.restore();
   });
 
 });
