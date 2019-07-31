@@ -345,13 +345,11 @@ describe('test resolveMountPoint', () => {
 describe('test convertMountPointToNasMapping', () => {
   let fsPathExists;
   let fsEnsureDir;
-  before (() => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
+  beforeEach (() => {
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
 
-  after(() => {
-    fs.pathExists.restore();
+  afterEach(() => {
     sandbox.restore();
   });
   const MountPoint = {
@@ -363,6 +361,7 @@ describe('test convertMountPointToNasMapping', () => {
   const nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
   
   it('nas dir not exist and local nas dir exists', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(false);
     fsPathExists.onCall(1).resolves(true);
     const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
@@ -376,6 +375,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   it('nas dir exist and local nas dir not exist', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(false);
     const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
@@ -388,6 +388,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   it('nas dir exists and local nas dir exists', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
     const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
@@ -400,6 +401,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   it('nas dir not exist and local nas dir not exist', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(false);
     fsPathExists.onCall(1).resolves(false);
     const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
@@ -413,6 +415,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   it('empty mount point', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const mountPointEmpty = {};
     let err;
     try {
@@ -426,6 +429,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   it('mount point without ServerAddr', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const mountPointServerAddrEmpty = { MountDir: '/mnt/test' };
     let err;
     try {
@@ -440,6 +444,7 @@ describe('test convertMountPointToNasMapping', () => {
   });
 
   it('mount point without MountDir', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const mountPointMountDirEmpty = { ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/' };
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
@@ -459,13 +464,11 @@ describe('test convertNasConfigToNasMappings', () => {
   const serviceName = 'demo_service';
   let fsPathExists;
   let fsEnsureDir;
-  before(() => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
+  beforeEach(() => {
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
 
-  after(() => {
-    fs.pathExists.restore();
+  afterEach(() => {
     sandbox.restore();
   });
   it('empty nas config', async () => {
@@ -476,6 +479,7 @@ describe('test convertNasConfigToNasMappings', () => {
   });
 
   it('nas config auto', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const nasConfig = 'Auto';
     const nasDir = path.join(baseDir, '.fun', 'nas', 'auto-default');
 
@@ -491,6 +495,7 @@ describe('test convertNasConfigToNasMappings', () => {
   });
   
   it('nas config not auto', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const nasConfig = {
       UserId: 10003,
       GroupId: 10003,
@@ -515,19 +520,19 @@ describe('test convertNasConfigToNasMappings', () => {
 });
 
 describe('test convertTplToServiceNasMappings', () => {
+  
   const baseDir = '/service_test';
   let fsPathExists;
   let fsEnsureDir;
-  before(() => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
+  beforeEach(() => {
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
-  after(() => {
-    fs.pathExists.restore();
+  afterEach(() => {
     sandbox.restore();
   });
 
   it('empty tpl resource', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const tpl = {
       ROSTemplateFormatVersion: '2015-09-01',
       Transform: 'Aliyun::Serverless-2018-04-03',
@@ -541,7 +546,7 @@ describe('test convertTplToServiceNasMappings', () => {
   });
 
   it('normal tpl', async () => {
-    
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const nasConfig = {
       UserId: 10003,
       GroupId: 10003,
