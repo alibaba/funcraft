@@ -342,7 +342,7 @@ describe('test resolveMountPoint', () => {
   });
 });
 
-describe('test convertMountPointToLocal', () => {
+describe('test convertMountPointToNasMapping', () => {
   let fsPathExists;
   let fsEnsureDir;
   beforeEach (() => {
@@ -364,7 +364,7 @@ describe('test convertMountPointToLocal', () => {
   it('nas dir not exist and local nas dir exists', async () => {
     fsPathExists.onCall(0).resolves(false);
     fsPathExists.onCall(1).resolves(true);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
 
     
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
@@ -377,7 +377,7 @@ describe('test convertMountPointToLocal', () => {
   it('nas dir exist and local nas dir not exist', async () => {
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(false);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
@@ -389,7 +389,7 @@ describe('test convertMountPointToLocal', () => {
   it('nas dir exists and local nas dir exists', async () => {
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
@@ -401,7 +401,7 @@ describe('test convertMountPointToLocal', () => {
   it('nas dir not exist and local nas dir not exist', async () => {
     fsPathExists.onCall(0).resolves(false);
     fsPathExists.onCall(1).resolves(false);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
@@ -415,7 +415,7 @@ describe('test convertMountPointToLocal', () => {
     const mountPointEmpty = {};
     let err;
     try {
-      await nas.convertMountPointToLocal(baseDir, mountPointEmpty);
+      await nas.convertMountPointToNasMapping(baseDir, mountPointEmpty);
     } catch (error) {
       err = error;
     }
@@ -428,7 +428,7 @@ describe('test convertMountPointToLocal', () => {
     const mountPointServerAddrEmpty = { MountDir: '/mnt/test' };
     let err;
     try {
-      await nas.convertMountPointToLocal(baseDir, mountPointServerAddrEmpty);
+      await nas.convertMountPointToNasMapping(baseDir, mountPointServerAddrEmpty);
     } catch (error) {
       err = error;
     }
@@ -442,7 +442,7 @@ describe('test convertMountPointToLocal', () => {
     const mountPointMountDirEmpty = { ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/' };
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, mountPointMountDirEmpty);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, mountPointMountDirEmpty);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql(undefined);
