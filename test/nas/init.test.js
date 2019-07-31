@@ -63,8 +63,8 @@ describe('test fun nas init', () => {
     const serviceName = 'fun-nas-test';
     const nasServiceName = 'fun-nas-' + serviceName;
     const nasFunctionName = 'fun-nas-function';
-    const dirName = '/Users/zqf/Documents/qianfeng-git/add_fun_nas_init_support/lib/nas';
-    const zipCodePath = path.resolve(dirName, '../fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip');
+    
+    const zipCodePath = path.resolve(__dirname, '../../lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip');
     const nasServiceRes = {
       'Type': 'Aliyun::Serverless::Service',
       'Properties': {
