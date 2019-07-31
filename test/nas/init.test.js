@@ -13,7 +13,6 @@ const profile = {
 const deploy = {
   deployService: sandbox.stub()
 };
-const fsPathExists = sandbox.stub(fs, 'pathExists');
 
 const nasInitStub = proxyquire('../../lib/nas/init', {
   '../profile': profile,
@@ -27,6 +26,10 @@ const proflieRes = {
   timeout: 60
 };
 describe('test fun nas init', () => {
+  let fsPathExists;
+  beforeEach(() => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
+  });
   afterEach(() => {
     sandbox.reset();
   });
