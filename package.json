@@ -26,7 +26,7 @@
     "upload": "make upload",
     "lint": "eslint --fix lib bin test",
     "validate-lint": "eslint lib bin test",
-    "prepack": "make -C ./lib/fc-utils/fc-fun-nas-server package"
+    "prepack": "make package-fun-nas-server"
   },
   "author": "Jackson Tian", 
   "maintainers": [
