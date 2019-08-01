@@ -342,11 +342,10 @@ describe('test resolveMountPoint', () => {
   });
 });
 
-describe('test convertMountPointToLocal', () => {
+describe('test convertMountPointToNasMapping', () => {
   let fsPathExists;
   let fsEnsureDir;
   beforeEach (() => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
 
@@ -362,9 +361,10 @@ describe('test convertMountPointToLocal', () => {
   const nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
   
   it('nas dir not exist and local nas dir exists', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(false);
     fsPathExists.onCall(1).resolves(true);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
 
     
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
@@ -372,36 +372,43 @@ describe('test convertMountPointToLocal', () => {
     assert.calledWith(fsEnsureDir, nasDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+
+    
   });
 
   it('nas dir exist and local nas dir not exist', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(false);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
     assert.calledWith(fsEnsureDir, localNasDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+    
   });
 
   it('nas dir exists and local nas dir exists', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
     sandbox.assert.notCalled(fsEnsureDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+    
   });
 
   it('nas dir not exist and local nas dir not exist', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(false);
     fsPathExists.onCall(1).resolves(false);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, MountPoint);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, MountPoint);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql('/mnt/test');
@@ -409,26 +416,30 @@ describe('test convertMountPointToLocal', () => {
     assert.calledWith(fsEnsureDir.secondCall, localNasDir);
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
+    
   });
 
   it('empty mount point', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const mountPointEmpty = {};
     let err;
     try {
-      await nas.convertMountPointToLocal(baseDir, mountPointEmpty);
+      await nas.convertMountPointToNasMapping(baseDir, mountPointEmpty);
     } catch (error) {
       err = error;
     }
     expect(err).to.eql(new Error(`NasConfig's nas server address 'undefined' doesn't match expected format (allowed: '^[a-z0-9-.]*.nas.[a-z]+.com:/')`));
     sandbox.assert.notCalled(fsEnsureDir);
     sandbox.assert.notCalled(fsPathExists);
+    
   });
 
   it('mount point without ServerAddr', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const mountPointServerAddrEmpty = { MountDir: '/mnt/test' };
     let err;
     try {
-      await nas.convertMountPointToLocal(baseDir, mountPointServerAddrEmpty);
+      await nas.convertMountPointToNasMapping(baseDir, mountPointServerAddrEmpty);
     } catch (error) {
       err = error;
     }
@@ -436,13 +447,15 @@ describe('test convertMountPointToLocal', () => {
 
     sandbox.assert.notCalled(fsPathExists);
     sandbox.assert.notCalled(fsEnsureDir);
+    
   });
 
   it('mount point without MountDir', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const mountPointMountDirEmpty = { ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/' };
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
-    const { localNasDir, remoteNasDir } = await nas.convertMountPointToLocal(baseDir, mountPointMountDirEmpty);
+    const { localNasDir, remoteNasDir } = await nas.convertMountPointToNasMapping(baseDir, mountPointMountDirEmpty);
     let nasDir = path.join(baseDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com');
     expect(localNasDir).to.eql(path.join(nasDir, '/'));
     expect(remoteNasDir).to.eql(undefined);
@@ -450,6 +463,7 @@ describe('test convertMountPointToLocal', () => {
     assert.calledWith(fsPathExists.firstCall, nasDir);
     assert.calledWith(fsPathExists.secondCall, localNasDir);
     sandbox.assert.notCalled(fsEnsureDir);
+    
   });
 });
 
@@ -459,7 +473,6 @@ describe('test convertNasConfigToNasMappings', () => {
   let fsPathExists;
   let fsEnsureDir;
   beforeEach(() => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
 
@@ -474,6 +487,7 @@ describe('test convertNasConfigToNasMappings', () => {
   });
 
   it('nas config auto', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const nasConfig = 'Auto';
     const nasDir = path.join(baseDir, '.fun', 'nas', 'auto-default');
 
@@ -489,6 +503,7 @@ describe('test convertNasConfigToNasMappings', () => {
   });
   
   it('nas config not auto', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const nasConfig = {
       UserId: 10003,
       GroupId: 10003,
@@ -509,15 +524,16 @@ describe('test convertNasConfigToNasMappings', () => {
     
     expect(res[0].localNasDir).to.eql(localNasDir);
     expect(res[0].remoteNasDir).to.eql(remoteNasDir);
+    
   });
 });
 
 describe('test convertTplToServiceNasMappings', () => {
+  
   const baseDir = '/service_test';
   let fsPathExists;
   let fsEnsureDir;
   beforeEach(() => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
     fsEnsureDir = sandbox.stub(fs, 'ensureDir');
   });
   afterEach(() => {
@@ -525,6 +541,7 @@ describe('test convertTplToServiceNasMappings', () => {
   });
 
   it('empty tpl resource', async () => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const tpl = {
       ROSTemplateFormatVersion: '2015-09-01',
       Transform: 'Aliyun::Serverless-2018-04-03',
@@ -535,10 +552,11 @@ describe('test convertTplToServiceNasMappings', () => {
     expect(serviceNasMappings).to.eql({});
     assert.notCalled(fsPathExists);
     assert.notCalled(fsEnsureDir);
+    
   });
 
   it('normal tpl', async () => {
-    
+    fsPathExists = sandbox.stub(fs, 'pathExists');
     const nasConfig = {
       UserId: 10003,
       GroupId: 10003,
