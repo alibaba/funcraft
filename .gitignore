@@ -91,8 +91,9 @@ output
 *.iml
 *.class
 .DS_Store
-.fun
+.fun/
 .classpath
 .project
 event.dat
 __pycache__/
+dist/
