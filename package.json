@@ -11,10 +11,12 @@
   "pkg": {
     "scripts": [
       "./lib/**/*.js",
-      "./bin/**/*.js"
+      "./bin/**/*.js",
+      "!./lib/fc-utils/fc-fun-nas-server/**/*.js"
     ],
     "assets": [
-      "./templates/**/*"
+      "./templates/**/*",
+      "./lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip"
     ]
   },
   "scripts": {
@@ -23,9 +25,24 @@
     "binary": "make binary",
     "upload": "make upload",
     "lint": "eslint --fix lib bin test",
-    "validate-lint": "eslint lib bin test"
+    "validate-lint": "eslint lib bin test",
+    "prepack": "make -C ./lib/fc-utils/fc-fun-nas-server package"
   },
-  "author": "Jackson Tian",
+  "author": "Jackson Tian", 
+  "maintainers": [
+    {
+      "name": "Vangie Du"
+    }, 
+    {
+      "name": "Hehe Tan"
+    }, 
+    {
+      "name": "Kevin Yang"
+    }, 
+    {
+      "name": "ChaoDaoH"
+    }
+  ], 
   "license": "MIT",
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
