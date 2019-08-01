@@ -13,9 +13,11 @@ validate-lint:
 	@npm run validate-lint
 
 integration-test:
+	echo "@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive  -name $(TEST_FILES) --grep ^Integration::"
 	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive  -name $(TEST_FILES) --grep ^Integration::
 
 unit-test:
+	echo "@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES) --grep '^(?!Integration::).*'"
 	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES) --grep '^(?!Integration::).*'
 
 test: lint unit-test
