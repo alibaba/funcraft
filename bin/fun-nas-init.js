@@ -10,7 +10,7 @@ const notifier = require('../lib/update-notifier');
 
 program
   .name('fun nas init')
-  .description('Initialize nas')
+  .description('For each service with NAS config, create local NAS folder and deploy fun nas server service.')
   .parse(process.argv);
 
 if (program.args.length) {
