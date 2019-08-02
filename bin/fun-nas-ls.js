@@ -10,10 +10,10 @@ const notifier = require('../lib/update-notifier');
 
 program
   .name('fun nas ls')
-  .description('Print remote nas directory.')
+  .description('List contents of remote NAS directory.')
   .usage('[options] <nas_dir>')
   .option('-a, --all', 'List all content of nas_dir')
-  .option('-l, --list', 'List detailed information about the content')
+  .option('-l, --long', 'List detailed information about the content')
   .parse(process.argv);
 
 
