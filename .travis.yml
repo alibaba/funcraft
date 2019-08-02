@@ -43,7 +43,7 @@ install:
       cd $TRAVIS_REPO_SLUG;
     fi
   - npm install
-  - cd ./lib/fc-utils/fc-fun-nas-server/; npm install
+  - bash -c 'cd ./lib/fc-utils/fc-fun-nas-server/; npm install'
 
 before_script: 
   - env | sort
