@@ -6,7 +6,7 @@ const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 
-describe('ls test', () => {
+describe.skip('ls test', () => {
   const serviceName = 'demo';
   const nasPath = '/mnt/nas';
   const isAllOpt = true;
