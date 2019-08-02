@@ -11,10 +11,12 @@
   "pkg": {
     "scripts": [
       "./lib/**/*.js",
-      "./bin/**/*.js"
+      "./bin/**/*.js",
+      "!./lib/fc-utils/fc-fun-nas-server/**/*.js"
     ],
     "assets": [
-      "./templates/**/*"
+      "./templates/**/*",
+      "./lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip"
     ]
   },
   "scripts": {
@@ -23,9 +25,24 @@
     "binary": "make binary",
     "upload": "make upload",
     "lint": "eslint --fix lib bin test",
-    "validate-lint": "eslint lib bin test"
+    "validate-lint": "eslint lib bin test",
+    "prepack": "make package-fun-nas-server"
   },
   "author": "Jackson Tian",
+  "maintainers": [
+    {
+      "name": "Vangie Du"
+    },
+    {
+      "name": "Hehe Tan"
+    },
+    {
+      "name": "Kevin Yang"
+    },
+    {
+      "name": "ChaoDaoH"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
@@ -72,6 +89,7 @@
     "node-watch": "^0.6.0",
     "os-locale": "^2.1.0",
     "os-name": "^3.1.0",
+    "ping": "^0.2.2",
     "progress": "^2.0.3",
     "promise-retry": "^1.1.1",
     "raw-body": "^2.3.3",
@@ -79,6 +97,7 @@
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
     "single-line-log": "^1.1.2",
+    "supertest": "^4.0.2",
     "tablestore": "^4.3.2",
     "universal-analytics": "^0.4.20",
     "unzipper": "^0.10.1",

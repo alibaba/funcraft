@@ -1,0 +1,23 @@
+# used for dev
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  fun-nas-service: 
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      NasConfig: Auto
+    fun-nas-function: 
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs10
+        CodeUri: './'
+        Timeout: 60
+        EnvironmentVariables: 
+          PATH: '/code/.fun/root/usr/bin'
+      Events:
+        httpTrigger:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['POST', 'GET']

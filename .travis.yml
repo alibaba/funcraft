@@ -42,6 +42,7 @@ install:
       cd $TRAVIS_REPO_SLUG;
     fi
   - npm install
+  - bash -c 'cd ./lib/fc-utils/fc-fun-nas-server/; npm install'
 
 before_script: 
   - env | sort
@@ -51,8 +52,10 @@ script:
   - |
     if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
       mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Integration::).*'
+      mocha ./lib/fc-utils/fc-fun-nas-server/test -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Integration::).*'
     else
       make test
+      make -C ./lib/fc-utils/fc-fun-nas-server/ test
     fi
 
 deploy:

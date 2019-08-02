@@ -9,41 +9,43 @@ const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
 program
-  .name('fun nas info')
-  .description('Print nas config information, such as local temp directory of NAS.')
-  .option('-t, --template [template]', 'path of fun template file.')
+  .name('fun nas ls')
+  .description('List contents of remote NAS directory.')
+  .usage('[options] <nas_dir>')
+  .option('-a, --all', 'List all content of nas_dir')
+  .option('-l, --long', 'List detailed information about the content')
   .parse(process.argv);
 
-if (program.args.length) {
+
+if (!program.args.length) {
   console.error();
-  console.error("  error: unexpected argument '%s'", program.args[0]);
+  console.error("  error: missing argument [nasDir]");
   program.help();
 }
 
 notifier.notify();
 
 getVisitor(true).then((visitor) => {
-  visitor.pageview('/fun/nas/info').send();
+  visitor.pageview('/fun/nas/ls').send();
 
-  require('../lib/commands/nas/info')(program.template)
+  require('../lib/commands/nas/ls')(program.args[0], program)
     .then(() => {
       visitor.event({
-        ec: 'info',
-        ea: 'info',
+        ec: 'ls',
+        ea: `ls`,
         el: 'success',
-        dp: '/fun/nas/info'
+        dp: '/fun/nas/ls'
       }).send();
     })
     .catch(error => {
       visitor.event({
-        ec: 'info',
-        ea: 'info',
+        ec: 'ls',
+        ea: `ls`,
         el: 'error',
-        dp: '/fun/nas/info'
+        dp: '/fun/nas/ls'
       }).send();
 
       require('../lib/exception-handler')(error);
     });
+    
 });
-
-

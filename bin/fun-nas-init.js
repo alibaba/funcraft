@@ -9,9 +9,8 @@ const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
 program
-  .name('fun nas info')
-  .description('Print nas config information, such as local temp directory of NAS.')
-  .option('-t, --template [template]', 'path of fun template file.')
+  .name('fun nas init')
+  .description('For each service with NAS config, create local NAS folder and deploy fun nas server service.')
   .parse(process.argv);
 
 if (program.args.length) {
@@ -23,27 +22,25 @@ if (program.args.length) {
 notifier.notify();
 
 getVisitor(true).then((visitor) => {
-  visitor.pageview('/fun/nas/info').send();
+  visitor.pageview('/fun/nas/init').send();
 
-  require('../lib/commands/nas/info')(program.template)
+  require('../lib/commands/nas/init')()
     .then(() => {
       visitor.event({
-        ec: 'info',
-        ea: 'info',
+        ec: 'init',
+        ea: 'init',
         el: 'success',
-        dp: '/fun/nas/info'
+        dp: '/fun/nas/init'
       }).send();
     })
     .catch(error => {
       visitor.event({
-        ec: 'info',
-        ea: 'info',
+        ec: 'init',
+        ea: 'init',
         el: 'error',
-        dp: '/fun/nas/info'
+        dp: '/fun/nas/init'
       }).send();
 
       require('../lib/exception-handler')(error);
     });
 });
-
-
