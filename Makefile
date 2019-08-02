@@ -21,7 +21,6 @@ unit-test:
 	@mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES) --grep '^(?!Integration::).*'
 
 test: lint unit-test
-	
 
 test-cov:
 	@nyc --reporter=html --reporter=text mocha $(TEST_FOLDER) -t $(TIMEOUT) -R spec --recursive -name $(TEST_FILES)
@@ -36,6 +35,9 @@ clean:
 
 binary: clean
 	@script/binary.sh
+
+package-fun-nas-server:
+	make -C ./lib/fc-utils/fc-fun-nas-server package
 
 upload: 
 	@script/upload.sh

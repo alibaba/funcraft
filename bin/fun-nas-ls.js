@@ -9,38 +9,43 @@ const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
 program
-  .name('fun nas init')
-  .description('For each service with NAS config, create local NAS folder and deploy fun nas server service.')
+  .name('fun nas ls')
+  .description('List contents of remote NAS directory.')
+  .usage('[options] <nas_dir>')
+  .option('-a, --all', 'List all content of nas_dir')
+  .option('-l, --long', 'List detailed information about the content')
   .parse(process.argv);
 
-if (program.args.length) {
+
+if (!program.args.length) {
   console.error();
-  console.error("  error: unexpected argument '%s'", program.args[0]);
+  console.error("  error: missing argument [nasDir]");
   program.help();
 }
 
 notifier.notify();
 
 getVisitor(true).then((visitor) => {
-  visitor.pageview('/fun/nas/init').send();
+  visitor.pageview('/fun/nas/ls').send();
 
-  require('../lib/commands/nas/init')()
+  require('../lib/commands/nas/ls')(program.args[0], program)
     .then(() => {
       visitor.event({
-        ec: 'init',
-        ea: 'init',
+        ec: 'ls',
+        ea: `ls`,
         el: 'success',
-        dp: '/fun/nas/init'
+        dp: '/fun/nas/ls'
       }).send();
     })
     .catch(error => {
       visitor.event({
-        ec: 'init',
-        ea: 'init',
+        ec: 'ls',
+        ea: `ls`,
         el: 'error',
-        dp: '/fun/nas/init'
+        dp: '/fun/nas/ls'
       }).send();
 
       require('../lib/exception-handler')(error);
     });
+    
 });
