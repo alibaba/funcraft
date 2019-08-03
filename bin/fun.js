@@ -9,10 +9,8 @@ const debug = require('debug');
 
 program
   .version(require('../package.json').version, '--version')
-  .description(
-    `The fun command line provides a complete set of commands to define, develop, test
-  serverless applications locally, and deploy them to the Alibaba Cloud.`
-  )
+  .description(`The fun command line provides a complete set of commands to define, develop,
+test serverless applications locally, and deploy them to the Alibaba Cloud.`)
   .option('-v, --verbose', 'verbose output', (_, total) => total + 1, 0)
   // See git-style sub-commands https://github.com/tj/commander.js/#git-style-sub-commands.
   // See source code: https://github.com/tj/commander.js/blob/master/index.js#L525-L570.

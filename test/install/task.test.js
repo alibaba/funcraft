@@ -41,7 +41,7 @@ chai.use(require('chai-fs'));
   it('pip_gloabl', async function () {
     this.timeout(10000);
     const context = await new Context('python2.7', funTempDir);
-    const pipTask = new PipTask('install pymssql', 'python2.7', funTempDir, 'pymssql', false, context);
+    const pipTask = new PipTask('install pymssql', 'python2.7', funTempDir, 'pymssql', false, null, context);
     await pipTask.run();
 
     await context.teardown();
@@ -50,7 +50,7 @@ chai.use(require('chai-fs'));
   it('apt_local', async function () {
     this.timeout(30000);
 
-    const aptTask = new AptTask('install libsybdb5', 'python3', funTempDir, 'libsybdb5', true);
+    const aptTask = new AptTask('install libsybdb5', 'python3', funTempDir, 'libsybdb5', true, null);
     await aptTask.run();
 
     const installedDir = path.join(funTempDir, '.fun/root/usr/lib/x86_64-linux-gnu/');
@@ -64,7 +64,7 @@ chai.use(require('chai-fs'));
 
     const context = await new Context('python3', funTempDir);
 
-    const aptTask = new AptTask('install libsybdb5', 'python3', funTempDir, 'libsybdb5', false, context);
+    const aptTask = new AptTask('install libsybdb5', 'python3', funTempDir, 'libsybdb5', false, null, context);
     await aptTask.run();
 
     await context.teardown();

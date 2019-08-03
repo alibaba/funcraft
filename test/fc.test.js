@@ -10,29 +10,22 @@ const { setProcess } = require('./test-utils');
 const zip = require('../lib/package/zip');
 let fc = require('../lib/fc');
 const path = require('path');
-const util = require('util');
+const fs = require('fs-extra');
+const expect = require('expect.js');
 
 describe('test getFunCodeAsBase64', () => {
 
   let restoreProcess;
-  let lstat;
 
   beforeEach(async () => {
 
     sandbox.stub(zip, 'pack').resolves({});
 
-    lstat = sandbox.stub();
-
-    lstat.resolves({
+    sandbox.stub(fs, 'lstat').resolves({
       isFile: function () { return false; }
     });
 
-    sandbox.stub(util, 'promisify').returns(lstat);
-
-    fc = await proxyquire('../lib/fc', {
-      './package/zip': zip,
-      'util': util
-    });
+    sandbox.stub(fs, 'readFile').resolves('test');
 
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',
@@ -48,39 +41,46 @@ describe('test getFunCodeAsBase64', () => {
 
   it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a');
-    assert.calledWith(lstat, '/a');
+    assert.calledWith(fs.lstat, '/a');
     assert.calledWith(zip.pack, '/a', null);
   });
 
 
   it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
     await fc.getFunCodeAsBase64('/a/b', '../');
-    assert.calledWith(lstat, '../');
+    assert.calledWith(fs.lstat, '../');
     assert.calledWith(zip.pack, '../', null);
   });
 
   it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a/b/c');
-    assert.calledWith(lstat, '/a/b/c');
+    assert.calledWith(fs.lstat, '/a/b/c');
     assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
   });
 
 
   it('test getFunCodeAsBase64: absolute codeUri path', async () => {
     await fc.getFunCodeAsBase64('/a/b', process.cwd() + '/a/b/c/index.js');
-    assert.calledWith(lstat, process.cwd() + '/a/b/c/index.js');
+    assert.calledWith(fs.lstat, process.cwd() + '/a/b/c/index.js');
     assert.calledWith(zip.pack, process.cwd() + '/a/b/c/index.js', null);
   });
 
   it('test getFunCodeAsBase64: relative codeUri path', async () => {
     await fc.getFunCodeAsBase64('/a/b', './index.js');
-    assert.calledWith(lstat, './index.js');
+    assert.calledWith(fs.lstat, './index.js');
     assert.calledWith(zip.pack, './index.js', null);
   });
-  
+
+  it('test getFunCodeAsBase64: relative codeUri for war', async () => {
+    const content = await fc.getFunCodeAsBase64('/a/b', './web.war');
+    expect(content).to.eql({ base64: Buffer.from('test').toString('base64') });
+
+    assert.calledWith(fs.readFile, './web.war');
+
+  });
 });
 
-describe('Incorrect environmental variables', ()=> {
+describe('Incorrect environmental variables', () => {
   let restoreProcess;
 
   beforeEach(async () => {
@@ -106,7 +106,7 @@ describe('Incorrect environmental variables', ()=> {
     restoreProcess();
   });
 
-  it('should cast env value to String', async ()=> {
+  it('should cast env value to String', async () => {
     await fc.makeFunction(path.join('examples', 'local'), {
       serviceName: 'localdemo',
       functionName: 'nodejs6',
@@ -118,9 +118,9 @@ describe('Incorrect environmental variables', ()=> {
       memorySize: 128,
       runtime: 'nodejs6',
       codeUri: path.join('examples', 'local', 'nodejs6'),
-      environmentVariables: {'StringTypeValue1': 123, 'StringTypeValue2': 'test'}
-    });    
-    
+      environmentVariables: { 'StringTypeValue1': 123, 'StringTypeValue2': 'test' }
+    });
+
     assert.calledWith(
       FC.prototype.updateFunction,
       'localdemo',

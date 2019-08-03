@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "2.15.1",
+  "version": "2.15.2",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.0.0"
@@ -11,10 +11,12 @@
   "pkg": {
     "scripts": [
       "./lib/**/*.js",
-      "./bin/**/*.js"
+      "./bin/**/*.js",
+      "!./lib/fc-utils/fc-fun-nas-server/**/*.js"
     ],
     "assets": [
-      "./templates/**/*"
+      "./templates/**/*",
+      "./lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip"
     ]
   },
   "scripts": {
@@ -23,9 +25,24 @@
     "binary": "make binary",
     "upload": "make upload",
     "lint": "eslint --fix lib bin test",
-    "validate-lint": "eslint lib bin test"
+    "validate-lint": "eslint lib bin test",
+    "prepack": "make package-fun-nas-server"
   },
   "author": "Jackson Tian",
+  "maintainers": [
+    {
+      "name": "Vangie Du"
+    },
+    {
+      "name": "Hehe Tan"
+    },
+    {
+      "name": "Kevin Yang"
+    },
+    {
+      "name": "ChaoDaoH"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
@@ -64,7 +81,7 @@
     "json-colorizer": "^2.2.0",
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "memory-streams": "^0.1.3",
     "mkdirp-promise": "^5.0.1",
     "nested-object-assign": "^1.0.3",
@@ -72,14 +89,18 @@
     "node-watch": "^0.6.0",
     "os-locale": "^2.1.0",
     "os-name": "^3.1.0",
+    "ping": "^0.2.2",
+    "progress": "^2.0.3",
     "promise-retry": "^1.1.1",
     "raw-body": "^2.3.3",
     "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
     "single-line-log": "^1.1.2",
+    "supertest": "^4.0.2",
     "tablestore": "^4.3.2",
     "universal-analytics": "^0.4.20",
+    "unzipper": "^0.10.1",
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0"
   },
