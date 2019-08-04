@@ -35,11 +35,13 @@ describe('request test', () => {
     defaultRegion: 'cn-hangzhou', 
     accountId: '12345', 
     accessKeyId: '123', 
+    accessKeySecret: '123', 
     timeout: 60
   };
   let profile;
-
+  
   beforeEach(() => {
+    
     fcRequest = sandbox.stub(FC.prototype, 'request');
     fcRequest.resolves(undefined);
     profile = {
