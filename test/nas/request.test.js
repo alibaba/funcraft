@@ -32,22 +32,11 @@ describe('request test', () => {
   const cmd = 'ls';
   const nasHttpTriggerPath = `/proxy/${nasServiceName}/${constants.FUN_NAS_FUNCTION}/`;
   let restoreProcess;
-  // const proflieRes = {
-  //   defaultRegion: 'cn-hangzhou', 
-  //   accountId: '12345', 
-  //   accessKeyId: '123', 
-  //   accessKeySecret: '123', 
-  //   timeout: 60
-  // };
-  //let profile;
   
   beforeEach(() => {
     
     fcRequest = sandbox.stub(FC.prototype, 'request');
     fcRequest.resolves(undefined);
-    // profile = {
-    //   getProfile: sandbox.stub().returns(proflieRes)
-    // };
     restoreProcess = setProcess({
       ACCOUNT_ID: 'ACCOUNT_ID',
       DEFAULT_REGION: 'cn-shanghai',
@@ -56,7 +45,6 @@ describe('request test', () => {
     });
     request = proxyquire('../../lib/nas/request', {
       '@alicloud/fc2': FC
-      // '../profile': profile
     });
     
   }); 
