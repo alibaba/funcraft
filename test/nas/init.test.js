@@ -28,7 +28,7 @@ const proflieRes = {
 describe('test fun nas init', () => {
   let fsPathExists;
   afterEach(() => {
-    sandbox.reset();
+    sandbox.restore();
   });
   
   it('function deployNasService', async () => {

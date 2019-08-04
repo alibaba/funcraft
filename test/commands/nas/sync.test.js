@@ -31,7 +31,7 @@ describe('fun nas sync test', () => {
   });
 
   afterEach(() => {
-    sandbox.reset();
+    sandbox.restore();
   });
 
   it('sync test', async () => {
