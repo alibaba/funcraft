@@ -25,7 +25,7 @@ test serverless applications locally, and deploy them to the Alibaba Cloud.`)
   .command('edge', 'run your serverless application at edge')
   .command('validate', 'validate a fun template')
   .command('deploy', 'deploy a fun application')
-  .command('nas', 'operate remote NAS file system');
+  .command('nas', 'operate NAS file system');
 // set default verbose value for subcommand.
 process.env.FUN_VERBOSE = 0;
 
