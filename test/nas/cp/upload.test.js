@@ -15,31 +15,32 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
 
-const request = {
-  statsRequest: sandbox.stub(), 
-  checkHasUpload: sandbox.stub(), 
-  sendMergeRequest: sandbox.stub(), 
-  uploadSplitFile: sandbox.stub(), 
-  uploadFile: sandbox.stub()
-};
-
-const file = {
-  zipWithArchiver: sandbox.stub()
-};
-
-const uploadStub = proxyquire('../../../lib/nas/cp/upload', {
-  '../request': request, 
-  './file': file
-});
-
 describe('upload test', () => {
   const srcPath = `${os.homedir()}/local-nas-dir/`;
   const dstPath = '/mnt/nas';
   const nasHttpTriggerPath = '/proxy/';
   const zipDst = path.join(path.dirname(srcPath), `.${path.basename(srcPath)}.zip`);
-
+  let request;
+  let file;
+  let uploadStub;
   beforeEach(async () => {
     await mkdirp(`${os.homedir()}/local-nas-dir/`);
+    request = {
+      statsRequest: sandbox.stub(), 
+      checkHasUpload: sandbox.stub(), 
+      sendMergeRequest: sandbox.stub(), 
+      uploadSplitFile: sandbox.stub(), 
+      uploadFile: sandbox.stub()
+    };
+    
+    file = {
+      zipWithArchiver: sandbox.stub()
+    };
+    
+    uploadStub = proxyquire('../../../lib/nas/cp/upload', {
+      '../request': request, 
+      './file': file
+    });
 
     request.sendMergeRequest.returns({
       headers: 200, 
@@ -76,10 +77,12 @@ describe('upload test', () => {
 
     file.zipWithArchiver.returns(zipDst);
     request.uploadSplitFile.returns();
+
+
   });
 
   afterEach(() => {
-    sandbox.resetHistory();
+    sandbox.restore();
     rimraf.sync(`${os.homedir()}/local-nas-dir/`);
   });
 

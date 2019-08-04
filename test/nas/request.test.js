@@ -11,7 +11,6 @@ const writeFile = util.promisify(fs.writeFile);
 const path = require('path');
 const fsExtra = require('fs-extra');
 const file = require('../../lib/nas/cp/file');
-let request = require('../../lib/nas/request');
 const expect = require('expect.js');
 const sinon = require('sinon');
 const constants = require('../../lib/nas/constants');
@@ -21,6 +20,7 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
 describe('request test', () => {
+  let request;
   let fcRequest;
   const dstPath = '/nas';
   const fileHashValue = '123';
@@ -30,10 +30,10 @@ describe('request test', () => {
   const cmd = 'ls';
   const nasHttpTriggerPath = `/proxy/${nasServiceName}/${constants.FUN_NAS_FUNCTION}/`;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     fcRequest = sandbox.stub(FC.prototype, 'request');
     fcRequest.resolves(undefined);
-    request = await proxyquire('../../lib/nas/request', {
+    request = proxyquire('../../lib/nas/request', {
       '@alicloud/fc2': FC
     });
     
