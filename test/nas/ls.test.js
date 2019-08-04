@@ -13,7 +13,7 @@ describe.skip('ls test', () => {
   const isLongOpt = true;
 
   beforeEach(() => {
-    sandbox.stub(FC.prototype, 'post').returns(undefined);
+    sandbox.stub(FC.prototype, 'request').resolves(undefined);
   });
   afterEach(() => {
     sandbox.restore();
