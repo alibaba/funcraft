@@ -1,7 +1,7 @@
 'use strict';
 
 //const ls = require('../../lib/nas/ls');
-const FC = require('@alicloud/fc2');
+//const FC = require('@alicloud/fc2');
 const sinon = require('sinon');
 const getNasHttpTriggerPath = require('../../lib/nas/request').getNasHttpTriggerPath;
 const sandbox = sinon.createSandbox();
@@ -14,28 +14,37 @@ describe('ls test', () => {
   const nasPath = '/mnt/nas';
   const isAllOpt = true;
   const isLongOpt = true;
-  const proflieRes = {
-    defaultRegion: 'cn-hangzhou', 
-    accountId: '12345', 
-    accessKeyId: '123', 
-    timeout: 60
-  };
-  let fcRequest;
+  // const proflieRes = {
+  //   defaultRegion: 'cn-hangzhou', 
+  //   accountId: '12345', 
+  //   accessKeyId: '123', 
+  //   timeout: 60
+  // };
+  //let fcRequest;
   let ls;
-  let profile;
+  //let profile;
+  let request;
   beforeEach(() => {
-    fcRequest = sandbox.stub(FC.prototype, 'request').resolves({
-      data: '123',
-      stderr: ''
-    });
-    profile = {
-      getProfile: sandbox.stub().returns(proflieRes)
+    // fcRequest = sandbox.stub(FC.prototype, 'request').resolves({
+    //   data: '123',
+    //   stderr: ''
+    // });
+    // profile = {
+    //   getProfile: sandbox.stub().returns(proflieRes)
+    // };
+    request = {
+      sendCmdReqequest: sandbox.stub().returns({
+        data: '123',
+        stderr: ''
+      })
     };
-    
     ls = proxyquire('../../lib/nas/ls', {
-      '@alicloud/fc2': FC, 
-      '../profile': profile
+      './request': request
     });
+    // ls = proxyquire('../../lib/nas/ls', {
+    //   '@alicloud/fc2': FC, 
+    //   '../profile': profile
+    // });
   });
   afterEach(() => {
     sandbox.restore();
@@ -45,7 +54,8 @@ describe('ls test', () => {
     await ls(serviceName, nasPath, isAllOpt, isLongOpt);
     const nasHttpTriggerPath = await getNasHttpTriggerPath(serviceName);
     const cmd = 'ls -a -l /mnt/nas';
-    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', { cmd }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
+    assert.calledWith(request.sendCmdReqequest, nasHttpTriggerPath, cmd);
+    //assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', { cmd }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
     
   });
 });
