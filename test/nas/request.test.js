@@ -19,6 +19,7 @@ const proxyquire = require('proxyquire');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
+
 describe('request test', () => {
   let request;
   let fcRequest;
@@ -30,11 +31,24 @@ describe('request test', () => {
   const cmd = 'ls';
   const nasHttpTriggerPath = `/proxy/${nasServiceName}/${constants.FUN_NAS_FUNCTION}/`;
 
+  const proflieRes = {
+    defaultRegion: 'cn-hangzhou', 
+    accountId: '12345', 
+    accessKeyId: '123', 
+    timeout: 60
+  };
+  let profile;
+
   beforeEach(() => {
     fcRequest = sandbox.stub(FC.prototype, 'request');
     fcRequest.resolves(undefined);
+    profile = {
+      getProfile: sandbox.stub().returns(proflieRes)
+    };
+
     request = proxyquire('../../lib/nas/request', {
-      '@alicloud/fc2': FC
+      '@alicloud/fc2': FC, 
+      '../profile': profile
     });
     
   }); 

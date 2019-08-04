@@ -9,23 +9,32 @@ const assert = sinon.assert;
 const proxyquire = require('proxyquire');
 
 
-
 describe('ls test', () => {
   const serviceName = 'demo';
   const nasPath = '/mnt/nas';
   const isAllOpt = true;
   const isLongOpt = true;
-
+  const proflieRes = {
+    defaultRegion: 'cn-hangzhou', 
+    accountId: '12345', 
+    accessKeyId: '123', 
+    timeout: 60
+  };
   let fcRequest;
   let ls;
+  let profile;
   beforeEach(() => {
     fcRequest = sandbox.stub(FC.prototype, 'request').resolves({
       data: '123',
       stderr: ''
     });
+    profile = {
+      getProfile: sandbox.stub().returns(proflieRes)
+    };
     
     ls = proxyquire('../../lib/nas/ls', {
-      '@alicloud/fc2': FC
+      '@alicloud/fc2': FC, 
+      '../profile': profile
     });
   });
   afterEach(() => {

@@ -7,17 +7,7 @@ const proxyquire = require('proxyquire');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
-const profile = {
-  getProfile: sandbox.stub()
-};
-const deploy = {
-  deployService: sandbox.stub()
-};
 
-const nasInitStub = proxyquire('../../lib/nas/init', {
-  '../profile': profile,
-  '../deploy/deploy-by-tpl': deploy
-});
 const baseDir = '/test-dir';
 const proflieRes = {
   defaultRegion: 'cn-hangzhou', 
@@ -27,7 +17,21 @@ const proflieRes = {
 };
 describe('test fun nas init', () => {
   let fsPathExists;
+  let profile;
+  let deploy;
+  let nasInitStub;
   beforeEach(() => {
+    profile = {
+      getProfile: sandbox.stub()
+    };
+    deploy = {
+      deployService: sandbox.stub()
+    };
+    
+    nasInitStub = proxyquire('../../lib/nas/init', {
+      '../profile': profile,
+      '../deploy/deploy-by-tpl': deploy
+    });
     fsPathExists = sandbox.stub(fs, 'pathExists');
   }); 
   afterEach(() => {
