@@ -27,7 +27,6 @@ program
   .command('edge', 'run your serverless application at edge')
   .command('validate', 'validate a fun template')
   .command('deploy', 'deploy a fun application');
-
 // set default verbose value for subcommand.
 process.env.FUN_VERBOSE = 0;
 
