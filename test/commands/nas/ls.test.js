@@ -11,7 +11,7 @@ const lsNasFile = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
-  detectTplPath: sandbox.stub()
+  detectTplPath: sandbox.stub().returns('/template.yml')
 };
 
 const lsStub = proxyquire('../../../lib/commands/nas/ls', {
@@ -26,13 +26,9 @@ describe('command ls test', () => {
       all: true, 
       long: true
     };
-  
-  beforeEach(async () => {
-    tpl.detectTplPath.returns('/template.yml');
-  });
 
   afterEach(() => {
-    sandbox.restore();
+    sandbox.reset();
   });
     
   it('valid nas path', async () => {

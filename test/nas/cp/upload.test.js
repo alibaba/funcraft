@@ -79,7 +79,7 @@ describe('upload test', () => {
   });
 
   afterEach(() => {
-    sandbox.restore();
+    sandbox.resetHistory();
     rimraf.sync(`${os.homedir()}/local-nas-dir/`);
   });
 
@@ -98,7 +98,7 @@ describe('upload test', () => {
     assert.calledWith(file.zipWithArchiver, srcPath);
   });
 
-  it.skip('upload file less than 5M', async () => {
+  it('upload file less than 5M', async () => {
     
     await writeFile(zipDst, new Buffer(4 * 1024 * 1024));
     
@@ -112,5 +112,4 @@ describe('upload test', () => {
     assert.notCalled(request.sendMergeRequest);
     assert.calledWith(file.zipWithArchiver, srcPath);
   });
-    
 });

@@ -1,27 +1,37 @@
 'use strict';
 
-const ls = require('../../lib/nas/ls');
+//const ls = require('../../lib/nas/ls');
 const FC = require('@alicloud/fc2');
-const expect = require('expect.js');
 const sinon = require('sinon');
+const getNasHttpTriggerPath = require('../../lib/nas/request').getNasHttpTriggerPath;
 const sandbox = sinon.createSandbox();
+const assert = sinon.assert;
+const proxyquire = require('proxyquire');
 
-describe.skip('ls test', () => {
+const fcRequest = sandbox.stub(FC.prototype, 'request').resolves({
+  data: '123',
+  stderr: ''
+});
+
+const ls = proxyquire('../../lib/nas/ls', {
+  '@alicloud/fc2': FC
+});
+
+describe('ls test', () => {
   const serviceName = 'demo';
   const nasPath = '/mnt/nas';
   const isAllOpt = true;
   const isLongOpt = true;
 
-  beforeEach(() => {
-    sandbox.stub(FC.prototype, 'request').resolves(undefined);
-  });
   afterEach(() => {
-    sandbox.restore();
+    sandbox.reset();
   });
 
   it('ls function test', async () => {
-        
-    let res = await ls(serviceName, nasPath, isAllOpt, isLongOpt);
-    expect(res).to.eql(undefined);
+    await ls(serviceName, nasPath, isAllOpt, isLongOpt);
+    const nasHttpTriggerPath = await getNasHttpTriggerPath(serviceName);
+    const cmd = 'ls -a -l /mnt/nas';
+    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', { cmd }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
+    
   });
 });

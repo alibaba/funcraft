@@ -19,7 +19,7 @@ const cpStub = proxyquire('../../lib/nas/cp', {
 describe('nas cp test', () => {
     
   afterEach(() => {
-    sandbox.restore();
+    sandbox.reset();
   });
 
   it('cp test', async() => {

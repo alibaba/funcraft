@@ -11,8 +11,8 @@ const cp = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
-  detectTplPath: sandbox.stub(), 
-  getTpl: sandbox.stub()
+  detectTplPath: sandbox.stub().returns('/demo/template.yml'), 
+  getTpl: sandbox.stub().returns(mockdata.tpl)
 };
 
 const syncStub = proxyquire('../../../lib/commands/nas/sync', {
@@ -24,16 +24,14 @@ const syncStub = proxyquire('../../../lib/commands/nas/sync', {
 describe('fun nas sync test', () => {
   
   beforeEach(() => {
-    tpl.detectTplPath.returns('/demo/template.yml');
+
     const fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
-    tpl.getTpl.returns(mockdata.tpl);
-    
   });
 
   afterEach(() => {
-    sandbox.restore();
+    sandbox.reset();
   });
 
   it('sync test', async () => {
