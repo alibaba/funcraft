@@ -22,12 +22,9 @@ const syncStub = proxyquire('../../../lib/commands/nas/sync', {
 });
 
 describe('fun nas sync test', () => {
-  
+  let fsPathExists;
   beforeEach(() => {
-
-    const fsPathExists = sandbox.stub(fs, 'pathExists');
-    fsPathExists.onCall(0).resolves(true);
-    fsPathExists.onCall(1).resolves(true);
+    fsPathExists = sandbox.stub(fs, 'pathExists');
   });
 
   afterEach(() => {
@@ -35,6 +32,8 @@ describe('fun nas sync test', () => {
   });
 
   it('sync test', async () => {
+    fsPathExists.onCall(0).resolves(true);
+    fsPathExists.onCall(1).resolves(true);
     const options = {
       service: undefined, 
       mntDirs: undefined

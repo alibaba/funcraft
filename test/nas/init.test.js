@@ -27,12 +27,14 @@ const proflieRes = {
 };
 describe('test fun nas init', () => {
   let fsPathExists;
+  beforeEach(() => {
+    fsPathExists = sandbox.stub(fs, 'pathExists');
+  }); 
   afterEach(() => {
     sandbox.restore();
   });
   
   it('function deployNasService', async () => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
     
     const nasConfig = {
       UserId: 10003,
