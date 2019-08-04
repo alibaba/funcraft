@@ -2,6 +2,7 @@
 
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const path = require('path');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
@@ -29,7 +30,9 @@ describe('nas cp test', () => {
     file.isFile.returns(true);
 
     await cpStub(srcPath, dstPath, false);
-    assert.calledWith(upload, srcPath, '/mnt/nas', '/proxy/fun-nas-fun-nas-test/fun-nas-function/', false);
+    const mntDir = path.join('/', 'mnt', 'nas');
+    
+    assert.calledWith(upload, srcPath, mntDir, '/proxy/fun-nas-fun-nas-test/fun-nas-function/', false);
   });
 
   it('src path undefined test', async () => {

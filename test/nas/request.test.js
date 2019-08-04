@@ -16,6 +16,7 @@ const sinon = require('sinon');
 const constants = require('../../lib/nas/constants');
 const FC = require('@alicloud/fc2');
 const proxyquire = require('proxyquire');
+const { setProcess } = require('../test-utils');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
@@ -30,32 +31,38 @@ describe('request test', () => {
   const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + 'demo';
   const cmd = 'ls';
   const nasHttpTriggerPath = `/proxy/${nasServiceName}/${constants.FUN_NAS_FUNCTION}/`;
-
-  const proflieRes = {
-    defaultRegion: 'cn-hangzhou', 
-    accountId: '12345', 
-    accessKeyId: '123', 
-    accessKeySecret: '123', 
-    timeout: 60
-  };
-  let profile;
+  let restoreProcess;
+  // const proflieRes = {
+  //   defaultRegion: 'cn-hangzhou', 
+  //   accountId: '12345', 
+  //   accessKeyId: '123', 
+  //   accessKeySecret: '123', 
+  //   timeout: 60
+  // };
+  //let profile;
   
   beforeEach(() => {
     
     fcRequest = sandbox.stub(FC.prototype, 'request');
     fcRequest.resolves(undefined);
-    profile = {
-      getProfile: sandbox.stub().returns(proflieRes)
-    };
-
+    // profile = {
+    //   getProfile: sandbox.stub().returns(proflieRes)
+    // };
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      DEFAULT_REGION: 'cn-shanghai',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
+    });
     request = proxyquire('../../lib/nas/request', {
-      '@alicloud/fc2': FC, 
-      '../profile': profile
+      '@alicloud/fc2': FC
+      // '../profile': profile
     });
     
   }); 
 
   afterEach(() => {
+    restoreProcess();
     sandbox.restore();
   });
 

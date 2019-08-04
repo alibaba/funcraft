@@ -19,9 +19,10 @@ const {
 
 describe('parseNasPath test', () => {
   it('valid nas path', () => {
-    const nasPath = 'nas://demo://mnt/nas';
+    const nasPath = 'nas://demo:/mnt/nas';
     let res = parseNasPath(nasPath);
-    expect(res).to.eql({nasPath: '/mnt/nas', serviceName: 'demo'});
+    const mntDir = path.join('/', 'mnt', 'nas');
+    expect(res).to.eql({nasPath: mntDir, serviceName: 'demo'});
   });
 });
 

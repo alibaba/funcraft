@@ -4,6 +4,7 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const mockdata = require('./mock-data');
 const fs = require('fs-extra');
+const path = require('path');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
@@ -40,7 +41,8 @@ describe('fun nas sync test', () => {
     };
 
     await syncStub(options);
-    assert.calledWith(cp, '/demo/.fun/nas/359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com/', 'nas://fun-nas-test:/mnt/nas/', true);
+    const localNasDir = path.join('/', 'demo', '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
+    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true);
   });
 
 });
