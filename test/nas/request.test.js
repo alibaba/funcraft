@@ -111,7 +111,7 @@ describe('request test', () => {
 
   it('uploadSplitFile function test', async () => {
     //prepared
-    const dirPath = `${os.homedir()}/.uploadSplitFile/`;
+    const dirPath = path.join(os.homedir(), '.uploadSplitFile');
     const filePath = path.join(dirPath, fileName);
     await mkdirp(dirPath);
     await writeFile(filePath, 'this is a test');
@@ -133,7 +133,7 @@ describe('request test', () => {
 
   it('uploadFile function test', async() => {
     //prepared
-    const dirPath = `${os.homedir()}/.uploadFile/`;
+    const dirPath = path.join(os.homedir(), '.uploadFile', '/');
     const filePath = path.join(dirPath, fileName);
     await mkdirp(dirPath);
     await writeFile(filePath, 'this is a test');

@@ -16,15 +16,15 @@ const assert = sinon.assert;
 
 
 describe('upload test', () => {
-  const srcPath = `${os.homedir()}/local-nas-dir/`;
-  const dstPath = '/mnt/nas';
+  const srcPath = path.join(os.homedir(), 'local-nas-dir', '/');
+  const dstPath = path.join('/', 'mnt', 'nas');
   const nasHttpTriggerPath = '/proxy/';
   const zipDst = path.join(path.dirname(srcPath), `.${path.basename(srcPath)}.zip`);
   let request;
   let file;
   let uploadStub;
   beforeEach(async () => {
-    await mkdirp(`${os.homedir()}/local-nas-dir/`);
+    await mkdirp(srcPath);
     request = {
       statsRequest: sandbox.stub(), 
       checkHasUpload: sandbox.stub(), 
@@ -83,7 +83,7 @@ describe('upload test', () => {
 
   afterEach(() => {
     sandbox.restore();
-    rimraf.sync(`${os.homedir()}/local-nas-dir/`);
+    rimraf.sync(srcPath);
   });
 
   it('upload file more than 5M', async() => { 

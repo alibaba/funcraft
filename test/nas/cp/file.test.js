@@ -19,7 +19,7 @@ const assert = sinon.assert;
 
 
 describe('function zipWithArchiver test', () => {
-  let inputPath = `${os.homedir()}/.zip-test/`;
+  let inputPath = path.join(os.homedir(), '.zip-test', '/');
   const zipDst = path.join(path.dirname(inputPath), `.${path.basename(inputPath)}.zip`);
   let fsExists;
   beforeEach(async () => {
@@ -28,7 +28,7 @@ describe('function zipWithArchiver test', () => {
     await writeFile(`${inputPath}test.txt`, 'this is a test');
   });
   afterEach(() => {
-    inputPath = `${os.homedir()}/.zip-test/`;
+    inputPath = path.join(os.homedir(), '.zip-test', '/');
     rimraf.sync(inputPath);
     rimraf.sync(zipDst);
     sandbox.restore();
@@ -63,9 +63,9 @@ describe('function zipWithArchiver test', () => {
 });
 
 describe('function splitFile test', () => {
-  const dirPath = `${os.homedir()}/.zip-test/`;
+  const dirPath = path.join(os.homedir(), '.zip-test', '/'); 
   const filePth = path.join(dirPath, 'test.txt');
-  const outPath = `${os.homedir()}/.output/`;
+  const outPath = path.join(os.homedir(), '.output', '/'); 
   const maxFileSize = 512;
   beforeEach(async () => {
     await mkdirp(outPath);
