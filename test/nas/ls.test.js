@@ -8,14 +8,7 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const proxyquire = require('proxyquire');
 
-const fcRequest = sandbox.stub(FC.prototype, 'request').resolves({
-  data: '123',
-  stderr: ''
-});
 
-const ls = proxyquire('../../lib/nas/ls', {
-  '@alicloud/fc2': FC
-});
 
 describe('ls test', () => {
   const serviceName = 'demo';
@@ -23,8 +16,20 @@ describe('ls test', () => {
   const isAllOpt = true;
   const isLongOpt = true;
 
+  let fcRequest;
+  let ls;
+  beforeEach(() => {
+    fcRequest = sandbox.stub(FC.prototype, 'request').resolves({
+      data: '123',
+      stderr: ''
+    });
+    
+    ls = proxyquire('../../lib/nas/ls', {
+      '@alicloud/fc2': FC
+    });
+  });
   afterEach(() => {
-    sandbox.reset();
+    sandbox.restore();
   });
 
   it('ls function test', async () => {
