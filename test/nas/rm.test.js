@@ -12,10 +12,10 @@ const proxyquire = require('proxyquire');
 describe('ls test', () => {
   const serviceName = 'demo';
   const nasPath = path.join('/', 'mnt', 'nas');
-  const isAllOpt = true;
-  const isLongOpt = true;
+  const isRecursiveOpt = true;
+  const isForceOpt = true;
   
-  let ls;
+  let rm;
   
   let request;
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('ls test', () => {
         stderr: ''
       })
     };
-    ls = proxyquire('../../lib/nas/ls', {
+    rm = proxyquire('../../lib/nas/rm', {
       './request': request
     });
     
@@ -35,10 +35,10 @@ describe('ls test', () => {
     sandbox.restore();
   });
 
-  it('ls function test', async () => {
-    await ls(serviceName, nasPath, isAllOpt, isLongOpt);
+  it('rm function test', async () => {
+    await rm(serviceName, nasPath, isRecursiveOpt, isForceOpt);
     const nasHttpTriggerPath = await getNasHttpTriggerPath(serviceName);
-    const cmd = `ls -a -l ${nasPath}`;
+    const cmd = `rm -R -f ${nasPath}`;
     assert.calledWith(request.sendCmdReqequest, nasHttpTriggerPath, cmd);
     
   });
