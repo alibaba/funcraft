@@ -8,7 +8,7 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
 
-const baseDir = '/test-dir';
+const baseDir = path.join('/', 'test-dir');
 const proflieRes = {
   defaultRegion: 'cn-hangzhou', 
   accountId: '12345', 
@@ -20,6 +20,7 @@ describe('test fun nas init', () => {
   let profile;
   let deploy;
   let nasInitStub;
+  let nas;
   beforeEach(() => {
     profile = {
       getProfile: sandbox.stub()
@@ -27,13 +28,18 @@ describe('test fun nas init', () => {
     deploy = {
       deployService: sandbox.stub()
     };
+    nas = {
+      convertNasConfigToNasMappings: sandbox.stub()
+    };
     
     nasInitStub = proxyquire('../../lib/nas/init', {
       '../profile': profile,
-      '../deploy/deploy-by-tpl': deploy
+      '../deploy/deploy-by-tpl': deploy, 
+      '../nas': nas
     });
     fsPathExists = sandbox.stub(fs, 'pathExists');
   }); 
+
   afterEach(() => {
     sandbox.restore();
   });
@@ -106,7 +112,7 @@ describe('test fun nas init', () => {
     };
     profile.getProfile.returns(proflieRes);
     fsPathExists.resolves(true);
-
+    nas.convertNasConfigToNasMappings.returns([{localNasDir: baseDir, remoteNasDir: baseDir}]);
     await nasInitStub.deployNasService(baseDir, tpl);
 
     assert.calledWith(fsPathExists, zipCodePath);
