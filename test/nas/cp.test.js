@@ -3,6 +3,7 @@
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
+const constants = require('../../lib/nas/constants')
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
@@ -31,8 +32,8 @@ describe('nas cp test', () => {
 
     await cpStub(srcPath, dstPath, false);
     const mntDir = path.join('/', 'mnt', 'nas');
-    
-    assert.calledWith(upload, srcPath, mntDir, '/proxy/fun-nas-fun-nas-test/fun-nas-function/', false);
+    const nasHttpTriggerPath = `/proxy/${constants.FUN_NAS_SERVICE_PREFIX}fun-nas-test/fun-nas-function/`;
+    assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false);
   });
 
   it('src path undefined test', async () => {

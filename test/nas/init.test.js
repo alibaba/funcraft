@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const constants = require('../../lib/nas/constants');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
@@ -71,7 +72,7 @@ describe('test fun nas init', () => {
       }
     };
     const serviceName = 'fun-nas-test';
-    const nasServiceName = 'fun-nas-' + serviceName;
+    const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + serviceName;
     const nasFunctionName = 'fun-nas-function';
     
     const zipCodePath = path.resolve(__dirname, '../../lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip');
