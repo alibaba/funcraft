@@ -34,6 +34,7 @@ describe('nas cp test', () => {
     const mntDir = path.join('/', 'mnt', 'nas');
     const nasHttpTriggerPath = `/proxy/${constants.FUN_NAS_SERVICE_PREFIX}fun-nas-test/fun-nas-function/`;
     assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false);
+    
   });
 
   it('src path undefined test', async () => {
