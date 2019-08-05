@@ -96,4 +96,8 @@ Resources:
 
 **注**： step 5 中的**共享文件夹名称**应按照上述格式手动填写。盘符小写，且以 `/` 为分隔符，同时保证路径完整性。例如：`d/fun/demo`，`e/fun/work` ...
 
-由于 `docker toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 `docker for windows`。
+由于 `Docker Toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 `Docker For Windows`。
+
+可以参考官方[教程](https://store.docker.com/editions/community/docker-ce-desktop-windows)。
+
+如果遇到网络问题，可以下载阿里云提供的 [Docker For Windows](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/beta/)。
