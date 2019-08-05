@@ -3,7 +3,7 @@
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const path = require('path');
-const constants = require('../../lib/nas/constants')
+const constants = require('../../lib/nas/constants');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
