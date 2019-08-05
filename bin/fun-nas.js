@@ -12,7 +12,8 @@ program
   .command('info', 'Print nas config information, such as local temp directory of NAS.')
   .command('init', 'For each service with NAS config, create local NAS folder and deploy fun nas server service.')
   .command('sync', 'Synchronize the local NAS directory with the remote NAS file system.')
-  .command('ls', 'List contents of remote NAS directory');
+  .command('ls', 'List contents of remote NAS directory')
+  .command('rm', 'Remove remote NAS file.');
 
 // Print help information if commands are unknown.
 program.on('command:*', (cmds) => {
