@@ -84,20 +84,16 @@ Resources:
 
 本地使用 Fun 时，如果需要在本地运行、调试函数，则需要使用 fun local 子命令。使用 fun local 子命令就需要预先安装 docker。
 
-如果在您的 windows 系统上安装的是 `docker toolbox`，在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_toolbox.png)
+如果在您的 windows 系统上安装的是 Docker Toolbox，在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_toolbox.png)
 
-提示默认主机路径为 `C:\Users`，`docker toolbox` 只能挂载 c 盘当前用户的目录，挂载其它盘都不会生效。错误信息中路径为 `D:\image_crawler`，所以失败。<br />如果想挂载其它盘符的路径，步骤如下：<br />1.打开 `Oracle VM VirtualBox`：
+提示默认主机路径为 C:\Users，Docker Toolbox 只能挂载 C 盘当前用户的目录，挂载其它盘都不会生效。错误信息中路径为 `D:\image_crawler`，所以失败。<br />如果想挂载其它盘符的路径，步骤如下：<br />1.打开 `Oracle VM VirtualBox`：
 
 ![image.png](/figures/virtual-box.png)
 
-2.选择共享文件夹，选择添加，选择我们需要共享的文件夹。确定并重启 `virtual box`。
+2.选择共享文件夹，选择添加，选择我们需要共享的文件夹。确定并重启 Virtual Box。
 
 ![image.png](/figures/steps.png)
 
 **注**： step 5 中的**共享文件夹名称**应按照上述格式手动填写。盘符小写，且以 `/` 为分隔符，同时保证路径完整性。例如：`d/fun/demo`，`e/fun/work` ...
 
-由于 `Docker Toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 `Docker For Windows`。
-
-可以参考官方[教程](https://store.docker.com/editions/community/docker-ce-desktop-windows)。
-
-如果遇到网络问题，可以下载阿里云提供的 [Docker For Windows](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/beta/)。
+由于 `Docker Toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 [Docker For Windows](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/beta/)。(建议使用我们提供的安装链接，某些版本的 Docker for Windows 可能存在不稳定的问题。)
