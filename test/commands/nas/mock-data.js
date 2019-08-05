@@ -35,5 +35,6 @@ const tpl = {
 
 module.exports = {
   nasConfig, 
-  tpl
+  tpl, 
+  vpcConfig
 };
