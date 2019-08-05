@@ -82,9 +82,9 @@ Resources:
 
 ### Fun local invoke && Fun local start
 
-本地使用 Fun 时，如果需要在本地运行、调试函数，则需要使用 fun local 子命令。使用 fun local 子命令就需要预先安装 docker。
+本地使用 Fun 时，如果需要在本地运行、调试函数，则需要使用 fun local 子命令。使用 fun local 子命令就需要预先安装 Docker。
 
-如果在您的 windows 系统上安装的是 Docker Toolbox，在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_toolbox.png)
+如果在您的 Windows 系统上安装的是 Docker Toolbox，在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_toolbox.png)
 
 提示默认主机路径为 C:\Users，Docker Toolbox 只能挂载 C 盘当前用户的目录，挂载其它盘都不会生效。错误信息中路径为 `D:\image_crawler`，所以失败。<br />如果想挂载其它盘符的路径，步骤如下：<br />1.打开 `Oracle VM VirtualBox`：
 
