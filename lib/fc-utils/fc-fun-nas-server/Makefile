@@ -17,6 +17,9 @@ install:
 	npm install
 	fun install
 
+clean: 
+	rm -rf ./dist
+	
 build: clean install
 	npm run build
 	mkdir -p ./dist/.fun/root

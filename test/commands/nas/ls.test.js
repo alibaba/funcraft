@@ -6,12 +6,12 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
-
+const path = require('path');
 const lsNasFile = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
-  detectTplPath: sandbox.stub()
+  detectTplPath: sandbox.stub().returns('/template.yml')
 };
 
 const lsStub = proxyquire('../../../lib/commands/nas/ls', {
@@ -26,20 +26,17 @@ describe('command ls test', () => {
       all: true, 
       long: true
     };
-  
-  beforeEach(async () => {
-    tpl.detectTplPath.returns('/template.yml');
-  });
 
   afterEach(() => {
-    sandbox.restore();
+    sandbox.reset();
   });
     
   it('valid nas path', async () => {
-    const nasPath = 'nas://demo://mnt/nas';
+    const nasPath = 'nas://demo:/mnt/nas';
 
     await lsStub(nasPath, options);
-    assert.calledWith(lsNasFile, 'demo', '/mnt/nas', options.all, options.long);
+    const mntDir = path.join('/', 'mnt', 'nas');
+    assert.calledWith(lsNasFile, 'demo', mntDir, options.all, options.long);
   });
 
   it('invalid nas path', async () => {
