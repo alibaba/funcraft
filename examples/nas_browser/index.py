@@ -10,12 +10,15 @@ import oss2
 import sys
 import os
 import zipfile
+import shutil
+import hashlib
 
 import logging
 
 logger = logging.getLogger()
 
 app = Flask(__name__)
+
 
 @app.route('/ls', methods=['GET'])
 def ls(p = ''):
@@ -33,9 +36,8 @@ def ls(p = ''):
     resp = make_response('\n'.join(dirs), 200)
     return resp
 
-@app.route('/cp', methods=['POST'])
+@app.route('/cp', methods=['POST','GET'])
 def cp():
-
     p = request.args.get('dst', default = '', type=str)
     
     logger.info("cp path parameter is " + p)
@@ -44,8 +46,12 @@ def cp():
     
     oss_url = request.args.get('oss', default = '', type=str)
 
+    file_id = request.args.get('file_hash', default = '', type=str)
+        
+    dst_file_name = request.args.get('dst_file_name', default = '', type=str)
+
     if oss_url:
-        if os.path.isdir(path):
+        if os.path.isdir(path):     
             return make_response('dir is not support')
 
         global auth
@@ -67,17 +73,111 @@ def cp():
         
         return make_response('copy from ' + oss_url + ' to fc:' + path)
     else:
-        f = request.files['file']
-
         if path.endswith('/') or os.path.isdir(path):
-            dst = os.path.join(path, f.filename)
+            tmp_dir = os.path.join(path, '.temp')
+            path = os.path.join(path, dst_file_name)
         else:
-            dst = path
+            tmp_dir = os.path.join(os.path.dirname(path), '.temp')
+        
+        if not os.path.isfile(path):
+            try:
+                os.makedirs(tmp_dir)
+            except OSError as e:
+                logger.info(str(e))
 
-        f.save(dst)
+            html = 'start upload files' + path + '\n'
+            resp = make_response(html,200)
+        else:
+            with open(path, "rb") as f:
+                exist_file_id = hashlib.md5(f.read()).hexdigest()
+            
+            if file_id == exist_file_id:
+                html = 'file already exists\n'
+                resp = make_response(html,201)
+            else:
+                try:
+                    os.makedirs(tmp_dir)
+                except OSError as e:
+                    logger.info(str(e))
+                
+                html = ' start override files\n'
+                resp = make_response(html, 200)
+        return resp
 
-        html = f.filename + ' upload ' + dst + ' to success'
+@app.route('/upload', methods=['POST'])
+def upload():
+    task_id = request.args.get('task_id', default = '', type=str)
+
+    file_id = request.args.get('file_hash', default = '', type=str)
+
+    chunk_id = request.args.get('chunk_id', default = -1, type=int)
+
+    chunk_sum = request.args.get('chunk_sum', default = -1, type=int)
+
+    p = request.args.get('dst', default = '', type=str)
+
+    path = os.path.join('/', p)
+    
+    if path.endswith('/') or os.path.isdir(path):
+        tmp_dir = os.path.join(path, '.temp')
+    else:
+        tmp_dir = os.path.join(os.path.dirname(path), '.temp')
+    
+    file = request.files['file']
+    upload_file_id = hashlib.md5(file.read()).hexdigest()
+    file.seek(0)
+    
+    if file_id == upload_file_id:
+        dst_file_name = '%s%s' % (task_id, chunk_id)
+        dst = os.path.join(tmp_dir, dst_file_name)
+        file.save(dst)
+        upload_percent = float(chunk_id + 1)/float(chunk_sum)
+        html = '{:.0%}'.format(upload_percent) + '  '
+        
         return make_response(html, 200)
+    else:
+        html = 'upload failed!\n'
+        shutil.rmtree(tmp_dir)
+        return make_response(html, 400)
+
+@app.route('/join', methods=['POST'])
+def join():
+    task_id = request.args.get('task_id', default = '', type=str)
+
+    p = request.args.get('dst', default = '', type=str)
+
+    path = os.path.join('/', p)
+
+    dst_file_name = request.args.get('dst_file_name', default = '', type=str)
+    
+    if path.endswith('/') or os.path.isdir(path):
+        tmp_dir = os.path.join(path, '.temp')
+    else:
+        tmp_dir = os.path.join(os.path.dirname(path), '.temp')
+    
+    split_file = task_id + '*'
+    join_src = os.path.join(tmp_dir, split_file)
+    
+    if path.endswith('/') or os.path.isdir(path):
+        join_dst = os.path.join(path, dst_file_name)
+    else:
+        join_dst = path
+        
+    my_cmd = 'cat  ' + join_src + '> ' + join_dst
+    os.system(my_cmd)
+
+    shutil.rmtree(tmp_dir)
+
+    with open(join_dst, "rb") as f:
+        join_dst_id = hashlib.md5(f.read()).hexdigest()
+    if join_dst_id == task_id:
+        html = 'upload success!\n'
+        return make_response(html, 200)
+    else:
+        os.remove(join_dst)
+        html = 'upload failed! '
+        return make_response(html, 400)
+
 
 @app.route('/cat', methods=['GET'])
 def cat():
@@ -99,7 +199,7 @@ def bash():
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     p.wait()
 
-    rs = ''.join(p.stdout.readlines())
+    rs = b''.join(p.stdout.readlines())
         
     return make_response(rs, 200)
 
