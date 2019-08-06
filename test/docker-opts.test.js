@@ -7,7 +7,6 @@ const { setProcess } = require('./test-utils');
 const os = require('os');
 const DockerCli = require('dockerode');
 const sinon = require('sinon');
-const assert = sinon.assert;
 const sandbox = sinon.createSandbox();
 const proxyquire = require('proxyquire');
 
@@ -263,5 +262,21 @@ describe('test transformPathForVirtualBox', () => {
       const result = await dockerOpts.transformPathForVirtualBox(source);
       expect(result).to.eql('/c/Users/WB-SFY~1/AppData/Local/Temp');
     }
+  });
+
+  it('test transformSourcePathOfMount', async () => {
+    const result = await dockerOpts.transformSourcePathOfMount({
+      'Type': 'bind',
+      'Source': 'C:\\Users\\image_crawler\\code',
+      'Target': '/code',
+      'ReadOnly': true
+    });
+
+    expect(result).to.eql({
+      'Type': 'bind',
+      'Source': '/c/Users/image_crawler/code',
+      'Target': '/code',
+      'ReadOnly': true
+    });
   });
 });
