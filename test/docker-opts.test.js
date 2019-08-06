@@ -150,7 +150,7 @@ describe('test generateLocalInvokeOpts', () => {
       'OpenStdin': true,
       'StdinOnce': true,
       'Tty': false,
-      'Image': 'aliyunfc/runtime-nodejs8:1.5.5',
+      'Image': 'aliyunfc/runtime-nodejs8:1.5.6',
       'HostConfig': {
         'AutoRemove': true,
         'Mounts': [
@@ -194,7 +194,7 @@ describe('test generateLocalInvokeOpts', () => {
       'StdinOnce': true,
       'Tty': false,
       'User': null,
-      'Image': 'aliyunfc/runtime-nodejs8:1.5.5',
+      'Image': 'aliyunfc/runtime-nodejs8:1.5.6',
       'Env': [
         'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
