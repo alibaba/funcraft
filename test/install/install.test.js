@@ -35,11 +35,11 @@ chai.use(require('chai-fs'));
     await installPackage('python2.7', 'apt', 'libzbar0', {
       packageType: 'apt',
       codeUri: funTempDir,
-      local: true
+      local: true,
+      env: {}
     });
 
     expect(path.join(funTempDir, '.fun/root/usr/lib/libzbar.so.0')).to.be.a.path();
-
   });
 
   it('install_pip', async function () {
@@ -47,7 +47,8 @@ chai.use(require('chai-fs'));
     await installPackage('python2.7', 'pip', 'pymssql', {
       packageType: 'pip',
       codeUri: funTempDir,
-      local: true
+      local: true,
+      env: {}
     });
 
     expect(path.join(funTempDir, '.fun/python/lib/python2.7/site-packages/pymssql.so')).to.be.a.path();
