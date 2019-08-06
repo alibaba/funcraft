@@ -494,3 +494,24 @@ describe('test conventInstallTargetsToMounts', () => {
     ]);
   });
 });
+
+
+describe('test isDockerToolBox', () => {
+
+  var isWin = process.platform === 'win32';
+
+  beforeEach(() => {
+
+    sandbox.stub(DockerCli.prototype, 'info').resolves({'Labels': ['provider=virtualbox']});
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  (isWin ? it : it.skip)('test isDockerToolBox', async () => {
+  
+    const result = await docker.isDockerToolBox();
+    expect(result).to.be(true);
+  });
+});
