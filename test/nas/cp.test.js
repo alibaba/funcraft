@@ -25,7 +25,8 @@ describe('nas cp test', () => {
   });
 
   it('cp test', async() => {
-    const srcPath = path.join('/', 'demo', '.fun', 'nas', 'auto-default');
+    const rootDir = path.parse(process.cwd()).root;
+    const srcPath = path.join(rootDir, 'demo', '.fun', 'nas', 'auto-default');
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
     file.isDir.returns(false);
     file.isFile.returns(true);
