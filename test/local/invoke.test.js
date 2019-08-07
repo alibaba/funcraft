@@ -44,7 +44,7 @@ describe('test invoke construct and init', async () => {
     expect(invoke.tplPath).to.eql(tplPath);
 
     expect(invoke.runtime).to.eql(functionProps.Runtime);
-    expect(invoke.codeUri).to.eql(functionProps.CodeUri);
+    expect(invoke.codeUri).to.eql(process.cwd());
   }
 
   it('test construct', async () => {
