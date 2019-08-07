@@ -7,7 +7,6 @@ const { setProcess } = require('./test-utils');
 const os = require('os');
 const DockerCli = require('dockerode');
 const sinon = require('sinon');
-const assert = sinon.assert;
 const sandbox = sinon.createSandbox();
 const proxyquire = require('proxyquire');
 
@@ -132,8 +131,6 @@ describe('test generateLocalInvokeOpts', () => {
       ReadOnly: true
     }], 'cmd', 9000, envs, '1000:1000');
 
-    assert.calledOnce(DockerCli.prototype.info);
-
     expect(opts).to.eql({
       'name': 'test',
       'Cmd': 'cmd',
@@ -153,7 +150,7 @@ describe('test generateLocalInvokeOpts', () => {
       'OpenStdin': true,
       'StdinOnce': true,
       'Tty': false,
-      'Image': 'aliyunfc/runtime-nodejs8:1.5.5',
+      'Image': 'aliyunfc/runtime-nodejs8:1.5.6',
       'HostConfig': {
         'AutoRemove': true,
         'Mounts': [
@@ -187,8 +184,6 @@ describe('test generateLocalInvokeOpts', () => {
       ReadOnly: true
     }], null, null, null, null);
 
-    assert.calledOnce(DockerCli.prototype.info);
-
     expect(opts).to.eql({
       'name': 'test',
       'Cmd': null,
@@ -199,7 +194,7 @@ describe('test generateLocalInvokeOpts', () => {
       'StdinOnce': true,
       'Tty': false,
       'User': null,
-      'Image': 'aliyunfc/runtime-nodejs8:1.5.5',
+      'Image': 'aliyunfc/runtime-nodejs8:1.5.6',
       'Env': [
         'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
@@ -260,12 +255,28 @@ describe('test resolveDockerEnv', () => {
   });
 });
 
-describe('test pathTransformationToVirtualBox', () => {
+describe('test transformPathForVirtualBox', () => {
   it('test default host machine path', async () => {
     if (process.platform === 'win32') {
       const source = 'C:\\Users\\WB-SFY~1\\AppData\\Local\\Temp';
-      const result = await dockerOpts.pathTransformationToVirtualBox(source);
+      const result = await dockerOpts.transformPathForVirtualBox(source);
       expect(result).to.eql('/c/Users/WB-SFY~1/AppData/Local/Temp');
     }
+  });
+
+  it('test transformSourcePathOfMount', async () => {
+    const result = await dockerOpts.transformSourcePathOfMount({
+      'Type': 'bind',
+      'Source': 'C:\\Users\\image_crawler\\code',
+      'Target': '/code',
+      'ReadOnly': true
+    });
+
+    expect(result).to.eql({
+      'Type': 'bind',
+      'Source': '/c/Users/image_crawler/code',
+      'Target': '/code',
+      'ReadOnly': true
+    });
   });
 });

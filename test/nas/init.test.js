@@ -1,78 +1,68 @@
 'use strict';
 
-const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const nasMockData = require('../commands/nas/mock-data');
+const constants = require('../../lib/nas/constants');
+const { setProcess } = require('../test-utils');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
-const profile = {
-  getProfile: sandbox.stub()
-};
-const deploy = {
-  deployService: sandbox.stub()
-};
+const baseDir = path.join('/', 'test-dir');
 
-const nasInitStub = proxyquire('../../lib/nas/init', {
-  '../profile': profile,
-  '../deploy/deploy-by-tpl': deploy
-});
-const baseDir = '/test-dir';
-const proflieRes = {
-  defaultRegion: 'cn-hangzhou', 
-  accountId: '12345', 
-  accessKeyId: '123', 
-  timeout: 60
-};
 describe('test fun nas init', () => {
-  let fsPathExists;
+  let deploy;
+  let nasInitStub;
+  let nas;
+  let fs;
+  let restoreProcess;
+  beforeEach(() => {
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      DEFAULT_REGION: 'cn-shanghai',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
+    });
+
+    deploy = {
+      deployService: sandbox.stub()
+    };
+    nas = {
+      convertNasConfigToNasMappings: sandbox.stub()
+    };
+    fs = {
+      pathExists: sandbox.stub()
+    };
+    nasInitStub = proxyquire('../../lib/nas/init', {
+      '../deploy/deploy-by-tpl': deploy, 
+      '../nas': nas, 
+      'fs-extra': fs
+    });
+
+  }); 
+
   afterEach(() => {
+    restoreProcess();
     sandbox.restore();
   });
   
   it('function deployNasService', async () => {
-    fsPathExists = sandbox.stub(fs, 'pathExists');
     
-    const nasConfig = {
-      UserId: 10003,
-      GroupId: 10003,
-      MountPoints: [{
-        ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
-        MountDir: '/mnt/nas'
-      }]
-    };
-    const vpcConfig = {
-      VpcId: 'vpc-uf6p2abfodpmpmzu6onhy',
-      VSwitchIds: [
-        'vsw-uf6074gzypzsc95idtxk8'
-      ],
-      SecurityGroupId: 'sg-uf6h3g45f2fo5lr04akb'
-    };
-    const tpl = {
-      ROSTemplateFormatVersion: '2015-09-01',
-      Transform: 'Aliyun::Serverless-2018-04-03',
-      Resources: {
-        'fun-nas-test': {
-          Type: 'Aliyun::Serverless::Service',
-          Properties: {
-            VpcConfig: vpcConfig, 
-            NasConfig: nasConfig
-          }
-        }
-      }
-    };
     const serviceName = 'fun-nas-test';
-    const nasServiceName = 'fun-nas-' + serviceName;
-    const nasFunctionName = 'fun-nas-function';
+    const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + serviceName;
+    const nasFunctionName = constants.FUN_NAS_FUNCTION;
     
+    fs.pathExists.returns(true);
     const zipCodePath = path.resolve(__dirname, '../../lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip');
+    
     const nasServiceRes = {
       'Type': 'Aliyun::Serverless::Service',
       'Properties': {
         'Description': `service for fc nas used for service ${serviceName}`,
-        'VpcConfig': vpcConfig,
-        'NasConfig': nasConfig
+        'VpcConfig': nasMockData.vpcConfig,
+        'NasConfig': nasMockData.nasConfig
       },
       [nasFunctionName]: {
         Type: 'Aliyun::Serverless::Function',
@@ -96,14 +86,13 @@ describe('test fun nas init', () => {
         }
       }
     };
-    profile.getProfile.returns(proflieRes);
-    fsPathExists.resolves(true);
-
-    await nasInitStub.deployNasService(baseDir, tpl);
-
-    assert.calledWith(fsPathExists, zipCodePath);
-    assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes);
     
+    nas.convertNasConfigToNasMappings.returns([{localNasDir: baseDir, remoteNasDir: baseDir}]);
+    await nasInitStub.deployNasService(baseDir, nasMockData.tpl);
+
+    assert.calledWith(fs.pathExists, zipCodePath);
+    assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes);
+
   });
     
 }); 

@@ -7,24 +7,25 @@ const proxyquire = require('proxyquire');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
-const lsNasFile = sandbox.stub();
+
+const rmNasFile = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
   detectTplPath: sandbox.stub().returns('/template.yml')
 };
 
-const lsStub = proxyquire('../../../lib/commands/nas/ls', {
+const rmStub = proxyquire('../../../lib/commands/nas/rm', {
   '../../validate/validate': validate,
-  '../../nas/ls': lsNasFile,
+  '../../nas/rm': rmNasFile,
   '../../tpl': tpl
 });
 
-describe('command ls test', () => {
+describe('command rm test', () => {
   const options = 
     {
-      all: true, 
-      long: true
+      recursive: true, 
+      force: true
     };
 
   afterEach(() => {
@@ -34,9 +35,9 @@ describe('command ls test', () => {
   it('valid nas path', async () => {
     const nasPath = 'nas://demo:/mnt/nas';
 
-    await lsStub(nasPath, options);
+    await rmStub(nasPath, options);
     const mntDir = path.join('/', 'mnt', 'nas');
-    assert.calledWith(lsNasFile, 'demo', mntDir, options.all, options.long);
+    assert.calledWith(rmNasFile, 'demo', mntDir, options.recursive, options.force);
   });
 
   it('invalid nas path', async () => {
@@ -44,13 +45,13 @@ describe('command ls test', () => {
     let err;
 
     try {
-      await lsStub(nasPath, options);
-      assert.notCalled(lsNasFile);
+      await rmStub(nasPath, options);
+      assert.notCalled(rmNasFile);
     } catch (error) {
       err = error;
     }
     expect(err).to.eql(new Error('nas path err: ' + nasPath));
-    
+
   });
 });
 
