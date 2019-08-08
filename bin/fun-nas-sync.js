@@ -23,8 +23,8 @@ program
   .name('fun nas sync')
   .usage('[options]')
   .description('Upload local NAS to remote NAS automatically')
-  .option('-s, --service <servicename>', 'Upload the local NAS belonging to the specified service')
-  .option('-m, --mount-dir <mountdirs>', 'Upload the local NAS corresponding to the specified mount directory', commaSeparatedList)
+  .option('-s, --service <service-name>', 'Upload the local NAS belonging to the specified service')
+  .option('-m, --mount-dir <mount-dirs>', 'Upload the local NAS corresponding to the specified mount directory', commaSeparatedList)
   .on('--help', () => {
     console.log(examples);
   })

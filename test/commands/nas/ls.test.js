@@ -35,7 +35,7 @@ describe('command ls test', () => {
     const nasPath = 'nas://demo:/mnt/nas';
 
     await lsStub(nasPath, options);
-    const mntDir = path.join('/', 'mnt', 'nas');
+    const mntDir = path.posix.join('/', 'mnt', 'nas');
     assert.calledWith(lsNasFile, 'demo', mntDir, options.all, options.long);
   });
 

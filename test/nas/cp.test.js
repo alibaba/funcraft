@@ -25,13 +25,14 @@ describe('nas cp test', () => {
   });
 
   it('cp test', async() => {
-    const srcPath = '/demo/.fun/nas/auto-default';
+    const rootDir = path.parse(process.cwd()).root;
+    const srcPath = path.join(rootDir, 'demo', '.fun', 'nas', 'auto-default');
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
     file.isDir.returns(false);
     file.isFile.returns(true);
 
     await cpStub(srcPath, dstPath, false);
-    const mntDir = path.join('/', 'mnt', 'nas');
+    const mntDir = path.posix.join('/', 'mnt', 'nas');
     const nasHttpTriggerPath = `/proxy/${constants.FUN_NAS_SERVICE_PREFIX}fun-nas-test/fun-nas-function/`;
     assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false);
     
