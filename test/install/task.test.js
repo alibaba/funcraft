@@ -8,7 +8,50 @@ const path = require('path');
 const mkdirp = require('mkdirp-promise');
 const chai = require('chai');
 const expect = chai.expect;
+const docker = require('../../lib/docker');
+const sinon = require('sinon');
+const sandbox = sinon.createSandbox();
+const assert = sinon.assert;
+
 chai.use(require('chai-fs'));
+
+describe('test PipTask', () => {
+
+  let runnerStub;
+
+  beforeEach(() => {
+    runnerStub = {
+      exec: sandbox.stub(),
+      stop: sandbox.stub()
+    };
+
+    sandbox.stub(docker, 'startInstallationContainer').resolves(runnerStub);
+
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('test PipTask', async () => {
+    const funTempDir = path.join(tempDir, 'funtemp');
+    const pipTask = new PipTask('install pymssql', 'python2.7', funTempDir, 'pymssql', true);
+    await pipTask.run();
+
+    assert.calledWith(docker.startInstallationContainer, {
+      codeUri: funTempDir,
+      runtime: 'python2.7',
+      targets: undefined
+    });
+
+    assert.calledWith(runnerStub.exec, ['pip', 'install', '--user', '--no-warn-script-location', 'pymssql'], {
+      env: { PIP_DISABLE_PIP_VERSION_CHECK: '1', PYTHONUSERBASE: '/code/.fun/python' },
+      verbose: false
+    });
+
+    assert.calledOnce(runnerStub.stop);
+  });
+});
 
 
 (hasDocker ? describe : describe.skip)('Integration::task', () => {
