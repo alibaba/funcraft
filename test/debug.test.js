@@ -102,6 +102,29 @@ describe('test generateVscodeDebugConfig', () => {
     });
   });
 
+  it('test nodejs10', async function () {
+
+    const debugConfig = await generateVscodeDebugConfig(serviceName, functionName, 'nodejs10', '.', 9000);
+
+    expect(debugConfig).to.eql({
+      'version': '0.2.0',
+      'configurations': [
+        {
+          'name': 'fc/testService/testFunction',
+          'type': 'node',
+          'request': 'attach',
+          'address': 'localhost',
+          'port': 9000,
+          'localRoot': '.',
+          'remoteRoot': '/code',
+          'protocol': 'inspector',
+          'stopOnEntry': false
+        }
+      ]
+    });
+  });
+
+
   it('test java8', async function () {
 
     const debugConfig = await generateVscodeDebugConfig(serviceName, functionName, 'java8', '.', 9000);
@@ -163,6 +186,11 @@ describe('test generateDebugEnv', () => {
 
   it('test nodejs8', async function () {
     const env = await generateDebugEnv('nodejs8', 9000);
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '--inspect-brk=0.0.0.0:9000' });
+  });
+
+  it('test nodejs10', async function () {
+    const env = await generateDebugEnv('nodejs10', 9000);
     expect(env).to.eql({ 'DEBUG_OPTIONS': '--inspect-brk=0.0.0.0:9000' });
   });
 
