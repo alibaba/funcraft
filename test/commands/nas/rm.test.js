@@ -36,7 +36,7 @@ describe('command rm test', () => {
     const nasPath = 'nas://demo:/mnt/nas';
 
     await rmStub(nasPath, options);
-    const mntDir = path.join('/', 'mnt', 'nas');
+    const mntDir = path.posix.join('/', 'mnt', 'nas');
     assert.calledWith(rmNasFile, 'demo', mntDir, options.recursive, options.force);
   });
 

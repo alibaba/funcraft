@@ -11,7 +11,7 @@ const proxyquire = require('proxyquire');
 
 describe('ls test', () => {
   const serviceName = 'demo';
-  const nasPath = path.join('/', 'mnt', 'nas');
+  const nasPath = path.posix.join('/', 'mnt', 'nas');
   const isAllOpt = true;
   const isLongOpt = true;
   

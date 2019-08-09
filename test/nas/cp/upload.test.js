@@ -17,7 +17,7 @@ const assert = sinon.assert;
 
 describe('upload test', () => {
   const srcPath = path.join(os.homedir(), 'local-nas-dir', '/');
-  const dstPath = path.join('/', 'mnt', 'nas');
+  const dstPath = path.posix.join('/', 'mnt', 'nas');
   const nasHttpTriggerPath = '/proxy/';
   const zipDst = path.join(path.dirname(srcPath), `.${path.basename(srcPath)}.zip`);
   let request;
