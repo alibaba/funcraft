@@ -71,6 +71,7 @@ describe('test fun nas init', () => {
           Runtime: 'nodejs10',
           CodeUri: zipCodePath,
           Timeout: 600,
+          MemorySize: 512,
           EnvironmentVariables: {
             PATH: '/code/.fun/root/usr/bin'
           }
