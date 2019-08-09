@@ -8,6 +8,7 @@ const assert = sinon.assert;
 let Invoke = require('../../lib/local/invoke');
 
 const docker = require('../../lib/docker');
+const dockerOpts = require('../../lib/docker-opts');
 
 const proxyquire = require('proxyquire');
 
@@ -23,9 +24,11 @@ describe('test invoke construct and init', async () => {
 
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
+    sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves('aliyunfc/runtime-python3.6:1.5.6');
 
     Invoke = proxyquire('../../lib/local/invoke', {
-      '../docker': docker
+      '../docker': docker,
+      '../docker-opts': dockerOpts
     });
   });
 
