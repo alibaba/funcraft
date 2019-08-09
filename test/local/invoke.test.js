@@ -24,7 +24,7 @@ describe('test invoke construct and init', async () => {
 
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
-    sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves('aliyunfc/runtime-python3.6:1.5.6');
+    sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves('aliyunfc/runtime-python3.6:1.5.7');
 
     Invoke = proxyquire('../../lib/local/invoke', {
       '../docker': docker,
@@ -80,9 +80,9 @@ describe('test invoke construct and init', async () => {
     expect(invoke.codeMount).to.eql(codeMount);
     expect(invoke.mounts).to.eql([codeMount]);
     expect(invoke.containerName).to.contain('fun_local_');
-    expect(invoke.imageName).to.contain('aliyunfc/runtime-python3.6:1.5.6');
+    expect(invoke.imageName).to.contain('aliyunfc/runtime-python3.6:1.5.7');
 
-    assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.6');
+    assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.7');
   });
 
   it('test init with nas config', async () => {
@@ -112,9 +112,9 @@ describe('test invoke construct and init', async () => {
     expect(invoke.codeMount).to.eql(codeMount);
     expect(invoke.mounts).to.eql([codeMount, ...nasMounts]);
     expect(invoke.containerName).to.contain('fun_local_');
-    expect(invoke.imageName).to.eql('aliyunfc/runtime-python3.6:1.5.6');
+    expect(invoke.imageName).to.eql('aliyunfc/runtime-python3.6:1.5.7');
 
-    assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.6');
+    assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.7');
   });
 });
 
