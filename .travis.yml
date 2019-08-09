@@ -51,7 +51,7 @@ before_script:
 script: 
   - |
     if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
-      mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Integration::).*'
+      mocha  ./test/ -t 20000  -R spec --recursive -name *.test.js --grep ^Integration::
     else
       make test
       make -C ./lib/fc-utils/fc-fun-nas-server/ test
