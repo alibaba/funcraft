@@ -1,7 +1,6 @@
 'use strict';
 
 const expect = require('expect.js');
-const getProfile = require('../lib/profile').getProfile;
 
 const { setProcess } = require('./test-utils');
 
