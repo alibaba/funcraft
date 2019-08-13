@@ -28,7 +28,6 @@
     "md5-file": "^4.0.0",
     "mkdirp-sync": "0.0.3",
     "mocha": "^6.2.0",
-    "node-stream-zip": "^1.8.2",
     "split-file": "^2.1.1",
     "stream": "0.0.2",
     "unzipper": "^0.10.1",
