@@ -10,16 +10,41 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const proxyquire = require('proxyquire');
 
-describe('test resolveRuntimeToDockerImage', () => {
+class Socket {
+  connect(part, host, callback) {
+  }
 
-  const pingProbe = sandbox.stub();
+  on(event, callback) {
+  }
+
+  setTimeout(timeout, callback) {
+  }
+}
+
+class OnErrorSocket extends Socket {
+  on(event, callback) {
+    callback();
+  }
+}
+
+class TimeoutSocket extends Socket {
+  setTimeout(timeout, callback) {
+    callback();
+  }
+}
+
+class ConnectSocket extends Socket {
+  connect(part, host, callback) {
+    callback();
+  }
+}
+
+describe('test resolveRuntimeToDockerImage', () => {
 
   beforeEach(() => {
     dockerOpts = proxyquire('../lib/docker-opts', {
-      'ping': {
-        promise: {
-          probe: pingProbe
-        }
+      net: {
+        Socket: ConnectSocket
       }
     });
   });
@@ -29,60 +54,50 @@ describe('test resolveRuntimeToDockerImage', () => {
   });
 
   it('test find not python image', async () => {
-    pingProbe.returns({ alive: true, host: 'google.com' });
-    for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2']) {
+    for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2', 'nodejs10']) {
       const imageName = await dockerOpts.resolveRuntimeToDockerImage(runtime);
       expect(imageName).to.contain(`aliyunfc/runtime-${runtime}:`);
     }
   });
 
   it('test find python 3 image', async () => {
-    pingProbe.returns({ alive: true, host: 'google.com' });
     const imageName = await dockerOpts.resolveRuntimeToDockerImage('python3');
     expect(imageName).to.contain(`aliyunfc/runtime-python3.6:`);
   });
 });
 
-describe('test resolveDockerImageRepo', () => {
-  const pingProbe = sandbox.stub();
+describe('test resolveDockerRegistry', () => {
 
-  beforeEach(() => {
+  it('test domestic users resolver docker registry', async () => {
     dockerOpts = proxyquire('../lib/docker-opts', {
-      'ping': {
-        promise: {
-          probe: pingProbe
-        }
+      net: {
+        Socket: OnErrorSocket
       }
     });
+    const dockerRegistry = await dockerOpts.resolveDockerRegistry();
+    expect(dockerRegistry).to.be.eql('registry.cn-beijing.aliyuncs.com');
   });
 
-  afterEach(() => {
-    sandbox.restore();
+  it('test foreign users resolver docker registry', async () => {
+    dockerOpts = proxyquire('../lib/docker-opts', {
+      net: {
+        Socket: ConnectSocket
+      }
+    });
+    const dockerRegistry = await dockerOpts.resolveDockerRegistry();
+    expect(dockerRegistry).to.be('');
   });
 
-  it('test domestic users resolver docker image repo', async () => {
-    pingProbe.returns({ alive: false, host: 'google.com' });
-    const dockerImageRepo = await dockerOpts.resolveDockerImageRepo();
-    expect(dockerImageRepo).to.be.eql('registry.cn-beijing.aliyuncs.com');
+  it('test resolver docker registry with network timeout', async () => {
+    dockerOpts = proxyquire('../lib/docker-opts', {
+      net: {
+        Socket: TimeoutSocket
+      }
+    });
+    const dockerRegistry = await dockerOpts.resolveDockerRegistry();
+    expect(dockerRegistry).to.be.eql('registry.cn-beijing.aliyuncs.com');
   });
 
-  it('test foreign users resolver docker image repo', async () => {
-    pingProbe.returns({ alive: true, host: 'google.com' });
-    const dockerImageRepo = await dockerOpts.resolveDockerImageRepo();
-    expect(dockerImageRepo).to.be('');
-  });
-
-  it('test resolver docker image repo with network not work', async () => {
-    pingProbe.returns({ alive: false, host: 'unknown' });
-    const dockerImageRepo = await dockerOpts.resolveDockerImageRepo();
-    expect(dockerImageRepo).to.be.eql('');
-  });
-
-  it('test resolver docker image repo with error throw', async () => {
-    pingProbe.throws();
-    const dockerImageRepo = await dockerOpts.resolveDockerImageRepo();
-    expect(dockerImageRepo).to.be.eql('');
-  });
 });
 
 describe('test generateLocalInvokeOpts', () => {
@@ -96,10 +111,8 @@ describe('test generateLocalInvokeOpts', () => {
 
     dockerOpts = proxyquire('../lib/docker-opts', {
       'dockerode': DockerCli,
-      'ping': {
-        promise: {
-          probe: pingProbe
-        }
+      net: {
+        Socket: ConnectSocket
       }
     });
 
@@ -150,7 +163,7 @@ describe('test generateLocalInvokeOpts', () => {
       'OpenStdin': true,
       'StdinOnce': true,
       'Tty': false,
-      'Image': 'aliyunfc/runtime-nodejs8:1.5.6',
+      'Image': 'aliyunfc/runtime-nodejs8:1.5.7',
       'HostConfig': {
         'AutoRemove': true,
         'Mounts': [
@@ -194,7 +207,7 @@ describe('test generateLocalInvokeOpts', () => {
       'StdinOnce': true,
       'Tty': false,
       'User': null,
-      'Image': 'aliyunfc/runtime-nodejs8:1.5.6',
+      'Image': 'aliyunfc/runtime-nodejs8:1.5.7',
       'Env': [
         'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
