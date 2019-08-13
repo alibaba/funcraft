@@ -94,4 +94,23 @@ describe('import utils', () => {
     expect(content).to.be.eql(utilsStub.getTemplateHeader());
   });
 
+  it('test getTemplateFile with the Resources not empty', () => {
+    const baseContent = utilsStub.getTemplateHeader();
+    baseContent.Resources.test = {
+      foo: 'bar'
+    };
+    fs.existsSync.returns(true);
+    fs.readFileSync.returns(JSON.stringify(baseContent));
+
+    const { content } = utilsStub.getTemplateFile('foo');
+    expect(content).to.be.eql(Object.assign(utilsStub.getTemplateHeader(), {
+      Resources: {
+        test: {
+          foo: 'bar'
+        }
+      }
+    }));
+  });
+
+
 });
