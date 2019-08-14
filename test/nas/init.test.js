@@ -48,7 +48,7 @@ describe('test fun nas init', () => {
     sandbox.restore();
   });
   
-  it('function deployNasService', async () => {
+  it('function deployNasService without service', async () => {
     
     const serviceName = 'fun-nas-test';
     const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + serviceName;
