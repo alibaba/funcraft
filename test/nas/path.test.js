@@ -12,18 +12,44 @@ const path = require('path');
 const sandbox = sinon.createSandbox();
 
 const { 
-  parseNasPath,
+  parseNasUri,
   resolveLocalPath, 
   makeTmpDir, 
   splitFiles } = require('../../lib/nas/path');
 
-describe('parseNasPath test', () => {
-  it('valid nas path', () => {
-    const nasPath = 'nas://demo:/mnt/nas';
-    let res = parseNasPath(nasPath);
-    const mntDir = path.posix.join('/', 'mnt', 'nas');
-    expect(res).to.eql({nasPath: mntDir, serviceName: 'demo'});
+describe('parseNasUri test', () => {
+  const validNasPathResultMap = new Map();
+  validNasPathResultMap.set('nas:///mnt/auto', {nasPath: '/mnt/auto', serviceName: ''});
+  validNasPathResultMap.set('nas://:/mnt/auto', {nasPath: '/mnt/auto', serviceName: ''});
+  validNasPathResultMap.set('nas://service1:/mnt/auto', {nasPath: '/mnt/auto', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1:/mnt', {nasPath: '/mnt', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1:/home/', {nasPath: '/home/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1:/home/', {nasPath: '/home/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1:/home/1', {nasPath: '/home/1', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1:/', {nasPath: '/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1:/tmp/', {nasPath: '/tmp/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas:///', {nasPath: '/', serviceName: ''});
+
+  const invalidNasPathArr = ['nas://service1/////mnt/auto', 'nas://service1:/mnt////auto', 'nas://service1:/'
+    , 'nas://service1/', 'nas://service1:', 'nas://service1:////', 'nas://service1:/tmp/////', 'oss:///mnt/auto'];
+
+  it('valid nas path test', () => {
+    validNasPathResultMap.forEach((parseRes, nasPath) => {
+      const res = parseNasUri(nasPath);
+      expect(res).to.eql(parseRes);
+    });
   });
+
+  it('invalid nas path test', () => {
+    invalidNasPathArr.map((invalidNasPath) => {
+      try {
+        parseNasUri(invalidNasPath);
+      } catch (error) {
+        expect(error).to.be.an.error;
+      }
+    });
+  });
+  
 });
 
 describe('resolveLocalPath test', () => {
