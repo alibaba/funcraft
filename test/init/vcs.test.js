@@ -8,7 +8,9 @@ const path = require('path');
 const sandbox = sinon.createSandbox();
 const fs = {
   mkdirSync: sandbox.stub(),
-  existsSync: sandbox.stub()
+  existsSync: sandbox.stub(),
+  ensureDir: sandbox.stub(),
+  moveSync: sandbox.stub()
 };
 
 const prompt = {
@@ -26,10 +28,15 @@ const uuid = {
   v1: sandbox.stub()
 };
 
+const httpx = {
+  request: sandbox.stub()
+};
+
 const vcsStub = proxyquire('../../lib/init/vcs', {
   'uuid': uuid,
-  'fs': fs,
+  'fs-extra': fs,
   './prompt': prompt,
+  'httpx': httpx,
   'child_process': child_process,
   'command-exists': commandExists
 });
@@ -40,17 +47,24 @@ describe('vcs', () => {
     sandbox.reset();
   });
 
-  it('clone with vcs is not installed', async () => {
+  it('clone with git not installed', async () => {
     commandExists.sync.returns(false);
     fs.existsSync.returns(true);
-    let err;
-    try {
-      await vcsStub.clone('https://github.com/foo/bar.git', '.');
-    } catch (error) {
-      err = error;
-    }
-    expect(err).to.eql(new Error(`git is not installed.`));
-
+    const on = (event, listener) => {
+      if (event === 'finish') {
+        listener();
+      } else if (event === 'end') {
+        listener();
+      }
+      return { on };
+    };
+    httpx.request.returns({
+      headers: { 'content-length': 1000 },
+      on,
+      pipe: () =>({ on })
+    });
+    await vcsStub.clone('https://github.com/foo/bar.git', '.');
+    httpx.request.calledWith('https://codeload.github.com/foo/bar/zip/master', { timeout: 36000000, method: 'GET' });
   });
 
   it('clone with unknown repo type', async () => {

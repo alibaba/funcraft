@@ -46,13 +46,15 @@ const path = {
   resolve: sandbox.stub()
 };
 
-const https = {};
+const httpx = {
+  request: sandbox.stub()
+};
 
 const serviceStub = proxyquire('../../lib/import/service', {
   '../client': client,
   './utils': utils,
   'path': path,
-  'https': https
+  'httpx': httpx
 });
 
 describe('import service', () => {
@@ -143,7 +145,7 @@ describe('import service', () => {
       return { on };
     };
 
-    https.get = (url, callback) => callback({
+    httpx.request.returns({
       headers: {},
       on,
       pipe: arg => ( { on })
