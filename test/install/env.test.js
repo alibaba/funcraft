@@ -93,7 +93,7 @@ describe('resolveLibPathsFromLdConf', () => {
 
   });
   
-  it('resolve path exist and nothing for lines', async () => {
+  it('Absolutely path exist and nothing for lines', async () => {
 
     file.readLines.returns(Promise.resolve([]));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
@@ -101,7 +101,7 @@ describe('resolveLibPathsFromLdConf', () => {
 
   });
 
-  it('resolve path exist and front / for lines', async () => {
+  it('Absolutely path exist and front / for lines', async () => {
 
     file.readLines.returns(Promise.resolve(['/aaa']));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
@@ -109,7 +109,7 @@ describe('resolveLibPathsFromLdConf', () => {
 
   });
 
-  it('resolve path exist and front / and blank for lines', async () => {
+  it('Absolutely path exist and front / and blank for lines', async () => {
 
     file.readLines.returns(Promise.resolve(['   /blank']));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
@@ -125,11 +125,27 @@ describe('resolveLibPathsFromLdConf', () => {
 
   });
 
-  it('resolve path exist and front / and blank for multiple lines', async () => {
+  it('Absolutely path exist and front / and blank for multiple lines', async () => {
 
     file.readLines.returns(Promise.resolve(['    /blank', 'aaa', 'bbb']));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
     expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/blank' });
+
+  });
+
+  it('codeuri is file for resolve path', async () => {
+
+    file.readLines.returns(Promise.resolve(['   /blank', 'lllll', 'ssssss']));
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './.fun/root/etc/ld.so.conf.d');
+    expect(lines).to.eql({});
+
+  });
+
+  it('codeuri is file for Absolutely path', async () => {
+
+    file.readLines.returns(Promise.resolve(['    /blank', 'aaa', 'bbb']));
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(filePath));
+    expect(lines).to.eql({});
 
   });
 });
