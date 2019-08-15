@@ -4,6 +4,11 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const expect = require('expect.js');
+const fs = require('fs-extra');
+const path = require('path');
+
+const mkdirp = require('mkdirp-promise');
+const rimraf = require('rimraf');
 
 const { addEnv } = require('../../lib/install/env');
 
@@ -42,61 +47,89 @@ describe('install_env', ()=>{
   });
 });
 
-const fs = {
-  existsSync: sandbox.stub(),
-  readdirSync: sandbox.stub()
-};
-
 const file = {
   readLines: sandbox.stub()
 };
 
 const envStub = proxyquire('../../lib/install/env', {
-  'fs-extra': fs,
   '../fc-utils/fc-fun-nas-server/lib/file': file
 });
 
 describe('resolveLibPathsFromLdConf', () => {
+  const confPath = '.fun/root/etc/ld.so.conf.d';
+  const dirName = path.join(process.cwd(), confPath);
+  const filePath = path.join(dirName, './test.conf');
+
+  beforeEach(async () => {
+    await mkdirp(dirName);
+    await fs.createFile(filePath);
+  });
 
   afterEach(() => {
-    sandbox.reset();
+    rimraf.sync(dirName);
   });
+  
+  it('path exist and front / for lines', async () => {
 
-  it('resolveLibPathsFromLdConf with path exist', async () => {
-
-    fs.existsSync.returns(true);
-    fs.readdirSync.returns(['a.conf', 'b.conf']);
     file.readLines.returns(Promise.resolve(['/aaa']));
-
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './');
+    expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/aaa' });
 
-    expect(lines).to.eql({
-      LD_LIBRARY_PATH: '/code/.fun/root/code/.fun/root/aaa:/code/.fun/root/code/.fun/root/aaa'});
   });
 
-  it('resolveLibPathsFromLdConf with path not exist', async () => {
+  it('path exist and front / and blank for lines', async () => {
 
-    fs.existsSync.returns(false);
+    file.readLines.returns(Promise.resolve(['   /blank']));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './');
-    expect(lines).to.eql({});
+    expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/blank' });
+
   });
 
-  it('resolveLibPathsFromLdConf with not exit .conf files', async () => {
+  it('path exist and nothing for lines', async () => {
 
-    fs.existsSync.returns(true);
-    fs.readdirSync.returns(['a.index', 'b.python']);
+    file.readLines.returns(Promise.resolve([]));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './');
     expect(lines).to.eql({});
+
+  });
+  
+  it('resolve path exist and nothing for lines', async () => {
+
+    file.readLines.returns(Promise.resolve([]));
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
+    expect(lines).to.eql({});
+
   });
 
-  it('resolveLibPathsFromLdConf with front blank for line', async () => {
+  it('resolve path exist and front / for lines', async () => {
 
-    fs.existsSync.returns(true);
-    fs.readdirSync.returns(['a.conf', 'b.conf']);
-    file.readLines.returns(Promise.resolve(['      /blank']));
+    file.readLines.returns(Promise.resolve(['/aaa']));
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
+    expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/aaa' });
+
+  });
+
+  it('resolve path exist and front / and blank for lines', async () => {
+
+    file.readLines.returns(Promise.resolve(['   /blank']));
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
+    expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/blank' });
+
+  });
+
+  it('path exist and front / and blank for multiple lines', async () => {
+
+    file.readLines.returns(Promise.resolve(['   /blank', 'lllll', 'ssssss']));
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './');
-    expect(lines).to.eql({
-      LD_LIBRARY_PATH: '/code/.fun/root/code/.fun/root/blank:/code/.fun/root/code/.fun/root/blank'});  
+    expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/blank' });
+
   });
 
+  it('resolve path exist and front / and blank for multiple lines', async () => {
+
+    file.readLines.returns(Promise.resolve(['    /blank', 'aaa', 'bbb']));
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), path.resolve(confPath));
+    expect(lines).to.eql({ LD_LIBRARY_PATH: '/code/.fun/root/blank' });
+
+  });
 });
