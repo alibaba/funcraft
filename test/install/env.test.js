@@ -56,7 +56,7 @@ const envStub = proxyquire('../../lib/install/env', {
   '../fc-utils/fc-fun-nas-server/lib/file': file
 });
 
-describe.only('resolveLibPathsFromLdConf', () => {
+describe('resolveLibPathsFromLdConf', () => {
 
   afterEach(() => {
     sandbox.reset();
@@ -77,6 +77,14 @@ describe.only('resolveLibPathsFromLdConf', () => {
   it('resolveLibPathsFromLdConf with path not exist', async () => {
 
     fs.existsSync.returns(false);
+    const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './');
+    expect(lines).to.eql({});
+  });
+
+  it('resolveLibPathsFromLdConf with not exit .conf files', async () => {
+
+    fs.existsSync.returns(true);
+    fs.readdirSync.returns(['a.index', 'b.python']);
     const lines = await envStub.resolveLibPathsFromLdConf(process.cwd(), './');
     expect(lines).to.eql({});
   });
