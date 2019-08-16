@@ -12,7 +12,7 @@ program
   .name('fun build')
   .usage('[options] [[service/]function]')
   .description('Build the dependencies.')
-  .option('-u, --use-container', 'Use docker container to build functions')
+  .option('-u, --use-docker', 'Use docker container to build functions')
   .option('-t, --template [template]', 'path of fun template file.')
   .parse(process.argv);
 

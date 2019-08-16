@@ -25,7 +25,7 @@ const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
 const funcArtifactDir = path.join(rootArtifactsDir, serviceName, functionName);
 const testOpts = 'opts';
 
-describe('test buildInContainer', () => {
+describe('test buildInDocker', () => {
 
   beforeEach(() => {
     sandbox.stub(docker, 'run').resolves({ StatusCode: 0 });
@@ -36,8 +36,8 @@ describe('test buildInContainer', () => {
     sandbox.restore();
   });
 
-  it('test buildInContainer', async function () {
-    await builder.buildInContainer(serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, funcArtifactDir, verbose);
+  it('test buildInDocker', async function () {
+    await builder.buildInDocker(serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, funcArtifactDir, verbose);
 
     assert.calledWith(buildOpts.generateBuildContainerBuildOpts, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, funcArtifactDir, verbose);
     assert.calledWith(docker.run, testOpts, null, process.stdout, process.stderr);

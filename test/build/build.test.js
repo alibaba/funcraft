@@ -57,7 +57,7 @@ describe('test buildFunction', () => {
   });
 
   it('test with buildFunction without manifest file', async function () {
-    const useContainer = false;
+    const useDocker = false;
 
     const buildFunc = {
       functionName,
@@ -72,7 +72,7 @@ describe('test buildFunction', () => {
     const Builder = fcBuilders.Builder;
     sandbox.stub(Builder, 'detectTaskFlow').resolves([]);
 
-    await build.buildFunction(buildName, tpl, tplPath, useContainer, verbose);
+    await build.buildFunction(buildName, tpl, tplPath, useDocker, verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -81,7 +81,7 @@ describe('test buildFunction', () => {
   });
 
   it('test with buildFunction with only manifest file', async function () {
-    const useContainer = false;
+    const useDocker = false;
 
     const buildFunc = {
       functionName,
@@ -105,7 +105,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, tplPath, useContainer, verbose);
+    await build.buildFunction(buildName, tpl, tplPath, useDocker, verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -116,7 +116,7 @@ describe('test buildFunction', () => {
 
   it('test with buildFunction with only manifest file, but not container', async function () {
 
-    const useContainer = false;
+    const useDocker = false;
 
     const buildFunc = {
       functionName,
@@ -140,7 +140,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, tplPath, useContainer, verbose);
+    await build.buildFunction(buildName, tpl, tplPath, useDocker, verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -151,7 +151,7 @@ describe('test buildFunction', () => {
 
   it('test with buildFunction with only manifest file, but with container', async function () {
 
-    const useContainer = true;
+    const useDocker = true;
 
     const buildFunc = {
       functionName,
@@ -173,19 +173,19 @@ describe('test buildFunction', () => {
     });
 
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
-    sandbox.stub(builder, 'buildInContainer').resolves({});
+    sandbox.stub(builder, 'buildInDocker').resolves({});
 
-    await build.buildFunction(buildName, tpl, tplPath, useContainer, verbose);
+    await build.buildFunction(buildName, tpl, tplPath, useDocker, verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
-    assert.calledWith(builder.buildInContainer, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
+    assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
   });
 
   it('test with buildFunction with only fun.yml, but force using docker', async function () {
-    const useContainer = false;
+    const useDocker = false;
 
     const buildFunc = {
       functionName,
@@ -207,17 +207,17 @@ describe('test buildFunction', () => {
     });
 
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
-    sandbox.stub(builder, 'buildInContainer').resolves({});
+    sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyFunYmlTaskFlow').returns(true);
-    sandbox.stub(taskflow, 'needBuildUsingContainer').returns(true);
+    sandbox.stub(taskflow, 'needBuildUsingDocker').returns(true);
 
-    await build.buildFunction(buildName, tpl, tplPath, useContainer, verbose);
+    await build.buildFunction(buildName, tpl, tplPath, useDocker, verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
-    assert.calledWith(builder.buildInContainer, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
+    assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
     assert.calledWith(taskflow.isOnlyFunYmlTaskFlow, [ mockedTaskFlowConstructor ]);
   });
 });
