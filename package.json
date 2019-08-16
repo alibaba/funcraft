@@ -110,13 +110,11 @@
     "tablestore": "^4.3.2",
     "temp-dir": "^1.0.0",
     "tar-fs": "^2.0.0",
+    "temp-dir": "^1.0.0",
     "universal-analytics": "^0.4.20",
     "unzipper": "^0.10.2",
     "update-notifier": "^3.0.0",
-    "urlencode": "^1.1.0",
-    "why-is-node-running": "^2.1.0",
-    "wtf": "^1.5.0",
-    "wtfnode": "^0.8.0"
+    "urlencode": "^1.1.0"
   },
   "files": [
     "bin",
