@@ -17,11 +17,11 @@ const assert = sinon.assert;
 const { setProcess } = require('./test-utils');
 const { hasDocker } = require('./conditions');
 
-const util = require('util');
 const path = require('path');
 const { sleep } = require('../lib/time');
 
 const baseDir = path.resolve('/');
+const fs = require('fs-extra');
 
 describe('test generateDockerCmd', () => {
   const functionProps = {
@@ -141,7 +141,7 @@ describe('test resolveCodeUriToMount', () => {
 
   beforeEach(() => {
 
-    const lstat = sandbox.stub();
+    const lstat = sandbox.stub(fs, 'lstat');
 
     lstat.withArgs(dirPath).resolves({
       isDirectory: function () { return true; }
@@ -152,13 +152,6 @@ describe('test resolveCodeUriToMount', () => {
     });
 
     sandbox.stub(path, 'basename').returns('jar');
-
-    sandbox.stub(util, 'promisify').returns(lstat);
-
-    docker = proxyquire('../lib/docker', {
-      'util': util,
-      'path': path
-    });
   });
 
   afterEach(() => {
@@ -274,7 +267,7 @@ describe('test resolveNasConfigToMounts', () => {
   it('test NasConfig: Auto', async () => {
     const nasConfig = 'Auto';
     
-    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, path.posix.join(projectDir, 'template.yml'));
+    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, projectDir);
 
     expect(mount).to.eql([{
       Type: 'bind',

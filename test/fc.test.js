@@ -77,8 +77,7 @@ describe('test getFunCodeAsBase64', () => {
     const content = await fc.getFunCodeAsBase64('/a/b', './web.war');
     expect(content).to.eql({ base64: Buffer.from('test').toString('base64') });
 
-    assert.calledWith(fs.readFile, './web.war');
-
+    assert.calledWith(fs.readFile, '/a/b/web.war');
   });
 });
 
@@ -121,7 +120,7 @@ describe('Incorrect environmental variables', () => {
       initializationTimeout: 3,
       memorySize: 128,
       runtime: 'nodejs6',
-      codeUri: path.join('examples', 'local', 'nodejs6'),
+      codeUri: 'nodejs6',
       environmentVariables: { 'StringTypeValue1': 123, 'StringTypeValue2': 'test' }
     });
 
