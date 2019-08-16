@@ -52,7 +52,7 @@ const file = {
 };
 
 const envStub = proxyquire('../../lib/install/env', {
-  '../fc-utils/fc-fun-nas-server/lib/file': file
+  '../read-line': file
 });
 
 describe('resolveLibPathsFromLdConf', () => {
