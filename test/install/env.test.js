@@ -52,7 +52,7 @@ const file = {
 };
 
 const envStub = proxyquire('../../lib/install/env', {
-  '../read-line': file
+  '../utils/file': file
 });
 
 describe('resolveLibPathsFromLdConf', () => {
