@@ -93,3 +93,20 @@ describe('function splitFile test', () => {
     }
   });
 });
+
+describe('function isEmptyDir test', () => {
+  const emptyDir = path.join(os.homedir(), '.empty-dir'); 
+
+  beforeEach(async () => {
+    await mkdirp(emptyDir);
+  });
+
+  afterEach(() => {
+    rimraf.sync(emptyDir);
+  });
+
+  it('empty dir test', async () => {
+    const res = await file.isEmptyDir(emptyDir);
+    expect(res).to.eql(res);
+  });
+});

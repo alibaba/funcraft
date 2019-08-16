@@ -1,4 +1,11 @@
 'use strict';
+const util = require('util');
+const os = require('os');
+const fs = require('fs');
+
+const mkdirp = require('mkdirp-promise');
+const rimraf = require('rimraf');
+const writeFile = util.promisify(fs.writeFile);
 
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
@@ -7,30 +14,33 @@ const constants = require('../../lib/nas/constants');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
-
-const file = {
-  isDir: sandbox.stub(), 
-  isFile: sandbox.stub()
-};
 const upload = sandbox.stub();
 
 const cpStub = proxyquire('../../lib/nas/cp', {
-  './cp/file': file, 
   './cp/upload': upload
 });
+
 describe('nas cp test', () => {
-    
+  const localNotEmptyPath = path.join(os.homedir(), '.not-empty-dir'); 
+  const localEmptyPath = path.join(os.homedir(), '.empty-dir'); 
+  const filePath = path.join(localNotEmptyPath, 'test.txt');
+  beforeEach(async () => {
+    await mkdirp(localEmptyPath);
+    await mkdirp(localNotEmptyPath);
+    await writeFile(`${filePath}`, 'this is a test');
+  });
+
   afterEach(() => {
+    rimraf.sync(localEmptyPath);
+    rimraf.sync(localNotEmptyPath);
     sandbox.reset();
   });
 
-  it('cp test', async() => {
-    const rootDir = path.parse(process.cwd()).root;
-    const srcPath = path.join(rootDir, 'demo', '.fun', 'nas', 'auto-default');
+  it('local path cp to nas path test', async() => {
+    
+    const srcPath = filePath;
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
-    file.isDir.returns(false);
-    file.isFile.returns(true);
-
+    
     await cpStub(srcPath, dstPath, false);
     const mntDir = path.posix.join('/', 'mnt', 'nas');
     const nasHttpTriggerPath = `/proxy/${constants.FUN_NAS_SERVICE_PREFIX}fun-nas-test/fun-nas-function/`;
@@ -43,9 +53,18 @@ describe('nas cp test', () => {
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
 
     await cpStub(srcPath, dstPath, false);
-    assert.notCalled(file.isDir);
-    assert.notCalled(file.isFile);
+    
     assert.notCalled(upload);
+  });
+
+  it('local src path is a empty dir test', async () => {
+    const srcPath = localEmptyPath;
+    const dstPath = 'nas://fun-nas-test:/mnt/nas';
+    
+    await cpStub(srcPath, dstPath, true);
+
+    assert.notCalled(upload);
+    
   });
 
 });
