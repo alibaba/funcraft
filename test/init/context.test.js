@@ -6,7 +6,8 @@ const expect = require('expect.js');
 
 const sandbox = sinon.createSandbox();
 const fs = {
-  readdirSync: sandbox.stub()
+  readdirSync: sandbox.stub(),
+  ensureDir: sandbox.stub()
 };
 const config = {
   getConfig: sandbox.stub()
@@ -14,10 +15,6 @@ const config = {
 
 const renderer = {
   renderContent: sandbox.stub()
-};
-
-const vcs = {
-  makeSurePathExists: sandbox.stub()
 };
 
 const prompt = {
@@ -29,8 +26,7 @@ const contextStub = proxyquire('../../lib/init/context', {
   './config': config,
   './renderer': renderer,
   './prompt': prompt,
-  './vcs': vcs,
-  'fs': fs
+  'fs-extra': fs
 });
 
 describe('context', () => {
