@@ -1,0 +1,7 @@
+{
+    "name": "event-python2.7",
+    "description": "Print hello world",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}

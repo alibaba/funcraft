@@ -1,7 +1,0 @@
-{
-    "name": "helloworld-python3",
-    "description": "Print hello world",
-    "vars": {
-        "service": "{{ projectName }}"
-    }
-}

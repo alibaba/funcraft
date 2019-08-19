@@ -14,7 +14,7 @@ const examples =
   Examples:
 
     $ fun init
-    $ fun init helloworld-nodejs8
+    $ fun init event-nodejs8
     $ fun init foo/bar
     $ fun init gh:foo/bar
     $ fun init gl:foo/bar
