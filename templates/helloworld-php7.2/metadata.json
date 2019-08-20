@@ -1,7 +1,0 @@
-{
-    "name": "helloworld-php7.2",
-    "description": "Print hello world",
-    "vars": {
-        "service": "{{ projectName }}"
-    }
-}

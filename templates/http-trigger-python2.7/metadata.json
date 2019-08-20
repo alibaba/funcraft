@@ -1,0 +1,7 @@
+{
+    "name": "http-trigger-python2.7",
+    "description": "Print hello world",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
