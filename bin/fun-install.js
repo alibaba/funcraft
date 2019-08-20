@@ -32,8 +32,8 @@ const convertOptions = (program) => {
 
 // [ 'A=B', 'B=C' ] => { A: 'B', B: 'C' }
 const convertEnvs = (env) => (env || []).map(e => _.split(e, '=', 2))
-      .filter(e => e.length === 2)
-      .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {})
+  .filter(e => e.length === 2)
+  .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {})
 
 program
   .usage('[-f|--function <[service/]function>] [-r|--runtime <runtime>] [-i|--interactive] [-p|--pacakge-type <type>] [--save] [-e|--env key=val ...] [-c|--command <cmd>] [packageNames...]')
@@ -69,58 +69,62 @@ program
   .command('init')
   .description('initialize fun.yml file.')
   .action(() => {
-    visitor.pageview('/fun/install/init').send();
-    init().then((runtime) => {
+    getVisitor().then(visitor => {
 
-      visitor.event({
-        ec: 'install',
-        ea: `init ${runtime}`,
-        el: 'success',
-        dp: '/fun/install/init'
-      }).send();
+      visitor.pageview('/fun/install/init').send();
+      init().then((runtime) => {
 
-    }).catch((error) => {
+        visitor.event({
+          ec: 'install',
+          ea: `init ${runtime}`,
+          el: 'success',
+          dp: '/fun/install/init'
+        }).send();
 
-      visitor.event({
-        ec: 'install',
-        ea: `init`,
-        el: 'error',
-        dp: '/fun/install/init'
-      }).send();
+      }).catch((error) => {
 
-      handler(error);
+        visitor.event({
+          ec: 'install',
+          ea: `init`,
+          el: 'error',
+          dp: '/fun/install/init'
+        }).send();
 
-    })
+        handler(error);
+
+      })
+    });
   });
 
 program
   .command('env')
   .description('print environment varables.')
   .action(() => {
+    getVisitor().then(visitor => {
+      visitor.pageview('/fun/install/env').send();
 
-    visitor.pageview('/fun/install/env').send();
+      env().then(() => {
 
-    env().then(() => {
+        visitor.event({
+          ec: 'install',
+          ea: 'env',
+          el: 'success',
+          dp: '/fun/install/env'
+        }).send();
 
-      visitor.event({
-        ec: 'install',
-        ea: 'env',
-        el: 'success',
-        dp: '/fun/install/env'
-      }).send();
+        autoExitOnWindows();
 
-      autoExitOnWindows();
+      }).catch((error) => {
 
-    }).catch((error) => {
+        visitor.event({
+          ec: 'install',
+          ea: `env`,
+          el: 'error',
+          dp: '/fun/install/env'
+        }).send();
 
-      visitor.event({
-        ec: 'install',
-        ea: `env`,
-        el: 'error',
-        dp: '/fun/install/env'
-      }).send();
-
-      handler(error);
+        handler(error);
+      });
     });
   });
 
@@ -134,30 +138,32 @@ program
   .option('-c, --cmd <cmd>', 'command with arguments to execute inside the installation sandbox.')
   .action((prog) => {
 
-    visitor.pageview('/fun/install/sbox').send();
+    getVisitor().then(visitor => {
+      visitor.pageview('/fun/install/sbox').send();
 
-    const options = convertOptions(prog);
-    if (program.runtime) {
-      options.runtime = runtime;
-    }
-    options.envs = convertEnvs(program.env);
+      const options = convertOptions(prog);
+      if (program.runtime) {
+        options.runtime = runtime;
+      }
+      options.envs = convertEnvs(program.env);
 
-    sbox(options).then(() => {
-      visitor.event({
-        ec: 'install',
-        ea: `sbox`,
-        el: 'success',
-        dp: '/fun/install/sbox'
-      }).send();
-    }).catch((error) => {
-      visitor.event({
-        ec: 'install',
-        ea: `sbox`,
-        el: 'error',
-        dp: '/fun/install/sbox'
-      }).send();
+      sbox(options).then(() => {
+        visitor.event({
+          ec: 'install',
+          ea: `sbox`,
+          el: 'success',
+          dp: '/fun/install/sbox'
+        }).send();
+      }).catch((error) => {
+        visitor.event({
+          ec: 'install',
+          ea: `sbox`,
+          el: 'error',
+          dp: '/fun/install/sbox'
+        }).send();
 
-      handler(error);
+        handler(error);
+      });
     });
   })
 
