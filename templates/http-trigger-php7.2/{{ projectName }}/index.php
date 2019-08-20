@@ -22,6 +22,8 @@ function handler($request, $context): Response{
     return new Response(
         200,
         array(
+            'content-type' => 'text/plain',
+
             'custom_header1' => 'v1',
             'custom_header2' => ['v2', 'v3'],
         ),
