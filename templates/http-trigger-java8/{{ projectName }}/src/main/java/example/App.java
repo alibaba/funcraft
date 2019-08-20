@@ -26,9 +26,12 @@ public class App implements HttpRequestHandler, FunctionInitializer {
         String requestPath = (String) request.getAttribute("FC_REQUEST_PATH");
         String requestURI = (String) request.getAttribute("FC_REQUEST_URI");
         String requestClientIP = (String) request.getAttribute("FC_REQUEST_CLIENT_IP"); 
+        
         response.setStatus(200);
         response.setHeader("header1", "value1");
         response.setHeader("header2", "value2");
+        response.setHeader("Content-Type", "text/plain");
+
         String body = String.format("Path: %s\n Uri: %s\n IP: %s\n", requestPath, requestURI, requestClientIP);
         OutputStream out = response.getOutputStream();
         out.write((body).getBytes());
