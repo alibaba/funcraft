@@ -28,12 +28,12 @@ const convertOptions = (program) => {
   const optionNames = _.map(program.options, (opt) => _.camelCase(opt.long));
   // pick the option properties into a new object.
   return _.pickBy(program, (_val, name) => _.includes(optionNames, name));
-}
+};
 
 // [ 'A=B', 'B=C' ] => { A: 'B', B: 'C' }
 const convertEnvs = (env) => (env || []).map(e => _.split(e, '=', 2))
   .filter(e => e.length === 2)
-  .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {})
+  .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
 program
   .usage('[-f|--function <[service/]function>] [-r|--runtime <runtime>] [-i|--interactive] [-p|--pacakge-type <type>] [--save] [-e|--env key=val ...] [-c|--command <cmd>] [packageNames...]')
@@ -92,7 +92,7 @@ program
 
         handler(error);
 
-      })
+      });
     });
   });
 
@@ -143,7 +143,7 @@ program
 
       const options = convertOptions(prog);
       if (program.runtime) {
-        options.runtime = runtime;
+        options.runtime = program.runtime;
       }
       options.envs = convertEnvs(program.env);
 
@@ -165,7 +165,7 @@ program
         handler(error);
       });
     });
-  })
+  });
 
 program.parse(process.argv);
 
@@ -175,11 +175,11 @@ notifier.notify();
 if (!program.args.length) {
 
   if (program.packageType) {
-    console.warn('Missing arguments [packageNames...], so the `--package-type` option is ignored.')
+    console.warn('Missing arguments [packageNames...], so the `--package-type` option is ignored.');
   }
 
   if (program.save) {
-    console.warn('Missing arguments [packageNames...], so the `--save` option is ignored.')
+    console.warn('Missing arguments [packageNames...], so the `--save` option is ignored.');
   }
 
   getVisitor().then(visitor => {

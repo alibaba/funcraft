@@ -14,8 +14,8 @@ class ExpectedShell {
     rows: 30,
     cwd: process.cwd(),
     env: Object.assign({}, process.env, {
-      PS1: "\\#$",
-      TERM: "dumb"
+      PS1: '\\#$',
+      TERM: 'dumb'
     })
   }) {
     this.args = args;
@@ -24,25 +24,25 @@ class ExpectedShell {
   }
 
   when(expect, response) {
-    this.supposeStream.when(expect)
+    this.supposeStream.when(expect);
 
-    if (response) this.respond(response)
+    if (response) { this.respond(response); }
 
-    return this
+    return this;
   }
 
   respond(response) {
     if (response instanceof Function)
-      this.supposeStream.respond(function () {
-        var argv = Array.prototype.slice.call(arguments)
-        argv.unshift(exe)
+    { this.supposeStream.respond(function () {
+      var argv = Array.prototype.slice.call(arguments);
+      argv.unshift(this.pty.process);
 
-        return response.apply(self, argv)
-      })
+      return response.apply(self, argv);
+    }); }
     else
-      this.supposeStream.respond(response)
+    { this.supposeStream.respond(response); }
 
-    return this
+    return this;
   }
 
   end(callback) {
@@ -56,11 +56,11 @@ class ExpectedShell {
       callback.call(self);
     });
 
-    return this.pty
+    return this.pty;
   }
 
 }
 
 module.exports = {
   ExpectedShell
-}
+};
