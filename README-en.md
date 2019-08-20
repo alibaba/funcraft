@@ -1,4 +1,4 @@
-# Fun
+# Funcraft
 
 (have)Fun with Serverless
 

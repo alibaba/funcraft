@@ -15,7 +15,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find by service name and funtion name', () => {
 
-    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo', 'python3', tpl);
+    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo/python3', tpl);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
@@ -26,7 +26,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find by funtion name', async function () {
 
-    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl(null, 'python3', tpl);
+    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('python3', tpl);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
@@ -36,7 +36,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find not found', async function () {
 
-    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl(null, 'python4', tpl);
+    const {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('python4', tpl);
 
     expect(serviceName).to.be(undefined);
     expect(functionName).to.be(undefined);
@@ -46,7 +46,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find by service name and function name in duplicated function', async function () {
 
-    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo', 'python3', tplWithDuplicatedFunction);
+    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo/python3', tplWithDuplicatedFunction);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
@@ -55,7 +55,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
   });
 
   it('test find anonther by service name and function name in duplicated function', async () => {
-    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo2', 'python3', tplWithDuplicatedFunction);
+    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('localdemo2/python3', tplWithDuplicatedFunction);
 
     expect(serviceName).to.be('localdemo2');
     expect(functionName).to.be('python3');
@@ -65,7 +65,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test find by function name in duplicated function', async function () {
 
-    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl(null, 'python3', tplWithDuplicatedFunction);
+    let {serviceName, serviceRes, functionName, functionRes} = definition.findFunctionInTpl('python3', tplWithDuplicatedFunction);
 
     expect(serviceName).to.be('localdemo');
     expect(functionName).to.be('python3');
