@@ -142,8 +142,8 @@ program
       visitor.pageview('/fun/install/sbox').send();
 
       const options = convertOptions(prog);
-      if (program.runtime) {
-        options.runtime = program.runtime;
+      if (program.function) {
+        options.function = program.function;
       }
       options.envs = convertEnvs(program.env);
 
