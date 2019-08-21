@@ -1,0 +1,19 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  {{ service }}:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'helloworld'
+    {{ projectName }}:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: {{ projectName }}::{{ projectName }}.App::HandleRequest
+        Runtime: dotnetcore2.1
+        CodeUri: './bin/Release/netcoreapp2.1/publish/'
+      Events:
+        httpTrigger:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['POST', 'GET']

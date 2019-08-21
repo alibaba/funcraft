@@ -1,8 +1,19 @@
 {
-    "helloworld-nodejs8":  "{{ templatePath }}/helloworld-nodejs8",
-    "helloworld-nodejs6":  "{{ templatePath }}/helloworld-nodejs6",
-    "helloworld-python3":  "{{ templatePath }}/helloworld-python3",
-    "helloworld-python2.7":  "{{ templatePath }}/helloworld-python2.7",
-    "helloworld-java8":  "{{ templatePath }}/helloworld-java8",
-    "helloworld-php7.2":  "{{ templatePath }}/helloworld-php7.2"
+    "event-nodejs10":  "{{ templatePath }}/event-nodejs10",
+    "event-nodejs8":  "{{ templatePath }}/event-nodejs8",
+    "event-nodejs6":  "{{ templatePath }}/event-nodejs6",
+    "event-python3":  "{{ templatePath }}/event-python3",
+    "event-python2.7":  "{{ templatePath }}/event-python2.7",
+    "event-java8":  "{{ templatePath }}/event-java8",
+    "event-php7.2":  "{{ templatePath }}/event-php7.2",
+    "event-dotnetcore2.1":  "{{ templatePath }}/event-dotnetcore2.1",
+    "http-trigger-nodejs10":  "{{ templatePath }}/http-trigger-nodejs10",
+    "http-trigger-nodejs8":  "{{ templatePath }}/http-trigger-nodejs8",
+    "http-trigger-nodejs6":  "{{ templatePath }}/http-trigger-nodejs6",
+    "http-trigger-python3":  "{{ templatePath }}/http-trigger-python3",
+    "http-trigger-python2.7":  "{{ templatePath }}/http-trigger-python2.7",
+    "http-trigger-java8":  "{{ templatePath }}/http-trigger-java8",
+    "http-trigger-php7.2":  "{{ templatePath }}/http-trigger-php7.2",
+    "http-trigger-dotnetcore2.1":  "{{ templatePath }}/http-trigger-dotnetcore2.1"
+
 }

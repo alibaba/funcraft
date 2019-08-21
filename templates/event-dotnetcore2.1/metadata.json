@@ -1,0 +1,7 @@
+{
+    "name": "event-dotnetcore2.1",
+    "description": "Print hello world",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "name": "http-trigger-nodejs6",
+    "description": "Print hello world",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
