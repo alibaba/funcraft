@@ -29,7 +29,10 @@ before_install:
     if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
       choco install make
     fi
-  - docker pull aliyunfc/runtime-nodejs8:build
+  - >
+    if [[ "$TRAVIS_OS_NAME" != "windows" ]]; then
+      docker pull aliyunfc/runtime-nodejs8:build
+    fi
 
 install: 
   # Re-checkout files preserving line feeds. This prevents Windows builds from

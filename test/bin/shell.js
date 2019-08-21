@@ -48,13 +48,13 @@ class ExpectedShell {
   end(callback) {
 
     this.pty = pty.spawn(shell, this.args, this.options);
-    this.pty.pipe(process.stdout);
     this.pty.pipe(this.supposeStream).pipe(this.pty);
     const self = this;
     this.pty.on('exit', () => {
       this.supposeStream.unpipe(this.pty);
       callback.call(self);
     });
+    this.pty.on('data', (data) => console.log(data));
 
     return this.pty;
   }
