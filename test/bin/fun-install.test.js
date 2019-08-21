@@ -2,7 +2,7 @@
 
 const { ExpectedShell } = require('./shell');
 
-describe('Docker::sbox', function() {
+describe('Integration::sbox', function() {
   this.timeout(4000);
 
   it('tty=true, interactive=true', (done) => {

@@ -50,16 +50,13 @@ before_script:
 script: 
   - |
     case "$TRAVIS_OS_NAME" in
-      'windows' )
-        mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Integration::).*' --grep '^(?!Docker::).*'
+      'windows' | 'osx' )
+        mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Integration::).*'
         ;;
       'linux' )
         make test
         make -C ./lib/fc-utils/fc-fun-nas-server/ test
-        ;;
-      'osx' )
-        mocha ./test/ -t 20000  -R spec --recursive -name *.test.js --grep '^(?!Docker::).*' 
-        ;;     
+        ;;    
     esac
 
 deploy:
