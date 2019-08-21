@@ -3,7 +3,7 @@
   "version": "2.16.5",
   "description": "(have)Fun with Serverless",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.6.0"
   },
   "bin": {
     "fun": "bin/fun.js"
