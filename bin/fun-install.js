@@ -10,7 +10,7 @@ const handler = require('../lib/exception-handler');
 const { install, installAll, init, env, sbox } = require('../lib/commands/install');
 const unrefTimeout = require('../lib/unref-timeout');
 const notifier = require('../lib/update-notifier');
-const { supportedRuntimesAsString } = require('../lib/common/model/runtime');
+const { getSupportedRuntimesAsString } = require('../lib/common/model/runtime');
 
 
 const autoExitOnWindows = () => {
@@ -132,7 +132,7 @@ program
   .command('sbox')
   .description('Start a local sandbox for installation dependencies or configuration')
   .option('-f, --function <[service/]function>', `Specify which function to execute installation task.`)
-  .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${supportedRuntimesAsString(['dotnetcore2.1'])}`)
+  .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString(['dotnetcore2.1'])}`)
   .option('-i, --interactive', 'Keep STDIN open and allocate a pseudo-TTY when in a interactive shell.', false)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', [])
   .option('-c, --cmd <cmd>', 'command with arguments to execute inside the installation sandbox.')
