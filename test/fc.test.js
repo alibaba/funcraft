@@ -154,19 +154,19 @@ describe.only('Incorrect environmental variables', () => {
 
     sandbox.stub(FC.prototype, 'invokeFunction').returns({
       'headers': {
-          'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
-          'content-length': '6',
-          'content-type': 'application/octet-stream',
-          'x-fc-code-checksum': '17380263816131011825',
-          'x-fc-invocation-duration': '18',
-          'x-fc-invocation-service-version': 'LATEST',
-          'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
-          'x-fc-max-memory-usage': '30.99',
-          'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
-          'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
+        'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
+        'content-length': '6',
+        'content-type': 'application/octet-stream',
+        'x-fc-code-checksum': '17380263816131011825',
+        'x-fc-invocation-duration': '18',
+        'x-fc-invocation-service-version': 'LATEST',
+        'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
+        'x-fc-max-memory-usage': '30.99',
+        'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
+        'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
       },
       'data': '[\'OK\']'
-  });
+    });
     const rs = await fc.invokeFunction({
       serviceName: 'serviceName', 
       functionName: 'functionName', 
@@ -183,16 +183,16 @@ describe.only('Incorrect environmental variables', () => {
 
     expect(rs).to.eql({
       'headers': {
-          'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
-          'content-length': '6',
-          'content-type': 'application/octet-stream',
-          'x-fc-code-checksum': '17380263816131011825',
-          'x-fc-invocation-duration': '18',
-          'x-fc-invocation-service-version': 'LATEST',
-          'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
-          'x-fc-max-memory-usage': '30.99',
-          'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
-          'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
+        'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
+        'content-length': '6',
+        'content-type': 'application/octet-stream',
+        'x-fc-code-checksum': '17380263816131011825',
+        'x-fc-invocation-duration': '18',
+        'x-fc-invocation-service-version': 'LATEST',
+        'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
+        'x-fc-max-memory-usage': '30.99',
+        'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
+        'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
       },
       'data': '[\'OK\']'
     });
@@ -202,19 +202,19 @@ describe.only('Incorrect environmental variables', () => {
 
     sandbox.stub(FC.prototype, 'invokeFunction').returns({
       'headers': {
-          'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
-          'content-length': '6',
-          'content-type': 'application/octet-stream',
-          'x-fc-code-checksum': '17380263816131011825',
-          'x-fc-invocation-duration': '18',
-          'x-fc-invocation-service-version': 'LATEST',
-          'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
-          'x-fc-max-memory-usage': '30.99',
-          'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
-          'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
+        'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
+        'content-length': '6',
+        'content-type': 'application/octet-stream',
+        'x-fc-code-checksum': '17380263816131011825',
+        'x-fc-invocation-duration': '18',
+        'x-fc-invocation-service-version': 'LATEST',
+        'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
+        'x-fc-max-memory-usage': '30.99',
+        'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
+        'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
       },
       'data': '[\'OK\']'
-  });
+    });
     const rs = await fc.invokeFunction({
       serviceName: 'serviceName', 
       functionName: 'functionName', 
@@ -230,16 +230,16 @@ describe.only('Incorrect environmental variables', () => {
 
     expect(rs).to.eql({
       'headers': {
-          'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
-          'content-length': '6',
-          'content-type': 'application/octet-stream',
-          'x-fc-code-checksum': '17380263816131011825',
-          'x-fc-invocation-duration': '18',
-          'x-fc-invocation-service-version': 'LATEST',
-          'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
-          'x-fc-max-memory-usage': '30.99',
-          'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
-          'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
+        'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version',
+        'content-length': '6',
+        'content-type': 'application/octet-stream',
+        'x-fc-code-checksum': '17380263816131011825',
+        'x-fc-invocation-duration': '18',
+        'x-fc-invocation-service-version': 'LATEST',
+        'x-fc-log-result': 'RkMgSW52b2tlIFN0YXJ0IFJlcXVlc3RJZDogYWMyOTI2NGQtMDkwMC00ZjNkLWEwOWEtYmMzZGQyMmIyMzI1DQpsb2FkIGNvZGUgZm9yIGhhbmRsZXI6aW5kZXguaGFuZGxlcg0KRkMgSW52b2tlIEVuZCBSZXF1ZXN0SWQ6IGFjMjkyNjRkLTA5MDAtNGYzZC1hMDlhLWJjM2RkMjJiMjMyNQ0KCkR1cmF0aW9uOiAxNy40NSBtcywgQmlsbGVkIER1cmF0aW9uOiAxMDAgbXMsIE1lbW9yeSBTaXplOiAxMjggTUIsIE1heCBNZW1vcnkgVXNlZDogMzAuOTkgTUI=',
+        'x-fc-max-memory-usage': '30.99',
+        'x-fc-request-id': 'ac29264d-0900-4f3d-a09a-bc3dd22b2325',
+        'date': 'Wed, 21 Aug 2019 03:09:03 GMT'
       },
       'data': '[\'OK\']'
     });
