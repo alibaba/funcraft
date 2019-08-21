@@ -89,7 +89,7 @@ describe('test findFunctionByServiceAndFunctionName', () => {
     expect(serviceRes).to.eql(definition.deleteUnmatchFunctionsUnderServiceRes({
       serviceName: 'localdemo',
       serviceRes: tplWithDuplicatedFunctionsInService.Resources.localdemo,
-      funcName: 'nodejs6'
+      functionName: 'nodejs6'
     }));
   });
 
@@ -124,7 +124,10 @@ describe('test matching function', () => {
 
     Object.keys(prompt).forEach(m => {
       if (m === 'promptForFunctionSelection') {
-        sandbox.stub(prompt, m).resolves('localdemo/python3');
+        sandbox.stub(prompt, m).resolves({
+          serviceName: 'localdemo',
+          functionName: 'python3'
+        });
       } else {
         sandbox.stub(prompt, m).resolves({});
       }
