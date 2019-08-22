@@ -23,7 +23,7 @@ const file = {
   getEvent: sandbox.stub()
 };
 
-describe.only('fun-invoke test', () => {
+describe('fun-invoke test', () => {
   let restoreProcess;
 
   beforeEach(() => {
