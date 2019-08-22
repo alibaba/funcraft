@@ -6,7 +6,7 @@ const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 
 const expect = require('expect.js');
-const USER_HOME = process.env.HOME || process.env.USERPROFILE;
+const USER_HOME = require('os').homedir();
 const sinon = require('sinon');
 const path = require('path');
 const sandbox = sinon.createSandbox();
