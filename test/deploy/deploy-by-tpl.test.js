@@ -1146,7 +1146,7 @@ describe('custom domain', () => {
 
 
 
-describe.only('test partical deploy', () => {
+describe('test partical deploy', () => {
   
   beforeEach(() => {
 
