@@ -82,7 +82,7 @@ describe('test getFunCodeAsBase64', () => {
   });
 });
 
-describe.only('Incorrect environmental variables', () => {
+describe('Incorrect environmental variables', () => {
   let restoreProcess;
 
   beforeEach(async () => {
