@@ -11,17 +11,19 @@ const prompt = require('../lib/init/prompt');
 
 const mockData = require('./tpl-mock-data');
 
+const validate = sandbox.stub();
+
 const tpl = {
 
   getTpl: sandbox.stub(),
-  detectTplPath: sandbox.stub().resolves('')
+  detectTplPath: sandbox.stub().resolves({})
 };
 
 const file = {
   getEvent: sandbox.stub()
 };
 
-describe('fun-invoke test', () => {
+describe.only('fun-invoke test', () => {
   let restoreProcess;
 
   beforeEach(() => {
@@ -52,7 +54,8 @@ describe('fun-invoke test', () => {
       '../fc': fc,
       '../tpl': tpl,
       '../init/prompt': prompt,
-      '../utils/file': file
+      '../utils/file': file,
+      '../../lib/commands/validate': validate
     })(invokeName, options);
   }
 
