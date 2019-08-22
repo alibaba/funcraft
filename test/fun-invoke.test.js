@@ -3,15 +3,25 @@
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const expect = require('expect.js');
+
 const proxyquire = require('proxyquire');
 const { setProcess } = require('./test-utils');
 
 const fc = require('../lib/fc');
 const prompt = require('../lib/init/prompt');
 
+const { detectTplPath} = require('../lib/tpl');
+
+const fs = require('fs-extra');
+const path = require('path');
+
+const rimraf = require('rimraf');
+
 const mockData = require('./tpl-mock-data');
 
 const validate = sandbox.stub();
+
 
 const tpl = {
 
@@ -163,5 +173,21 @@ describe('fun-invoke test', () => {
       event: '',
       invocationType: 'Sync'
     });
+  });
+});
+
+describe('tpl detectTplPath test', () => {
+
+  it('yml exits', async () => {
+    const ymlPath = path.join(process.cwd(), './template.yml');
+    await fs.createFile(ymlPath);
+    const result = await detectTplPath();
+    rimraf.sync(ymlPath);
+    expect(result).to.be(path.join(process.cwd(), './template.yml'));
+  });
+
+  it('yml not exits', async () => {
+    const result = await detectTplPath();
+    expect(result).to.be(null);
   });
 });
