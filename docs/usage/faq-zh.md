@@ -84,6 +84,8 @@ Resources:
 
 本地使用 Fun 时，如果需要在本地运行、调试函数，则需要使用 fun local 子命令。使用 fun local 子命令就需要预先安装 Docker。
 
+#### Windows
+
 如果在您的 Windows 系统上安装的是 Docker Toolbox，在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_toolbox.png)
 
 提示默认主机路径为 C:\Users，Docker Toolbox 只能挂载 C 盘当前用户的目录，挂载其它盘都不会生效。错误信息中路径为 `D:\image_crawler`，所以失败。<br />如果想挂载其它盘符的路径，步骤如下：<br />1.打开 `Oracle VM VirtualBox`：
@@ -97,3 +99,16 @@ Resources:
 **注**： step 5 中的**共享文件夹名称**应按照上述格式手动填写。盘符小写，且以 `/` 为分隔符，同时保证路径完整性。例如：`d/fun/demo`，`e/fun/work` ...
 
 由于 `Docker Toolbox` 官方也已经不在维护，为了更好的体验，我们希望您使用 [Docker For Windows](http://mirrors.aliyun.com/docker-toolbox/windows/docker-for-windows/beta/)。(建议使用我们提供的安装链接，某些版本的 Docker for Windows 可能存在不稳定的问题。)
+
+#### MacOS
+如果在您的 MacOS 系统上安装了 Docker，在本地使用在本地使用 `fun local invoke` 或者 `fun local start` 命令时提示信息如下：<br />![image.png](/figures/fun_local_error_on_docker_share_file.png)
+
+提示添加相应路径至 Docker File sharing list ， 这是因为您的 CodeUri 对应的目录不在 Docker 的 File Sharing 中，需要手动添加，步骤如下：<br />1.打开 `Docker Preferences`：
+
+![image.png](/figures/docker-preferences.png)
+
+2.选择共享文件夹，选择`File Sharing`，点击`+`，选择 CodeUri 对应的目录，添加后点击`Apply & Restart`。
+
+![image.png](/figures/add_docker_file_sharing.png)
+
+**注**：更多信息请参考 [Docker For Mac](https://docs.docker.com/docker-for-mac/osxfs/)
