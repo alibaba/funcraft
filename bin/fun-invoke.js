@@ -10,11 +10,11 @@ const notifier = require('../lib/update-notifier');
 
 program
   .name('fun invoke')
-  .description('remote invoke function.')
+  .description('invoke deployed function.')
   .option('-e, --event [event]', `event data (strings) passed to the function during invocation,
            which is empty sting by default if this option is not specified`, '')
   .option('-f, --event-file <path>', `a file containing event data passed to the function during invoke.`)
-  .option('-s, --event-stdin', 'read by standard input, support pipeline.')
+  .option('-s, --event-stdin', 'read from standard input, to support script pipeline.')
   .option('-t, --invocation-type <invocationType>', `invocation type: optional value "Async"|"Sync", default value "Sync"`, 'Sync')
 
   .parse(process.argv);
