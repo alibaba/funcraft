@@ -81,14 +81,14 @@ describe('test http response', async () => {
     assert.calledWith(resp.send, Buffer.from('testBody'));
   });
 
-  it.only('test response custom http trigger', async () => {
+  it('test response custom http trigger', async () => {
     httpInvoke.runtime = 'custom';
 
     httpInvoke.response(httpOutputStream, '', resp);
 
     assert.calledWith(resp.status, '200');
     assert.calledWith(resp.set, {
-      'x-fc-http-params': "eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19"
+      'x-fc-http-params': 'eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19'
     });
     assert.calledWith(resp.send, Buffer.from('testBody'));
   });
