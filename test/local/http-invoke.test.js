@@ -44,31 +44,30 @@ SFRUUC8xLjEgNDAwIE9LDQoNCnRlc3RCb2R5
 
 describe('test http response', async () => {
 
-  const httpInvoke = new HttpInvoke(serviceName, serviceRes, functionName, functionRes);
+  let httpInvoke;
+  let resp;
 
-  it('test response success http trigger', async () => {
-    const resp = {
+  beforeEach(() => {
+    httpInvoke = new HttpInvoke(serviceName, serviceRes, functionName, functionRes);
+
+    resp = {
       send: sinon.stub(),
       status: sinon.stub(),
-      setHeader: sinon.stub()
+      setHeader: sinon.stub(),
+      set: sinon.stub()
     };
+  });
 
+  it('test response success http trigger', async () => {
     httpInvoke.response(httpOutputStream, '', resp);
     console.log(Buffer.from('HTTP/1.1 400 OK\r\n\r\ntestBody').toString('base64'));
 
-  
     assert.calledWith(resp.status, 200);
     assert.calledWith(resp.setHeader, 'content-type', ['application/json']);
     assert.calledWith(resp.send, Buffer.from('testBody'));
   });
   
   it('test response with 4xx invoke http status', async () => {
-    const resp = {
-      send: sinon.stub(),
-      status: sinon.stub(),
-      setHeader: sinon.stub()
-    };
-  
     httpInvoke.response(httpErrorOutputStream, '', resp);
   
     assert.calledWith(resp.status, '400');
@@ -76,15 +75,21 @@ describe('test http response', async () => {
   });
   
   it('test response error http trigger', async () => {
-    const resp = {
-      send: sinon.stub(),
-      status: sinon.stub(),
-      setHeader: sinon.stub()
-    };
-      
     httpInvoke.response(httpErrorOutputStream, 'function invoke error', resp);
       
     assert.calledWith(resp.status, '400');
+    assert.calledWith(resp.send, Buffer.from('testBody'));
+  });
+
+  it.only('test response custom http trigger', async () => {
+    httpInvoke.runtime = 'custom';
+
+    httpInvoke.response(httpOutputStream, '', resp);
+
+    assert.calledWith(resp.status, '200');
+    assert.calledWith(resp.set, {
+      'x-fc-http-params': "eyJzdGF0dXMiOjIwMCwiaGVhZGVycyI6eyJjb250ZW50LXR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIn0sImhlYWRlcnNNYXAiOnsiY29udGVudC10eXBlIjpbImFwcGxpY2F0aW9uL2pzb24iXX19"
+    });
     assert.calledWith(resp.send, Buffer.from('testBody'));
   });
 });
