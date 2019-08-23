@@ -15,7 +15,7 @@ program
            which is empty sting by default if this option is not specified`, '')
   .option('-f, --event-file <path>', `a file containing event data passed to the function during invoke.`)
   .option('-s, --event-stdin', 'read from standard input, to support script pipeline.')
-  .option('-t, --invocation-type <invocationType>', `invocation type: optional value "Async"|"Sync", default value "Sync"`, 'Sync')
+  .option('-t, --invocation-type <invocationType>', `invocation type: optional value "async"|"sync", default value "sync"`, 'sync')
 
   .parse(process.argv);
 
