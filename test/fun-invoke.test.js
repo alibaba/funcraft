@@ -4,26 +4,24 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const expect = require('expect.js');
-
 const proxyquire = require('proxyquire');
-const { setProcess } = require('./test-utils');
-
-const service = require('../lib/import/service');
 
 const fc = require('../lib/fc');
-const prompt = require('../lib/init/prompt');
-
-const { detectTplPath} = require('../lib/tpl');
-
 const fs = require('fs-extra');
 const path = require('path');
-
 const rimraf = require('rimraf');
+const prompt = require('../lib/init/prompt');
+
+const { setProcess } = require('./test-utils');
+const { detectTplPath} = require('../lib/tpl');
 
 const mockData = require('./tpl-mock-data');
 
 const validate = sandbox.stub();
 
+const service = {
+  getTriggerMetas: sandbox.stub()
+};
 
 const tpl = {
 
@@ -39,8 +37,6 @@ describe('fun-invoke test', () => {
   let restoreProcess;
 
   beforeEach(() => {
-
-    sandbox.stub(service, 'getTriggerMetas').resolves({});
 
     sandbox.stub(prompt, 'promptForFunctionSelection').resolves({
       serviceName: 'localdemo',
@@ -69,12 +65,14 @@ describe('fun-invoke test', () => {
       '../tpl': tpl,
       '../init/prompt': prompt,
       '../utils/file': file,
-      '../../lib/commands/validate': validate
+      '../../lib/commands/validate': validate,
+      '../../lib/import/service': service
     })(invokeName, options);
   }
 
   it('serviceName/functionName and event is empty stirng and uppercase Sync', async () => {
 
+    service.getTriggerMetas.returns({});
     await invokeFuntion('serviceName/functionName', {
       event: '',
       invocationType: 'Sync'
@@ -92,7 +90,7 @@ describe('fun-invoke test', () => {
   it('serviceName/functionName and event is eventStdin and uppercase Sync', async () => {
 
     file.getEvent.returns('eventStdin');
-
+    service.getTriggerMetas.returns({});
     await invokeFuntion('serviceName/functionName', {
       event: '',
       invocationType: 'Sync',
@@ -109,6 +107,7 @@ describe('fun-invoke test', () => {
 
   it('serviceName/functionName and event is empty stirng and lowercase async', async () => {
 
+    service.getTriggerMetas.returns({});
     await invokeFuntion('serviceName/functionName', {
       event: '',
       invocationType: 'async'
@@ -127,6 +126,7 @@ describe('fun-invoke test', () => {
   it('serviceName/functionName and event is eventFile and uppercase Sync', async () => {
 
     file.getEvent.returns('eventFile');
+    service.getTriggerMetas.returns({});
 
     await invokeFuntion('serviceName/functionName', {
       event: '',
@@ -146,7 +146,7 @@ describe('fun-invoke test', () => {
   it('single functionName and event is empty stirng and uppercase Sync', async () => {
 
     tpl.getTpl.returns(mockData.tpl);
-
+    service.getTriggerMetas.returns({});
     await invokeFuntion('python3', {
       event: '',
       invocationType: 'Sync'
@@ -164,7 +164,7 @@ describe('fun-invoke test', () => {
   it('duplicated functions and event is empty stirng and uppercase Sync', async () => {
 
     tpl.getTpl.returns(mockData.tplWithDuplicatedFunction);
-
+    service.getTriggerMetas.returns({});
     await invokeFuntion('python3', {
       event: '',
       invocationType: 'Sync'
@@ -177,6 +177,47 @@ describe('fun-invoke test', () => {
       event: '',
       invocationType: 'Sync'
     });
+  });
+
+
+  it('exit http trigger in function', async () => {
+
+    service.getTriggerMetas.returns([
+      {
+        'triggerName': 'http-test',
+        'description': '',
+        'triggerId': 'c364dbea-31d7-43a9-93e2-2cad4ea4c4e3',
+        'sourceArn': null,
+        'triggerType': 'http',
+        'invocationRole': null,
+        'qualifier': null,
+        'triggerConfig': {
+          'methods': [
+              'GET',
+              'POST',
+              'PUT'
+          ],
+          'authType': 'anonymous'
+        },
+        'createdTime': '2019-04-08T08:20:00Z',
+        'lastModifiedTime': '2019-08-23T02:32:12Z'
+      }
+    ]);
+
+    tpl.getTpl.returns(mockData.tplWithDuplicatedFunction);
+
+    try {
+      await invokeFuntion('python3', {
+        event: '',
+        invocationType: 'Sync'
+      });
+    } catch (error) {
+      assert.notCalled(fc.invokeFunction);
+      return;
+    }
+
+    expect().fail('expect throw Error.');
+
   });
 });
 
