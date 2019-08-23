@@ -40,7 +40,7 @@ notifier.notify();
 getVisitor().then(visitor => {
   visitor.pageview('/fun/local/invoke').send();
 
-  require('../lib/commands/local/invoke')(program.args[0], program)
+  require('../lib/commands/local/invoke').invoke(program.args[0], program)
     .then(() => {
       visitor.event({
         ec: 'local invoke',

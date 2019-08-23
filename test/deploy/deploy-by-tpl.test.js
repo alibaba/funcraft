@@ -16,7 +16,7 @@ const trigger = require('../../lib/trigger');
 const fc = require('../../lib/fc');
 const prompt = require('../../lib/init/prompt');
 
-const { tpl } = require('../tpl-mock-data');
+const { tpl, tplWithDuplicatedFunction } = require('../tpl-mock-data');
 
 describe('deploy service role ', () => {
   let restoreProcess;
@@ -1152,7 +1152,10 @@ describe('test partical deploy', () => {
 
     Object.keys(prompt).forEach(m => {
       if (m === 'promptForSameFunction') {
-        sandbox.stub(prompt, m).resolves('localdemo/python3');
+        sandbox.stub(prompt, m).resolves({
+          serviceName: 'localdemo',
+          functionName: 'python3'
+        });
       } else {
         sandbox.stub(prompt, m).resolves({});
       }
@@ -1185,5 +1188,13 @@ describe('test partical deploy', () => {
     
     expect(serviceName).to.be('localdemo');
     expect(serviceRes).to.be(tpl.Resources.localdemo);
+  });
+
+  it('more than one function', async () => {
+
+    const {serviceName, serviceRes} = await partialDeployment('localdemo/python3', tplWithDuplicatedFunction);
+    
+    expect(serviceName).to.be('localdemo');
+    expect(serviceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
   });
 });
