@@ -193,9 +193,9 @@ describe('fun-invoke test', () => {
         'qualifier': null,
         'triggerConfig': {
           'methods': [
-              'GET',
-              'POST',
-              'PUT'
+            'GET',
+            'POST',
+            'PUT'
           ],
           'authType': 'anonymous'
         },
