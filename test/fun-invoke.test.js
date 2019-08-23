@@ -8,6 +8,8 @@ const expect = require('expect.js');
 const proxyquire = require('proxyquire');
 const { setProcess } = require('./test-utils');
 
+const service = require('../lib/import/service');
+
 const fc = require('../lib/fc');
 const prompt = require('../lib/init/prompt');
 
@@ -37,6 +39,8 @@ describe('fun-invoke test', () => {
   let restoreProcess;
 
   beforeEach(() => {
+
+    sandbox.stub(service, 'getTriggerMetas').resolves({});
 
     sandbox.stub(prompt, 'promptForFunctionSelection').resolves({
       serviceName: 'localdemo',
