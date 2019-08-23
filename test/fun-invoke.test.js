@@ -219,6 +219,47 @@ describe('fun-invoke test', () => {
     expect().fail('expect throw Error.');
 
   });
+
+
+  it('http trigger bind more than one qualifier', async () => {
+
+    service.getTriggerMetas.returns([
+      {
+        'triggerName': 'http-test',
+        'description': '',
+        'triggerId': 'c364dbea-31d7-43a9-93e2-2cad4ea4c4e3',
+        'sourceArn': null,
+        'triggerType': 'http',
+        'invocationRole': null,
+        'qualifier': 'superman',
+        'triggerConfig': {
+          'methods': [
+            'GET',
+            'POST',
+            'PUT'
+          ],
+          'authType': 'anonymous'
+        },
+        'createdTime': '2019-04-08T08:20:00Z',
+        'lastModifiedTime': '2019-08-23T02:32:12Z'
+      }
+    ]);
+
+    tpl.getTpl.returns(mockData.tplWithDuplicatedFunction);
+
+    try {
+      await invokeFuntion('python3', {
+        event: '',
+        invocationType: 'Sync'
+      });
+    } catch (error) {
+      assert.notCalled(fc.invokeFunction);
+      return;
+    }
+
+    expect().fail('expect throw Error.');
+
+  });
 });
 
 describe('tpl detectTplPath test', () => {
