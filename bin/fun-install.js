@@ -131,10 +131,11 @@ program
 
 program
   .command('sbox')
+  .usage('[-f|--function <[service/]function>] [-r|--runtime <runtime>] [-i|--interactive] [-e|--env key=val ...] [-e|--cmd <cmd>]')
   .description('Start a local sandbox for installation dependencies or configuration')
   .option('-f, --function <[service/]function>', `Specify which function to execute installation task.`)
   .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString(['dotnetcore2.1'])}`)
-  .option('-i, --interactive', 'Keep STDIN open and allocate a pseudo-TTY when in a interactive shell.', false)
+  .option('-i, --interactive', 'run as interactive mode. Keep STDIN open and allocate a pseudo-TTY when in a interactive shell.', false)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', [])
   .option('-c, --cmd <cmd>', 'command with arguments to execute inside the installation sandbox.')
   .action((prog) => {
