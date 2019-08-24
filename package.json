@@ -111,7 +111,6 @@
     "tablestore": "^4.3.2",
     "temp-dir": "^1.0.0",
     "tar-fs": "^2.0.0",
-    "temp-dir": "^1.0.0",
     "universal-analytics": "^0.4.20",
     "unzipper": "^0.10.2",
     "update-notifier": "^3.0.0",
@@ -133,8 +132,7 @@
     "pkg": "^4.3.4",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
-    "suppose": "^0.6.2",
-    "temp-dir": "^1.0.0"
+    "suppose": "^0.6.2"
   },
   "repository": {
     "type": "git",
