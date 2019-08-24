@@ -6,8 +6,6 @@ const parser = require('../../lib/build/parser');
 const fs = require('fs-extra');
 const expect = require('expect.js');
 
-const assert = sandbox.assert;
-
 const funymlContent = `
 runtime: python3
 tasks:

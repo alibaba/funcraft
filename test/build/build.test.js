@@ -32,7 +32,6 @@ describe('test buildFunction', () => {
 
   const buildName = functionName;
   const projectRoot = os.tmpdir();
-  const tplPath = path.join(projectRoot, 'template.yml');
   const rootArtifactsDir = path.join(projectRoot, '.fun', 'build', 'artifacts');
   const verbose = true;
   const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
@@ -56,7 +55,7 @@ describe('test buildFunction', () => {
     sandbox.restore();
   });
 
-  it.only('test with buildFunction without manifest file, funfile, funyml', async function () {
+  it('test with buildFunction without manifest file, funfile, funyml', async function () {
     const useDocker = false;
 
     const buildFunc = {
