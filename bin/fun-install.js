@@ -151,6 +151,28 @@ program
         options.runtime = program.runtime;
       }
 
+      if (!options.function && !options.runtime) {
+        console.error("The `--runtime` or `--function` option is missing.");
+        visitor.event({
+          ec: 'install',
+          ea: `sbox`,
+          el: 'error',
+          dp: '/fun/install/sbox'
+        }).send();
+        return;
+      }
+
+      if(!options.interactive && !options.cmd) {
+        console.warn("The `--interactive` or `--cmd` option is missing.");
+        visitor.event({
+          ec: 'install',
+          ea: `sbox`,
+          el: 'error',
+          dp: '/fun/install/sbox'
+        }).send();
+        return;
+      }
+
       options.envs = convertEnvs(program.env);
 
       sbox(options).then(() => {
