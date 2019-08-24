@@ -152,7 +152,7 @@ program
       }
 
       if (!options.function && !options.runtime) {
-        console.error("The `--runtime` or `--function` option is missing.");
+        console.error('The `--runtime` or `--function` option is missing.');
         visitor.event({
           ec: 'install',
           ea: `sbox`,
@@ -162,8 +162,8 @@ program
         return;
       }
 
-      if(!options.interactive && !options.cmd) {
-        console.warn("The `--interactive` or `--cmd` option is missing.");
+      if (!options.interactive && !options.cmd) {
+        console.error('The `--interactive` or `--cmd` option is missing.');
         visitor.event({
           ec: 'install',
           ea: `sbox`,
