@@ -36,8 +36,9 @@ const convertEnvs = (env) => (env || []).map(e => _.split(e, '=', 2))
   .reduce((acc, cur) => (acc[cur[0]] = cur[1], acc), {});
 
 program
-  .usage('[-f|--function <[service/]function>] [-r|--runtime <runtime>] [-i|--interactive] [-p|--pacakge-type <type>] [--save] [-e|--env key=val ...] [-c|--command <cmd>] [packageNames...]')
+  .usage('[-f|--function <[service/]function>] [-r|--runtime <runtime>] [-p|--pacakge-type <type>] [--save] [-e|--env key=val ...] [packageNames...]')
   .option('-f, --function <[service/]function>', `Specify which function to execute installation task.`)
+  .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString(['dotnetcore2.1'])}`)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', (e, envs) => (envs.push(e), envs), [])
   .option('--save', 'add task to fun.yml file.')
   .option('-p, --package-type <type>', 'avaliable package type option: pip, apt.')
@@ -145,6 +146,10 @@ program
       if (program.function) {
         options.function = program.function;
       }
+      if (program.runtime) {
+        options.runtime = program.runtime;
+      }
+
       options.envs = convertEnvs(program.env);
 
       sbox(options).then(() => {
