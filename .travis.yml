@@ -20,8 +20,7 @@ cache:
 before_install:
   - > 
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-      # docker pull aliyunfc/runtime-python2.7:build-1.5.3
-      # docker pull aliyunfc/runtime-python3.6:build-1.5.3
+      docker pull aliyunfc/runtime-nodejs8:build
       docker pull bitnami/minideb:jessie
     fi
   # install make for windows
