@@ -24,7 +24,7 @@ describe('test invoke construct and init', async () => {
 
   beforeEach(() => {
 
-    sandbox.stub(docker, 'isDockerToolBox').resolves({})
+    sandbox.stub(docker, 'isDockerToolBox').resolves({});
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves('aliyunfc/runtime-python3.6:1.5.7');
@@ -124,7 +124,7 @@ describe('test showDebugIdeTips', async () => {
 
   beforeEach(() => {
 
-    sandbox.stub(docker, 'isDockerToolBox').resolves({})
+    sandbox.stub(docker, 'isDockerToolBox').resolves({});
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
 

@@ -25,7 +25,7 @@ let LocalInvoke = require('../../lib/local/local-invoke');
 const { functionName, functionRes,
   serviceName, serviceRes,
   debugPort, debugIde,
-  tplPath, codeMount, tpl } = require('./mock-data');
+  codeMount, tpl } = require('./mock-data');
 
 const docker = require('../../lib/docker');
 const dockerOpts = require('../../lib/docker-opts');
