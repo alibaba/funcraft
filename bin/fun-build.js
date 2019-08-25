@@ -10,10 +10,13 @@ const notifier = require('../lib/update-notifier');
 
 program
   .name('fun build')
+  .usage('[options] [[service/]function]')
   .description('Build the dependencies.')
+  .option('-u, --use-docker', 'Use docker container to build functions')
+  .option('-t, --template [template]', 'path of fun template file.')
   .parse(process.argv);
 
-if (program.args.length) {
+if (program.args.length > 1) {
   console.error();
   console.error("  error: unexpected argument '%s'", program.args[0]);
   program.help();
@@ -24,7 +27,9 @@ notifier.notify();
 getVisitor().then(visitor => {
   visitor.pageview('/fun/build').send();
 
-  require('../lib/commands/build')()
+  program.verbose = parseInt(process.env.FUN_VERBOSE) > 0;
+
+  require('../lib/commands/build')(program.args[0], program)
     .then(() => {
       visitor.event({
         ec: 'build',

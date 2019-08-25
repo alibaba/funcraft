@@ -25,7 +25,7 @@ let LocalInvoke = require('../../lib/local/local-invoke');
 const { functionName, functionRes,
   serviceName, serviceRes,
   debugPort, debugIde,
-  tplPath, codeMount, tpl } = require('./mock-data');
+  codeMount, tpl } = require('./mock-data');
 
 const docker = require('../../lib/docker');
 const dockerOpts = require('../../lib/docker-opts');
@@ -62,13 +62,13 @@ describe('test local invoke init', async () => {
       functionRes,
       debugPort,
       debugIde,
-      tplPath);
+      '.');
 
     await invoke.init();
 
     expect(invoke.cmd).to.eql([ '-h', 'index.handler', '--stdin' ]);
     
-    assert.calledWith(docker.generateDockerEnvs, invoke.functionProps, invoke.debugPort, null);
+    assert.calledWith(docker.generateDockerEnvs, '.', invoke.functionProps, invoke.debugPort, null);
 
     assert.calledWith(dockerOpts.generateLocalInvokeOpts, 
       invoke.runtime,
@@ -117,7 +117,7 @@ def handler(event, context):
 
   it('test local invoke', async () => {
     const localInvoke = new LocalInvoke(serviceName, serviceRes,
-      functionName, functionRes, null, null, ymlPath);
+      functionName, functionRes, null, null, projectDir);
 
     const outputStream = new streams.WritableStream();
       

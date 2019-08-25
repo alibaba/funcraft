@@ -43,42 +43,41 @@ describe('test getFunCodeAsBase64', () => {
 
   it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a');
-    assert.calledWith(fs.lstat, '/a');
-    assert.calledWith(zip.pack, '/a', null);
+    assert.calledWith(fs.lstat, path.resolve('/a'));
+    assert.calledWith(zip.pack, path.resolve('/a'), null);
   });
 
 
   it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
     await fc.getFunCodeAsBase64('/a/b', '../');
-    assert.calledWith(fs.lstat, '../');
-    assert.calledWith(zip.pack, '../', null);
+    assert.calledWith(fs.lstat, path.resolve('/a'));
+    assert.calledWith(zip.pack, path.resolve('/a'), null);
   });
 
   it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a/b/c');
-    assert.calledWith(fs.lstat, '/a/b/c');
-    assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
+    assert.calledWith(fs.lstat, path.resolve('/a/b/c'));
+    assert.calledWith(zip.pack, path.resolve('/a/b/c'), sinon.match.func);
   });
 
 
   it('test getFunCodeAsBase64: absolute codeUri path', async () => {
-    await fc.getFunCodeAsBase64('/a/b', process.cwd() + '/a/b/c/index.js');
-    assert.calledWith(fs.lstat, process.cwd() + '/a/b/c/index.js');
-    assert.calledWith(zip.pack, process.cwd() + '/a/b/c/index.js', null);
+    await fc.getFunCodeAsBase64('/a/b', '/a/b/c/index.js');
+    assert.calledWith(fs.lstat, path.resolve('/a/b/c/index.js'));
+    assert.calledWith(zip.pack, path.resolve('/a/b/c/index.js'), sinon.match.func);
   });
 
   it('test getFunCodeAsBase64: relative codeUri path', async () => {
     await fc.getFunCodeAsBase64('/a/b', './index.js');
-    assert.calledWith(fs.lstat, './index.js');
-    assert.calledWith(zip.pack, './index.js', null);
+    assert.calledWith(fs.lstat, path.resolve('/a/b/index.js'));
+    assert.calledWith(zip.pack, path.resolve('/a/b/index.js'), sinon.match.func);
   });
 
   it('test getFunCodeAsBase64: relative codeUri for war', async () => {
     const content = await fc.getFunCodeAsBase64('/a/b', './web.war');
     expect(content).to.eql({ base64: Buffer.from('test').toString('base64') });
 
-    assert.calledWith(fs.readFile, './web.war');
-
+    assert.calledWith(fs.readFile, path.resolve('/a/b/web.war'));
   });
 });
 
@@ -121,7 +120,7 @@ describe('Incorrect environmental variables', () => {
       initializationTimeout: 3,
       memorySize: 128,
       runtime: 'nodejs6',
-      codeUri: path.join('examples', 'local', 'nodejs6'),
+      codeUri: 'nodejs6',
       environmentVariables: { 'StringTypeValue1': 123, 'StringTypeValue2': 'test' }
     });
 

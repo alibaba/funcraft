@@ -3,10 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const execSync = require('child_process').execSync;
-
 const hook = require('fc-helper');
 const kitx = require('kitx');
-
 const zip = require('./zip');
 
 function pkg(deps) {

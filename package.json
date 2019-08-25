@@ -47,6 +47,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
+    "@alicloud/fc-builders": "git+https://github.com/aliyun/fc-builders.git",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
@@ -60,10 +61,12 @@
     "command-exists": "^1.2.8",
     "commander": "^3.0.0",
     "conf": "^4.0.2",
+    "copy-dir": "^1.1.0",
     "crc64-ecma182.js": "^1.0.0",
     "debug": "^2.6.8",
     "detect-mocha": "^0.1.0",
     "dev-null": "^0.1.1",
+    "dockerfile-ast": "0.0.16",
     "dockerode": "^2.5.8",
     "dotenv": "^6.0.0",
     "es6-promise-pool": "^2.5.0",
@@ -83,10 +86,12 @@
     "json-colorizer": "^2.2.0",
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
+    "klaw": "^3.0.0",
     "lodash": "^4.17.11",
     "md5-file": "^4.0.0",
     "memory-streams": "^0.1.3",
     "mkdirp-promise": "^5.0.1",
+    "ncp": "^2.0.0",
     "nested-object-assign": "^1.0.3",
     "node-machine-id": "^1.1.10",
     "node-stream-zip": "^1.8.2",
@@ -105,13 +110,11 @@
     "supertest": "^4.0.2",
     "tablestore": "^4.3.2",
     "temp-dir": "^1.0.0",
+    "tar-fs": "^2.0.0",
     "universal-analytics": "^0.4.20",
     "unzipper": "^0.10.2",
     "update-notifier": "^3.0.0",
-    "urlencode": "^1.1.0",
-    "why-is-node-running": "^2.1.0",
-    "wtf": "^1.5.0",
-    "wtfnode": "^0.8.0"
+    "urlencode": "^1.1.0"
   },
   "files": [
     "bin",
@@ -129,8 +132,7 @@
     "pkg": "^4.3.4",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
-    "suppose": "^0.6.2",
-    "temp-dir": "^1.0.0"
+    "suppose": "^0.6.2"
   },
   "repository": {
     "type": "git",

@@ -20,7 +20,7 @@ program
 
   with '--only-config' parameter, will only update resource config without updating the function code`)
 
-  .option('-t, --template [template]', 'path of fun template file.', null)
+  .option('-t, --template [template]', 'path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
   .parse(process.argv);
 
