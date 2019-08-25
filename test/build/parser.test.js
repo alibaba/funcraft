@@ -47,7 +47,7 @@ RUN LD_LIBRARY=testLD_LIBRARY apt-get build-dep -y r-base; \\
   LD_LIBRARY=testLD_LIBRARY make ;  \\
   LD_LIBRARY=testLD_LIBRARY make install;`;
 
-const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-1.5.7
+const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-1.5.8
 COPY . /code
 WORKDIR /code
 RUN apt-get install local-package
