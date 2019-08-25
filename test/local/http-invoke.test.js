@@ -48,7 +48,7 @@ describe('test http response', async () => {
   let resp;
 
   beforeEach(() => {
-    httpInvoke = new HttpInvoke(serviceName, serviceRes, functionName, functionRes);
+    httpInvoke = new HttpInvoke(serviceName, serviceRes, functionName, functionRes, null, null, process.cwd());
 
     resp = {
       send: sinon.stub(),

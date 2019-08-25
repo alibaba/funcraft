@@ -6,6 +6,7 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const definition = require('../../lib/definition');
+const path = require('path');
 
 const {
   findBuildFuncs, updateTemplateResources
@@ -16,7 +17,6 @@ describe('test findBuildFuncs', () => {
   const buildName = 'test';
 
   beforeEach(() => {
-    sandbox.stub(definition, 'parseInvokeName').returns(['service', 'function']);
     sandbox.stub(definition, 'findFunctionInTpl').returns({ functionName: 'function' });
     sandbox.stub(definition, 'findFunctionsInTpl').returns(['func1', 'func2']);
   });
@@ -26,10 +26,9 @@ describe('test findBuildFuncs', () => {
 
   it('test with buildName', async function () {
 
-    const funcs = findBuildFuncs('test', {});
+    const funcs = findBuildFuncs(buildName, {});
 
-    assert.calledWith(definition.parseInvokeName, buildName);
-    assert.calledWith(definition.findFunctionInTpl, 'service', 'function', {});
+    assert.calledWith(definition.findFunctionInTpl, buildName, {});
     expect(funcs).to.eql([{ functionName: 'function' }]);
   });
 
@@ -46,7 +45,6 @@ describe('test findBuildFuncs', () => {
   const buildName = 'test';
 
   beforeEach(() => {
-    sandbox.stub(definition, 'parseInvokeName').returns(['service', 'function']);
     sandbox.stub(definition, 'findFunctionInTpl').returns({ functionName: 'function' });
     sandbox.stub(definition, 'findFunctionsInTpl').returns(['func1', 'func2']);
   });
@@ -56,10 +54,9 @@ describe('test findBuildFuncs', () => {
 
   it('test with buildName', async function () {
 
-    const funcs = findBuildFuncs('test', {});
+    const funcs = findBuildFuncs(buildName, {});
 
-    assert.calledWith(definition.parseInvokeName, buildName);
-    assert.calledWith(definition.findFunctionInTpl, 'service', 'function', {});
+    assert.calledWith(definition.findFunctionInTpl, buildName, {});
     expect(funcs).to.eql([{ functionName: 'function' }]);
   });
 });
@@ -115,7 +112,7 @@ describe('test updateTemplateResources', () => {
             'Type': 'Aliyun::Serverless::Service',
             'testFunc1': {
               'Properties': {
-                'CodeUri': 'testDemo/testFunc1',
+                'CodeUri': path.join('testDemo', 'testFunc1'),
                 'Description': 'Hello world with python3!',
                 'Handler': 'index.handler',
                 'Runtime': 'python3'
@@ -150,7 +147,7 @@ describe('test updateTemplateResources', () => {
             'Type': 'Aliyun::Serverless::Service',
             'testFunc1': {
               'Properties': {
-                'CodeUri': '../python3',
+                'CodeUri': path.join('..', 'python3'),
                 'Description': 'Hello world with python3!',
                 'Handler': 'index.handler',
                 'Runtime': 'python3'
@@ -183,7 +180,7 @@ describe('test updateTemplateResources', () => {
             'Type': 'Aliyun::Serverless::Service',
             'testFunc1': {
               'Properties': {
-                'CodeUri': '../python3',
+                'CodeUri': path.join('..', 'python3'),
                 'Description': 'Hello world with python3!',
                 'Handler': 'index.handler',
                 'Runtime': 'python3'

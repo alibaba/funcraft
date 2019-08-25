@@ -428,7 +428,7 @@ describe('test docker run', async () => {
   });
 });
 
-describe('InstallationContainer', async () => {
+describe('Integration::InstallationContainer', async () => {
 
   beforeEach(() => {
     sandbox.stub(DockerCli.prototype, 'listImages').resolves({

@@ -62,13 +62,13 @@ describe('test local invoke init', async () => {
       functionRes,
       debugPort,
       debugIde,
-      tplPath);
+      '.');
 
     await invoke.init();
 
     expect(invoke.cmd).to.eql([ '-h', 'index.handler', '--stdin' ]);
     
-    assert.calledWith(docker.generateDockerEnvs, invoke.functionProps, invoke.debugPort, null);
+    assert.calledWith(docker.generateDockerEnvs, '.', invoke.functionProps, invoke.debugPort, null);
 
     assert.calledWith(dockerOpts.generateLocalInvokeOpts, 
       invoke.runtime,

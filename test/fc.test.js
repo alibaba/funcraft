@@ -43,41 +43,41 @@ describe('test getFunCodeAsBase64', () => {
 
   it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a');
-    assert.calledWith(fs.lstat, '/a');
-    assert.calledWith(zip.pack, '/a', null);
+    assert.calledWith(fs.lstat, path.resolve('/a'));
+    assert.calledWith(zip.pack, path.resolve('/a'), null);
   });
 
 
   it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
     await fc.getFunCodeAsBase64('/a/b', '../');
-    assert.calledWith(fs.lstat, '/a');
-    assert.calledWith(zip.pack, '/a', null);
+    assert.calledWith(fs.lstat, path.resolve('/a'));
+    assert.calledWith(zip.pack, path.resolve('/a'), null);
   });
 
   it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a/b/c');
-    assert.calledWith(fs.lstat, '/a/b/c');
-    assert.calledWith(zip.pack, '/a/b/c', sinon.match.func);
+    assert.calledWith(fs.lstat, path.resolve('/a/b/c'));
+    assert.calledWith(zip.pack, path.resolve('/a/b/c'), sinon.match.func);
   });
 
 
   it('test getFunCodeAsBase64: absolute codeUri path', async () => {
     await fc.getFunCodeAsBase64('/a/b', '/a/b/c/index.js');
-    assert.calledWith(fs.lstat, '/a/b/c/index.js');
-    assert.calledWith(zip.pack, '/a/b/c/index.js', sinon.match.func);
+    assert.calledWith(fs.lstat, path.resolve('/a/b/c/index.js'));
+    assert.calledWith(zip.pack, path.resolve('/a/b/c/index.js'), sinon.match.func);
   });
 
   it('test getFunCodeAsBase64: relative codeUri path', async () => {
     await fc.getFunCodeAsBase64('/a/b', './index.js');
-    assert.calledWith(fs.lstat, '/a/b/index.js');
-    assert.calledWith(zip.pack, '/a/b/index.js', sinon.match.func);
+    assert.calledWith(fs.lstat, path.resolve('/a/b/index.js'));
+    assert.calledWith(zip.pack, path.resolve('/a/b/index.js'), sinon.match.func);
   });
 
   it('test getFunCodeAsBase64: relative codeUri for war', async () => {
     const content = await fc.getFunCodeAsBase64('/a/b', './web.war');
     expect(content).to.eql({ base64: Buffer.from('test').toString('base64') });
 
-    assert.calledWith(fs.readFile, '/a/b/web.war');
+    assert.calledWith(fs.readFile, path.resolve('/a/b/web.war'));
   });
 });
 

@@ -6,6 +6,7 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const definition = require('../../lib/definition');
 const docker = require('../../lib/docker');
+const path = require('path');
 
 const { serviceName,
   functionName,
@@ -20,7 +21,7 @@ const {
 describe('test generateBuildContainerBuildOpts', () => {
 
   beforeEach(() => {
-    sandbox.stub(definition, 'parseInvokeName').returns(['service', 'function']);
+    sandbox.stub(definition, 'parseFunctionPath').returns(['service', 'function']);
     sandbox.stub(definition, 'findFunctionInTpl').returns({ functionName: 'function' });
     sandbox.stub(definition, 'findFunctionsInTpl').returns(['func1', 'func2']);
     sandbox.stub(docker, 'generateDockerEnvs').resolves({ 'envKey': 'envValue' });
@@ -63,7 +64,7 @@ describe('test generateBuildContainerBuildOpts', () => {
         'Mounts': [
           {
             'Type': 'bind',
-            'Source': '/',
+            'Source': path.resolve('/'),
             'Target': '/code',
             'ReadOnly': false
           },

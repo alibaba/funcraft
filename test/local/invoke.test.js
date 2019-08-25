@@ -24,6 +24,7 @@ describe('test invoke construct and init', async () => {
 
   beforeEach(() => {
 
+    sandbox.stub(docker, 'isDockerToolBox').resolves({})
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves('aliyunfc/runtime-python3.6:1.5.7');
@@ -52,7 +53,7 @@ describe('test invoke construct and init', async () => {
     expect(invoke.codeUri).to.eql(process.cwd());
   }
 
-  it('test construct', async () => {    
+  it('test construct', async () => {
     const invoke = new Invoke(serviceName,
       serviceRes,
       functionName,
@@ -80,11 +81,11 @@ describe('test invoke construct and init', async () => {
     expect(invoke.dockerUser).to.eql('10003:10003');
     expect(invoke.nasMounts).to.eql([]);
     expect(invoke.codeMount).to.eql(codeMount);
-    expect(invoke.mounts).to.eql([codeMount]);
     expect(invoke.containerName).to.contain('fun_local_');
     expect(invoke.imageName).to.contain('aliyunfc/runtime-python3.6:1.5.7');
 
     assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.7');
+    assert.called(docker.isDockerToolBox);
   });
 
   it('test init with nas config', async () => {
@@ -112,7 +113,6 @@ describe('test invoke construct and init', async () => {
     expect(invoke.dockerUser).to.eql('10003:10003');
     expect(invoke.nasMounts).to.eql(nasMounts);
     expect(invoke.codeMount).to.eql(codeMount);
-    expect(invoke.mounts).to.eql([codeMount, ...nasMounts]);
     expect(invoke.containerName).to.contain('fun_local_');
     expect(invoke.imageName).to.eql('aliyunfc/runtime-python3.6:1.5.7');
 
@@ -124,6 +124,7 @@ describe('test showDebugIdeTips', async () => {
 
   beforeEach(() => {
 
+    sandbox.stub(docker, 'isDockerToolBox').resolves({})
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
 
@@ -148,7 +149,7 @@ describe('test showDebugIdeTips', async () => {
       baseDir);
 
     await invoke.showDebugIdeTips();
-    
+
     assert.notCalled(docker.showDebugIdeTips);
   });
 
@@ -162,7 +163,7 @@ describe('test showDebugIdeTips', async () => {
       baseDir);
 
     await invoke.showDebugIdeTips();
-    
+
     assert.notCalled(docker.showDebugIdeTips);
   });
 
@@ -177,7 +178,7 @@ describe('test showDebugIdeTips', async () => {
       baseDir);
 
     await invoke.showDebugIdeTips();
-    
+
     assert.notCalled(docker.showDebugIdeTips);
   });
 

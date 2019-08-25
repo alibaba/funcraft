@@ -75,7 +75,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -110,7 +110,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -147,7 +147,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -184,7 +184,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -234,7 +234,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
     
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun/build/artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);

@@ -35,7 +35,7 @@ OWM4MWI1M2UtZWQxNy00MzI3LWFjNzctMjhkYWMzNzRlMDU1CjE4MgoxOTk4CjIwCg==
 `;
 
 describe('test responseApi', async () => {
-  const apiInvoke = new ApiInvoke(serviceName, serviceRes, functionName, functionRes);
+  const apiInvoke = new ApiInvoke(serviceName, serviceRes, functionName, functionRes, null, null, process.cwd());
 
   it('test normal resposne', async () => {
     const resp = {
