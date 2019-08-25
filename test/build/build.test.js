@@ -55,7 +55,7 @@ describe('test buildFunction', () => {
     sandbox.restore();
   });
 
-  it('test with buildFunction without manifest file, funfile, funyml', async function () {
+  it('test with buildFunction without manifest file, Funfile, funyml', async function () {
     const useDocker = false;
 
     const buildFunc = {
@@ -196,9 +196,9 @@ describe('test buildFunction', () => {
   it('test with buildFunction with only fun.yml, but force using docker', async function () {
 
     const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
-    const funfilePath = path.join(codeUri, 'funfile');
+    const funfilePath = path.join(codeUri, 'Funfile');
     const funymlPath = path.join(codeUri, 'fun.yml');
-    const dockerFilePath = path.join(codeUri, '.funfile.generated.dockerfile');
+    const dockerFilePath = path.join(codeUri, '.Funfile.generated.dockerfile');
     const artifactDir = path.join(projectRoot, '.fun', 'build', 'artifacts', serviceName, functionName);
 
     const pathExistsStub = sandbox.stub(fs, 'pathExists');
