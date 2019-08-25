@@ -44,7 +44,7 @@ describe('test generateBuildContainerBuildOpts', () => {
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
         'PYTHONUSERBASE=/code/.fun/python'
       ],
-      'Image': 'aliyunfc/runtime-python3.6:build-1.5.7',
+      'Image': 'aliyunfc/runtime-python3.6:build-1.5.8',
       'name': 'containerName',
       'Cmd': [
         'fun-install',
