@@ -551,7 +551,7 @@ describe('deploy', () => {
     });
   });
 
-  it('deploy cdn-trigger', async () => {
+  it('deploy cdn-trigger whith qualifier property', async () => {
     await deploy('cdn-trigger');
 
     assert.calledWith(fc.makeService, {
@@ -591,7 +591,8 @@ describe('deploy', () => {
           'Domain': [
             'cdn-trigger.sunfeiyu.top'
           ]
-        }
+        },
+        'Qualifier': '1'
       }
     });
     assert.calledWith(trigger.getTriggerNameList, {

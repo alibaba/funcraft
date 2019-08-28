@@ -15,6 +15,7 @@ Resources:
         cdn-trigger-name: # trigger name
           Type: CDN # trigger type
           Properties:
+            Qualifier: '1'
             EventName: CachedObjectsRefreshed
             EventVersion: '1.0.0'
             Notes: cdn events trigger test
