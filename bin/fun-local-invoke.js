@@ -28,7 +28,7 @@ program
     `a file containing event data passed to the function during
                              invoke, If this option is not specified, it defaults to
                              reading event from stdin`)
-  .option('-o, --tmp-dir <tmpDir>', 'Custom mount directory.')
+  .option('--tmp-dir <tmpDir>', 'Custom mount directory.')
 
   .parse(process.argv);
 
