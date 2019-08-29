@@ -10,8 +10,11 @@ const taskflow = require('../../lib/build/taskflow');
 const parser = require('../../lib/build/parser');
 const fs = require('fs-extra');
 const docker = require('../../lib/docker');
-
-const build = require('../../lib/build/build');
+const tempDir = require('temp-dir');
+let build = require('../../lib/build/build');
+const uuid = require('uuid');
+const util = require('util');
+const nas = require('../../lib/nas');
 
 const assert = sandbox.assert;
 
@@ -19,10 +22,12 @@ const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const { tpl, serviceName,
+const { tpl, 
+  serviceName,
   functionName,
   serviceRes,
-  functionRes
+  functionRes,
+  serviceResWithNasConfig
 } = require('../local/mock-data');
 
 describe('test buildFunction', () => {
@@ -247,3 +252,55 @@ describe('test buildFunction', () => {
   });
 });
 
+describe('test copyNasArtifact', () => {
+
+  let rootArtifactsDir;
+  let funcArtifactDir;
+  let ncpStub;
+
+  beforeEach(() => {
+    rootArtifactsDir = path.join(tempDir, uuid.v4());
+    funcArtifactDir = path.join(rootArtifactsDir, serviceName, functionName);
+
+    sandbox.stub(fs, 'pathExists').resolves(true);
+    sandbox.stub(fs, 'ensureDir').resolves();
+    sandbox.stub(fs, 'remove').resolves();
+
+    ncpStub = sandbox.stub();
+
+    sandbox.stub(util, 'promisify').returns(ncpStub);
+
+    sandbox.stub(nas, 'convertNasConfigToNasMappings').resolves([{
+      localNasDir: 'localNasDir',
+      remoteNasDir: 'remoteNasDir'
+    }]);
+
+    sandbox.stub(docker, 'copyFromImage').resolves();
+
+    build = require('proxyquire')('../../lib/build/build', {
+      'util': util
+    });
+  });
+
+  afterEach(async () => {
+    await fs.remove(rootArtifactsDir);
+    sandbox.restore();
+  });
+
+  it('test with .fun/nas and nasConfig', async () => {
+
+    const funcNasFolder = path.join(funcArtifactDir, '.fun', 'nas');
+    const rootNasFolder = path.join(rootArtifactsDir, '.fun', 'nas');
+
+    await build.copyNasArtifact(serviceName, serviceResWithNasConfig, 'imageTag', rootArtifactsDir, funcArtifactDir);
+
+    assert.calledWith(fs.pathExists, funcNasFolder);
+    assert.calledWith(fs.ensureDir, rootNasFolder);
+    assert.calledWith(fs.remove, funcNasFolder);
+
+    assert.calledWith(nas.convertNasConfigToNasMappings, rootArtifactsDir, serviceResWithNasConfig.Properties.NasConfig, serviceName);
+
+    assert.calledWith(docker.copyFromImage, 'imageTag', 'remoteNasDir/.', 'localNasDir');
+    
+  });
+});
