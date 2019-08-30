@@ -15,7 +15,7 @@ unit-test:
 test: lint unit-test
 
 install: 
-	# npm install
+	npm install
 	$(FUN) install
 
 clean: 
