@@ -9,6 +9,10 @@ const expect = require('expect.js');
 const funymlContent = `
 runtime: python3
 tasks:
+  - apt: local-test
+    target: .fun/nas/auto/apt
+  - pip: testPipTarget
+    target: .fun/nas/auto/pip
   - apt: local-package
     local: false
   - apt: libzbar0
@@ -35,6 +39,8 @@ tasks:
 const funfileContent = `RUNTIME python3
 COPY . /code
 WORKDIR /code
+RUN fun-install apt-get install local-test -t .fun/nas/auto/apt
+RUN fun-install pip install testPipTarget -t .fun/nas/auto/pip
 RUN apt-get install local-package
 RUN fun-install apt-get install libzbar0
 RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
@@ -50,6 +56,8 @@ RUN LD_LIBRARY=testLD_LIBRARY apt-get build-dep -y r-base; \\
 const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-1.5.8
 COPY . /code
 WORKDIR /code
+RUN fun-install apt-get install local-test -t .fun/nas/auto/apt
+RUN fun-install pip install testPipTarget -t .fun/nas/auto/pip
 RUN apt-get install local-package
 RUN fun-install apt-get install libzbar0
 RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
@@ -73,6 +81,7 @@ describe('test funymlToFunfile', () => {
     sandbox.stub(fs, 'readFileSync').returns(funymlContent);
 
     const funFile = await parser.funymlToFunfile('path');
+
     expect(funFile).to.equal(funfileContent);
   });
 });
