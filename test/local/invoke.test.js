@@ -30,7 +30,7 @@ describe('test invoke construct and init', async () => {
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
-    sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves('aliyunfc/runtime-python3.6:1.5.8');
+    sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves(`aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
 
     Invoke = proxyquire('../../lib/local/invoke', {
       '../docker': docker,
@@ -87,10 +87,10 @@ describe('test invoke construct and init', async () => {
     expect(invoke.nasMounts).to.eql([]);
     expect(invoke.codeMount).to.eql(codeMount);
     expect(invoke.containerName).to.contain('fun_local_');
-    expect(invoke.imageName).to.contain('aliyunfc/runtime-python3.6:1.5.8');
+    expect(invoke.imageName).to.contain(`aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
     expect(invoke.tmpDir).to.eql(tmpDir);
 
-    assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.8');
+    assert.calledWith(docker.pullImageIfNeed, `aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
     assert.called(docker.isDockerToolBox);
   });
 
@@ -122,10 +122,10 @@ describe('test invoke construct and init', async () => {
     expect(invoke.nasMounts).to.eql(nasMounts);
     expect(invoke.codeMount).to.eql(codeMount);
     expect(invoke.containerName).to.contain('fun_local_');
-    expect(invoke.imageName).to.eql('aliyunfc/runtime-python3.6:1.5.8');
+    expect(invoke.imageName).to.eql(`aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
     expect(invoke.tmpDir).to.eql(tmpDir);
 
-    assert.calledWith(docker.pullImageIfNeed, 'aliyunfc/runtime-python3.6:1.5.8');
+    assert.calledWith(docker.pullImageIfNeed, `aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
   });
 });
 
