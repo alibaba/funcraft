@@ -4,6 +4,7 @@ REPORTER = spec
 TIMEOUT = 20000
 PATH := ./node_modules/.bin:$(PATH)
 SHELL := /bin/bash
+FUN = ../../../bin/fun.js
 
 lint:
 	@npm run lint
@@ -14,8 +15,8 @@ unit-test:
 test: lint unit-test
 
 install: 
-	npm install
-	fun install
+	# npm install
+	$(FUN) install
 
 clean: 
 	rm -rf ./dist
@@ -27,7 +28,7 @@ build: clean install
 
 dev: 
 	npm run dev
-	fun local start
+	$(FUN) local start
 
 package: build
 	cd ./dist && zip -r fun-nas-server.zip  * .[^.]* -x "*.zip" -x ".fun/root/usr/share/*"
