@@ -13,6 +13,7 @@
       2,
       "unix"
     ],
+    "require-atomic-updates": "off",
     "semi": [2, "always"],
     "strict": [2, "global"],
     "curly": 2,

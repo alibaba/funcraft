@@ -71,7 +71,7 @@ describe('resolveLocalPath test', () => {
 });
 
 describe('makeTmpDir test', () => {
-  const parentDir = os.homedir();
+  const parentDir = os.tmpdir();
   const tmpDirName = '.fun-nas-tmp';
   const splitDirName = 'split-dir';
   const tmpDir = path.join(parentDir, tmpDirName, splitDirName);
