@@ -1,4 +1,4 @@
 *.debug.js
 *.min.js
 node_modules/*
-lib/fc-utils/fc-fun-nas-server
+lib/utils/fun-nas-server/

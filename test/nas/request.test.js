@@ -54,21 +54,21 @@ describe('request test', () => {
     sandbox.restore();
   });
 
-  it('sendCmdReqequest function test', async () => {
+  it('sendCmdRequest function test', async () => {
     
     const cmd = 'ls';
 
-    let res = await request.sendCmdReqequest(nasHttpTriggerPath, cmd);
-    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', { cmd }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
+    let res = await request.sendCmdRequest(nasHttpTriggerPath, cmd);
+    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', {}, { cmd }, {'X-Fc-Log-Type': 'Tail'}, {});
     expect(res).to.eql(undefined);
   });
 
-  it('sendCmdReqequest function throw err test', async () => {
+  it('sendCmdRequest function throw err test', async () => {
     
     fcRequest.throws(new Error('send cmd error'));
 
     try {
-      await request.sendCmdReqequest(nasHttpTriggerPath, cmd);
+      await request.sendCmdRequest(nasHttpTriggerPath, cmd);
       assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', { cmd }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
     } catch (error) {
       expect(error).to.eql(new Error('send cmd error'));
@@ -111,7 +111,7 @@ describe('request test', () => {
 
   it('uploadSplitFile function test', async () => {
     //prepared
-    const dirPath = path.join(os.homedir(), '.uploadSplitFile');
+    const dirPath = path.join(os.tmpdir(), '.uploadSplitFile');
     const filePath = path.join(dirPath, fileName);
     await mkdirp(dirPath);
     await writeFile(filePath, 'this is a test');
@@ -133,7 +133,7 @@ describe('request test', () => {
 
   it('uploadFile function test', async() => {
     //prepared
-    const dirPath = path.join(os.homedir(), '.uploadFile', '/');
+    const dirPath = path.join(os.tmpdir(), '.uploadFile', '/');
     const filePath = path.join(dirPath, fileName);
     await mkdirp(dirPath);
     await writeFile(filePath, 'this is a test');

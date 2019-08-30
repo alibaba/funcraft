@@ -35,7 +35,7 @@ binary: clean
 	@script/binary.sh
 
 package-fun-nas-server:
-	make -C ./lib/fc-utils/fc-fun-nas-server package
+	make -C ./lib/utils/fun-nas-server package
 
 upload: 
 	@script/upload.sh

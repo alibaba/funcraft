@@ -21,7 +21,7 @@ describe('ls test', () => {
   beforeEach(() => {
     
     request = {
-      sendCmdReqequest: sandbox.stub().returns({
+      sendCmdRequest: sandbox.stub().returns({
         data: '123',
         stderr: ''
       })
@@ -39,7 +39,7 @@ describe('ls test', () => {
     await ls(serviceName, nasPath, isAllOpt, isLongOpt);
     const nasHttpTriggerPath = await getNasHttpTriggerPath(serviceName);
     const cmd = `ls -a -l ${nasPath}`;
-    assert.calledWith(request.sendCmdReqequest, nasHttpTriggerPath, cmd);
+    assert.calledWith(request.sendCmdRequest, nasHttpTriggerPath, cmd);
     
   });
 });

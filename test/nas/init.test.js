@@ -55,7 +55,7 @@ describe('test fun nas init', () => {
     const nasFunctionName = constants.FUN_NAS_FUNCTION;
     
     fs.pathExists.returns(true);
-    const zipCodePath = path.resolve(__dirname, '../../lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip');
+    const zipCodePath = path.resolve(__dirname, '../../lib/utils/fun-nas-server/dist/fun-nas-server.zip');
     
     const nasServiceRes = {
       'Type': 'Aliyun::Serverless::Service',

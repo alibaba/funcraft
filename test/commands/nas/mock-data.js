@@ -17,12 +17,12 @@ const vpcConfig = {
   SecurityGroupId: 'sg-uf6h3g45f2fo5lr04akb'
 };
 const policies = ['AliyunECSNetworkInterfaceManagementAccess', 'AliyunOSSFullAccess'];
-
+const serviceName = 'fun-nas-test';
 const tpl = {
   ROSTemplateFormatVersion: '2015-09-01',
   Transform: 'Aliyun::Serverless-2018-04-03',
   Resources: {
-    'fun-nas-test': {
+    [serviceName]: {
       Type: 'Aliyun::Serverless::Service',
       Properties: {
         Policies: policies, 
@@ -36,5 +36,6 @@ const tpl = {
 module.exports = {
   nasConfig, 
   tpl, 
-  vpcConfig
+  vpcConfig, 
+  serviceName
 };
