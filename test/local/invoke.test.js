@@ -90,6 +90,13 @@ describe('test invoke construct and init', async () => {
     expect(invoke.imageName).to.contain(`aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
     expect(invoke.tmpDir).to.eql(tmpDir);
 
+    expect(invoke.mounts).to.eql([{
+      Type: 'bind',
+      Source: '/.',
+      Target: '/',
+      ReadOnly: false 
+    }]);
+
     assert.calledWith(docker.pullImageIfNeed, `aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
     assert.called(docker.isDockerToolBox);
   });
@@ -124,6 +131,20 @@ describe('test invoke construct and init', async () => {
     expect(invoke.containerName).to.contain('fun_local_');
     expect(invoke.imageName).to.eql(`aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
     expect(invoke.tmpDir).to.eql(tmpDir);
+
+    expect(invoke.mounts).to.eql([
+      {
+        Type: 'bind',
+        Source: '/.',
+        Target: '/',
+        ReadOnly: false
+      },
+      {
+        Type: 'bind',
+        Source: '/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/',
+        Target: '/mnt/nas',
+        ReadOnly: false }
+    ]);
 
     assert.calledWith(docker.pullImageIfNeed, `aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
   });
