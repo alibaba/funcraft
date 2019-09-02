@@ -145,6 +145,12 @@ describe('test resolveTmpDirToMount', () => {
       ReadOnly: false
     });
   });
+
+  it('test tmp dir is empty', async () => {
+
+    const mount = await docker.resolveTmpDirToMount();
+    expect(mount).to.eql({});
+  });
 });
 
 describe('test resolveCodeUriToMount', () => {
