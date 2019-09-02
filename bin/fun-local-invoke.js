@@ -28,7 +28,7 @@ program
     `a file containing event data passed to the function during
                              invoke, If this option is not specified, it defaults to
                              reading event from stdin`)
-  .option('--tmp-dir <tmpDir>', `The temp directory mounted to /tmp , default to './.fun/invoke-tmp/{service}/{function}/'`)
+  .option('--tmp-dir <tmpDir>', `The temp directory mounted to /tmp , default to './.fun/tmp/invoke/{service}/{function}/'`)
 
   .parse(process.argv);
 
