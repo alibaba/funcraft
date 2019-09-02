@@ -21,8 +21,8 @@ const cpStub = proxyquire('../../lib/nas/cp', {
 });
 
 describe('nas cp test', () => {
-  const localNotEmptyPath = path.join(os.homedir(), '.not-empty-dir'); 
-  const localEmptyPath = path.join(os.homedir(), '.empty-dir'); 
+  const localNotEmptyPath = path.join(os.tmpdir(), '.not-empty-dir'); 
+  const localEmptyPath = path.join(os.tmpdir(), '.empty-dir'); 
   const filePath = path.join(localNotEmptyPath, 'test.txt');
   beforeEach(async () => {
     await mkdirp(localEmptyPath);

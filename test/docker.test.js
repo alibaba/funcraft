@@ -132,6 +132,21 @@ describe('test imageExist', async () => {
   });
 });
 
+describe('test resolveTmpDirToMount', () => {
+
+  it('test resolve tmp dir', async () => {
+
+    const mount = await docker.resolveTmpDirToMount('/tmp');
+
+    expect(mount).to.eql({
+      Type: 'bind',
+      Source: '/tmp',
+      Target: '/tmp',
+      ReadOnly: false
+    });
+  });
+});
+
 describe('test resolveCodeUriToMount', () => {
 
   // windows will resolve /dir to c:\dir

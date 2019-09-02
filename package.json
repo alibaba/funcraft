@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.1",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
@@ -12,11 +12,11 @@
     "scripts": [
       "./lib/**/*.js",
       "./bin/**/*.js",
-      "!./lib/fc-utils/fc-fun-nas-server/**/*.js"
+      "!./lib/utils/fun-nas-server/**/*.js"
     ],
     "assets": [
       "./templates/**/*",
-      "./lib/fc-utils/fc-fun-nas-server/dist/fun-nas-server.zip"
+      "./lib/utils/fun-nas-server/dist/fun-nas-server.zip"
     ]
   },
   "scripts": {
@@ -69,7 +69,6 @@
     "dockerfile-ast": "0.0.16",
     "dockerode": "^2.5.8",
     "dotenv": "^6.0.0",
-    "es6-promise-pool": "^2.5.0",
     "express": "^4.16.4",
     "findit2": "^2.2.3",
     "fs-extra": "^8.1.0",
@@ -101,6 +100,7 @@
     "progress": "^2.0.3",
     "promise-retry": "^1.1.1",
     "raw-body": "^2.3.3",
+    "readdirp": "^3.1.2",
     "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",

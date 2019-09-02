@@ -5,6 +5,7 @@ const sandbox = sinon.createSandbox();
 const parser = require('../../lib/build/parser');
 const fs = require('fs-extra');
 const expect = require('expect.js');
+const dockerOpts = require('../../lib/docker-opts');
 
 const funymlContent = `
 runtime: python3
@@ -53,7 +54,7 @@ RUN LD_LIBRARY=testLD_LIBRARY apt-get build-dep -y r-base; \\
   LD_LIBRARY=testLD_LIBRARY make ;  \\
   LD_LIBRARY=testLD_LIBRARY make install;`;
 
-const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-1.5.8
+const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
 COPY . /code
 WORKDIR /code
 RUN fun-install apt-get install local-test -t .fun/nas/auto/apt

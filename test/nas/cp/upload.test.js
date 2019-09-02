@@ -16,36 +16,43 @@ const assert = sinon.assert;
 
 
 describe('upload test', () => {
-  const srcPath = path.join(os.homedir(), 'local-nas-dir', '/');
+  const srcPath = path.join(os.tmpdir(), 'local-nas-dir', '/');
   const dstPath = path.posix.join('/', 'mnt', 'nas');
   const nasHttpTriggerPath = '/proxy/';
   const zipDst = path.join(path.dirname(srcPath), `.${path.basename(srcPath)}.zip`);
+  const srcPathFile = path.join(srcPath, 'test-file');
   let request;
   let file;
   let uploadStub;
+
+  request = {
+    statsRequest: sandbox.stub(), 
+    checkHasUpload: sandbox.stub(), 
+    sendMergeRequest: sandbox.stub(), 
+    uploadSplitFile: sandbox.stub(), 
+    uploadFile: sandbox.stub(),
+    sendUnzipRequest: sandbox.stub(),
+    sendCleanRequest: sandbox.stub()
+  };
+  
+  file = {
+    zipWithArchiver: sandbox.stub()
+  };
+  
+  uploadStub = proxyquire('../../../lib/nas/cp/upload', {
+    '../request': request, 
+    './file': file
+  });
+
   beforeEach(async () => {
     await mkdirp(srcPath);
-    request = {
-      statsRequest: sandbox.stub(), 
-      checkHasUpload: sandbox.stub(), 
-      sendMergeRequest: sandbox.stub(), 
-      uploadSplitFile: sandbox.stub(), 
-      uploadFile: sandbox.stub()
-    };
-    
-    file = {
-      zipWithArchiver: sandbox.stub()
-    };
-    
-    uploadStub = proxyquire('../../../lib/nas/cp/upload', {
-      '../request': request, 
-      './file': file
-    });
+    await writeFile(srcPathFile, 'this is a test');
 
     request.sendMergeRequest.returns({
       headers: 200, 
       data: {
-        desc: 'unzip success'
+        desc: 'unzip success',
+        nasZipFile: 'zipFile'
       }
     });
 
@@ -75,19 +82,24 @@ describe('upload test', () => {
       }
     });
 
+    request.sendUnzipRequest.returns({
+      stdout: 'test',
+      stderr: ''
+    });
+    request.sendCleanRequest.returns({
+      desc: 'clean done'
+    });
     file.zipWithArchiver.returns(zipDst);
     request.uploadSplitFile.returns();
-
-
   });
 
   afterEach(() => {
-    sandbox.restore();
+    sandbox.reset();
     rimraf.sync(srcPath);
   });
 
   it('upload file more than 5M', async() => { 
-    await writeFile(zipDst, new Buffer(10 * 1024 * 1024));
+    await writeFile(zipDst, Buffer.alloc(10 * 1024 * 1024));
 
     await uploadStub(srcPath, dstPath, nasHttpTriggerPath);
 
@@ -99,6 +111,9 @@ describe('upload test', () => {
     assert.called(request.uploadSplitFile);
     assert.calledOnce(request.sendMergeRequest);
     assert.calledWith(file.zipWithArchiver, srcPath);
+    assert.calledOnce(request.sendUnzipRequest);
+    assert.calledOnce(request.sendCleanRequest);
+
   });
 
   it('upload file less than 5M', async () => {
@@ -114,5 +129,7 @@ describe('upload test', () => {
     assert.notCalled(request.uploadSplitFile);
     assert.notCalled(request.sendMergeRequest);
     assert.calledWith(file.zipWithArchiver, srcPath);
+    assert.notCalled(request.sendUnzipRequest);
+    assert.notCalled(request.sendCleanRequest);
   });
 });
