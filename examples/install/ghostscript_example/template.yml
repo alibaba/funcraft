@@ -1,0 +1,15 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  ghostscript:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'helloworld'
+    pdf2jpg:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs10
+        CodeUri: './'
+        EnvironmentVariables:
+          GS_LIB: .fun/root/usr/share/ghostscript/9.26/Resource/Init:.fun/root/usr/share/ghostscript/9.26/lib:.fun/root/usr/share/ghostscript/9.26/Resource/Font:.fun/root/usr/share/ghostscript/fonts:.fun/root/var/lib/ghostscript/fonts:.fun/root/usr/share/ghostscript/fonts:.fun/root/usr/share/fonts
