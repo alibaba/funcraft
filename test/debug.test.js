@@ -3,7 +3,8 @@
 const expect = require('expect.js');
 
 const {
-  generateVscodeDebugConfig, generateDebugEnv, generateDockerDebugOpts
+  generateVscodeDebugConfig, generateDebugEnv,
+  generateDockerDebugOpts, getDebugIde
 } = require('../lib/debug');
 
 const serviceName = 'testService';
@@ -204,12 +205,21 @@ describe('test generateDebugEnv', () => {
     expect(env).to.eql({ 'DEBUG_OPTIONS': '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,quiet=y,address=9000' });
   });
 
+  it('test python3 with pycharm', async function () {
+    const env = await generateDebugEnv('python3', 9000, 'pycharm');
+    expect(env).to.eql({});
+  });
+
+  it('test python2.7 with pycharm', async function () {
+    const env = await generateDebugEnv('python2.7', 9000, 'pycharm');
+    expect(env).to.eql({});
+  });
 });
 
 describe('test generateDockerDebugOpts', () => {
   it('test not php7.2', async function () {
     for (let runtime of ['python2.7', 'python3', 'java8', 'nodejs6', 'nodejs8']) {
-      const debugOpts = await generateDockerDebugOpts(runtime, 9000);
+      const debugOpts = await generateDockerDebugOpts(runtime, 9000); 
 
       expect(debugOpts).to.eql({
         'ExposedPorts': {
@@ -232,5 +242,32 @@ describe('test generateDockerDebugOpts', () => {
   it('test php7.2', async function () {
     const opts = await generateDockerDebugOpts('php7.2', 9000);
     expect(opts).to.be.empty();
+  });
+});
+
+describe('test getDebugIde', () => {
+  it('test debug ide1', () => {
+    const ide = getDebugIde({ config: 'vscode' });
+    expect(ide).to.eql('vscode');
+  });
+
+  it('test debug ide2', () => {
+    const ide = getDebugIde({ config: 'vsCode' });
+    expect(ide).to.eql('vscode');
+  });
+
+  it('test debug ide3', () => {
+    const ide = getDebugIde({ config: 'pycharm' });
+    expect(ide).to.eql('pycharm');
+  });
+
+  it('test debug ide4', () => {
+    const ide = getDebugIde({ config: 'PYCHARM' });
+    expect(ide).to.eql('pycharm');
+  });
+
+  it('test debug ide6', () => {
+    const ide = getDebugIde();
+    expect(ide).to.be(null);
   });
 });
