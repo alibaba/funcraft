@@ -159,7 +159,7 @@ describe('test showDebugIdeTips', async () => {
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
 
-    sandbox.stub(docker, 'showDebugIdeTips').resolves({});
+    sandbox.stub(docker, 'showDebugIdeTipsForVscode').resolves({});
 
     Invoke = proxyquire('../../lib/local/invoke', {
       '../docker': docker

@@ -25,7 +25,8 @@ program
   .usage('[options]')
   .option('-d, --debug-port <port>', 'specify the sandbox container starting in debug' +
     ' mode, and exposing this port on localhost')
-  .option('-c, --config <ide/debugger>', 'output ide debug configuration. Options：\'vscode\'')
+  .option('-c, --config <ide/debugger>', 
+    'select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
   .parse(process.argv);
 
 if (program.args.length) {

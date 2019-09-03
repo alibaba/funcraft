@@ -20,10 +20,8 @@ program
   .option('-d, --debug-port <port>',
     `specify the sandboxed container starting in debug mode,
                              and exposing this port on localhost`)
-  // todo: add auto option to auto config vscode
-  .option('-c, --config <ide/debugger>',
-    `output configurations for the specified ide/debugger, where
-                             the ide/debugger can currently only be vscode`)
+  .option('-c, --config <ide/debugger>', 
+    'select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
   .option('-e, --event <path>',
     `a file containing event data passed to the function during
                              invoke, If this option is not specified, it defaults to
