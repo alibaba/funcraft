@@ -160,6 +160,7 @@ describe('test showDebugIdeTips', async () => {
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
 
     sandbox.stub(docker, 'showDebugIdeTipsForVscode').resolves({});
+    sandbox.stub(docker, 'showDebugIdeTipsForPycharm').resolves({});
 
     Invoke = proxyquire('../../lib/local/invoke', {
       '../docker': docker
@@ -181,7 +182,7 @@ describe('test showDebugIdeTips', async () => {
 
     await invoke.showDebugIdeTips();
 
-    assert.notCalled(docker.showDebugIdeTips);
+    assert.notCalled(docker.showDebugIdeTipsForVscode);
   });
 
   it('test does nothing2', async () => {
@@ -195,7 +196,7 @@ describe('test showDebugIdeTips', async () => {
 
     await invoke.showDebugIdeTips();
 
-    assert.notCalled(docker.showDebugIdeTips);
+    assert.notCalled(docker.showDebugIdeTipsForVscode);
   });
 
 
@@ -210,10 +211,10 @@ describe('test showDebugIdeTips', async () => {
 
     await invoke.showDebugIdeTips();
 
-    assert.notCalled(docker.showDebugIdeTips);
+    assert.notCalled(docker.showDebugIdeTipsForVscode);
   });
 
-  it('test show debug ide tips', async () => {
+  it('test show vscode debug tips', async () => {
     const invoke = new Invoke(serviceName,
       serviceResWithNasConfig,
       functionName,
@@ -226,7 +227,7 @@ describe('test showDebugIdeTips', async () => {
     
     await invoke.showDebugIdeTips();
     
-    assert.calledWith(docker.showDebugIdeTips, 
+    assert.calledWith(docker.showDebugIdeTipsForVscode, 
       serviceName, 
       functionName,
       'python3', 
@@ -234,4 +235,21 @@ describe('test showDebugIdeTips', async () => {
       debugPort);
   });
 
+  it('test show pycharm debug tips', async () => {
+    const invoke = new Invoke(serviceName,
+      serviceResWithNasConfig,
+      functionName,
+      functionRes,
+      debugPort,
+      'pycharm',
+      baseDir);
+
+    await invoke.init();
+    
+    await invoke.showDebugIdeTips();
+    
+    assert.calledWith(docker.showDebugIdeTipsForPycharm, 
+      '.', 
+      debugPort);
+  });
 });

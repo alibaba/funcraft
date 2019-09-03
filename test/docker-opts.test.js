@@ -142,7 +142,7 @@ describe('test generateLocalInvokeOpts', () => {
       Source: '/test',
       Target: '/code',
       ReadOnly: true
-    }], 'cmd', 9000, envs, '1000:1000');  // todo: 
+    }], 'cmd', 9000, envs, '1000:1000');
 
     expect(opts).to.eql({
       'name': 'test',
@@ -195,7 +195,7 @@ describe('test generateLocalInvokeOpts', () => {
       Source: '/test',
       Target: '/code',
       ReadOnly: true
-    }], null, null, null, null); // todo: 
+    }], null, null, null, null);
 
     expect(opts).to.eql({
       'name': 'test',
