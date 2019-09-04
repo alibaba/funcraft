@@ -9,7 +9,7 @@ const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
 const tplPath = path.join('/', 'demo', 'template.yml');
-
+const nasTmpDir = path.join(path.dirname(tplPath), '.fun', 'tmp', 'nas', 'sync');
 const cp = sandbox.stub();
 const validate = sandbox.stub();
 
@@ -49,7 +49,7 @@ describe('fun nas sync test', () => {
 
     await syncStub(options);
     const localNasDir = path.join('/', 'demo', '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
-    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true);
+    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true, nasTmpDir);
   });
 
   it('sync test with service', async () => {
@@ -60,7 +60,7 @@ describe('fun nas sync test', () => {
     await syncStub(options);
     const localNasDir = path.join('/', 'demo', '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
     const baseDir = path.dirname(tplPath);
-    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true);
+    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true, nasTmpDir);
     assert.calledWith(init.deployNasService, baseDir, mockdata.tpl, options.service);
   });
 

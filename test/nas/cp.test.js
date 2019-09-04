@@ -24,6 +24,7 @@ describe('nas cp test', () => {
   const localNotEmptyPath = path.join(os.tmpdir(), '.not-empty-dir'); 
   const localEmptyPath = path.join(os.tmpdir(), '.empty-dir'); 
   const filePath = path.join(localNotEmptyPath, 'test.txt');
+  const nasTmpDir = 'nastmp';
   beforeEach(async () => {
     await mkdirp(localEmptyPath);
     await mkdirp(localNotEmptyPath);
@@ -41,10 +42,10 @@ describe('nas cp test', () => {
     const srcPath = filePath;
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
     
-    await cpStub(srcPath, dstPath, false);
+    await cpStub(srcPath, dstPath, false, nasTmpDir);
     const mntDir = path.posix.join('/', 'mnt', 'nas');
     const nasHttpTriggerPath = `/proxy/${constants.FUN_NAS_SERVICE_PREFIX}fun-nas-test/fun-nas-function/`;
-    assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false);
+    assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false, nasTmpDir);
     
   });
 
@@ -52,7 +53,7 @@ describe('nas cp test', () => {
     const srcPath = undefined;
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
 
-    await cpStub(srcPath, dstPath, false);
+    await cpStub(srcPath, dstPath, false, nasTmpDir);
     
     assert.notCalled(upload);
   });
@@ -61,7 +62,7 @@ describe('nas cp test', () => {
     const srcPath = localEmptyPath;
     const dstPath = 'nas://fun-nas-test:/mnt/nas';
     
-    await cpStub(srcPath, dstPath, true);
+    await cpStub(srcPath, dstPath, true, nasTmpDir);
 
     assert.notCalled(upload);
     
