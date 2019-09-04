@@ -76,7 +76,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
     sandbox.stub(fs, 'pathExists').resolves(true);
     sandbox.stub(fs, 'ensureDir').resolves(true);
     sandbox.stub(zip, 'packTo').resolves(true);
-    sandbox.stub(util, 'fileMD5').resolves('md5');
+    sandbox.stub(util, 'md5').resolves('md5');
     sandbox.stub(fs, 'remove').resolves(true);
     sandbox.stub(fs, 'createReadStream').returns('zipcontent');
     sandbox.stub(uuid, 'v4').returns('random');
@@ -105,7 +105,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
     assert.calledWith(fs.pathExists, absCodeUri);
     assert.calledWith(fs.ensureDir, randomDir);
     assert.calledWith(zip.packTo, absCodeUri, sinon.match.func, zipPath);
-    assert.calledWith(util.fileMD5, sinon.match.string);
+    assert.calledWith(util.md5, sinon.match.string);
     assert.calledWith(ossClient.head, 'localdemo/php72/md5');
     assert.calledWith(ossClient.put, 'localdemo/php72/md5', 'zipcontent');
     assert.calledWith(fs.remove, randomDir);
@@ -119,7 +119,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
     assert.notCalled(fs.pathExists);
     assert.notCalled(fs.ensureDir);
     assert.notCalled(zip.packTo);
-    assert.notCalled(util.fileMD5);
+    assert.notCalled(util.md5);
     assert.notCalled(ossClient.head);
     assert.notCalled(ossClient.put);
     assert.notCalled(fs.remove);
