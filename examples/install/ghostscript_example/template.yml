@@ -12,4 +12,10 @@ Resources:
         Runtime: nodejs10
         CodeUri: './'
         EnvironmentVariables:
-          GS_LIB: .fun/root/usr/share/ghostscript/9.26/Resource/Init:.fun/root/usr/share/ghostscript/9.26/lib:.fun/root/usr/share/ghostscript/9.26/Resource/Font:.fun/root/usr/share/ghostscript/fonts:.fun/root/var/lib/ghostscript/fonts:.fun/root/usr/share/ghostscript/fonts:.fun/root/usr/share/fonts
+          GS_LIB: ".fun/root/usr/share/ghostscript/9.26/Resource/Init:\
+            .fun/root/usr/share/ghostscript/9.26/lib:\
+            .fun/root/usr/share/ghostscript/9.26/Resource/Font:\
+            .fun/root/usr/share/ghostscript/fonts:\
+            .fun/root/var/lib/ghostscript/fonts:\
+            .fun/root/usr/share/ghostscript/fonts:\
+            .fun/root/usr/share/fonts"
