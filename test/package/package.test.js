@@ -1,10 +1,8 @@
 'use strict';
 
 const path = require('path');
-const expect = require('expect.js');
 let pack = require('../../lib/package/package');
 const template = require('../../lib/package/template');
-const fs = require('fs-extra');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const tpl = require('../../lib/tpl');
@@ -19,7 +17,6 @@ describe('test package', () => {
   const bucket = 'bucket';
   const outputTemplateFile = 'outputTemplateFile';
   const updatedTpl = 'updatedTpl';
-  const baseDir = 'baseDir';
   const tplContent = 'tplContent';
 
   let ossClient;

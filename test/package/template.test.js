@@ -81,8 +81,6 @@ describe('test uploadAndUpdateFunctionCode', () => {
     sandbox.stub(fs, 'createReadStream').returns('zipcontent');
     sandbox.stub(uuid, 'v4').returns('random');
 
-    ossClient.head.rejects({ name: 'NoSuchKeyError' });
-
     ossClient = {
       head: sandbox.stub(),
       put: sandbox.stub(),
@@ -90,6 +88,8 @@ describe('test uploadAndUpdateFunctionCode', () => {
         bucket
       }
     };
+
+    ossClient.head.rejects({ name: 'NoSuchKeyError' });
   });
 
   afterEach(() => {
@@ -115,8 +115,6 @@ describe('test uploadAndUpdateFunctionCode', () => {
 
   it('test uploadAndUpdateFunctionCode with oss code', async () => {
     const updatedTpl = await template.uploadAndUpdateFunctionCode(baseDir, ossTpl, ossClient);
-
-    const randomDir = path.join(tempDir, 'random');
 
     assert.notCalled(fs.pathExists);
     assert.notCalled(fs.ensureDir);
