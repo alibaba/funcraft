@@ -26,7 +26,7 @@ test serverless applications locally, and deploy them to the Alibaba Cloud.`)
   .command('validate', 'validate a fun template')
   .command('deploy', 'deploy a fun application')
   .command('nas', 'operate NAS file system')
-  .command("package", 'package a Function Compute application.')
+  .command("package", 'package a Function Compute application')
   .command('invoke', 'remote invoke function');
 // set default verbose value for subcommand.
 process.env.FUN_VERBOSE = 0;
