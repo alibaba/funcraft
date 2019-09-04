@@ -15,7 +15,7 @@ const expect = require('expect.js');
 
 const { green } = require('colors');
 
-describe('test getFunCodeAsBase64', () => {
+describe('test zipCode', () => {
 
   let restoreProcess;
 
@@ -41,40 +41,40 @@ describe('test getFunCodeAsBase64', () => {
     restoreProcess();
   });
 
-  it('test getFunCodeAsBase64: codeUri outside baseDir', async () => {
-    await fc.getFunCodeAsBase64('/a/b', '/a');
+  it('test zipCode: codeUri outside baseDir', async () => {
+    await fc.zipCode('/a/b', '/a');
     assert.calledWith(fs.lstat, path.resolve('/a'));
     assert.calledWith(zip.pack, path.resolve('/a'), null);
   });
 
 
-  it('test getFunCodeAsBase64: codeUri outside baseDir2', async () => {
-    await fc.getFunCodeAsBase64('/a/b', '../');
+  it('test zipCode: codeUri outside baseDir2', async () => {
+    await fc.zipCode('/a/b', '../');
     assert.calledWith(fs.lstat, path.resolve('/a'));
     assert.calledWith(zip.pack, path.resolve('/a'), null);
   });
 
-  it('test getFunCodeAsBase64: codeUri within baseDir', async () => {
-    await fc.getFunCodeAsBase64('/a/b', '/a/b/c');
+  it('test zipCode: codeUri within baseDir', async () => {
+    await fc.zipCode('/a/b', '/a/b/c');
     assert.calledWith(fs.lstat, path.resolve('/a/b/c'));
     assert.calledWith(zip.pack, path.resolve('/a/b/c'), sinon.match.func);
   });
 
 
-  it('test getFunCodeAsBase64: absolute codeUri path', async () => {
-    await fc.getFunCodeAsBase64('/a/b', '/a/b/c/index.js');
+  it('test zipCode: absolute codeUri path', async () => {
+    await fc.zipCode('/a/b', '/a/b/c/index.js');
     assert.calledWith(fs.lstat, path.resolve('/a/b/c/index.js'));
     assert.calledWith(zip.pack, path.resolve('/a/b/c/index.js'), sinon.match.func);
   });
 
-  it('test getFunCodeAsBase64: relative codeUri path', async () => {
-    await fc.getFunCodeAsBase64('/a/b', './index.js');
+  it('test zipCode: relative codeUri path', async () => {
+    await fc.zipCode('/a/b', './index.js');
     assert.calledWith(fs.lstat, path.resolve('/a/b/index.js'));
     assert.calledWith(zip.pack, path.resolve('/a/b/index.js'), sinon.match.func);
   });
 
-  it('test getFunCodeAsBase64: relative codeUri for war', async () => {
-    const content = await fc.getFunCodeAsBase64('/a/b', './web.war');
+  it('test zipCode: relative codeUri for war', async () => {
+    const content = await fc.zipCode('/a/b', './web.war');
     expect(content).to.eql({ base64: Buffer.from('test').toString('base64') });
 
     assert.calledWith(fs.readFile, path.resolve('/a/b/web.war'));
