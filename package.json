@@ -106,7 +106,6 @@
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
     "single-line-log": "^1.1.2",
-    "split-file": "^2.1.1",
     "string-argv": "^0.3.0",
     "supertest": "^4.0.2",
     "tablestore": "^4.3.2",

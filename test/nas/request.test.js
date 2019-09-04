@@ -1,16 +1,5 @@
 'use strict';
 
-const util = require('util');
-const os = require('os');
-const fs = require('fs');
-
-const mkdirp = require('mkdirp-promise');
-const rimraf = require('rimraf');
-const writeFile = util.promisify(fs.writeFile);
-
-const path = require('path');
-const fsExtra = require('fs-extra');
-const file = require('../../lib/nas/cp/file');
 const expect = require('expect.js');
 const sinon = require('sinon');
 const constants = require('../../lib/nas/constants');
@@ -24,9 +13,11 @@ const assert = sinon.assert;
 describe('request test', () => {
   let request;
   let fcRequest;
+  let cpFile;
   const dstPath = '/nas';
   const fileHashValue = '123';
-  const fileName = 'file';
+  const nasFile = 'nasFile';
+  const body = Buffer.alloc(10);
   
   const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + 'demo';
   const cmd = 'ls';
@@ -34,17 +25,22 @@ describe('request test', () => {
   let restoreProcess;
   
   beforeEach(() => {
-    
+    cpFile = {
+      readFileChunk: sandbox.stub()
+    };
+    cpFile.readFileChunk.returns(body);
     fcRequest = sandbox.stub(FC.prototype, 'request');
-    fcRequest.resolves(undefined);
+    fcRequest.resolves('fcRequestRes');
     restoreProcess = setProcess({
       ACCOUNT_ID: 'ACCOUNT_ID',
       DEFAULT_REGION: 'cn-shanghai',
       ACCESS_KEY_ID: 'ACCESS_KEY_ID',
       ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
     });
+
     request = proxyquire('../../lib/nas/request', {
-      '@alicloud/fc2': FC
+      '@alicloud/fc2': FC,
+      './cp/file': cpFile
     });
     
   }); 
@@ -60,7 +56,7 @@ describe('request test', () => {
 
     let res = await request.sendCmdRequest(nasHttpTriggerPath, cmd);
     assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', {}, { cmd }, {'X-Fc-Log-Type': 'Tail'}, {});
-    expect(res).to.eql(undefined);
+    expect(res).to.eql('fcRequestRes');
   });
 
   it('sendCmdRequest function throw err test', async () => {
@@ -75,82 +71,43 @@ describe('request test', () => {
     }
   });
   
-  it('checkHasUpload function test', async() => {
-
-    let res = await request.checkHasUpload(dstPath, nasHttpTriggerPath, fileHashValue, fileName);
-    const query = {
-      fileHashValue,
-      fileName,
-      dstPath
-    };
-    assert.calledWith(fcRequest, 'GET', nasHttpTriggerPath + 'nas/stats', query, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
-    expect(res).to.be.undefined;
-  });
-
   it('statsRequest function test', async() => {
  
     let res = await request.statsRequest(dstPath, nasHttpTriggerPath);
     assert.calledWith(fcRequest, 'GET', nasHttpTriggerPath + 'stats', { dstPath }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
-    expect(res).to.be.undefined;
+    expect(res).to.eql('fcRequestRes');
     
   });
 
   it('checkFileHash function test', async() => {
-    let isNasFile = true;
-    let res = await request.checkFileHash(dstPath, nasHttpTriggerPath, fileHashValue, fileName, isNasFile);
-    isNasFile = 'true';
-    assert.calledWith(fcRequest, 'GET', nasHttpTriggerPath + 'check/file', {
-      fileHashValue,
-      fileName,
-      dstPath,
-      isNasFile
+    let res = await request.checkFileHash(nasHttpTriggerPath, nasFile, fileHashValue);
+    assert.calledWith(fcRequest, 'GET', nasHttpTriggerPath + 'file/check', {
+      nasFile,
+      fileHash: fileHashValue
     }, undefined, {'X-Fc-Log-Type': 'Tail'}, {});
-    expect(res).to.be.undefined;
+    expect(res).to.eql('fcRequestRes');
 
   });
 
-  it('uploadSplitFile function test', async () => {
-    //prepared
-    const dirPath = path.join(os.tmpdir(), '.uploadSplitFile');
-    const filePath = path.join(dirPath, fileName);
-    await mkdirp(dirPath);
-    await writeFile(filePath, 'this is a test');
+  it('createSizedNasFile function test', async() => {
 
-    const fileHash = await file.getFileHash(filePath);
-    const nasTmpDir = '/mnt/nas/tmp';
-    const body = await fsExtra.readFile(filePath);
-    const query = {
-      fileName,
-      nasTmpDir,
-      fileHashValue: fileHash
-    };
-    
-    let res = await request.uploadSplitFile(nasHttpTriggerPath, nasTmpDir, filePath);
-    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'split/uploads', query, body, {'X-Fc-Log-Type': 'Tail'}, {});
-    expect(res).to.be.undefined;
-    rimraf.sync(dirPath);
+    let res = await request.createSizedNasFile(nasHttpTriggerPath, nasFile, 1000);
+    const cmd = `dd if=/dev/zero of=${nasFile} count=0 bs=1 seek=1000`;
+    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'commands', {}, { cmd }, {'X-Fc-Log-Type': 'Tail'}, {});
+    expect(res).to.eql('fcRequestRes');
+
   });
 
-  it('uploadFile function test', async() => {
-    //prepared
-    const dirPath = path.join(os.tmpdir(), '.uploadFile', '/');
-    const filePath = path.join(dirPath, fileName);
-    await mkdirp(dirPath);
-    await writeFile(filePath, 'this is a test');
-    
-
-    const dstDir = '/mnt/nas';
-
-    let res = await request.uploadFile(filePath, dstDir, nasHttpTriggerPath, fileHashValue, fileName);
+  it('uploadChunkFile function test', async() => {
+    let res = await request.uploadChunkFile(nasHttpTriggerPath, nasFile, 'zipFilePath', { start: 0, size: 10});
     const query = {
-      dstDir,
-      fileHashValue,
-      fileName
+      nasFile, 
+      fileStart: '0'
     };
-    const body = await fsExtra.readFile(filePath);
-    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'uploads', query, body, {'X-Fc-Log-Type': 'Tail'}, {});
-    expect(res).to.be.undefined;
-    rimraf.sync(dirPath);
+    
+    assert.calledWith(cpFile.readFileChunk, 'zipFilePath', 0, 10);
+    assert.calledWith(fcRequest, 'POST', nasHttpTriggerPath + 'file/chunk/upload', query, body, {'X-Fc-Log-Type': 'Tail'}, {});
+    expect(res).to.eql('fcRequestRes');
   });
 
 });
