@@ -7,7 +7,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 const writeFile = util.promisify(fs.writeFile);
-
+const { getFileHash } = require('../../../lib/nas/cp/file');
 const path = require('path');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
@@ -19,20 +19,25 @@ describe('upload test', () => {
   const srcPath = path.join(os.tmpdir(), 'local-nas-dir', '/');
   const dstPath = path.posix.join('/', 'mnt', 'nas');
   const nasHttpTriggerPath = '/proxy/';
-  const zipDst = path.join(path.dirname(srcPath), `.${path.basename(srcPath)}.zip`);
+  const zipFilePath = path.join(path.dirname(srcPath), `.fun-nas-generated-${path.basename(srcPath)}.zip`);
+  const fileName = path.basename(zipFilePath);
+  const remoteNasTmpDir = path.posix.join(dstPath, '.fun_nas_tmp');
+  const nasZipFile = path.posix.join(remoteNasTmpDir, fileName);
+  const zipFileSize = 10 * 1024 * 1024;
+  const localNasTmpDir = 'nastmp';
   const srcPathFile = path.join(srcPath, 'test-file');
   let request;
   let file;
   let uploadStub;
-
+  let zipHash;
   request = {
-    statsRequest: sandbox.stub(), 
-    checkHasUpload: sandbox.stub(), 
-    sendMergeRequest: sandbox.stub(), 
-    uploadSplitFile: sandbox.stub(), 
-    uploadFile: sandbox.stub(),
+    statsRequest: sandbox.stub(),
     sendUnzipRequest: sandbox.stub(),
-    sendCleanRequest: sandbox.stub()
+    sendCleanRequest: sandbox.stub(),
+    createSizedNasFile: sandbox.stub(),
+    uploadChunkFile: sandbox.stub(),
+    checkFileHash: sandbox.stub(), 
+    checkRemoteNasTmpDir: sandbox.stub()
   };
   
   file = {
@@ -48,30 +53,27 @@ describe('upload test', () => {
     await mkdirp(srcPath);
     await writeFile(srcPathFile, 'this is a test');
 
-    request.sendMergeRequest.returns({
+    request.createSizedNasFile.returns({
+      headers: 200,
+      data: {
+        stdout: 'stdout',
+        stderr: ''
+      }
+    });
+    request.uploadChunkFile.returns({
+      headers: 200,
+      data: {
+        desc: 'chunk file write done'
+      }
+    });
+    request.checkFileHash.returns({
       headers: 200, 
       data: {
-        desc: 'unzip success',
-        nasZipFile: 'zipFile'
+        stat: 1, 
+        desc: 'File saved'
       }
     });
 
-    request.uploadFile.returns({
-      headers: 200, 
-      data: {
-        stat: 1,
-        desc: 'Folder saved'
-      }
-    });
-
-    request.checkHasUpload.returns({
-      headers: 200, 
-      data: {
-        nasTmpDir: '/mnt/nas/.tmp',
-        dstDir: '/mnt/nas',
-        uploadedSplitFiles: '{}'
-      }
-    });
     request.statsRequest.returns({
       headers: 200, 
       data: {
@@ -89,8 +91,10 @@ describe('upload test', () => {
     request.sendCleanRequest.returns({
       desc: 'clean done'
     });
-    file.zipWithArchiver.returns(zipDst);
-    request.uploadSplitFile.returns();
+    request.checkRemoteNasTmpDir.returns({
+      desc: 'check tmpDir done!'
+    });
+    file.zipWithArchiver.returns(zipFilePath);
   });
 
   afterEach(() => {
@@ -98,38 +102,20 @@ describe('upload test', () => {
     rimraf.sync(srcPath);
   });
 
-  it('upload file more than 5M', async() => { 
-    await writeFile(zipDst, Buffer.alloc(10 * 1024 * 1024));
-
-    await uploadStub(srcPath, dstPath, nasHttpTriggerPath);
-
-    assert.calledWith(request.statsRequest, dstPath, nasHttpTriggerPath);
-    
-    assert.calledOnce(request.checkHasUpload);
-    
-    assert.notCalled(request.uploadFile);
-    assert.called(request.uploadSplitFile);
-    assert.calledOnce(request.sendMergeRequest);
-    assert.calledWith(file.zipWithArchiver, srcPath);
-    assert.calledOnce(request.sendUnzipRequest);
-    assert.calledOnce(request.sendCleanRequest);
-
-  });
-
-  it('upload file less than 5M', async () => {
-    
-    await writeFile(zipDst, new Buffer(4 * 1024 * 1024));
-    
-
-    await uploadStub(srcPath, dstPath, nasHttpTriggerPath);
+  it('upload file', async() => { 
+    await writeFile(zipFilePath, Buffer.alloc(zipFileSize));
+    zipHash = await getFileHash(zipFilePath);
+    await uploadStub(srcPath, dstPath, nasHttpTriggerPath, true, localNasTmpDir);
 
     assert.calledWith(request.statsRequest, dstPath, nasHttpTriggerPath);
-    assert.calledOnce(request.checkHasUpload);
-    assert.calledOnce(request.uploadFile);
-    assert.notCalled(request.uploadSplitFile);
-    assert.notCalled(request.sendMergeRequest);
-    assert.calledWith(file.zipWithArchiver, srcPath);
-    assert.notCalled(request.sendUnzipRequest);
-    assert.notCalled(request.sendCleanRequest);
+    
+    assert.calledWith(file.zipWithArchiver, srcPath, localNasTmpDir);
+    assert.calledWith(request.createSizedNasFile, nasHttpTriggerPath, nasZipFile, zipFileSize);
+    assert.calledTwice(request.uploadChunkFile);
+    assert.calledWith(request.checkFileHash, nasHttpTriggerPath, nasZipFile, zipHash);
+
+    assert.calledWith(request.sendUnzipRequest, nasHttpTriggerPath, dstPath, nasZipFile, ['test-file']);
+    assert.calledWith(request.sendCleanRequest, nasHttpTriggerPath, nasZipFile);
+    assert.calledWith(request.checkRemoteNasTmpDir, nasHttpTriggerPath, remoteNasTmpDir);
   });
 });

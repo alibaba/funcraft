@@ -12,11 +12,22 @@ const assert = sinon.assert;
 const baseDir = path.join('/', 'test-dir');
 
 describe('test fun nas init', () => {
-  let deploy;
-  let nasInitStub;
-  let nas;
-  let fs;
+  
   let restoreProcess;
+  const deploy = {
+    deployService: sandbox.stub()
+  };
+  const nas = {
+    convertNasConfigToNasMappings: sandbox.stub()
+  };
+  const fs = {
+    pathExists: sandbox.stub()
+  };
+  const nasInitStub = proxyquire('../../lib/nas/init', {
+    '../deploy/deploy-by-tpl': deploy, 
+    '../nas': nas, 
+    'fs-extra': fs
+  });
   beforeEach(() => {
 
     restoreProcess = setProcess({
@@ -26,26 +37,11 @@ describe('test fun nas init', () => {
       ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
     });
 
-    deploy = {
-      deployService: sandbox.stub()
-    };
-    nas = {
-      convertNasConfigToNasMappings: sandbox.stub()
-    };
-    fs = {
-      pathExists: sandbox.stub()
-    };
-    nasInitStub = proxyquire('../../lib/nas/init', {
-      '../deploy/deploy-by-tpl': deploy, 
-      '../nas': nas, 
-      'fs-extra': fs
-    });
-
   }); 
 
   afterEach(() => {
     restoreProcess();
-    sandbox.restore();
+    sandbox.reset();
   });
   
   it('function deployNasService without service', async () => {

@@ -1,10 +1,5 @@
 'use strict';
 
-const os = require('os');
-
-const mkdirp = require('mkdirp-promise');
-const rimraf = require('rimraf');
-
 const expect = require('expect.js');
 const USER_HOME = require('os').homedir();
 const sinon = require('sinon');
@@ -13,9 +8,7 @@ const sandbox = sinon.createSandbox();
 
 const { 
   parseNasUri,
-  resolveLocalPath, 
-  makeTmpDir, 
-  splitFiles } = require('../../lib/nas/path');
+  resolveLocalPath} = require('../../lib/nas/path');
 
 describe('parseNasUri test', () => {
   const validNasPathResultMap = new Map();
@@ -68,45 +61,4 @@ describe('resolveLocalPath test', () => {
     sandbox.restore();
   });
 
-});
-
-describe('makeTmpDir test', () => {
-  const parentDir = os.tmpdir();
-  const tmpDirName = '.fun-nas-tmp';
-  const splitDirName = 'split-dir';
-  const tmpDir = path.join(parentDir, tmpDirName, splitDirName);
-  afterEach(() => {
-    rimraf.sync(tmpDir);
-  });
-
-  it('tmp dir exist test', async () => {
-    await mkdirp(tmpDir);
-    let res = await makeTmpDir(parentDir, tmpDirName, splitDirName);
-    expect(res).to.eql(tmpDir);
-  });
-
-  it('tmp dir not exist test', async () => {
-    let res = await makeTmpDir(parentDir, tmpDirName, splitDirName);
-    expect(res).to.eql(tmpDir);
-  });
-});
-
-describe('splitFiles test', () => {
-  it('uploadedSplitFilesHash is empty', async () => {
-    const uploadedSplitFilesHash = new Map();
-    const splitFilePathArr = ['/local/file'];
-
-    let res = await splitFiles(uploadedSplitFilesHash, splitFilePathArr);
-    expect(res).to.eql(splitFilePathArr);
-  });
-
-  it('uploadedSplitFilesHash not empty', async () => {
-    const uploadedSplitFilesHash = new Map();
-    uploadedSplitFilesHash.set('test', '123');
-    const splitFilePathArr = ['/local/file'];
-
-    let res = await splitFiles(uploadedSplitFilesHash, splitFilePathArr);
-    expect(res).to.eql(splitFilePathArr);
-  });
-  
 });
