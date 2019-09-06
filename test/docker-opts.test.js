@@ -195,7 +195,7 @@ describe('test generateLocalInvokeOpts', () => {
       Source: '/test',
       Target: '/code',
       ReadOnly: true
-    }], null, null, null, null, `aliyunfc/runtime-nodejs8:${dockerOpts.IMAGE_VERSION}`);
+    }], null, null, null, null, null, `aliyunfc/runtime-nodejs8:${dockerOpts.IMAGE_VERSION}`);
 
     expect(opts).to.eql({
       'name': 'test',
