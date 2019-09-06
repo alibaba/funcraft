@@ -14,8 +14,8 @@ const cp = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
-  detectTplPath: sandbox.stub().returns(tplPath), 
-  getTpl: sandbox.stub().returns(mockdata.tpl)
+  detectTplPath: sandbox.stub(), 
+  getTpl: sandbox.stub()
 };
 const init = {
   deployNasService: sandbox.stub().resolves()
@@ -34,10 +34,14 @@ describe('fun nas sync test', () => {
     fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
+
+    tpl.detectTplPath.returns(tplPath);
+    tpl.getTpl.returns(mockdata.tpl);
   });
 
   afterEach(() => {
     sandbox.restore();
+    sandbox.reset();
   });
 
   it('sync test without service', async () => {
@@ -49,18 +53,18 @@ describe('fun nas sync test', () => {
 
     await syncStub(options);
     const localNasDir = path.join('/', 'demo', '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
-    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true, localNasTmpDir);
+    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test/mnt/nas/', true, localNasTmpDir, mockdata.nasId);
   });
 
   it('sync test with service', async () => {
     const options = {
-      service: 'fun-nas-test', 
+      service: mockdata.serviceName, 
       mntDirs: undefined
     };
     await syncStub(options);
     const localNasDir = path.join('/', 'demo', '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
     const baseDir = path.dirname(tplPath);
-    assert.calledWith(cp, localNasDir, 'nas://fun-nas-test:/mnt/nas/', true, localNasTmpDir);
+    assert.calledWith(cp, localNasDir, `nas://${mockdata.serviceName}/mnt/nas/`, true, localNasTmpDir, mockdata.nasId);
     assert.calledWith(init.deployNasService, baseDir, mockdata.tpl, options.service);
   });
 

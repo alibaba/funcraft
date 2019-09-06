@@ -6,6 +6,7 @@ const fs = require('fs');
 
 const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
+const mockdata = require('../../commands/nas/mock-data');
 const writeFile = util.promisify(fs.writeFile);
 const { getFileHash } = require('../../../lib/nas/cp/file');
 const path = require('path');
@@ -80,7 +81,10 @@ describe('upload test', () => {
         path: '/mnt/nas',
         isExist: true,
         isDir: true,
-        isFile: false
+        isFile: false, 
+        UserId: 100, 
+        GroupId: 100, 
+        mode: 123
       }
     });
 
@@ -105,7 +109,7 @@ describe('upload test', () => {
   it('upload file', async() => { 
     await writeFile(zipFilePath, Buffer.alloc(zipFileSize));
     zipHash = await getFileHash(zipFilePath);
-    await uploadStub(srcPath, dstPath, nasHttpTriggerPath, true, localNasTmpDir);
+    await uploadStub(srcPath, dstPath, nasHttpTriggerPath, true, localNasTmpDir, mockdata.nasId);
 
     assert.calledWith(request.statsRequest, dstPath, nasHttpTriggerPath);
     

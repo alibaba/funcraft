@@ -6,6 +6,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
 const yaml = require('js-yaml');
+const mockdata = require('./commands/nas/mock-data');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
@@ -594,4 +595,27 @@ describe('test convertTplToServiceNasMappings', () => {
     
   });
 
+});
+
+describe('test convertTplToServiceNasIdMappings', () => {
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('normal tpl resource', () => {
+    const res = nas.convertTplToServiceNasIdMappings(mockdata.tpl);
+    expect(res).to.eql({
+      [mockdata.serviceName]: mockdata.nasId
+    });
+  });
+
+  it('empty tpl resource', () => {
+    const tpl = {
+      ROSTemplateFormatVersion: '2015-09-01',
+      Transform: 'Aliyun::Serverless-2018-04-03',
+      Resources: {}
+    };
+    const res = nas.convertTplToServiceNasIdMappings(tpl);
+    expect(res).to.eql({});
+  });
 });

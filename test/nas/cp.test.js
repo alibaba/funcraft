@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
+const mockdata = require('../commands/nas/mock-data');
 const writeFile = util.promisify(fs.writeFile);
 
 const sinon = require('sinon');
@@ -40,29 +41,29 @@ describe('nas cp test', () => {
   it('local path cp to nas path test', async() => {
     
     const srcPath = filePath;
-    const dstPath = 'nas://fun-nas-test:/mnt/nas';
+    const dstPath = 'nas://fun-nas-test/mnt/nas';
     
-    await cpStub(srcPath, dstPath, false, localNasTmpDir);
+    await cpStub(srcPath, dstPath, false, localNasTmpDir, mockdata.nasId);
     const mntDir = path.posix.join('/', 'mnt', 'nas');
     const nasHttpTriggerPath = `/proxy/${constants.FUN_NAS_SERVICE_PREFIX}fun-nas-test/fun-nas-function/`;
-    assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false, localNasTmpDir);
+    assert.calledWith(upload, srcPath, mntDir, nasHttpTriggerPath, false, localNasTmpDir, mockdata.nasId);
     
   });
 
   it('src path undefined test', async () => {
     const srcPath = undefined;
-    const dstPath = 'nas://fun-nas-test:/mnt/nas';
+    const dstPath = 'nas://fun-nas-test/mnt/nas';
 
-    await cpStub(srcPath, dstPath, false, localNasTmpDir);
+    await cpStub(srcPath, dstPath, false, localNasTmpDir, mockdata.nasId);
     
     assert.notCalled(upload);
   });
 
   it('local src path is a empty dir test', async () => {
     const srcPath = localEmptyPath;
-    const dstPath = 'nas://fun-nas-test:/mnt/nas';
+    const dstPath = 'nas://fun-nas-test/mnt/nas';
     
-    await cpStub(srcPath, dstPath, true, localNasTmpDir);
+    await cpStub(srcPath, dstPath, true, localNasTmpDir, mockdata.nasId);
 
     assert.notCalled(upload);
     

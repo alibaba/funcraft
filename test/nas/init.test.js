@@ -23,10 +23,14 @@ describe('test fun nas init', () => {
   const fs = {
     pathExists: sandbox.stub()
   };
+  const request = {
+    statsRequest: sandbox.stub()
+  };
   const nasInitStub = proxyquire('../../lib/nas/init', {
     '../deploy/deploy-by-tpl': deploy, 
     '../nas': nas, 
-    'fs-extra': fs
+    'fs-extra': fs, 
+    './request': request
   });
   beforeEach(() => {
 
@@ -36,7 +40,18 @@ describe('test fun nas init', () => {
       ACCESS_KEY_ID: 'ACCESS_KEY_ID',
       ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET'
     });
-
+    request.statsRequest.returns({
+      headers: 200, 
+      data: {
+        path: '/mnt/nas',
+        isExist: true,
+        isDir: true,
+        isFile: false, 
+        UserId: 100, 
+        GroupId: 100, 
+        mode: 123
+      }
+    });
   }); 
 
   afterEach(() => {

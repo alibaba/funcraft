@@ -4,6 +4,7 @@
 const expect = require('expect.js');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const mockdata = require('./mock-data');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
@@ -12,7 +13,8 @@ const rmNasFile = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
-  detectTplPath: sandbox.stub().returns('/template.yml')
+  detectTplPath: sandbox.stub(), 
+  getTpl: sandbox.stub()
 };
 
 const rmStub = proxyquire('../../../lib/commands/nas/rm', {
@@ -23,21 +25,26 @@ const rmStub = proxyquire('../../../lib/commands/nas/rm', {
 
 describe('command rm test', () => {
   const options = 
-    {
-      recursive: true, 
-      force: true
-    };
-
+  {
+    recursive: true, 
+    force: true
+  };
+  
+  beforeEach(() => {
+    tpl.detectTplPath.returns('/template.yml');
+    tpl.getTpl.returns(mockdata.tpl);
+  });
   afterEach(() => {
     sandbox.reset();
   });
     
   it('valid nas path', async () => {
-    const nasPath = 'nas://demo:/mnt/nas';
+    const nasPath = `nas://${mockdata.serviceName}/mnt/nas`;
 
     await rmStub(nasPath, options);
     const mntDir = path.posix.join('/', 'mnt', 'nas');
-    assert.calledWith(rmNasFile, 'demo', mntDir, options.recursive, options.force);
+    
+    assert.calledWith(rmNasFile, mockdata.serviceName, mntDir, options.recursive, options.force, mockdata.nasId);
   });
 
   it('invalid nas path', async () => {

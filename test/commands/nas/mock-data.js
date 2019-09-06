@@ -1,8 +1,8 @@
 'use strict';
 
 const nasConfig = {
-  UserId: 10003,
-  GroupId: 10003,
+  UserId: 1000,
+  GroupId: 1000,
   MountPoints: [{
     ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
     MountDir: '/mnt/nas'
@@ -32,10 +32,15 @@ const tpl = {
     }
   }
 };
-
+const nasId = 
+{
+  UserId: 1000,
+  GroupId: 1000
+};
 module.exports = {
   nasConfig, 
   tpl, 
   vpcConfig, 
-  serviceName
+  serviceName, 
+  nasId
 };
