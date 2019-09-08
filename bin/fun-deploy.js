@@ -22,6 +22,8 @@ program
 
   .option('-t, --template [template]', 'path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
+  .option('--use-ros', 'deploy resources using ros')
+  .option('--stack-name <stackName>', 'the name of the ros stack')
   .parse(process.argv);
 
 
@@ -34,7 +36,9 @@ if (program.args.length > 1) {
 const context = {
   resourceName: program.args[0],
   onlyConfig: program.onlyConfig || false,
-  template: program.template
+  template: program.template,
+  useRos: program.useRos,
+  stackName: program.stackName
 };
 
 notifier.notify();
