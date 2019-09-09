@@ -355,6 +355,12 @@ describe('deploy', () => {
       description: 'api group for function compute'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
+      allowSignatureMethod: undefined,
+      appCodeAuthType: undefined,
+      disableInternet: undefined,
+      errorCodeSamples: undefined,
+      forceNonceCheck: undefined,
+      webSocketApiType: undefined,
       apiName: 'connectid',
       auth: {
         config: {
@@ -674,6 +680,12 @@ describe('deploy', () => {
       name: 'apigw_fc'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
+      allowSignatureMethod: undefined,
+      appCodeAuthType: undefined,
+      disableInternet: undefined,
+      errorCodeSamples: undefined,
+      forceNonceCheck: undefined,
+      webSocketApiType: undefined,
       apiName: 'pythonhello',
       auth: {
         config: undefined,
@@ -729,6 +741,12 @@ describe('deploy', () => {
       name: 'maasapi'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
+      allowSignatureMethod: undefined,
+      appCodeAuthType: undefined,
+      disableInternet: undefined,
+      errorCodeSamples: undefined,
+      forceNonceCheck: undefined,
+      webSocketApiType: undefined,
       description: undefined,
       apiName: 'segment_post',
       auth: { config: undefined, type: undefined },
@@ -818,6 +836,12 @@ describe('deploy', () => {
       name: 'wechat_group'
     });
     assert.calledWith(deploySupport.makeApi.firstCall, {}, {
+      allowSignatureMethod: undefined,
+      appCodeAuthType: undefined,
+      disableInternet: undefined,
+      errorCodeSamples: undefined,
+      forceNonceCheck: undefined,
+      webSocketApiType: undefined,
       apiName: 'wechat_get',
       auth: { config: undefined, type: undefined },
       functionName: 'get',
@@ -859,6 +883,12 @@ describe('deploy', () => {
         nasConfig: undefined
       });
     assert.calledWith(deploySupport.makeApi.secondCall, {}, {
+      allowSignatureMethod: undefined,
+      appCodeAuthType: undefined,
+      disableInternet: undefined,
+      errorCodeSamples: undefined,
+      forceNonceCheck: undefined,
+      webSocketApiType: undefined,
       apiName: 'wechat_post',
       auth: { config: undefined, type: undefined },
       functionName: 'post',
@@ -939,6 +969,12 @@ describe('deploy', () => {
       name: 'apigw_fc'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
+      allowSignatureMethod: undefined,
+      appCodeAuthType: undefined,
+      disableInternet: undefined,
+      errorCodeSamples: undefined,
+      forceNonceCheck: undefined,
+      webSocketApiType: undefined,
       apiName: 'initialize',
       auth: {
         config: undefined,
