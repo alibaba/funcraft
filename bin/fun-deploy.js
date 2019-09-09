@@ -22,8 +22,8 @@ program
 
   .option('-t, --template [template]', 'path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
-  .option('--use-ros', 'deploy resources using ros')
-  .option('--stack-name <stackName>', 'the name of the ros stack')
+  .option('--use-ros', 'deploy resources using ROS')
+  .option('--stack-name <stackName>', 'the name of the ROS stack')
   .parse(process.argv);
 
 
