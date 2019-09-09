@@ -7,11 +7,13 @@ const proxyquire = require('proxyquire');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const path = require('path');
+const mockdata = require('./mock-data');
 const lsNasFile = sandbox.stub();
 const validate = sandbox.stub();
 
 const tpl = {
-  detectTplPath: sandbox.stub().returns('/template.yml')
+  detectTplPath: sandbox.stub(), 
+  getTpl: sandbox.stub()
 };
 
 const lsStub = proxyquire('../../../lib/commands/nas/ls', {
@@ -26,21 +28,33 @@ describe('command ls test', () => {
       all: true, 
       long: true
     };
-
+  beforeEach(() => {
+    tpl.detectTplPath.returns('/template.yml');
+    tpl.getTpl.returns(mockdata.tpl);
+  });
+  
   afterEach(() => {
     sandbox.reset();
   });
     
   it('valid nas path', async () => {
-    const nasPath = 'nas://demo:/mnt/nas';
+    const nasPath = 'nas://demo/mnt/nas';
 
     await lsStub(nasPath, options);
     const mntDir = path.posix.join('/', 'mnt', 'nas');
     assert.calledWith(lsNasFile, 'demo', mntDir, options.all, options.long);
   });
 
+  it('valid nas path with short nasPath', async () => {
+    const nasPath = 'nas:///mnt/nas';
+
+    await lsStub(nasPath, options);
+    const mntDir = path.posix.join('/', 'mnt', 'nas');
+    assert.calledWith(lsNasFile, mockdata.serviceName, mntDir, options.all, options.long);
+  });
+
   it('invalid nas path', async () => {
-    const nasPath = '://demo://mnt/nas';
+    const nasPath = '://demo//mnt/nas';
     let err;
 
     try {

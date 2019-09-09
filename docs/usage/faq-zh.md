@@ -112,3 +112,23 @@ Resources:
 ![image.png](/figures/add_docker_file_sharing.png)
 
 **注**：更多信息请参考 [Docker For Mac](https://docs.docker.com/docker-for-mac/osxfs/)
+
+## Fun Nas Init && Fun Nas Sync && Fun Nas Rm
+
+### Warning: fun nas xxx: ${nasPath} has no '-w-' or '-wx' permission, this may cause permission problem, more information please refer to...
+
+原因: 用户挂载的 NAS 盘路径或操作的 NAS 盘路径 nasPath 没有修改权限（文件为 '-w-', 文件夹为 '-wx'），用户对 nasPath 的改动操作可能会产生权限问题，提示 "permission denied" 这类错误，具体可以通过 fun nas ls -l nas://${serviceName}${nasPath} 来查看相应权限。
+
+解决方法: 通过 ecs 挂载 NAS 后修改对应 NAS 目录的权限
+
+### Warning: fun nas xxx: UserId: xxx and GroupId: xxx in your NasConfig are mismatched with UserId: xxx and GroupId: xxx of ${nasPath}, which may cause permission problem, more information please refer to...
+
+原因: 用户挂载的 NAS 盘路径或操作的 NAS 盘路径 nasPath 的 UserId 和 GroupId 与用户在 template.yml 中 NasConfig 下设置的 UserId 和 GroupId 不一致，用户对 nasPath 作出改动操作可能会产生权限问题，提示 "permission denied" 这类错误，具体可以通过 fun nas ls -l nas://${serviceName}${nasPath} 来查看相应的权限和 UserId 和 GroupId。
+
+解决方法: 将 NasConfig 下的 UserId 和 GroupId 设置为 Warning 中提示的 NAS 盘路径的 UserId 和 GroupId。若 NasConfig 为 Auto ，则UserId 和 GroupId 默认为 10003 无法变更，若要对指定路径文件/文件夹进行变更操作，需要对 NasConfig 进行手工设置，填写具有足够权限的 UserId 和 GroupId。
+
+### Warning: fun nas xxx: UserId: xxx and GroupId: xxx have no '-w-' or '-wx' permission to ${nasPath}, which may cause permission problem, more information please refer to...
+
+原因: 用户挂载的 NAS 盘路径或操作的 NAS 盘路径 nasPath 的 UserId 和 GroupId 没有修改权限（文件为 '-w-', 文件夹为 '-wx'），用户对 nasPath 的改动操作可能会产生权限问题，提示 "permission denied" 这类错误，具体可以通过 fun nas ls -l nas://${serviceName}${nasPath} 来查看相应权限。
+
+解决方法: 这种情况下其他用户（除了上述的 UserId 和属于 GroupId 的 UserId 之外的 UserId）具有写权限，可以将 NasConfig 中的 UserId 改成前面描述的“其他用户”来避免权限问题。

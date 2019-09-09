@@ -14,12 +14,12 @@ describe('parseNasUri test', () => {
   const validNasPathResultMap = new Map();
   validNasPathResultMap.set('nas:///mnt/auto', {nasPath: '/mnt/auto', serviceName: ''});
   validNasPathResultMap.set('nas://:/mnt/auto', {nasPath: '/mnt/auto', serviceName: ''});
-  validNasPathResultMap.set('nas://service1:/mnt/auto', {nasPath: '/mnt/auto', serviceName: 'service1'});
-  validNasPathResultMap.set('nas://service1:/mnt', {nasPath: '/mnt', serviceName: 'service1'});
-  validNasPathResultMap.set('nas://service1:/home/', {nasPath: '/home/', serviceName: 'service1'});
-  validNasPathResultMap.set('nas://service1:/home/', {nasPath: '/home/', serviceName: 'service1'});
-  validNasPathResultMap.set('nas://service1:/home/1', {nasPath: '/home/1', serviceName: 'service1'});
-  validNasPathResultMap.set('nas://service1:/', {nasPath: '/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1/mnt/auto', {nasPath: '/mnt/auto', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1/mnt', {nasPath: '/mnt', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1/home/', {nasPath: '/home/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1/home/', {nasPath: '/home/', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1/home/1', {nasPath: '/home/1', serviceName: 'service1'});
+  validNasPathResultMap.set('nas://service1/', {nasPath: '/', serviceName: 'service1'});
   validNasPathResultMap.set('nas://service1:/tmp/', {nasPath: '/tmp/', serviceName: 'service1'});
   validNasPathResultMap.set('nas:///', {nasPath: '/', serviceName: ''});
 
