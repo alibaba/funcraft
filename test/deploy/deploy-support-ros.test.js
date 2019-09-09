@@ -1,4 +1,4 @@
-'use strcit';
+'use strict';
 
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
@@ -18,6 +18,7 @@ describe('test deploy support ros', () => {
   };
 
   let requestStub;
+  let restoreProcess;
 
   beforeEach(() => {
 
@@ -57,13 +58,13 @@ describe('test deploy support ros', () => {
     };
 
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
-      "PageNumber": 1,
-      "TotalCount": 3,
-      "PageSize": 50,
-      "Stacks": [
+      'PageNumber': 1,
+      'TotalCount': 3,
+      'PageSize': 50,
+      'Stacks': [
         {
-          "StackId": stackId,
-          "StackName": stackName
+          'StackId': stackId,
+          'StackName': stackName
         }
       ]
     });
@@ -81,7 +82,7 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('CreateChangeSet', updateParams, requestOption).resolves({
       ChangeSetId: 'changeSetId'
-    })
+    });
 
     const execChangeSetParams = {
       RegionId: 'cn-beijing', 
