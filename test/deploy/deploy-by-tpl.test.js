@@ -683,18 +683,30 @@ describe('deploy', () => {
       allowSignatureMethod: 'HmacSHA256',
       appCodeAuthType: 'HEADER_QUERY',
       disableInternet: true,
-      errorCodeSamples: { code: 400, description: 'error description', message: 'error' },
+      errorCodeSamples: [
+        {
+          code: 400, description: 'error description', message: 'error' 
+        }, 
+        {
+          code: 300, description: 'error description', message: 'error'
+        }
+      ],      
       forceNonceCheck: false,
       webSocketApiType: 'REGISTER',
       apiName: 'pythonhello',
       auth: {
-        config: undefined,
-        type: undefined
+        config: { idTokenParamName: 'token', openIdApiType: 'BUSINESS' },
+        type: 'APPOPENID'
       },
       description: undefined,
       functionName: 'hello',
       method: 'get',
-      requestParameters: undefined,
+      requestParameters: [{
+        apiParameterName: 'token',
+        location: 'Path',
+        parameterType: 'String',
+        required: 'REQUIRED'
+      }],
       requestPath: '/python/hello',
       roleArn: `acs:ram::123:role/aliyunfcgeneratedrole-fc`,
       serviceName: 'pythondemo',
