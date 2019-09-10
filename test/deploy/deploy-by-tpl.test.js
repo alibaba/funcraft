@@ -680,12 +680,12 @@ describe('deploy', () => {
       name: 'apigw_fc'
     });
     assert.calledWith(deploySupport.makeApi, {}, {
-      allowSignatureMethod: undefined,
-      appCodeAuthType: undefined,
-      disableInternet: undefined,
-      errorCodeSamples: undefined,
-      forceNonceCheck: undefined,
-      webSocketApiType: undefined,
+      allowSignatureMethod: 'HmacSHA256',
+      appCodeAuthType: 'HEADER_QUERY',
+      disableInternet: true,
+      errorCodeSamples: { code: 400, description: 'error description', message: 'error' },
+      forceNonceCheck: false,
+      webSocketApiType: 'REGISTER',
       apiName: 'pythonhello',
       auth: {
         config: undefined,
