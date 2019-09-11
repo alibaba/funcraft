@@ -15,14 +15,13 @@ unit-test:
 test: lint unit-test
 
 install: 
-	npm install
+	env -i npm install
 
 clean: 
 	rm -rf ./dist
 	
 build: clean install
-	env
-	npm run build
+	env -i npm run build
 	mkdir -p ./dist/.fun/root
 	cp -r ./.fun/root/ ./dist/.fun/root
 	git log -n 1 --pretty="format:%h" -- . > ./dist/VERSION
