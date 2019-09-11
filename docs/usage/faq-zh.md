@@ -64,6 +64,12 @@ Resources:
 
 注意，`Role` 与 `Polices` 不能同时使用，如果配置了 `Role`，则 `Polices` 会被忽略。
 
+### May be UserId and GroupId in NasConfig don't have enough permission, more information please refer to https://github.com/alibaba/funcraft/blob/master/docs/usage/faq-zh.md
+
+原因: 配置了 NAS 的服务在部署时会自动部署 nas-dir-checker 函数，用于检查 NAS 端挂载的目录是否存在，若不存在则创建远端 NAS 目录，nas-dir-checker 函数的 NasConfig 复用了用户的服务，因此若用户在 NasConfig 中配置的 UserId 和 GroupId 不具有创建远端 NAS 相应目录的权限，或者远端 NAS 相应目录的上层目录无 'w' 或 'x' 权限，则在创建目录过程中会提示 'permission denied' 这类错误。
+
+解决方法: 通过 ecs 挂载 NAS 后修改对应 NAS 目录的权限，或者查看相应目录的 UserId 和 GroupId 并依此修改 NasConfig 中的 UserId 和 GroupId。
+
 ## Fun Local
 
 ### Error starting userland proxy: mkdir /port/tcp:0.0.0.0:80:tcp:172.17.0.2:5000: input/output error.

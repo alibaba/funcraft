@@ -37,7 +37,7 @@ describe('ls test', () => {
 
   it('ls function test', async () => {
     await ls(serviceName, nasPath, isAllOpt, isLongOpt);
-    const nasHttpTriggerPath = await getNasHttpTriggerPath(serviceName);
+    const nasHttpTriggerPath = getNasHttpTriggerPath(serviceName);
     const cmd = `ls -a -l ${nasPath}`;
     assert.calledWith(request.sendCmdRequest, nasHttpTriggerPath, cmd);
     

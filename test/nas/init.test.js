@@ -21,16 +21,21 @@ describe('test fun nas init', () => {
     convertNasConfigToNasMappings: sandbox.stub()
   };
   const fs = {
-    pathExists: sandbox.stub()
+    pathExists: sandbox.stub(),
+    readFile: sandbox.stub()
   };
   const request = {
     statsRequest: sandbox.stub()
+  };
+  const support = {
+    isNasServerStale: sandbox.stub()
   };
   const nasInitStub = proxyquire('../../lib/nas/init', {
     '../deploy/deploy-by-tpl': deploy, 
     '../nas': nas, 
     'fs-extra': fs, 
-    './request': request
+    './request': request, 
+    './support': support
   });
   beforeEach(() => {
 
@@ -52,6 +57,9 @@ describe('test fun nas init', () => {
         mode: 123
       }
     });
+    support.isNasServerStale.returns(true);
+    fs.pathExists.returns(true);
+    fs.readFile.returns(Buffer.from('123'));
   }); 
 
   afterEach(() => {
@@ -65,7 +73,6 @@ describe('test fun nas init', () => {
     const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + serviceName;
     const nasFunctionName = constants.FUN_NAS_FUNCTION;
     
-    fs.pathExists.returns(true);
     const zipCodePath = path.resolve(__dirname, '../../lib/utils/fun-nas-server/dist/fun-nas-server.zip');
     
     const nasServiceRes = {
