@@ -23,3 +23,27 @@ Resources:
             x-aliyun-apigateway-api-name: pythonhello
             x-aliyun-apigateway-fc:
               arn: acs:fc:::services/${pythondemo.Arn}/functions/${hello.Arn}/
+
+
+            x-aliyun-apigateway-request-parameters:
+              - apiParameterName: 'token'
+                location: 'Path'
+                parameterType: 'String'
+                required: 'REQUIRED'
+            
+            x-aliyun-apigateway-auth-type: 'APPOPENID'
+            x-aliyun-apigateway-open-id-connect-config:
+              idTokenParamName: 'token'
+              openIdApiType: 'BUSINESS'
+            x-aliyun-apigateway-force-nonce-check: false
+            x-aliyun-apigateway-app-code-auth-type: HEADER_QUERY
+            x-aliyun-apigateway-allow-signature-method: HmacSHA256
+            x-aliyun-apigateway-disable-internet: true
+            x-aliyun-apigateway-websocket-api-type: REGISTER
+            x-aliyun-apigateway-error-code-sample:
+              - code: 400
+                message: error
+                description: error description
+              - code: 300
+                message: error
+                description: error description
