@@ -16,7 +16,6 @@ test: lint unit-test
 
 install: 
 	npm install
-	$(FUN) install
 
 clean: 
 	rm -rf ./dist
