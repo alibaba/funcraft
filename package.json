@@ -47,7 +47,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "git+https://github.com/aliyun/fc-builders.git",
+    "@alicloud/fc-builders": "git://github.com/aliyun/fc-builders.git",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",

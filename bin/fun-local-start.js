@@ -22,16 +22,16 @@ program
     For compiled languages such as java, we recommend you set CodeUri to the compiled or packaged location.
     Once compiled or packaged result changed, the modified code will take effect immediately without restarting the http server.`
   )
-  .usage('[options]')
+  .usage('[options] <[service/]function>')
   .option('-d, --debug-port <port>', 'specify the sandbox container starting in debug' +
     ' mode, and exposing this port on localhost')
   .option('-c, --config <ide/debugger>', 
     'select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
   .parse(process.argv);
 
-if (program.args.length) {
+if (program.args.length > 1) {
   console.error();
-  console.error("  error: unexpected argument `%s'", program.args[0]);
+  console.error("  error: unexpected argument `%s'", program.args[1]);
   program.help();
 }
 
@@ -40,7 +40,7 @@ notifier.notify();
 getVisitor().then(visitor => {
   visitor.pageview('/fun/local/start').send();
 
-  require('../lib/commands/local/start')(program)
+  require('../lib/commands/local/start')(program, program.args[0])
     .then(() => {
       visitor.event({
         ec: 'local start',
