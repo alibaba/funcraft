@@ -48,7 +48,7 @@ describe('fun nas sync test', () => {
     
     const options = {
       service: undefined, 
-      mntDirs: undefined
+      mountDir: undefined
     };
 
     await syncStub(options);
@@ -59,7 +59,7 @@ describe('fun nas sync test', () => {
   it('sync test with service', async () => {
     const options = {
       service: mockdata.serviceName, 
-      mntDirs: undefined
+      mountDir: ['/mnt']
     };
     await syncStub(options);
     const localNasDir = path.join('/', 'demo', '.fun', 'nas', '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');

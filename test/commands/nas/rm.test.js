@@ -16,11 +16,14 @@ const tpl = {
   detectTplPath: sandbox.stub(), 
   getTpl: sandbox.stub()
 };
-
+const init = {
+  deployNasService: sandbox.stub()
+};
 const rmStub = proxyquire('../../../lib/commands/nas/rm', {
   '../../validate/validate': validate,
   '../../nas/rm': rmNasFile,
-  '../../tpl': tpl
+  '../../tpl': tpl, 
+  '../../nas/init': init
 });
 
 describe('command rm test', () => {

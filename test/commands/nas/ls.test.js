@@ -15,11 +15,14 @@ const tpl = {
   detectTplPath: sandbox.stub(), 
   getTpl: sandbox.stub()
 };
-
+const init = {
+  deployNasService: sandbox.stub()
+};
 const lsStub = proxyquire('../../../lib/commands/nas/ls', {
   '../../validate/validate': validate,
   '../../nas/ls': lsNasFile,
-  '../../tpl': tpl
+  '../../tpl': tpl, 
+  '../../nas/init': init
 });
 
 describe('command ls test', () => {

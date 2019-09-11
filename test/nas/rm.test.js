@@ -47,7 +47,7 @@ describe('ls test', () => {
 
   it('rm function test', async () => {
     await rm(serviceName, nasPath, isRecursiveOpt, isForceOpt, mockdata.nasId);
-    const nasHttpTriggerPath = await getNasHttpTriggerPath(serviceName);
+    const nasHttpTriggerPath = getNasHttpTriggerPath(serviceName);
     const cmd = `rm -R -f ${nasPath}`;
     assert.calledWith(request.sendCmdRequest, nasHttpTriggerPath, cmd);
     

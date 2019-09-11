@@ -5,9 +5,20 @@ const path = require('path');
 const mockdata = require('../commands/nas/mock-data');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
+const assert = sandbox.assert;
 const expect = require('expect.js');
-const { getDefaultService, chunk, splitRangeBySize, checkWritePerm } = require('../../lib/nas/support');
+const proxyquire = require('proxyquire');
 
+const request = require('../../lib/nas/request');
+
+const requestStub = {
+  getVersion: sandbox.stub(), 
+  getNasConfig: sandbox.stub()
+};
+
+const supportStub = proxyquire('../../lib/nas/support', {
+  './request': requestStub
+});
 describe('getDefaultService test', () => {
   const tplWithEmptyResource = {
     ROSTemplateFormatVersion: '2015-09-01',
@@ -15,16 +26,16 @@ describe('getDefaultService test', () => {
     Resources: {}
   };
   it('tpl with only one service', async () => {
-    let res = await getDefaultService(mockdata.tpl);
+    let res = await supportStub.getDefaultService(mockdata.tpl);
     expect(res).to.eql(mockdata.serviceName);
   });
 
   it('tpl with none service', async () => {
     
     try {
-      getDefaultService(tplWithEmptyResource);
+      supportStub.getDefaultService(tplWithEmptyResource);
     } catch (error) {
-      expect(error).to.eql(new Error('There should be one and only one service in your template.[yml|yaml].'));
+      expect(error).to.eql(new Error('There should be one and only one service in your template.[yml|yaml] when ignoring service in nas path.'));
     }
   });
 });
@@ -34,17 +45,17 @@ describe('chunk test', () => {
     sandbox.restore();
   });
   it('empty arr', () => {
-    let res = chunk([], 1);
+    let res = supportStub.chunk([], 1);
     expect(res).to.eql([]);
   });
   it('not empty arr', () => {
-    let res = chunk([1, 2, 3], 2);
+    let res = supportStub.chunk([1, 2, 3], 2);
     expect(res).to.eql([[1, 2], [3]]);
   });
 
   it('0 step', () => {
     try {
-      chunk([1, 2, 3], 0);
+      supportStub.chunk([1, 2, 3], 0);
     } catch (error) {
       expect(error).to.eql(new Error('chunk step should not be 0'));
     }
@@ -57,17 +68,17 @@ describe('splitRangeBySize test', () => {
   });
 
   it('start > end', () => {
-    const res = splitRangeBySize(10, 1, 2);
+    const res = supportStub.splitRangeBySize(10, 1, 2);
     expect(res).to.be.empty;
   });
   it('start < end', () => {
     
-    const res = splitRangeBySize(1, 10, 4);
+    const res = supportStub.splitRangeBySize(1, 10, 4);
     expect(res).to.eql([{ start: 1, size: 4}, { start: 5, size: 4}, { start: 9, size: 1}]);
   });
   it('chunkSize === 0', () => {
     try {
-      splitRangeBySize(1, 10, 0);
+      supportStub.splitRangeBySize(1, 10, 0);
     } catch (error) {
       expect(error).to.eql(new Error('chunkSize of function splitRangeBySize should not be 0'));
     }
@@ -92,7 +103,7 @@ describe('checkWritePerm test', () => {
       UserId: -1, 
       GroupId: -1
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
 
     expect(res).to.eql(`${nasPath} not exist`);
   });
@@ -110,7 +121,7 @@ describe('checkWritePerm test', () => {
       UserId: 10, 
       GroupId: 10
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(`${nasPath} has no '-w-' or '-wx' permission, more information please refer to https://github.com/alibaba/funcraft/blob/master/docs/usage/faq-zh.md`);
   });
 
@@ -127,7 +138,7 @@ describe('checkWritePerm test', () => {
       UserId: 10, 
       GroupId: 10
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(`${nasPath} has no '-w-' or '-wx' permission, more information please refer to https://github.com/alibaba/funcraft/blob/master/docs/usage/faq-zh.md`);
   });
 
@@ -144,7 +155,7 @@ describe('checkWritePerm test', () => {
       UserId: 1, 
       GroupId: 1
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(`UserId: ${nasId.UserId} and GroupId: ${nasId.GroupId} in your NasConfig are mismatched with UserId: ${stats.UserId} and GroupId: ${stats.GroupId} of ${nasPath}, \
 which may cause permission problem, more information please refer to https://github.com/alibaba/funcraft/blob/master/docs/usage/faq-zh.md`);
   });
@@ -161,7 +172,7 @@ which may cause permission problem, more information please refer to https://git
       UserId: 10, 
       GroupId: 1
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(undefined);
   });
   it('groupId match', () => {
@@ -177,7 +188,7 @@ which may cause permission problem, more information please refer to https://git
       UserId: 1, 
       GroupId: 10
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(undefined);
   });
   it('file userId and groupId have no write permission', () => {
@@ -193,7 +204,7 @@ which may cause permission problem, more information please refer to https://git
       UserId: 10, 
       GroupId: 10
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(`UserId: ${stats.UserId} and GroupId: ${stats.GroupId} have no '-w-' or '-wx' permission to ${nasPath}, which may cause permission problem, \
 more information please refer to https://github.com/alibaba/funcraft/blob/master/docs/usage/faq-zh.md`);
   });
@@ -210,7 +221,7 @@ more information please refer to https://github.com/alibaba/funcraft/blob/master
       UserId: 10, 
       GroupId: 10
     };
-    const res = checkWritePerm(stats, nasId, nasPath);
+    const res = supportStub.checkWritePerm(stats, nasId, nasPath);
     expect(res).to.eql(`UserId: ${stats.UserId} and GroupId: ${stats.GroupId} have no '-w-' or '-wx' permission to ${nasPath}, which may cause permission problem, \
 more information please refer to https://github.com/alibaba/funcraft/blob/master/docs/usage/faq-zh.md`);
   });
@@ -229,9 +240,80 @@ more information please refer to https://github.com/alibaba/funcraft/blob/master
       GroupId: 10
     };
     try {
-      checkWritePerm(stats, nasId, nasPath);
+      supportStub.checkWritePerm(stats, nasId, nasPath);
     } catch (error) {
       expect(error).to.eql(new Error(`isFile and isDir attributes of ${nasPath} are true simultaneously`));
     }
+  });
+});
+
+describe('isSameVersion test', () => {
+  const nasHttpTriggerPath = request.getNasHttpTriggerPath(mockdata.serviceName);
+  beforeEach(() => {
+    
+    requestStub.getVersion.returns({
+      header: 200, 
+      data: {
+        curVersionId: '123'
+      }
+    });
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+  it('version not matched', async () => {
+    const res = await supportStub.isSameVersion(mockdata.serviceName, '321');
+    expect(res).to.eql(false);
+    
+    assert.calledWith(requestStub.getVersion, nasHttpTriggerPath);
+  });
+  it('version matched', async () => {
+    const res = await supportStub.isSameVersion(mockdata.serviceName, '123');
+    expect(res).to.eql(true);
+    assert.calledWith(requestStub.getVersion, nasHttpTriggerPath);
+  });
+});
+
+describe('isSameNasConfig test', () => {
+  beforeEach(() => {
+    
+    requestStub.getNasConfig.returns({
+      userId: 1000,
+      groupId: 1000,
+      mountPoints: [{
+        serverAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        mountDir: '/mnt/nas'
+      }]
+    });
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('config not matched', async() => {
+    const nasConig = {
+      UserId: 100,
+      GroupId: 100, 
+      MountPoints: [{
+        ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        MountDir: '/mnt/nas'
+      }]
+    };
+    const res = await supportStub.isSameNasConfig(mockdata.serviceName, nasConig);
+    expect(res).to.eql(false);
+    assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
+  });
+  it('config not matched', async() => {
+    const nasConig = {
+      UserId: 1000,
+      GroupId: 1000, 
+      MountPoints: [{
+        ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        MountDir: '/mnt/nas'
+      }]
+    };
+    const res = await supportStub.isSameNasConfig(mockdata.serviceName, nasConig);
+    expect(res).to.eql(true);
+    assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
   });
 });

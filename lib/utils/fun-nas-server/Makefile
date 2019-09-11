@@ -24,7 +24,8 @@ build: clean install
 	npm run build
 	mkdir -p ./dist/.fun/root
 	cp -r ./.fun/root/ ./dist/.fun/root
-
+	git log -n 1 --pretty="format:%h" -- . > ./dist/VERSION
+	
 dev: 
 	npm run dev
 	$(FUN) local start
