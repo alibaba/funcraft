@@ -15,7 +15,7 @@ unit-test:
 test: lint unit-test
 
 install: 
-	env -i npm install
+	env -i PATH="$(PATH)" npm install
 
 clean: 
 	rm -rf ./dist
