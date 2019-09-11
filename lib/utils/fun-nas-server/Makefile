@@ -16,12 +16,12 @@ test: lint unit-test
 
 install: 
 	npm install
-	npm install --only=dev
 
 clean: 
 	rm -rf ./dist
 	
 build: clean install
+	env
 	npm run build
 	mkdir -p ./dist/.fun/root
 	cp -r ./.fun/root/ ./dist/.fun/root
