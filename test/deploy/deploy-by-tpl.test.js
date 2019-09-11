@@ -83,7 +83,7 @@ describe('deploy service role ', () => {
   });
 
   it('police and vpc', async () => {
-    await deploy('nas');
+    await deploy('nas/read-write');
     assert.calledWith(ram.makeRole, '', true);
     assert.notCalled(ram.makePolicy);
     assert.notCalled(ram.makeAndAttachPolicy);
@@ -252,7 +252,7 @@ describe('deploy', () => {
   });
 
   it('deploy nas', async () => {
-    await deploy('nas');
+    await deploy('nas/read-write');
 
     assert.calledWith(fc.makeService, {
       description: 'fc nas test',
@@ -276,7 +276,7 @@ describe('deploy', () => {
     });
 
     assert.calledWith(fc.makeFunction.firstCall,
-      path.join(process.cwd(), 'examples', 'nas'), {
+      path.join(process.cwd(), 'examples', 'nas', 'read-write'), {
         codeUri: './read.js',
         description: undefined,
         functionName: 'readNas',
@@ -299,7 +299,7 @@ describe('deploy', () => {
       });
 
     assert.calledWith(fc.makeFunction.secondCall,
-      path.join(process.cwd(), 'examples', 'nas'), {
+      path.join(process.cwd(), 'examples', 'nas', 'read-write'), {
         codeUri: './write.py',
         description: undefined,
         functionName: 'writeNas',
