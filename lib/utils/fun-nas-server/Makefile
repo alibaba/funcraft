@@ -21,7 +21,7 @@ clean:
 	rm -rf ./dist
 	
 build: clean install
-	env -i npm run build
+	env -i PATH="$(PATH)" npm run build
 	mkdir -p ./dist/.fun/root
 	cp -r ./.fun/root/ ./dist/.fun/root
 	git log -n 1 --pretty="format:%h" -- . > ./dist/VERSION
