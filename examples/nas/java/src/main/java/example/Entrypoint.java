@@ -64,7 +64,6 @@ public class Entrypoint implements StreamRequestHandler, FunctionInitializer {
 
     public void initialize(Context context) throws IOException {
         Thread.currentThread().setContextClassLoader(nasLibClassloader);
-        System.out.println(((URLClassLoader) appObj.getClass().getClassLoader()).getURLs()[0].toString());
 
         try {
             Method initialize = appClass.getDeclaredMethod("initialize", Context.class);
