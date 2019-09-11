@@ -19,6 +19,11 @@ program
 
   .parse(process.argv);
 
+if (!program.args.length) {
+  console.error();
+  program.help();
+}
+
 if (program.args.length > 1) {
   console.error();
   console.error("  error: unexpected argument '%s'", program.args[1]);
