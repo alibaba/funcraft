@@ -31,7 +31,7 @@ test-coveralls:
 clean: 
 	@rm -rf output
 
-binary: clean
+binary: clean package-fun-nas-server
 	@script/binary.sh
 
 package-fun-nas-server:

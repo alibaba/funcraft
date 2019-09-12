@@ -3,3 +3,4 @@ dist/**
 node_modules/
 
 !dist/fun-nas-server.zip
+!dist/VERSION
