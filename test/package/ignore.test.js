@@ -36,7 +36,7 @@ describe('funignore', () => {
   });
 
   it('unignore env', () => {
-    var baseDir = path.join(__dirname, "unignore")
+    var baseDir = path.join(__dirname, 'unignore');
     var funignore = ignore(baseDir);
 
     expect(funignore(path.join(baseDir, '.env'))).not.to.be.ok();
