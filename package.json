@@ -71,7 +71,6 @@
     "dockerode": "^2.5.8",
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
-    "findit2": "^2.2.3",
     "fs-extra": "^8.1.0",
     "get-stdin": "^6.0.0",
     "git-ignore-parser": "0.0.2",
