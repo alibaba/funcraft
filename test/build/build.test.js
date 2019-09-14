@@ -78,7 +78,7 @@ describe('test buildFunction', () => {
 
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(false);
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -113,7 +113,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -150,7 +150,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -187,7 +187,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -237,7 +237,7 @@ describe('test buildFunction', () => {
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
     
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
