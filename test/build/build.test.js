@@ -256,35 +256,20 @@ describe('test buildFunction', () => {
     const funfilePath = path.join(codeUri, 'Funfile');
     const funymlPath = path.join(codeUri, 'fun.yml');
     const dockerFilePath = path.join(codeUri, '.Funfile.generated.dockerfile');
-    const artifactDir = path.join(projectRoot, '.fun', 'build', 'artifacts', serviceName, functionName);
 
     const pathExistsStub = sandbox.stub(fs, 'pathExists');
     pathExistsStub.withArgs(codeUri).resolves(true);
     pathExistsStub.withArgs(funymlPath).resolves(true);
     pathExistsStub.withArgs(funfilePath).resolves(false);
 
-
     const useDocker = false;
-
-    const buildFunc = {
-      functionName,
-      functionRes,
-      serviceName,
-      serviceRes
-    };
-
-    const buildFuncs = [buildFunc];
-    const skippedBuildFuncs = [];
-
     const Builder = fcBuilders.Builder;
-
     const mockedTaskFlowConstructor = sandbox.stub();
-
     const taskFlowStartStub = sandbox.stub();
+
     mockedTaskFlowConstructor.returns({
       start: taskFlowStartStub
     });
-
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
