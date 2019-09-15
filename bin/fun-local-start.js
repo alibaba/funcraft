@@ -27,6 +27,8 @@ program
     ' mode, and exposing this port on localhost')
   .option('-c, --config <ide/debugger>', 
     'select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
+  .option('--debugger-path <debuggerPath>', 'the path of the debugger on the host')
+  .option('--debug-args <debugArgs>', 'additional parameters that will be passed to the debugger')
   .parse(process.argv);
 
 if (program.args.length > 1) {

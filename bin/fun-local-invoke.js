@@ -26,6 +26,8 @@ program
     `a file containing event data passed to the function during
                              invoke, If this option is not specified, it defaults to
                              reading event from stdin`)
+  .option('--debugger-path <debuggerPath>', 'the path of the debugger on the host')
+  .option('--debug-args <debugArgs>', 'additional parameters that will be passed to the debugger')
   .option('--tmp-dir <tmpDir>', `The temp directory mounted to /tmp , default to './.fun/tmp/invoke/{service}/{function}/'`)
 
   .parse(process.argv);
