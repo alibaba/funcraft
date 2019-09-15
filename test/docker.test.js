@@ -287,7 +287,7 @@ describe('test resolveNasConfigToMounts', () => {
 
   it('test NasConfig: Auto', async () => {
     const nasConfig = 'Auto';
-    
+
     const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, projectDir);
 
     expect(mount).to.eql([{
@@ -311,7 +311,7 @@ describe('test docker run', async () => {
 
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
-    sandbox.stub(DockerCli.prototype, 'getContainer').returns({ 
+    sandbox.stub(DockerCli.prototype, 'getContainer').returns({
       'stop': sandbox.stub(),
       'inspect': sandbox.stub().resolves({})
     });
@@ -520,7 +520,7 @@ describe('test isDockerToolBox', () => {
 
   beforeEach(() => {
 
-    sandbox.stub(DockerCli.prototype, 'info').resolves({'Labels': ['provider=virtualbox']});
+    sandbox.stub(DockerCli.prototype, 'info').resolves({ 'Labels': ['provider=virtualbox'] });
   });
 
   afterEach(() => {
@@ -528,8 +528,20 @@ describe('test isDockerToolBox', () => {
   });
 
   (isWin ? it : it.skip)('test isDockerToolBox', async () => {
-  
+
     const result = await docker.isDockerToolBox();
     expect(result).to.be(true);
+  });
+});
+
+describe('test resolveDebuggerPathToMount', () => {
+  it('test resolveDebuggerPathToMount', async () => {
+    const mount = await docker.resolveDebuggerPathToMount('/path');
+    expect(mount).to.eql({
+      Type: 'bind',
+      Source: path.resolve('/path'),
+      Target: '/tmp/debugger_files',
+      ReadOnly: false
+    });
   });
 });
