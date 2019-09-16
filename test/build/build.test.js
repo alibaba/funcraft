@@ -15,14 +15,13 @@ let build = require('../../lib/build/build');
 const uuid = require('uuid');
 const util = require('util');
 const nas = require('../../lib/nas');
-
 const assert = sandbox.assert;
-
+const expect = require('expect.js');
 const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const { tpl, 
+const { tpl,
   serviceName,
   functionName,
   serviceRes,
@@ -78,7 +77,7 @@ describe('test buildFunction', () => {
 
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(false);
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -110,10 +109,10 @@ describe('test buildFunction', () => {
       start: taskFlowStartStub
     });
 
-    sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -147,10 +146,10 @@ describe('test buildFunction', () => {
       start: taskFlowStartStub
     });
 
-    sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -184,10 +183,10 @@ describe('test buildFunction', () => {
       start: taskFlowStartStub
     });
 
-    sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
@@ -233,12 +232,12 @@ describe('test buildFunction', () => {
       start: taskFlowStartStub
     });
 
-    sandbox.stub(Builder, 'detectTaskFlow').resolves([ mockedTaskFlowConstructor ]);
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, verbose);
-    
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
+
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
@@ -249,6 +248,40 @@ describe('test buildFunction', () => {
     assert.calledWith(docker.buildImage, codeUri, dockerFilePath, sinon.match.string);
     assert.calledWith(docker.copyFromImage, 'imageTag', '/code/.', artifactDir);
     assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
+  });
+
+  it.only('test with buildFunction with install stage and only fun.yml, but force using docker', async function () {
+
+    const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
+    const funfilePath = path.join(codeUri, 'Funfile');
+    const funymlPath = path.join(codeUri, 'fun.yml');
+    const dockerFilePath = path.join(codeUri, '.Funfile.generated.dockerfile');
+
+    const pathExistsStub = sandbox.stub(fs, 'pathExists');
+    pathExistsStub.withArgs(codeUri).resolves(true);
+    pathExistsStub.withArgs(funymlPath).resolves(true);
+    pathExistsStub.withArgs(funfilePath).resolves(false);
+
+    const useDocker = false;
+    const Builder = fcBuilders.Builder;
+    const mockedTaskFlowConstructor = sandbox.stub();
+    const taskFlowStartStub = sandbox.stub();
+
+    mockedTaskFlowConstructor.returns({
+      start: taskFlowStartStub
+    });
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
+    sandbox.stub(builder, 'buildInDocker').resolves({});
+    sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
+
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install'], verbose);
+
+    assert.notCalled(taskflow.isOnlyDefaultTaskFlow);
+    assert.calledWith(parser.funymlToFunfile, funymlPath);
+    assert.calledWith(parser.funfileToDockerfile, funfilePath);
+    assert.calledWith(docker.buildImage, codeUri, dockerFilePath, sinon.match.string);
+    assert.calledWith(docker.copyFromImage, 'imageTag', '/code/.', codeUri);
+    assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, codeUri, verbose);
   });
 });
 
@@ -301,6 +334,60 @@ describe('test copyNasArtifact', () => {
     assert.calledWith(nas.convertNasConfigToNasMappings, rootArtifactsDir, serviceResWithNasConfig.Properties.NasConfig, serviceName);
 
     assert.calledWith(docker.copyFromImage, 'imageTag', 'remoteNasDir/.', 'localNasDir');
-    
+  });
+});
+
+describe('test getOrConvertFunfile', () => {
+  let randomDir;
+
+  beforeEach(async () => {
+    randomDir = path.join(tempDir, uuid.v4());
+    await fs.mkdirp(randomDir);
+  });
+
+  afterEach(async () => {
+    await fs.remove(randomDir);
+  });
+
+  it('test no funyml', async () => {
+    const funfilePath = await build.getOrConvertFunfile(randomDir);
+    expect(funfilePath).to.be(null);
+  });
+
+  it('test exist funyml', async () => {
+    const funymlPath = path.join(randomDir, 'fun.yml');
+    const funfilePath = path.join(randomDir, 'Funfile');
+
+    await fs.writeFile(funymlPath, `runtime: python3
+tasks:
+  - apt: libzbar0
+  - shell: ln -sf libzbar.so.0.2.0 libzbar.so
+    cwd: /code/.fun/root/usr/lib
+  - pip: Pillow
+  - pip: pyzbar`);
+
+    const p = await build.getOrConvertFunfile(randomDir);
+
+    expect(p).to.eql(funfilePath);
+
+    expect(await fs.exists(funfilePath)).to.be(true);
+    const funfileContent = await fs.readFile(funfilePath, 'utf8');
+    expect(funfileContent).to.eql(`RUNTIME python3
+COPY . /code
+WORKDIR /code
+RUN fun-install apt-get install libzbar0
+RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
+RUN fun-install pip install Pillow
+RUN fun-install pip install pyzbar`);
+  });
+
+  it('test exist funfile', async () => {
+    const funfilePath = path.join(randomDir, 'Funfile');
+
+    await fs.writeFile(funfilePath, `RUNTIME python3`);
+
+    const p = await build.getOrConvertFunfile(randomDir);
+
+    expect(p).to.eql(funfilePath);
   });
 });

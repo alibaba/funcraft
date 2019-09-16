@@ -40,6 +40,7 @@ program
   .option('-f, --function <[service/]function>', `Specify which function to execute installation task.`)
   .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString(['dotnetcore2.1'])}`)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', (e, envs) => (envs.push(e), envs), [])
+  .option('-d, --use-docker', 'Use docker container to install function dependencies')
   .option('--save', 'add task to fun.yml file.')
   .option('-p, --package-type <type>', 'avaliable package type option: pip, apt.')
   .arguments('[packageNames...]')
@@ -56,14 +57,9 @@ program
     opts.verbose = parseInt(process.env.FUN_VERBOSE) > 0;
     opts.env = convertEnvs(options.env);
 
-
     install(packageNames, opts).then(() => {
-
       autoExitOnWindows();
-
     }).catch(handler);
-
-
   });
 
 program
@@ -74,25 +70,21 @@ program
 
       visitor.pageview('/fun/install/init').send();
       init().then((runtime) => {
-
         visitor.event({
           ec: 'install',
           ea: `init ${runtime}`,
           el: 'success',
           dp: '/fun/install/init'
         }).send();
-
       }).catch((error) => {
-
         visitor.event({
           ec: 'install',
           ea: `init`,
           el: 'error',
           dp: '/fun/install/init'
         }).send();
-
+        
         handler(error);
-
       });
     });
   });
@@ -214,7 +206,8 @@ if (!program.args.length) {
     visitor.pageview('/fun/installAll').send();
 
     installAll(program.function, {
-      verbose: parseInt(process.env.FUN_VERBOSE) > 0
+      verbose: parseInt(process.env.FUN_VERBOSE) > 0,
+      useDocker: program.useDocker
     }).then(() => {
       visitor.event({
         ec: 'installAll',
