@@ -12,9 +12,9 @@ program
   .name('fun package')
   .usage('[options]')
   .description('packages the local artifacts to oss. In order that you can deploy your application directly through a template file') 
-  .option('-t, --template <template>', 'the template file path')
-  .option('-b, --oss-bucket <bucket>', 'the name of the oss bucket where Fun uploads local artifacts')
-  .option('-o, --output-template-file <filename>', 'the output path of the packaged template file')
+  .option('-t, --template <template>', 'The template file path')
+  .option('-b, --oss-bucket <bucket>', 'The name of the oss bucket where Fun uploads local artifacts')
+  .option('-o, --output-template-file <filename>', 'The output path of the packaged template file')
   .parse(process.argv);
 
 if (program.args.length > 1) {

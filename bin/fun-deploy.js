@@ -20,10 +20,10 @@ program
 
   with '--only-config' parameter, will only update resource config without updating the function code`)
 
-  .option('-t, --template [template]', 'path of fun template file.')
+  .option('-t, --template [template]', 'The path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
-  .option('--use-ros', 'deploy resources using ROS')
-  .option('--stack-name <stackName>', 'the name of the ROS stack')
+  .option('--use-ros', 'Deploy resources using ROS')
+  .option('--stack-name <stackName>', 'The name of the ROS stack')
   .parse(process.argv);
 
 

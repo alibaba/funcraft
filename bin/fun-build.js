@@ -13,7 +13,7 @@ program
   .usage('[options] [[service/]function]')
   .description('Build the dependencies.')
   .option('-d, --use-docker', 'Use docker container to build functions')
-  .option('-t, --template [template]', 'path of fun template file.')
+  .option('-t, --template [template]', 'The path of fun template file.')
   .parse(process.argv);
 
 if (program.args.length > 1) {

@@ -17,17 +17,17 @@ test serverless applications locally, and deploy them to the Alibaba Cloud.`)
 
   // The commander will try to search the executables in the directory of the entry script
   // (like ./examples/pm) with the name program-command.
-  .command('config', 'configure the fun')
-  .command('init', 'initialize a new fun project')
-  .command('install', 'install dependencies which are described in fun.yml')
-  .command('build', 'build the dependencies')
-  .command('local', 'run your serverless application locally')
-  .command('edge', 'run your serverless application at edge')
-  .command('validate', 'validate a fun template')
-  .command('deploy', 'deploy a fun application')
-  .command('nas', 'operate NAS file system')
-  .command("package", 'package a Function Compute application')
-  .command('invoke', 'remote invoke function');
+  .command('config', 'Configure the fun')
+  .command('init', 'Initialize a new fun project')
+  .command('install', 'Install dependencies which are described in fun.yml')
+  .command('build', 'Build the dependencies')
+  .command('local', 'Run your serverless application locally')
+  .command('edge', 'Run your serverless application at edge')
+  .command('validate', 'Validate a fun template')
+  .command('deploy', 'Deploy a fun application')
+  .command('nas', 'Operate NAS file system')
+  .command("package", 'Package a Function Compute application')
+  .command('invoke', 'Remote invoke function');
 // set default verbose value for subcommand.
 process.env.FUN_VERBOSE = 0;
 
