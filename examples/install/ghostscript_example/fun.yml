@@ -1,3 +1,13 @@
 runtime: python3
 tasks:
+  - name: workaround for update-gsfontmap
+    shell: >-
+      mkdir -p /code/.fun/root/etc/ghostscript/cidfmap.d/
+      && mkdir -p /code/.fun/root/etc/ghostscript/fontmap.d/
+      && mkdir -p /etc/ghostscript/
+      && mkdir -p /var/lib/ghostscript/
+      && mkdir -p /code/.fun/root/var/lib/ghostscript/fonts
+      && ln -s /code/.fun/root/etc/ghostscript/cidfmap.d /etc/ghostscript/
+      && ln -s /code/.fun/root/etc/ghostscript/fontmap.d /etc/ghostscript/
+      && ln -s /code/.fun/root/var/lib/ghostscript/fonts /var/lib/ghostscript/
   - apt: ghostscript
