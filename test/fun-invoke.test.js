@@ -70,6 +70,25 @@ describe('fun-invoke test', () => {
     })(invokeName, options);
   }
 
+
+  it('fun invoke without invokeName, default first function in tpl', async () => {
+
+    tpl.getTpl.returns(mockData.tpl);
+    service.getTriggerMetas.returns({});
+    await invokeFuntion(undefined, {
+      event: '',
+      invocationType: 'Sync'
+
+    });
+
+    assert.calledWith(fc.invokeFunction, {
+      serviceName: 'localdemo',
+      functionName: 'python3',
+      event: '',
+      invocationType: 'Sync'
+    });
+  });
+
   it('serviceName/functionName and event is empty stirng and uppercase Sync', async () => {
 
     service.getTriggerMetas.returns({});
