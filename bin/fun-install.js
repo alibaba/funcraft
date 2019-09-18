@@ -130,6 +130,7 @@ program
   .option('-i, --interactive', 'run as interactive mode. Keep STDIN open and allocate a pseudo-TTY when in a interactive shell.', false)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', [])
   .option('-c, --cmd <cmd>', 'command with arguments to execute inside the installation sandbox.')
+  .option('-t, --template [template]', 'path of fun template file.')
   .action((prog) => {
 
     getVisitor().then(visitor => {
