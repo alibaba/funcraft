@@ -71,6 +71,7 @@
     "dockerfile-ast": "0.0.16",
     "dockerode": "^2.5.8",
     "dotenv": "^6.0.0",
+    "draftlog": "^1.0.12",
     "express": "^4.16.4",
     "fs-extra": "^8.1.0",
     "get-stdin": "^6.0.0",
