@@ -13,7 +13,7 @@ const rimraf = require('rimraf');
 const prompt = require('../lib/init/prompt');
 
 const { setProcess } = require('./test-utils');
-const { detectTplPath} = require('../lib/tpl');
+const { detectTplPath } = require('../lib/tpl');
 
 const mockData = require('./tpl-mock-data');
 
@@ -225,23 +225,16 @@ describe('fun-invoke test', () => {
 
     tpl.getTpl.returns(mockData.tplWithDuplicatedFunction);
 
-    try {
-      await invokeFuntion('python3', {
-        event: '',
-        invocationType: 'Sync'
-      });
-    } catch (error) {
-      assert.notCalled(fc.invokeFunction);
-      return;
-    }
+    await invokeFuntion('python3', {
+      event: '',
+      invocationType: 'Sync'
+    });
 
-    expect().fail('expect throw Error.');
-
+    assert.notCalled(fc.invokeFunction);
   });
 
 
   it('http trigger bind more than one qualifier', async () => {
-
     service.getTriggerMetas.returns([
       {
         'triggerName': 'http-test',
@@ -266,18 +259,12 @@ describe('fun-invoke test', () => {
 
     tpl.getTpl.returns(mockData.tplWithDuplicatedFunction);
 
-    try {
-      await invokeFuntion('python3', {
-        event: '',
-        invocationType: 'Sync'
-      });
-    } catch (error) {
-      assert.notCalled(fc.invokeFunction);
-      return;
-    }
+    await invokeFuntion('python3', {
+      event: '',
+      invocationType: 'Sync'
+    });
 
-    expect().fail('expect throw Error.');
-
+    assert.notCalled(fc.invokeFunction);
   });
 });
 
