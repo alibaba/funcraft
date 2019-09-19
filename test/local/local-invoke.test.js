@@ -84,7 +84,7 @@ describe('test local invoke init', async () => {
     var tplPath = path.join('./examples', 'local', 'template.yml');
     const tplContent = await readFile(tplPath, 'utf8');
     const tpl = yaml.safeLoad(tplContent);
-    var firstFuntionName = definition.findFirstFunction(tpl);
+    var firstFuntionName = definition.findFirstFunctionName(tpl);
     expect(firstFuntionName).equal('localdemo/php72');
   });
 });

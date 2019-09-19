@@ -25,8 +25,7 @@ const { tpl,
   serviceName,
   functionName,
   serviceRes,
-  functionRes,
-  serviceResWithNasConfig
+  functionRes
 } = require('../local/mock-data');
 
 describe('test buildFunction', () => {
@@ -242,7 +241,7 @@ describe('test buildFunction', () => {
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
-    assert.notCalled(taskflow.isOnlyDefaultTaskFlow);
+    assert.calledWith(taskflow.isOnlyDefaultTaskFlow, [mockedTaskFlowConstructor]);
     assert.calledWith(parser.funymlToFunfile, funymlPath);
     assert.calledWith(parser.funfileToDockerfile, funfilePath);
     assert.calledWith(docker.buildImage, codeUri, dockerFilePath, sinon.match.string);
@@ -250,7 +249,7 @@ describe('test buildFunction', () => {
     assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
   });
 
-  it.only('test with buildFunction with install stage and only fun.yml, but force using docker', async function () {
+  it('test with buildFunction with install stage and only fun.yml, but force using docker', async function () {
 
     const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
     const funfilePath = path.join(codeUri, 'Funfile');
@@ -276,12 +275,12 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install'], verbose);
 
-    assert.notCalled(taskflow.isOnlyDefaultTaskFlow);
+    assert.calledWith(taskflow.isOnlyDefaultTaskFlow, [mockedTaskFlowConstructor]);
     assert.calledWith(parser.funymlToFunfile, funymlPath);
     assert.calledWith(parser.funfileToDockerfile, funfilePath);
     assert.calledWith(docker.buildImage, codeUri, dockerFilePath, sinon.match.string);
     assert.calledWith(docker.copyFromImage, 'imageTag', '/code/.', codeUri);
-    assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, codeUri, verbose);
+    assert.notCalled(builder.buildInDocker);
   });
 });
 
@@ -325,13 +324,18 @@ describe('test copyNasArtifact', () => {
     const funcNasFolder = path.join(funcArtifactDir, '.fun', 'nas');
     const rootNasFolder = path.join(rootArtifactsDir, '.fun', 'nas');
 
-    await build.copyNasArtifact(serviceName, serviceResWithNasConfig, 'imageTag', rootArtifactsDir, funcArtifactDir);
+    const nasMappings = [
+      {
+        localNasDir: 'localNasDir',
+        remoteNasDir: 'remoteNasDir'
+      }
+    ];
+
+    await build.copyNasArtifact(nasMappings, 'imageTag', rootArtifactsDir, funcArtifactDir);
 
     assert.calledWith(fs.pathExists, funcNasFolder);
     assert.calledWith(fs.ensureDir, rootNasFolder);
     assert.calledWith(fs.remove, funcNasFolder);
-
-    assert.calledWith(nas.convertNasConfigToNasMappings, rootArtifactsDir, serviceResWithNasConfig.Properties.NasConfig, serviceName);
 
     assert.calledWith(docker.copyFromImage, 'imageTag', 'remoteNasDir/.', 'localNasDir');
   });
