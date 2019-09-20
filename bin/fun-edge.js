@@ -11,9 +11,9 @@ program
   .description(
     `Run your serverless application at edge (within local Link IoT Edge environment) for
   quick development & testing.`)
-  .command('invoke', 'invoke a function at edge once')
-  .command('start', 'launch one local Link IoT Edge environment, or create one if none exist')
-  .command('stop', 'stop the local Link IoT Edge environment');
+  .command('invoke', 'Invoke a function at edge once')
+  .command('start', 'Launch one local Link IoT Edge environment, or create one if none exist')
+  .command('stop', 'Stop the local Link IoT Edge environment');
 
 // Print help information if commands are unknown.
 program.on('command:*', (cmds) => {

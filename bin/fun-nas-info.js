@@ -11,7 +11,7 @@ const notifier = require('../lib/update-notifier');
 program
   .name('fun nas info')
   .description('Print nas config information, such as local temp directory of NAS.')
-  .option('-t, --template [template]', 'path of fun template file.')
+  .option('-t, --template [template]', 'The path of fun template file.')
   .parse(process.argv);
 
 if (program.args.length) {

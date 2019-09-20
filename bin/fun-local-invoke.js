@@ -16,14 +16,14 @@ program
   almost identically. You can pass in the event body via stdin or by using the -e (--event)
   parameter.`)
   .usage('[options] <[service/]function>')
-  .option('-t, --template [template]', 'path of fun template file.')
+  .option('-t, --template [template]', 'The path of fun template file.')
   .option('-d, --debug-port <port>',
-    `specify the sandboxed container starting in debug mode,
+    `Specify the sandboxed container starting in debug mode,
                              and exposing this port on localhost`)
   .option('-c, --config <ide/debugger>', 
-    'select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
+    'Select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
   .option('-e, --event <path>',
-    `a file containing event data passed to the function during
+    `A file containing event data passed to the function during
                              invoke, If this option is not specified, it defaults to
                              reading event from stdin`)
   .option('--debugger-path <debuggerPath>', 'the path of the debugger on the host')

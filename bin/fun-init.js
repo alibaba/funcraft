@@ -48,11 +48,11 @@ program
   .name('fun init')
   .usage('[options] [template]')
   .description('Initialize a new project based on a template. A template can be a folder containing template metadata and boilerplate files, a name of a pre-built template, or a url that resolves to a template. You can find more information about template at https://yq.aliyun.com/articles/674364.')
-  .option('-o, --output-dir [path]', 'where to output the initialized app into', '.')
-  .option('-n, --name [name]', 'name of your project to be generated as a folder', '')
-  .option('-m, --merge [merge]', 'merge into the template.[yml|yaml] file if it already exist', false)
-  .option('--no-input', 'disable prompting and accept default values defined template config')
-  .option('-V, --var [vars]', 'template variable', parseVars)
+  .option('-o, --output-dir [path]', 'Where to output the initialized app into', '.')
+  .option('-n, --name [name]', 'The name of your project to be generated as a folder', '')
+  .option('-m, --merge [merge]', 'Merge into the template.[yml|yaml] file if it already exist', false)
+  .option('--no-input', 'Disable prompting and accept default values defined template config')
+  .option('-V, --var [vars]', 'Template variable', parseVars)
   .on('--help', () => {
     console.log(examples);
   })

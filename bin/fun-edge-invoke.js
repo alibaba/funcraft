@@ -17,17 +17,17 @@ program
   the -e (--event) parameter.`)
   .usage('[options] <[service/]function>')
   .option('--debug',
-    `specify your function executes in debug mode, and listens
+    `Specify your function executes in debug mode, and listens
                              on port 5700 at localhost for debuggers to connect`)
   .option('-e, --event <path>',
-    `a file containing event data passed to the function during
+    `A file containing event data passed to the function during
                              invoke, If this option is not specified, it defaults to
                              reading event from stdin`)
   .option('-c, --config <ide/debugger>',
-    `output configurations for the specified ide/debugger, where
+    `Output configurations for the specified ide/debugger, where
                              the ide/debugger can currently only be vscode`)
   .option('--output-debugger-configs',
-    `output configurations for all debuggers. It will override
+    `Output configurations for all debuggers. It will override
                              the behavior of --config option`)
   .parse(process.argv);
 

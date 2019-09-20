@@ -23,12 +23,12 @@ program
     Once compiled or packaged result changed, the modified code will take effect immediately without restarting the http server.`
   )
   .usage('[options] <[service/]function>')
-  .option('-d, --debug-port <port>', 'specify the sandbox container starting in debug' +
+  .option('-d, --debug-port <port>', 'Specify the sandbox container starting in debug' +
     ' mode, and exposing this port on localhost')
   .option('-c, --config <ide/debugger>', 
-    'select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
-  .option('--debugger-path <debuggerPath>', 'the path of the debugger on the host')
-  .option('--debug-args <debugArgs>', 'additional parameters that will be passed to the debugger')
+    'Select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
+  .option('--debugger-path <debuggerPath>', 'The path of the debugger on the host')
+  .option('--debug-args <debugArgs>', 'Additional parameters that will be passed to the debugger')
   .parse(process.argv);
 
 if (program.args.length > 1) {

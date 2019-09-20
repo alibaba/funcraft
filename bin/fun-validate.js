@@ -13,7 +13,7 @@ const notifier = require('../lib/update-notifier');
 program
   .name('fun validate')
   .description('Validate a fun template.')
-  .option('-t, --template [template]', 'path of fun template file.', 'template.[yaml|yml]')
+  .option('-t, --template [template]', 'The path of fun template file.', 'template.[yaml|yml]')
   .parse(process.argv);
 
 if (program.args.length) {

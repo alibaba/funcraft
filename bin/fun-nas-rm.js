@@ -12,8 +12,8 @@ program
   .name('fun nas rm')
   .description('Remove remote NAS file.')
   .usage('[options] <nas_dir>')
-  .option('-r, --recursive', 'remove folders recursively')
-  .option('-f, --force', 'remove files without prompting for confirmation')
+  .option('-r, --recursive', 'Remove folders recursively')
+  .option('-f, --force', 'Remove files without prompting for confirmation')
   .parse(process.argv);
 
 
