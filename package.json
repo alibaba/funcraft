@@ -48,7 +48,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "git://github.com/aliyun/fc-builders.git",
+    "@alicloud/fc-builders": "^0.2.0",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
@@ -109,7 +109,7 @@
     "single-line-log": "^1.1.2",
     "string-argv": "^0.3.0",
     "supertest": "^4.0.2",
-    "tablestore": "^4.3.2",
+    "tablestore": "^5.0.1",
     "tar-fs": "^2.0.0",
     "temp-dir": "^1.0.0",
     "universal-analytics": "^0.4.20",
