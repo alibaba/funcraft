@@ -45,7 +45,13 @@ notifier.notify();
 
 getVisitor().then(visitor => {
 
-  const ea = context.resourceName ? `deploy ${ context.resourceName }` : 'deploy';
+  let ea;
+
+  if (context.useRos) {
+    ea = 'ros';
+  } else {
+    ea = context.resourceName ? `deploy ${ context.resourceName }` : 'deploy';
+  }
 
   visitor.pageview('/fun/deploy').send();
 
