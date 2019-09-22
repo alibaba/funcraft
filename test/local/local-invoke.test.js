@@ -89,6 +89,125 @@ describe('test local invoke init', async () => {
   });
 });
 
+describe('test local invoke reuse', async () => {
+  beforeEach(() => {
+
+    sandbox.stub(docker, 'getContainer').resolves({});
+    sandbox.stub(docker, 'execContainer').resolves({});
+    sandbox.stub(docker, 'renameContainer').resolves({});
+    sandbox.stub(docker, 'run').resolves({});
+
+    sandbox.stub(dockerOpts, 'generateLocalInvokeOpts').resolves({});
+
+    sandbox.stub(Inovke.prototype, 'init').resolves({});
+
+    LocalInvoke = proxyquire('../../lib/local/local-invoke', {
+      '../docker': docker,
+      '../docker-opts': dockerOpts
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('test reuse run container with existed container', async () => {
+    sandbox.stub(docker, 'listContainers').resolves(['container1']);
+    const invoke = new LocalInvoke(serviceName,
+      serviceRes,
+      functionName,
+      functionRes,
+      undefined,
+      undefined,
+      '.',
+      undefined,
+      undefined,
+      undefined,
+      true
+    );
+
+    await invoke.doInvoke();
+
+    assert.notCalled(docker.run);
+    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run-inited"]}` });
+    assert.neverCalledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run"]}` });
+    assert.called(docker.execContainer);
+    assert.notCalled(docker.renameContainer);
+  });
+
+  it('test not reuse run container with none existed container', async () => {
+    sandbox.stub(docker, 'listContainers').resolves([]);
+    const invoke = new LocalInvoke(serviceName,
+      serviceRes,
+      functionName,
+      functionRes,
+      undefined,
+      undefined,
+      '.',
+      undefined,
+      undefined,
+      undefined,
+      true
+    );
+
+    await invoke.doInvoke();
+
+    assert.called(docker.run);
+    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run-inited"]}` });
+    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run"]}` });
+    assert.notCalled(docker.execContainer);
+    assert.notCalled(docker.renameContainer);
+  });
+
+  it('test reuse debug container with existed container', async () => {
+    sandbox.stub(docker, 'listContainers').resolves(['container1']);
+    const invoke = new LocalInvoke(serviceName,
+      serviceRes,
+      functionName,
+      functionRes,
+      debugPort,
+      debugIde,
+      '.',
+      undefined,
+      undefined,
+      undefined,
+      true
+    );
+
+    await invoke.doInvoke();
+
+    assert.notCalled(docker.run);
+    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug-inited"]}` });
+    assert.neverCalledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug"]}` });
+    assert.called(docker.execContainer);
+    assert.notCalled(docker.renameContainer);
+  });
+
+  it('test not reuse debug container with none existed container', async () => {
+    sandbox.stub(docker, 'listContainers').resolves([]);
+    const invoke = new LocalInvoke(serviceName,
+      serviceRes,
+      functionName,
+      functionRes,
+      debugPort,
+      debugIde,
+      '.',
+      undefined,
+      undefined,
+      undefined,
+      true
+    );
+
+    await invoke.doInvoke();
+
+    assert.called(docker.run);
+    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug-inited"]}` });
+    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug"]}` });
+    assert.notCalled(docker.execContainer);
+    assert.notCalled(docker.renameContainer);
+  });
+});
+
 (hasDocker ? describe : describe.skip)('Integration::invoke', () => {
   
   const projectDir = path.join(tempDir, 'invoke-it-dir'); 
