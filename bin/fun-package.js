@@ -27,7 +27,7 @@ notifier.notify();
 
 getVisitor().then(visitor => {
 
-  visitor.pageview('/fun/deploy').send();
+  visitor.pageview('/fun/package').send();
 
   require('../lib/commands/package')(program)
     .then(() => {

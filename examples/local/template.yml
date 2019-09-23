@@ -45,6 +45,6 @@ Resources:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: example.App::handleRequest
-        CodeUri: java8/target/demo-1.0-SNAPSHOT.jar
+        CodeUri: java8
         Description: 'Hello world with java8!'
         Runtime: java8

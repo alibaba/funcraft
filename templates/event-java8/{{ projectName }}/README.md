@@ -3,11 +3,11 @@
 ## 本地运行
 
 ```bash
-mvn package && fun local invoke
+fun build && fun local invoke
 ```
 
 ## 部署
 
 ```bash
-mvn package && fun deploy
+fun build && fun deploy
 ```

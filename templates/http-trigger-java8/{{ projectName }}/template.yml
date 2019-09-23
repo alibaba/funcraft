@@ -11,7 +11,7 @@ Resources:
         Handler: example.App::handleRequest
         Initializer: example.App::initialize
         Runtime: java8
-        CodeUri: './lib/{{ projectName }}-1.0-SNAPSHOT.jar'
+        CodeUri: './'
       Events:
         httpTrigger:
           Type: HTTP
