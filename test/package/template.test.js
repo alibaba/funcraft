@@ -36,6 +36,76 @@ describe('test uploadAndUpdateFunctionCode', () => {
     }
   };
 
+  const tplWithSameCodeUri = {
+    Resources: {
+      localdemo: {
+        Type: 'Aliyun::Serverless::Service',
+        php72: {
+          Type: 'Aliyun::Serverless::Function',
+          Properties: {
+            Handler: 'index.handler',
+            CodeUri: './',
+            Description: 'Hello world with php7.2!',
+            Runtime: 'php7.2'
+          }
+        },
+        nodejs6: {
+          Type: 'Aliyun::Serverless::Function',
+          Properties: {
+            Handler: 'index.handler',
+            CodeUri: './',
+            Description: 'Hello world with nodejs6!',
+            Runtime: 'nodejs6'
+          }
+        },
+        nodejs8: {
+          Type: 'Aliyun::Serverless::Function',
+          Properties: {
+            Handler: 'index.handler',
+            CodeUri: 'nodejs8/index.php',
+            Description: 'Hello world with nodejs8!',
+            Runtime: 'nodejs8'
+          }
+        }
+      }
+    }
+  };
+
+  const updatedTplWithSameCodeUri = {
+    Resources: {
+      localdemo: {
+        Type: 'Aliyun::Serverless::Service',
+        php72: {
+          Type: 'Aliyun::Serverless::Function',
+          Properties: {
+            Handler: 'index.handler',
+            CodeUri: 'oss://bucket/md5',
+            Description: 'Hello world with php7.2!',
+            Runtime: 'php7.2'
+          }
+        },
+        nodejs6: {
+          Type: 'Aliyun::Serverless::Function',
+          Properties: {
+            Handler: 'index.handler',
+            CodeUri: 'oss://bucket/md5',
+            Description: 'Hello world with nodejs6!',
+            Runtime: 'nodejs6'
+          }
+        },
+        nodejs8: {
+          Type: 'Aliyun::Serverless::Function',
+          Properties: {
+            Handler: 'index.handler',
+            CodeUri: 'oss://bucket/md5',
+            Description: 'Hello world with nodejs8!',
+            Runtime: 'nodejs8'
+          }
+        }
+      }
+    }
+  };
+
   const ossTpl = {
     Resources: {
       localdemo: {
@@ -59,7 +129,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
         'Type': 'Aliyun::Serverless::Service',
         'php72': {
           'Properties': {
-            'CodeUri': 'oss://bucket/localdemo/php72/md5',
+            'CodeUri': 'oss://bucket/md5',
             'Description': 'Hello world with php7.2!',
             'Handler': 'index.handler',
             'Runtime': 'php7.2'
@@ -106,11 +176,34 @@ describe('test uploadAndUpdateFunctionCode', () => {
     assert.calledWith(fs.ensureDir, randomDir);
     assert.calledWith(zip.packTo, absCodeUri, sinon.match.func, zipPath);
     assert.calledWith(util.md5, sinon.match.string);
-    assert.calledWith(ossClient.head, 'localdemo/php72/md5');
-    assert.calledWith(ossClient.put, 'localdemo/php72/md5', 'zipcontent');
+    assert.calledWith(ossClient.head, 'md5');
+    assert.calledWith(ossClient.put, 'md5', 'zipcontent');
     assert.calledWith(fs.remove, randomDir);
 
     expect(t).to.eql(updatedTpl);
+  });
+
+
+  it('test uploadAndUpdateFunctionCode with local code and multiple same codeUri', async () => {
+    const t = await template.uploadAndUpdateFunctionCode(baseDir, tplWithSameCodeUri, ossClient);
+
+    const randomDir = path.join(tempDir, 'random');
+    const zipPath = path.join(randomDir, 'code.zip');
+
+    assert.callCount(fs.pathExists, 3);
+    assert.calledWith(fs.ensureDir, randomDir);
+    assert.calledTwice(zip.packTo);
+
+    assert.calledWith(zip.packTo, path.resolve(baseDir, './'), sinon.match.func, zipPath);
+    assert.calledWith(util.md5, sinon.match.string);
+    assert.calledWith(ossClient.head, 'md5');
+
+    assert.calledTwice(ossClient.put);
+    assert.calledWith(ossClient.put, 'md5', 'zipcontent');
+
+    assert.calledWith(fs.remove, randomDir);
+
+    expect(t).to.eql(updatedTplWithSameCodeUri);
   });
 
   it('test uploadAndUpdateFunctionCode with oss code', async () => {
@@ -126,6 +219,4 @@ describe('test uploadAndUpdateFunctionCode', () => {
 
     expect(ossTpl).to.eql(updatedTpl);
   });
-
-
 });
