@@ -159,6 +159,51 @@ describe('test buildFunction', () => {
     assert.notCalled(parser.funymlToFunfile);
   });
 
+  it('test with buildFunction with only manifest file, but with container and funfile not in the codeuri', async function () {
+
+    const useDocker = true;
+
+    const buildFunc = {
+      functionName,
+      functionRes,
+      serviceName,
+      serviceRes
+    };
+
+    const buildFuncs = [buildFunc];
+    const skippedBuildFuncs = [];
+
+    const Builder = fcBuilders.Builder;
+
+    const mockedTaskFlowConstructor = sandbox.stub();
+
+    const taskFlowStartStub = sandbox.stub();
+    mockedTaskFlowConstructor.returns({
+      start: taskFlowStartStub
+    });
+
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
+    sandbox.stub(builder, 'buildInDocker').resolves({});
+
+    tpl.Resources.localdemo.python3.Properties.CodeUri = 'python3';
+    const funfilePath = path.join(projectRoot, 'Funfile');
+    const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
+
+    const pathExistsStub = sandbox.stub(fs, 'pathExists');
+    pathExistsStub.withArgs(funfilePath).resolves(true);
+    pathExistsStub.withArgs(codeUri).resolves(true);
+
+    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
+
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
+    assert.calledWith(yaml.dump, updatedContent);
+    assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
+    assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
+    assert.notCalled(parser.funfileToDockerfile);
+    assert.notCalled(parser.funymlToFunfile);
+  });
+
   it('test with buildFunction with only manifest file, but with container', async function () {
 
     const useDocker = true;
