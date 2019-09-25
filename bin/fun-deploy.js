@@ -55,7 +55,7 @@ getVisitor().then(visitor => {
 
   visitor.pageview('/fun/deploy').send();
 
-  require('../lib/commands/deploy')(null, context)
+  require('../lib/commands/deploy')(context)
     .then(() => {
       visitor.event({
         ec: 'deploy',
