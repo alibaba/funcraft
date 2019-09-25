@@ -29,7 +29,10 @@ program
   .option('--debugger-path <debuggerPath>', 'the path of the debugger on the host')
   .option('--debug-args <debugArgs>', 'additional parameters that will be passed to the debugger')
   .option('--tmp-dir <tmpDir>', `The temp directory mounted to /tmp , default to './.fun/tmp/invoke/{service}/{function}/'`)
-  .option('--no-reuse', `Do not reuse the container which was started by the 'fun local start {service}/{function}' command.`)
+  .option('--disable-reuse',
+    `Do not reuse the container which was started by the 'fun local start {service}/{function}' command.`,
+    false,
+  )
   .parse(process.argv);
 
 if (program.args.length > 1) {
