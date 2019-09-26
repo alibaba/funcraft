@@ -21,6 +21,9 @@ const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
 
+const { red } = require('colors');
+const _ = require('lodash');
+
 const { tpl,
   serviceName,
   functionName,
@@ -157,6 +160,63 @@ describe('test buildFunction', () => {
     assert.calledWith(builder.buildInProcess, serviceName, functionName, path.resolve(projectRoot, codeUri), runtime, path.join(rootArtifactsDir, serviceName, functionName));
     assert.notCalled(parser.funfileToDockerfile);
     assert.notCalled(parser.funymlToFunfile);
+  });
+
+  it('test with buildFunction with only manifest file, but with container and funfile not in the codeuri', async function () {
+
+    const useDocker = true;
+
+    const buildFunc = {
+      functionName,
+      functionRes,
+      serviceName,
+      serviceRes
+    };
+
+    const cloneBuildFunc = _.cloneDeep(buildFunc);
+
+    let buildFuncs = [cloneBuildFunc];
+
+    for (const bFunction of buildFuncs) {
+      bFunction.functionRes.Properties.CodeUri = 'python3';
+    }
+    
+    const skippedBuildFuncs = [];
+
+    const Builder = fcBuilders.Builder;
+
+    const mockedTaskFlowConstructor = sandbox.stub();
+
+    const taskFlowStartStub = sandbox.stub();
+    mockedTaskFlowConstructor.returns({
+      start: taskFlowStartStub
+    });
+
+    sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
+    sandbox.stub(builder, 'buildInDocker').resolves({});
+    sandbox.stub(console, 'warn');
+
+    const cloneTpl = _.cloneDeep(tpl);
+    cloneTpl.Resources.localdemo.python3.Properties.CodeUri = 'python3';
+
+    const funfilePath = path.join(projectRoot, 'Funfile');
+    const codeUri = path.resolve(projectRoot, 'python3');
+
+    const pathExistsStub = sandbox.stub(fs, 'pathExists');
+    pathExistsStub.withArgs(funfilePath).resolves(true);
+    pathExistsStub.withArgs(codeUri).resolves(true);
+
+    await build.buildFunction(buildName, cloneTpl, projectRoot, useDocker, ['install', 'build'], verbose);
+
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(template.updateTemplateResources, cloneTpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
+    assert.calledWith(yaml.dump, updatedContent);
+    assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
+    assert.calledWith(builder.buildInDocker, cloneBuildFunc.serviceName, cloneBuildFunc.serviceRes, cloneBuildFunc.functionName, cloneBuildFunc.functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
+    assert.notCalled(parser.funfileToDockerfile);
+    assert.notCalled(parser.funymlToFunfile);
+
+    assert.calledWith(console.warn, red(`\nFun detected that the '${path.resolve(funfilePath)}' is not included in any CodeUri.\nPlease make sure if it is the right configuration. if yes, ignore please.`));
   });
 
   it('test with buildFunction with only manifest file, but with container', async function () {
@@ -377,8 +437,6 @@ tasks:
     expect(await fs.exists(funfilePath)).to.be(true);
     const funfileContent = await fs.readFile(funfilePath, 'utf8');
     expect(funfileContent).to.eql(`RUNTIME python3
-COPY . /code
-WORKDIR /code
 RUN fun-install apt-get install libzbar0
 RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
 RUN fun-install pip install Pillow

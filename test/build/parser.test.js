@@ -38,8 +38,6 @@ tasks:
 `;
 
 const funfileContent = `RUNTIME python3
-COPY . /code
-WORKDIR /code
 RUN fun-install apt-get install local-test -t .fun/nas/auto/apt
 RUN fun-install pip install testPipTarget -t .fun/nas/auto/pip
 RUN apt-get install local-package
@@ -55,8 +53,6 @@ RUN LD_LIBRARY=testLD_LIBRARY apt-get build-dep -y r-base; \\
   LD_LIBRARY=testLD_LIBRARY make install;`;
 
 const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
-COPY . /code
-WORKDIR /code
 RUN fun-install apt-get install local-test -t .fun/nas/auto/apt
 RUN fun-install pip install testPipTarget -t .fun/nas/auto/pip
 RUN apt-get install local-package
