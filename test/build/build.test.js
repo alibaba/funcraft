@@ -161,7 +161,7 @@ describe('test buildFunction', () => {
     assert.notCalled(parser.funymlToFunfile);
   });
 
-  it.only('test with buildFunction with only manifest file, but with container and funfile not in the codeuri', async function () {
+  it('test with buildFunction with only manifest file, but with container and funfile not in the codeuri', async function () {
 
     const useDocker = true;
 
