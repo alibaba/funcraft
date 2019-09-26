@@ -84,10 +84,12 @@ describe('test deploy support ros', () => {
       ChangeSetId: 'changeSetId'
     });
 
-    requestStub.withArgs('GetStack', {
+    const getStackParams = {
       'StackId': stackId,
       'RegionId': 'cn-beijing'
-    }).resolves({
+    };
+
+    requestStub.withArgs('GetStack', getStackParams).resolves({
       'Status': 'COMPLETE'  
     });
 
@@ -103,5 +105,6 @@ describe('test deploy support ros', () => {
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'ExecuteChangeSet', execChangeSetParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetStack', getStackParams, requestOption);
   });
 });
