@@ -84,6 +84,13 @@ describe('test deploy support ros', () => {
       ChangeSetId: 'changeSetId'
     });
 
+    requestStub.withArgs('GetStack', {
+      'StackId': stackId,
+      'RegionId': 'cn-beijing'
+    }).resolves({
+      'Status': 'COMPLETE'  
+    });
+
     const execChangeSetParams = {
       RegionId: 'cn-beijing', 
       ChangeSetId: 'changeSetId'
