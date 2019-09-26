@@ -21,6 +21,8 @@ const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
 
+const { red } = require('colors');
+
 const { tpl,
   serviceName,
   functionName,
@@ -159,7 +161,7 @@ describe('test buildFunction', () => {
     assert.notCalled(parser.funymlToFunfile);
   });
 
-  it('test with buildFunction with only manifest file, but with container and funfile not in the codeuri', async function () {
+  it.only('test with buildFunction with only manifest file, but with container and funfile not in the codeuri', async function () {
 
     const useDocker = true;
 
@@ -184,6 +186,7 @@ describe('test buildFunction', () => {
 
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
+    sandbox.stub(console, 'warn');
 
     tpl.Resources.localdemo.python3.Properties.CodeUri = 'python3';
     const funfilePath = path.join(projectRoot, 'Funfile');
@@ -202,6 +205,8 @@ describe('test buildFunction', () => {
     assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
     assert.notCalled(parser.funfileToDockerfile);
     assert.notCalled(parser.funymlToFunfile);
+
+    assert.calledWith(console.warn, red(`\nFun detected that the '${path.resolve(funfilePath)}' is not included in any CodeUri.\nPlease make sure if it is the right configuration. if yes, ignore please.`));
   });
 
   it('test with buildFunction with only manifest file, but with container', async function () {
