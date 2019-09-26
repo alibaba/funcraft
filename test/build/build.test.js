@@ -22,6 +22,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const { red } = require('colors');
+const _ = require('lodash');
 
 const { tpl,
   serviceName,
@@ -172,7 +173,14 @@ describe('test buildFunction', () => {
       serviceRes
     };
 
-    const buildFuncs = [buildFunc];
+    const cloneBuildFunc = _.cloneDeep(buildFunc);
+
+    let buildFuncs = [cloneBuildFunc];
+
+    for (const bFunction of buildFuncs) {
+      bFunction.functionRes.Properties.CodeUri = 'python3';
+    }
+    
     const skippedBuildFuncs = [];
 
     const Builder = fcBuilders.Builder;
@@ -188,21 +196,23 @@ describe('test buildFunction', () => {
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(console, 'warn');
 
-    tpl.Resources.localdemo.python3.Properties.CodeUri = 'python3';
+    const cloneTpl = _.cloneDeep(tpl);
+    cloneTpl.Resources.localdemo.python3.Properties.CodeUri = 'python3';
+
     const funfilePath = path.join(projectRoot, 'Funfile');
-    const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
+    const codeUri = path.resolve(projectRoot, 'python3');
 
     const pathExistsStub = sandbox.stub(fs, 'pathExists');
     pathExistsStub.withArgs(funfilePath).resolves(true);
     pathExistsStub.withArgs(codeUri).resolves(true);
 
-    await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, cloneTpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
     assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
-    assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
+    assert.calledWith(template.updateTemplateResources, cloneTpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
-    assert.calledWith(builder.buildInDocker, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
+    assert.calledWith(builder.buildInDocker, cloneBuildFunc.serviceName, cloneBuildFunc.serviceRes, cloneBuildFunc.functionName, cloneBuildFunc.functionRes, projectRoot, codeUri, path.join(rootArtifactsDir, serviceName, functionName), verbose);
     assert.notCalled(parser.funfileToDockerfile);
     assert.notCalled(parser.funymlToFunfile);
 
