@@ -10,7 +10,7 @@ Resources:
       Properties:
         Handler: index.handler
         Runtime: nodejs8
-        CodeUri: './index.js'
+        CodeUri: './'
         Timeout: 60
 
   HelloworldGroup:
