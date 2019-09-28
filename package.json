@@ -59,6 +59,7 @@
     "archiver": "^2.0.0",
     "async-lock": "^1.1.4",
     "ci-info": "^2.0.0",
+    "cli-table3": "^0.5.1",
     "colors": "^1.1.2",
     "command-exists": "^1.2.8",
     "commander": "^3.0.0",
