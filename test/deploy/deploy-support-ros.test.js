@@ -8,6 +8,48 @@ const { setProcess } = require('../test-utils');
 const assert = sandbox.assert;
 const uuid = require('uuid');
 
+
+const changes = [
+  {
+    'ResourceChange': {
+      'LogicalResourceId': 'RosDemo',
+      'ResourceType': 'ALIYUN::FC::Service',
+      'Action': 'Modify',
+      'Details': [
+        {
+          'Target': {
+            'Name': 'Description'
+          }
+        }
+      ]
+    }
+  },
+  {
+    'ResourceChange': {
+      'LogicalResourceId': 'RosDemoRosDemo',
+      'ResourceType': 'ALIYUN::FC::Function',
+      'Action': 'Modify',
+      'Details': [
+        {
+          'Target': {
+            'Name': 'Code'
+          }
+        },
+        {
+          'Target': {
+            'Name': 'Timeout'
+          }
+        },
+        {
+          'Target': {
+            'Name': 'Runtime'
+          }
+        }
+      ]
+    }
+  }
+];
+
 describe('test deploy support ros', () => {
 
   let rosClient;
@@ -90,7 +132,18 @@ describe('test deploy support ros', () => {
     };
 
     requestStub.withArgs('GetStack', getStackParams).resolves({
-      'Status': 'COMPLETE'  
+      'Status': 'COMPLETE'
+    });
+
+    const getChangeSetParam = {
+      'RegionId': 'cn-beijing',
+      'ChangeSetId': 'changeSetId',
+      'ShowTemplate': true
+    };
+
+    requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
+      'Status': 'COMPLETE',
+      'Changes': changes
     });
 
     const execChangeSetParams = {
@@ -104,7 +157,7 @@ describe('test deploy support ros', () => {
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
-    assert.calledWith(requestStub.thirdCall, 'ExecuteChangeSet', execChangeSetParams, requestOption);
+    assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
     assert.calledWith(requestStub.lastCall, 'GetStack', getStackParams, requestOption);
   });
 });
