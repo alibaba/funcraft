@@ -22,7 +22,7 @@ program
 
   .option('-t, --template [template]', 'The path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
-  .option('-y --assume-yes', 'Assume Yes to all queries and do not prompt')
+  .option('-y, --assume-yes', 'Assume Yes to all queries and do not prompt')
   .option('--use-ros', 'Deploy resources using ROS')
   .option('--stack-name <stackName>', 'The name of the ROS stack')
   .parse(process.argv);
