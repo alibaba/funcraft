@@ -155,7 +155,7 @@ describe('test deploy support ros', () => {
    
 
     requestStub.withArgs('GetStack', getStackParams).resolves({
-      'Status': 'COMPLETE'
+      'Status': 'UPDATE_COMPLETE'
     });
 
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
