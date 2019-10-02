@@ -205,7 +205,7 @@ describe('test deploy support ros', () => {
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
 
     const promptArguments = [{
-      message: 'Please confirm whether to continue or not.',
+      message: 'Please confirm to continue.',
       name: 'ok',
       type: 'confirm'
     }];
