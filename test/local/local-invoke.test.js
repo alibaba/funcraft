@@ -153,8 +153,8 @@ describe('test local invoke reuse', async () => {
     await invoke.doInvoke();
 
     assert.called(docker.run);
-    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run-inited"]}` });
-    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run"]}` });
+    assert.calledWith(docker.listContainers.firstCall, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run-inited"]}` });
+    assert.calledWith(docker.listContainers.secondCall, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-run"]}` });
     assert.notCalled(docker.execContainer);
     assert.notCalled(docker.renameContainer);
   });
@@ -201,8 +201,8 @@ describe('test local invoke reuse', async () => {
     await invoke.doInvoke();
 
     assert.called(docker.run);
-    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug-inited"]}` });
-    assert.calledWith(docker.listContainers, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug"]}` });
+    assert.calledWith(docker.listContainers.firstCall, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug-inited"]}` });
+    assert.calledWith(docker.listContainers.secondCall, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug"]}` });
     assert.notCalled(docker.execContainer);
     assert.notCalled(docker.renameContainer);
   });

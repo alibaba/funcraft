@@ -44,7 +44,7 @@ describe('test event start init', async () => {
   });
 
   it('test init', async () => {
-
+    sandbox.stub(docker, 'listContainers').resolves([]);
     const invoke = new EventStart(serviceName,
       serviceRes,
       functionName,
@@ -62,6 +62,8 @@ describe('test event start init', async () => {
       invoke.nasConfig, false, invoke.debugIde, invoke.debugArgs
     );
 
+    assert.calledWith(docker.listContainers.firstCall, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug-inited"]}` });
+    assert.calledWith(docker.listContainers.secondCall, { filters: `{"name": ["fun-local-${serviceName}-${functionName}-debug"]}` });
     assert.calledWith(docker.createAndRunContainer, invoke.opts);
   });
 });
