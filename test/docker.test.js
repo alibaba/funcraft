@@ -250,7 +250,7 @@ describe('test resolveNasConfigToMounts', () => {
       ]
     };
 
-    const mount = await docker.resolveNasConfigToMounts('', nasConfig, projectDir);
+    const mount = await docker.resolveNasConfigToMounts('', nasConfig, path.join(projectDir, '.fun', 'nas'));
 
     expect(mount).to.eql([{
       Type: 'bind',
@@ -288,7 +288,7 @@ describe('test resolveNasConfigToMounts', () => {
   it('test NasConfig: Auto', async () => {
     const nasConfig = 'Auto';
 
-    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, projectDir);
+    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, path.join(projectDir, '.fun', 'nas'));
 
     expect(mount).to.eql([{
       Type: 'bind',
