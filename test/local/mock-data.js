@@ -5,6 +5,7 @@ const path = require('path');
 const functionName = 'python3';
 
 const triggerName = 'http-test';
+const { DEFAULT_NAS_PATH_SUFFIX } = require('../../lib/tpl');
 
 const triggerRes = {
   'Type': 'HTTP',
@@ -97,7 +98,7 @@ const codeMount = {
 
 const nasMounts = [{
   Type: 'bind',
-  Source: path.join('.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/'),
+  Source: path.join(DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/'),
   Target: '/mnt/nas',
   ReadOnly: false
 }];

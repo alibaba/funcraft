@@ -22,7 +22,7 @@ describe('test detectProjectRoot', () => {
   });
 
   it('test built template yml', () => {
-    sandbox.stub(fs, 'pathExists').withArgs(path.join('.fun', 'build', 'artifacts', 'template.yml')).resolves(true);
+    sandbox.stub(fs, 'pathExists').withArgs(path.join(tpl.DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX, 'template.yml')).resolves(true);
     expect(tpl.detectProjectRoot(path.join(process.cwd(), '.fun', 'build', 'artifacts', 'template.yml'))).to.eql(process.cwd());
   });
 });

@@ -20,9 +20,9 @@ const expect = require('expect.js');
 const os = require('os');
 const path = require('path');
 const yaml = require('js-yaml');
-
 const { red } = require('colors');
 const _ = require('lodash');
+const { DEFAULT_NAS_PATH_SUFFIX, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX } = require('../../lib/tpl');
 
 const { tpl,
   serviceName,
@@ -38,7 +38,7 @@ describe('test buildFunction', () => {
 
   const buildName = functionName;
   const projectRoot = os.tmpdir();
-  const rootArtifactsDir = path.join(projectRoot, '.fun', 'build', 'artifacts');
+  const rootArtifactsDir = path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX);
   const verbose = true;
   const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
   const runtime = functionRes.Properties.Runtime;
@@ -81,7 +81,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -116,7 +116,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -153,7 +153,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -208,7 +208,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, cloneTpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, cloneTpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -247,7 +247,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -297,7 +297,7 @@ describe('test buildFunction', () => {
 
     await build.buildFunction(buildName, tpl, projectRoot, useDocker, ['install', 'build'], verbose);
 
-    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    assert.calledWith(artifact.cleanDirectory, path.join(projectRoot, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, projectRoot, rootArtifactsDir);
     assert.calledWith(yaml.dump, updatedContent);
     assert.calledWith(fs.writeFile, path.join(rootArtifactsDir, 'template.yml'), dumpedContent);
@@ -381,8 +381,8 @@ describe('test copyNasArtifact', () => {
 
   it('test with .fun/nas and nasConfig', async () => {
 
-    const funcNasFolder = path.join(funcArtifactDir, '.fun', 'nas');
-    const rootNasFolder = path.join(rootArtifactsDir, '.fun', 'nas');
+    const funcNasFolder = path.join(funcArtifactDir, DEFAULT_NAS_PATH_SUFFIX);
+    const rootNasFolder = path.join(rootArtifactsDir, DEFAULT_NAS_PATH_SUFFIX);
 
     const nasMappings = [
       {
