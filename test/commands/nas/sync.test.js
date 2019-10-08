@@ -9,7 +9,7 @@ const { DEFAULT_NAS_PATH_SUFFIX } = require('../../../lib/tpl');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
-const tplPath = path.join('/', 'demo', 'template.yml');
+const tplPath = path.resolve('/', 'demo', 'template.yml');
 const localNasTmpDir = path.join(path.dirname(tplPath), '.fun', 'tmp', 'nas', 'sync');
 const cp = sandbox.stub();
 const validate = sandbox.stub();
@@ -53,7 +53,7 @@ describe('fun nas sync test', () => {
     };
 
     await syncStub(options);
-    const localNasDir = path.join('/', 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
+    const localNasDir = path.resolve('/', 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
     assert.calledWith(cp, localNasDir, 'nas://fun-nas-test/mnt/nas/', true, localNasTmpDir, mockdata.nasId);
   });
 
@@ -63,7 +63,7 @@ describe('fun nas sync test', () => {
       mountDir: ['/mnt']
     };
     await syncStub(options);
-    const localNasDir = path.join('/', 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
+    const localNasDir = path.resolve('/', 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
     const baseDir = path.dirname(tplPath);
     assert.calledWith(cp, localNasDir, `nas://${mockdata.serviceName}/mnt/nas/`, true, localNasTmpDir, mockdata.nasId);
     assert.calledWith(init.deployNasService, baseDir, mockdata.tpl, options.service);
