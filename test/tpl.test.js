@@ -7,7 +7,7 @@ const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 
-describe('test detectProjectRoot', () => {
+describe('test getProjectRoot', () => {
   afterEach(() => {
     sandbox.restore();
   });
@@ -18,11 +18,11 @@ describe('test detectProjectRoot', () => {
     pathExistsStub.withArgs(path.join(process.cwd(), '.fun', 'build', 'artifacts', 'template.yaml')).resolves(false);
     pathExistsStub.withArgs(path.join(process.cwd(), 'template.yml')).resolves(true);
 
-    expect(tpl.detectProjectRoot(path.join('template.yml'))).to.eql(process.cwd());
+    expect(tpl.getProjectRoot(path.join('template.yml'))).to.eql(process.cwd());
   });
 
   it('test built template yml', () => {
     sandbox.stub(fs, 'pathExists').withArgs(path.join(tpl.DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX, 'template.yml')).resolves(true);
-    expect(tpl.detectProjectRoot(path.join(process.cwd(), '.fun', 'build', 'artifacts', 'template.yml'))).to.eql(process.cwd());
+    expect(tpl.getProjectRoot(path.join(process.cwd(), '.fun', 'build', 'artifacts', 'template.yml'))).to.eql(process.cwd());
   });
 });
