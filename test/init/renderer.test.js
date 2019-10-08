@@ -13,7 +13,8 @@ const fs = {
   readFileSync: sandbox.stub(),
   createReadStream: sandbox.stub(),
   createWriteStream: sandbox.stub(),
-  existsSync: sandbox.stub()
+  existsSync: sandbox.stub(),
+  chmodSync: sandbox.stub()
 
 };
 
@@ -98,6 +99,7 @@ describe('renderer', () => {
   it('render', async () => {
     fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc', 'cba']).withArgs('foo').returns([]);
     fs.createReadStream.returns({ pipe: () => {} });
+    fs.statSync.returns({ mode: 123 });
     fs.statSync
       .withArgs('foo').returns({ isDirectory: () => true })
       .withArgs('bar').returns({ isDirectory: () => false })
@@ -113,11 +115,13 @@ describe('renderer', () => {
     sandbox.assert.calledWith(fs.createReadStream, 'abc');
     sandbox.assert.calledOnce(fs.createWriteStream);
     sandbox.assert.calledWith(fs.createWriteStream, 'abc');
+    sandbox.assert.callCount(fs.chmodSync, 4);
   });
 
   it('render with multi path', async () => {
     fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc', 'abc2', 'cba2']).withArgs('foo').returns([]);
     fs.createReadStream.returns({ pipe: () => {} });
+    fs.statSync.returns({ mode: 123 });
     fs.statSync
       .withArgs('foo').returns({ isDirectory: () => true })
       .withArgs('bar').returns({ isDirectory: () => false })
@@ -138,6 +142,7 @@ describe('renderer', () => {
     sandbox.assert.calledWith(fs.createWriteStream, 'abc');
     sandbox.assert.calledWith(fs.createReadStream, 'abc2');
     sandbox.assert.calledWith(fs.createWriteStream, 'abc2');
+    sandbox.assert.callCount(fs.chmodSync, 5);
   });
 
   it('render when merge is true', async () => {
@@ -149,6 +154,7 @@ describe('renderer', () => {
     rendererStub.render({ repoDir: 'for', merge: true, templateDir: 'baz', vars: { }, config: {} });
     sandbox.assert.calledOnce(yaml.safeDump);
     sandbox.assert.calledWith(yaml.safeDump, realYaml.safeLoad(mergedTemplate));
+    sandbox.assert.callCount(fs.chmodSync, 1);
   });
 
 });
