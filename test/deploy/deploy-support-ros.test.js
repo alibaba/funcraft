@@ -8,6 +8,7 @@ const { setProcess } = require('../test-utils');
 const assert = sandbox.assert;
 const uuid = require('uuid');
 const inquirer = require('inquirer');
+const time = require('../../lib/time');
 
 const changes = [
   {
@@ -64,6 +65,13 @@ const listParams = {
   'ShowNestedStack': false
 };
 
+const listEventsParams = {
+  'StackId': stackId,
+  'RegionId': 'cn-beijing',
+  'PageSize': 50,
+  'PageNumber': 1
+};
+
 const updateParams = {
   RegionId: 'cn-beijing',
   ChangeSetName: 'fun-random',
@@ -90,6 +98,56 @@ const getChangeSetParam = {
 const execChangeSetParams = {
   RegionId: 'cn-beijing', 
   ChangeSetId: 'changeSetId'
+};
+
+const events = [
+  { StatusReason: 'state changed',
+    Status: 'UPDATE_COMPLETE',
+    PhysicalResourceId: '9daa0176-02df-45b0-b0cc-22f66b6ff41f',
+    LogicalResourceId: 'RosDemotest5',
+    ResourceType: 'ALIYUN::ROS::Stack',
+    StackId: 'db7d6ddc-b089-4a9f-baaf-79169d2eed6f',
+    CreateTime: '2019-10-09T13:27:15',
+    EventId: '5138c28b-08b2-4d6e-be6c-865f91779ebc',
+    StackName: 'coco-superme'
+  },
+  { StatusReason: 'state changed',
+    Status: 'UPDATE_COMPLETE',
+    PhysicalResourceId: 'e2c71fd2-5bfb-4693-a4ef-728ecabc7613',
+    LogicalResourceId: 'RosDemotest2',
+    ResourceType: 'ALIYUN::FC::Function',
+    StackId: 'db7d6ddc-b089-4a9f-baaf-79169d2eed6f',
+    CreateTime: '2019-10-09T13:27:15',
+    EventId: '2a6d975c-b1bc-40fe-a848-508a29269260',
+    StackName: 'coco-superme'
+  },
+  { StatusReason: 'state changed',
+    Status: 'UPDATE_COMPLETE',
+    PhysicalResourceId: '27fe8d7d-657c-4e2c-8a02-7ef3e8f1fa0a',
+    LogicalResourceId: 'RosDemotest1',
+    ResourceType: 'ALIYUN::FC::Function',
+    StackId: 'db7d6ddc-b089-4a9f-baaf-79169d2eed6f',
+    CreateTime: '2019-10-09T13:27:15',
+    EventId: '95519d25-3a4d-4321-96c3-c0b796d37789',
+    StackName: 'coco-superme'
+  },
+  { StatusReason: 'state changed',
+    Status: 'UPDATE_IN_PROGRESS',
+    PhysicalResourceId: 'f5dcf959-07e7-4acc-8d45-9fab9ccac711',
+    LogicalResourceId: 'RosDemotest3',
+    ResourceType: 'ALIYUN::ROS::Stack',
+    StackId: 'db7d6ddc-b089-4a9f-baaf-79169d2eed6f',
+    CreateTime: '2019-10-09T13:27:15',
+    EventId: '4bcd4524-f9d8-42c1-b097-aca101007e86',
+    StackName: 'coco-superme'
+  }
+];
+
+const listEventsResults = {
+  'PageNumber': 1,
+  'TotalCount': 20,
+  'PageSize': 50,
+  'Events': events
 };
 
 describe('test deploy support ros', () => {
@@ -125,6 +183,7 @@ describe('test deploy support ros', () => {
       request: requestStub
     };
 
+    sandbox.stub(time, 'sleep');
     sandbox.stub(client, 'getRosClient').resolves(rosClient);
     sandbox.stub(uuid, 'v4').returns('random');
   });
@@ -165,12 +224,15 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
 
+
+    requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
+
     await deployByRos(stackName, tpl, true);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'GetStack', getStackParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
 
     assert.notCalled(inquirer.prompt);
   });
@@ -210,12 +272,15 @@ describe('test deploy support ros', () => {
       type: 'confirm'
     }];
 
+    requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
+
     await deployByRos(stackName, tpl, false);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'GetStack', getStackParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
+
     assert.calledWith(inquirer.prompt, promptArguments);
   });
 });
