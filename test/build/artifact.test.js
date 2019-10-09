@@ -15,35 +15,35 @@ const {
 
 describe('test generateRootArtifactDirectory', () => {
   it('test generateRootArtifactDirectory', async function () {
-    const projectRoot = path.join(tmpDir, uuid.v4());
+    const baseDir = path.join(tmpDir, uuid.v4());
     
-    const rootArtifactsDir = await generateRootArtifactDirectory(projectRoot);
+    const rootArtifactsDir = await generateRootArtifactDirectory(baseDir);
 
     expect(fs.existsSync(rootArtifactsDir)).to.be(true);
-    expect(rootArtifactsDir).to.eql(path.join(projectRoot, '.fun', 'build', 'artifacts'));
+    expect(rootArtifactsDir).to.eql(path.join(baseDir, '.fun', 'build', 'artifacts'));
   });
 });
 
 describe('test generateArtifactDirectory', () => {
   it('test generateArtifactDirectory', async function () {
-    const projectRoot = path.join(tmpDir, uuid.v4());
+    const baseDir = path.join(tmpDir, uuid.v4());
     
-    const artifactDir = await generateArtifactDirectory(projectRoot, 'service', 'function');
+    const artifactDir = await generateArtifactDirectory(baseDir, 'service', 'function');
 
     expect(fs.existsSync(artifactDir)).to.be(true);
-    expect(artifactDir).to.eql(path.join(projectRoot, 'service', 'function'));
+    expect(artifactDir).to.eql(path.join(baseDir, 'service', 'function'));
   });
 });
 
 describe('test cleanDirectory', () => {
   it('test cleanDirectory', async () => {
-    const projectRoot = path.join(tmpDir, uuid.v4());
+    const baseDir = path.join(tmpDir, uuid.v4());
 
-    await fs.createFile(path.join(projectRoot, 'a'));
+    await fs.createFile(path.join(baseDir, 'a'));
     
-    await cleanDirectory(projectRoot);
+    await cleanDirectory(baseDir);
 
-    expect(await fs.readdir(projectRoot)).to.eql([]);
+    expect(await fs.readdir(baseDir)).to.eql([]);
   });
 });
 

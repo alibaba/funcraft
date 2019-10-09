@@ -18,10 +18,10 @@ const { serviceName,
   functionRes
 } = require('../local/mock-data');
 
-const projectRoot = os.tmpdir();
-const rootArtifactsDir = path.join(projectRoot, '.fun', 'build', 'artifacts');
+const baseDir = os.tmpdir();
+const rootArtifactsDir = path.join(baseDir, '.fun', 'build', 'artifacts');
 const verbose = true;
-const codeUri = path.resolve(projectRoot, functionRes.Properties.CodeUri);
+const codeUri = path.resolve(baseDir, functionRes.Properties.CodeUri);
 const funcArtifactDir = path.join(rootArtifactsDir, serviceName, functionName);
 const testOpts = 'opts';
 
@@ -37,9 +37,9 @@ describe('test buildInDocker', () => {
   });
 
   it('test buildInDocker', async function () {
-    await builder.buildInDocker(serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, funcArtifactDir, verbose);
+    await builder.buildInDocker(serviceName, serviceRes, functionName, functionRes, baseDir, codeUri, funcArtifactDir, verbose);
 
-    assert.calledWith(buildOpts.generateBuildContainerBuildOpts, serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, funcArtifactDir, verbose);
+    assert.calledWith(buildOpts.generateBuildContainerBuildOpts, serviceName, serviceRes, functionName, functionRes, baseDir, codeUri, funcArtifactDir, verbose);
     assert.calledWith(docker.run, testOpts, null, process.stdout, process.stderr);
   });
 });
@@ -56,7 +56,7 @@ describe('test buildInProcess', () => {
   });
 
   it('test buildInProcess', async function () {
-    await builder.buildInProcess(serviceName, serviceRes, functionName, functionRes, projectRoot, codeUri, funcArtifactDir, verbose);
+    await builder.buildInProcess(serviceName, serviceRes, functionName, functionRes, baseDir, codeUri, funcArtifactDir, verbose);
 
     assert.calledWith(fcBuilders.Builder.prototype.build);
   });
