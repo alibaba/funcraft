@@ -280,7 +280,6 @@ describe('test deploy support ros', () => {
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
     assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
-
     assert.calledWith(inquirer.prompt, promptArguments);
   });
 });
