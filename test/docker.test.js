@@ -13,6 +13,7 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const { DEFAULT_NAS_PATH_SUFFIX } = require('../lib/tpl');
 
 const { setProcess } = require('./test-utils');
 const { hasDocker } = require('./conditions');
@@ -250,11 +251,11 @@ describe('test resolveNasConfigToMounts', () => {
       ]
     };
 
-    const mount = await docker.resolveNasConfigToMounts('', nasConfig, projectDir);
+    const mount = await docker.resolveNasConfigToMounts('', nasConfig, path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX));
 
     expect(mount).to.eql([{
       Type: 'bind',
-      Source: path.join(projectDir, '.fun', 'nas', '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),
+      Source: path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),
       Target: '/mnt/test',
       ReadOnly: false
     }]);
@@ -288,11 +289,11 @@ describe('test resolveNasConfigToMounts', () => {
   it('test NasConfig: Auto', async () => {
     const nasConfig = 'Auto';
 
-    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, projectDir);
+    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX));
 
     expect(mount).to.eql([{
       Type: 'bind',
-      Source: path.join(projectDir, '.fun', 'nas', 'auto-default', 'serviceName'),
+      Source: path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX, 'auto-default', 'serviceName'),
       Target: '/mnt/auto',
       ReadOnly: false
     }]);
