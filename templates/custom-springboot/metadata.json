@@ -1,0 +1,8 @@
+{
+    "name": "custom-springboot",
+    "description": "Spring Boot template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    },
+    "copyOnlyPaths": [ ".mvn", "mvnw*", "target" ]
+}
