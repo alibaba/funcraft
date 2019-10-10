@@ -437,7 +437,9 @@ tasks:
     expect(await fs.exists(funfilePath)).to.be(true);
     const funfileContent = await fs.readFile(funfilePath, 'utf8');
     expect(funfileContent).to.eql(`RUNTIME python3
+WORKDIR /code
 RUN fun-install apt-get install libzbar0
+COPY . /code
 RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
 RUN fun-install pip install Pillow
 RUN fun-install pip install pyzbar`);
