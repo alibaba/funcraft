@@ -10,41 +10,14 @@ const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const proxyquire = require('proxyquire');
 
-class Socket {
-  connect(part, host, callback) {
-  }
-
-  on(event, callback) {
-  }
-
-  setTimeout(timeout, callback) {
-  }
-}
-
-class OnErrorSocket extends Socket {
-  on(event, callback) {
-    callback();
-  }
-}
-
-class TimeoutSocket extends Socket {
-  setTimeout(timeout, callback) {
-    callback();
-  }
-}
-
-class ConnectSocket extends Socket {
-  connect(part, host, callback) {
-    callback();
-  }
-}
+const request = sandbox.stub();
 
 describe('test resolveRuntimeToDockerImage', () => {
 
   beforeEach(() => {
     dockerOpts = proxyquire('../lib/docker-opts', {
-      net: {
-        Socket: ConnectSocket
+      httpx: {
+        request
       }
     });
   });
@@ -68,34 +41,38 @@ describe('test resolveRuntimeToDockerImage', () => {
 
 describe('test resolveDockerRegistry', () => {
 
-  it('test domestic users resolver docker registry', async () => {
+  beforeEach(() => {
     dockerOpts = proxyquire('../lib/docker-opts', {
-      net: {
-        Socket: OnErrorSocket
+      httpx: {
+        request
       }
     });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('test domestic users resolver docker registry', async () => {
+    request.withArgs('https://registry.cn-beijing.aliyuncs.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).resolves();
+    request.withArgs('https://registry.hub.docker.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).returns(new Promise(resolve => setTimeout(resolve, 1000)));
     const dockerRegistry = await dockerOpts.resolveDockerRegistry();
     expect(dockerRegistry).to.be.eql('registry.cn-beijing.aliyuncs.com');
   });
 
   it('test foreign users resolver docker registry', async () => {
-    dockerOpts = proxyquire('../lib/docker-opts', {
-      net: {
-        Socket: ConnectSocket
-      }
-    });
+    request.withArgs('https://registry.cn-beijing.aliyuncs.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).returns(new Promise(resolve => setTimeout(resolve, 1000)));
+    request.withArgs('https://registry.hub.docker.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).resolves();
     const dockerRegistry = await dockerOpts.resolveDockerRegistry();
-    expect(dockerRegistry).to.be('');
+    expect(dockerRegistry).to.be('registry.hub.docker.com');
   });
 
-  it('test resolver docker registry with network timeout', async () => {
-    dockerOpts = proxyquire('../lib/docker-opts', {
-      net: {
-        Socket: TimeoutSocket
-      }
-    });
+  it('test resolver docker registry with throw error', async () => {
+    request.withArgs('https://registry.cn-beijing.aliyuncs.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).rejects();
+    request.withArgs('https://registry.hub.docker.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).resolves();
     const dockerRegistry = await dockerOpts.resolveDockerRegistry();
     expect(dockerRegistry).to.be.eql('registry.cn-beijing.aliyuncs.com');
+    
   });
 
 });
@@ -108,11 +85,12 @@ describe('test generateLocalInvokeOpts', () => {
   beforeEach(() => {
 
     sandbox.stub(DockerCli.prototype, 'info').resolves({});
+    const request = sandbox.stub();
 
     dockerOpts = proxyquire('../lib/docker-opts', {
       'dockerode': DockerCli,
-      net: {
-        Socket: ConnectSocket
+      httpx: {
+        request
       }
     });
 
