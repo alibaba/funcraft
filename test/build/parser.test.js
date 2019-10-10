@@ -38,10 +38,12 @@ tasks:
 `;
 
 const funfileContent = `RUNTIME python3
+WORKDIR /code
 RUN fun-install apt-get install local-test -t .fun/nas/auto/apt
 RUN fun-install pip install testPipTarget -t .fun/nas/auto/pip
 RUN apt-get install local-package
 RUN fun-install apt-get install libzbar0
+COPY . /code
 RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
 RUN PATH=testpath:$PATH TESTENV=testenv fun-install pip install Pillow
 RUN fun-install pip install pyzbar
@@ -53,10 +55,12 @@ RUN LD_LIBRARY=testLD_LIBRARY apt-get build-dep -y r-base; \\
   LD_LIBRARY=testLD_LIBRARY make install;`;
 
 const dockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
+WORKDIR /code
 RUN fun-install apt-get install local-test -t .fun/nas/auto/apt
 RUN fun-install pip install testPipTarget -t .fun/nas/auto/pip
 RUN apt-get install local-package
 RUN fun-install apt-get install libzbar0
+COPY . /code
 RUN cd /code/.fun/root/usr/lib && ln -sf libzbar.so.0.2.0 libzbar.so
 RUN PATH=testpath:$PATH TESTENV=testenv fun-install pip install Pillow
 RUN fun-install pip install pyzbar
