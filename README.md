@@ -42,11 +42,14 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
       - [express 项目接入函数计算](https://github.com/muxiangqiu/fc-express-nodejs8)：通过该模板，可以快速将 express 项目接入函数计算。
       - [nextjs 应用接入到函数计算](https://github.com/muxiangqiu/fc-next-nodejs8)：提供了一个 fun 模块，通过该模板，三分钟就可以让 next.js 应用在函数计算中运行起来。
       - [es6 代码编译成 es5 项目模板](https://github.com/muxiangqiu/fc-skeleton-nodejs8)：提供一个 fun 模板，通过 webpack 将 es6 代码编译成 es5，并且剪切打包压缩成一个 js 文件，然后将该 js 文件上传到函数计算中运行。
+      - [函数计算狗和猫图像分类模版项目](https://github.com/awesome-fc/cat-dog-classify)：轻松搭建一个可以实现狗和猫图像分类器的模版项目。
   - **依赖安装**：关于如何使用 fun install 快速安装函数依赖的文章。
     - [Funfile 功能介绍](https://yq.aliyun.com/articles/719100)：介绍了使用 Funfile 构造函数计算的交付产物。Funfile 中包含了一系列的命令，Fun 会忠实地执行这些步骤，最终产出“交付产物”。
     - [开发函数计算的正确姿势 —— 安装第三方依赖](https://yq.aliyun.com/articles/688062)：介绍了 fun install 的基本用法。
     - [函数运行环境系统动态链接库版本太低？函数计算 fun 神助力分忧解难](https://yq.aliyun.com/articles/690856)：介绍了如何利用 fun install，升级系统动态链接库。
+    - [开发函数计算的正确姿势——使用交互模式安装依赖](https://yq.aliyun.com/articles/716663)：介绍了 Fun 使用交互模式安装依赖，除了支持交互模式，沿用了指定 runtime 启动 sbox，也实现了 fun 风格的指定函数启动 sbox，更加便利。
     - [开发函数计算的正确姿势 —— 使用 Fun Build 构建函数](https://yq.aliyun.com/articles/719102)：介绍了使用 Fun Build 实现从源码到交付产物的构建过程。
+    - [开发函数计算的正确姿势 —— 依赖安装方法一览](https://yq.aliyun.com/articles/719107)：从用户需求的视角对安装依赖的方式进行简单分类，以便于用户可以根据自己的需求，寻找到正确的解决方法。
     - **install 原理介绍**：fun install 功能推出之前推荐的方法，现在更推荐优先使用 fun install。下面的文章，可以作为了解 install 的原理，以便更好的使用 fun install。
         - [函数计算安装依赖库方法小结](https://yq.aliyun.com/articles/602147)：总结了各个语言依赖安装的方法。
         - [函数计算 Python 连接 SQL Server 小结](https://yq.aliyun.com/articles/672131)：介绍了如何利用 fc-docker 安装 pymssql 库。该文章介绍的思路，与 fun install 的底层实现思路是类似的。
@@ -62,6 +65,8 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
     - [开发函数计算的正确姿势 —— OSS 触发器](https://yq.aliyun.com/articles/699379)：介绍了如何部署 OSS 触发器 + 函数计算应用。
     - [开发函数计算的正确姿势 —— CDN 触发器](https://yq.aliyun.com/articles/700808)：介绍了如何部署 CDN 触发器 + 函数计算应用。
     - [开发函数计算的正确姿势 —— 使用 ROS 进行资源编排](https://yq.aliyun.com/articles/719104)：介绍了如何将资源通过 ROS 的方式进行部署。
+    - [开发函数计算的正确姿势 —— 使用 Fun NAS 管理 NAS 资源](https://yq.aliyun.com/articles/712700)：介绍了如何使用 Fun NAS 管理 NAS 文件以及上传本地文件到 NAS。
+    - [开发函数计算的正确姿势 —— Fun 自动化 NAS 配置](https://yq.aliyun.com/articles/712693)：介绍了 Fun 自动化 NAS 配置, 可以极大的减少了用户配置 NAS 服务与函数计算的步骤。
   - **实战**：关于如何利用 init、local、install、deploy 等命令，快速开发一款 Serverless 应用的文章。
     - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): 通过一个实战场景，介绍了如何利用 Fun 工具从头开始开发一个 Serverless 应用。
     - [开发函数计算的正确姿势 —— 排查超时问题](https://yq.aliyun.com/articles/672627): 从一个 bug 出发，介绍了各种排查问题的技巧。
@@ -73,6 +78,7 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
     - [用函数计算搭建微服务——云客服访客名片](https://yq.aliyun.com/articles/674378)：介绍了如何利用函数计算搭建云客服访客名片微服务。
     - [三分钟学会如何在函数计算中使用 puppeteer](https://yq.aliyun.com/articles/602877)：介绍了如何在函数计算中使用 puppeteer。
     - [函数计算部署机器学习遇到的问题和解法](https://yq.aliyun.com/articles/630289)：介绍了机器学习部署到函数计算时可能会遇到的一些问题以及相关问的解法。
+    - [开发函数计算的正确姿势——借助 Ghostscript 将 PDF 转换成 JPG](https://yq.aliyun.com/articles/718747)：介绍了使用函数计算并借助 Ghostscript 进行 word 到 pdf 的转换。
 
 - [常见问题与解答](https://github.com/aliyun/fun/blob/master/docs/usage/faq-zh.md): 使用 Fun 时的常见问题与解答。
 - [更多示例](https://github.com/aliyun/fun/tree/master/examples)
