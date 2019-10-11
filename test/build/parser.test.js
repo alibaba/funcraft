@@ -74,7 +74,7 @@ const dockerHubDockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dock
 ${dockerfileContent}`;
 
 
-const aliregistryDockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
+const aliregistryDockerfileContent = `FROM registry.cn-beijing.aliyuncs.com:build-${dockerOpts.IMAGE_VERSION}
 ${dockerfileContent}`;
 
 
