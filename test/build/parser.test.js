@@ -74,7 +74,7 @@ const dockerHubDockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dock
 ${dockerfileContent}`;
 
 
-const aliregistryDockerfileContent = `FROM registry.cn-beijing.aliyuncs.com:build-${dockerOpts.IMAGE_VERSION}
+const aliregistryDockerfileContent = `FROM registry.cn-beijing.aliyuncs.com/aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
 ${dockerfileContent}`;
 
 
@@ -103,7 +103,7 @@ describe('test funfileToDockerfile', () => {
   });
 
   it('test funfileToDockerfile', async function () {
-    sandbox.stub(dockerOpts, 'resolveDockerRegistry').resolves('');
+    sandbox.stub(dockerOpts, 'resolveImageNameForPull').resolves(`aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}`);
     sandbox.stub(fs, 'readFile').returns(funfileContent);
 
     const dockerfile = await parser.funfileToDockerfile('path');
@@ -111,7 +111,7 @@ describe('test funfileToDockerfile', () => {
   });
 
   it('test funfileToDockerfile for aliregistry', async function () {
-    sandbox.stub(dockerOpts, 'resolveDockerRegistry').resolves('registry.cn-beijing.aliyuncs.com');
+    sandbox.stub(dockerOpts, 'resolveImageNameForPull').resolves(`registry.cn-beijing.aliyuncs.com/aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}`);
     sandbox.stub(fs, 'readFile').returns(funfileContent);
 
     const dockerfile = await parser.funfileToDockerfile('path');
