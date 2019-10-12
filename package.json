@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
@@ -48,7 +48,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.2.3",
+    "@alicloud/fc-builders": "^0.2.4",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
@@ -131,7 +131,7 @@
     "mocha": "^5.2.0",
     "nock": "^10.0.6",
     "node-pty": "^0.8.1",
-    "pkg": "^4.3.4",
+    "pkg": "^4.4.0",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
     "suppose": "^0.6.2"
