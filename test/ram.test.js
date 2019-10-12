@@ -1,5 +1,6 @@
 'use strict';
 
+const { setProcess } = require('./test-utils');
 const { normalizeRoleOrPoliceName } = require('../lib/ram');
 
 const sinon = require('sinon');
@@ -40,14 +41,24 @@ describe('test normalizeRoleOrPoliceName', () => {
 
 describe('ram police capitalization test', () => {
 
+  let restoreProcess;
+
   beforeEach(() => {
 
     sandbox.stub(Ram.prototype, 'listPoliciesForRole').resolves(policy);
     sandbox.stub(Ram.prototype, 'attachPolicyToRole');
   });
 
+  restoreProcess = setProcess({
+    ACCOUNT_ID: 'ACCOUNT_ID',
+    ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+    ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
+    DEFAULT_REGION: 'cn-shanghai'
+  });
+
   afterEach(() => {
     sandbox.restore();
+    restoreProcess();
   });
 
   it('ram police lower case', async () => {
