@@ -47,13 +47,13 @@ describe('ram police capitalization test', () => {
 
     sandbox.stub(Ram.prototype, 'listPoliciesForRole').resolves(policy);
     sandbox.stub(Ram.prototype, 'attachPolicyToRole');
-  });
 
-  restoreProcess = setProcess({
-    ACCOUNT_ID: 'ACCOUNT_ID',
-    ACCESS_KEY_ID: 'ACCESS_KEY_ID',
-    ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
-    DEFAULT_REGION: 'cn-shanghai'
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'ACCOUNT_ID',
+      ACCESS_KEY_ID: 'ACCESS_KEY_ID',
+      ACCESS_KEY_SECRET: 'ACCESS_KEY_SECRET',
+      DEFAULT_REGION: 'cn-shanghai'
+    });
   });
 
   afterEach(() => {
