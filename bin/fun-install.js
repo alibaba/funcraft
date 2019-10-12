@@ -13,14 +13,12 @@ const notifier = require('../lib/update-notifier');
 const { getSupportedRuntimesAsString } = require('../lib/common/model/runtime');
 
 
-const autoExitOnWindows = () => {
-  if (process.platform === 'win32') {
-    // fix windows not auto exit bug after docker operation
-    unrefTimeout(() => {
-      // in order visitor request has been sent out
-      process.exit(0); // eslint-disable-line
-    });
-  }
+const autoExit = () => {
+  // fix not auto exit bug after docker operation
+  unrefTimeout(() => {
+    // in order visitor request has been sent out
+    process.exit(0); // eslint-disable-line
+  });
 };
 
 const convertOptions = (program) => {
@@ -58,7 +56,7 @@ program
     opts.env = convertEnvs(options.env);
 
     install(packageNames, opts).then(() => {
-      autoExitOnWindows();
+      autoExit();
     }).catch(handler);
   });
 
@@ -83,7 +81,7 @@ program
           el: 'error',
           dp: '/fun/install/init'
         }).send();
-        
+
         handler(error);
       });
     });
@@ -105,7 +103,7 @@ program
           dp: '/fun/install/env'
         }).send();
 
-        autoExitOnWindows();
+        autoExit();
 
       }).catch((error) => {
 
@@ -217,7 +215,7 @@ if (!program.args.length) {
         dp: '/fun/installAll'
       }).send();
 
-      autoExitOnWindows();
+      autoExit();
 
     }).catch(error => {
       visitor.event({
