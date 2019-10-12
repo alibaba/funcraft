@@ -3,15 +3,20 @@ set -e
 
 PKG_VERSION=`node -p "require('./package').version"`
 
-## package to binary
-pkg -t node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86,node8-win-x64,node8-win-x86  --out-path output .
+targets=("node8-linux-x64" "node8-macos-x64" "node8-win-x64")
+outputs=("fun-v${PKG_VERSION}-linux-x64" "fun-v${PKG_VERSION}-macos-x64" "fun-v${PKG_VERSION}-win-x64.exe")
+
+mkdir -p output
 
 ## rename and zip output files
-cd output
-for f in fun-*; 
+for i in "${!targets[@]}";
 do 
-	filename=fun-v${PKG_VERSION}${f##*fun}
-	mv $f $filename
+	target=${targets[$i]}
+	filename=${outputs[$i]}
+	pkg -t $target --output output/$filename .
+	
+	cd output
 	zip $filename.zip $filename
 	rm $filename
+	cd ..
 done
