@@ -39,7 +39,7 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
       - [express 项目接入函数计算](https://github.com/muxiangqiu/fc-express-nodejs8)：Help quickly build a express project of Function-Compute.
       - [nextjs 应用接入到函数计算](https://github.com/muxiangqiu/fc-next-nodejs8)：Help quickly build a next.js project of Function-Compute.
       - [es6 代码编译成 es5 项目模板](https://github.com/muxiangqiu/fc-skeleton-nodejs8)：Help quickly build a webpack project of Function-Compute in order to compile es6 to es5.
-      - [Serverless 微服务实践-移动应用包分发服务](https://github.com/coco-super/package-distribution-service-for-serverless)：Provide a service template project for package distribution based on serverless architecture of Function-Compute.
+      - [Serverless 微服务实践-移动应用包分发服务](https://github.com/coco-super/package-distribution-service-for-serverless)：Help quickly build a package distribution project based on serverless architecture of Function-Compute.
   - **Dependences installation**: Articles on how to use fun install to quickly install  dependencies.
     - [开发函数计算的正确姿势 —— 安装第三方依赖](https://yq.aliyun.com/articles/688062): introduce the basic usage of fun install.
     - [函数运行环境系统动态链接库版本太低？函数计算 fun 神助力分忧解难](https://yq.aliyun.com/articles/690856): Introduce how to use fun install to upgrade the system Dynamic-link libraries.
