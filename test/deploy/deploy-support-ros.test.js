@@ -240,7 +240,7 @@ describe('test deploy support ros', () => {
     assert.notCalled(inquirer.prompt);
   });
 
-  it('test deploy by ros with assumeYes is true', async () => {
+  it.skip('test deploy by ros with assumeYes is true', async () => {
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
       'PageNumber': 1,
       'TotalCount': 3,
