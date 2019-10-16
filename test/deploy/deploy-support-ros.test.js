@@ -143,6 +143,26 @@ const events = [
   }
 ];
 
+const eventsForStackProcess = [
+  { StatusReason: 'state changed',
+    Status: 'UPDATE_IN_PROGRESS',
+    PhysicalResourceId: 'f5dcf959-07e7-4acc-8d45-9fab9ccac711',
+    LogicalResourceId: 'RosDemotest3',
+    ResourceType: 'ALIYUN::ROS::Stack',
+    StackId: 'db7d6ddc-b089-4a9f-baaf-79169d2eed6f',
+    CreateTime: '2019-10-09T13:27:15',
+    EventId: '4bcd4524-f9d8-42c1-b097-aca101007e86',
+    StackName: 'coco-superme'
+  }
+];
+
+const resultsForStackProcess = {
+  'PageNumber': 1,
+  'TotalCount': 20,
+  'PageSize': 50,
+  'Events': eventsForStackProcess
+};
+
 const listEventsResults = {
   'PageNumber': 1,
   'TotalCount': 20,
@@ -151,22 +171,17 @@ const listEventsResults = {
 };
 
 describe('test deploy support ros', () => {
-
-  let rosClient;
-
   const requestOption = {
     method: 'POST'
   };
-
   const answer = {
     'ok': true
   };
 
+  let rosClient;
   let requestStub;
   let restoreProcess;
-
   beforeEach(() => {
-
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
@@ -193,8 +208,7 @@ describe('test deploy support ros', () => {
     sandbox.restore();
   });
 
-  it('test deploy by ros with assumeYes is true', async () => {
-
+  it('fix ros deploy undefined bug', async () => {
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
       'PageNumber': 1,
       'TotalCount': 3,
@@ -211,7 +225,46 @@ describe('test deploy support ros', () => {
       ChangeSetId: 'changeSetId'
     });
 
-   
+    requestStub.withArgs('GetStack', getStackParams).resolves({
+      'Status': 'UPDATE_COMPLETE'
+    });
+
+    requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
+      'Status': 'COMPLETE',
+      'Changes': changes
+    });
+
+    requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
+    requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).onFirstCall().resolves(resultsForStackProcess);
+    requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).onSecondCall().resolves(listEventsResults);
+
+    await deployByRos(stackName, tpl, true);
+
+    assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
+    assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
+    assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
+    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
+
+    assert.callCount(requestStub, 6);
+    assert.notCalled(inquirer.prompt);
+  });
+
+  it('test deploy by ros with assumeYes is true', async () => {
+    requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
+      'PageNumber': 1,
+      'TotalCount': 3,
+      'PageSize': 50,
+      'Stacks': [
+        {
+          'StackId': stackId,
+          'StackName': stackName
+        }
+      ]
+    });
+
+    requestStub.withArgs('CreateChangeSet', updateParams, requestOption).resolves({
+      ChangeSetId: 'changeSetId'
+    });
 
     requestStub.withArgs('GetStack', getStackParams).resolves({
       'Status': 'UPDATE_COMPLETE'
@@ -223,8 +276,6 @@ describe('test deploy support ros', () => {
     });
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
-
-
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
 
     await deployByRos(stackName, tpl, true);
