@@ -72,7 +72,7 @@ describe('fun-invoke test', () => {
 
   it('fun invoke ros template test', async () => {
 
-    const rosTemplatePath = path.join('.fun', 'tmp', 'rosTemplate');
+    const rosTemplatePath = path.join('.fun', 'tmp', 'rosTemplate.json');
 
     const absRosTemplatePath = path.resolve(rosTemplatePath);
 
@@ -87,7 +87,6 @@ describe('fun-invoke test', () => {
     });
 
     rimraf.sync(`${process.cwd()}/.fun/`);
-
 
     assert.calledWith(fc.invokeFunction, {
       serviceName: 'ros-ellison-localdemo-6E86262F4770',
