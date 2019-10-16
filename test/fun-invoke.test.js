@@ -70,6 +70,32 @@ describe('fun-invoke test', () => {
     })(invokeName, options);
   }
 
+  it('fun invoke ros template test', async () => {
+
+    const rosTemplatePath = path.join('.fun', 'tmp', 'rosTemplate.json');
+
+    const absRosTemplatePath = path.resolve(rosTemplatePath);
+
+    await fs.outputFile(absRosTemplatePath, JSON.stringify(mockData.rosTemplate));
+
+    tpl.getTpl.returns(mockData.tpl);
+    service.getTriggerMetas.returns({});
+    await invokeFuntion(undefined, {
+      event: '',
+      invocationType: 'Sync'
+
+    });
+
+    rimraf.sync(`${process.cwd()}/.fun/`);
+
+    assert.calledWith(fc.invokeFunction, {
+      serviceName: 'ros-ellison-localdemo-6E86262F4770',
+      functionName: 'ros-ellison-python3-BD6A72101919',
+      event: '',
+      invocationType: 'Sync'
+    });
+  });
+
 
   it('fun invoke without invokeName, default first function in tpl', async () => {
 

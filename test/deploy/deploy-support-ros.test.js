@@ -9,6 +9,7 @@ const assert = sandbox.assert;
 const uuid = require('uuid');
 const inquirer = require('inquirer');
 const time = require('../../lib/time');
+const os = require('os');
 
 const changes = [
   {
@@ -70,6 +71,11 @@ const listEventsParams = {
   'RegionId': 'cn-beijing',
   'PageSize': 50,
   'PageNumber': 1
+};
+
+const getTemplateParams = {
+  'RegionId': 'cn-beijing',
+  'StackId': stackId
 };
 
 const updateParams = {
@@ -211,8 +217,6 @@ describe('test deploy support ros', () => {
       ChangeSetId: 'changeSetId'
     });
 
-   
-
     requestStub.withArgs('GetStack', getStackParams).resolves({
       'Status': 'UPDATE_COMPLETE'
     });
@@ -224,16 +228,18 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
 
-
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
 
-    await deployByRos(stackName, tpl, true);
+    requestStub.withArgs('GetTemplate', getTemplateParams, requestOption).resolves({});
+
+    await deployByRos(os.tmpdir(), stackName, tpl, true);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetTemplate', getTemplateParams, requestOption);
 
+    assert.callCount(requestStub, 6);
     assert.notCalled(inquirer.prompt);
   });
 
