@@ -213,7 +213,7 @@ describe('test deploy support ros', () => {
     sandbox.restore();
   });
 
-  it('fix ros deploy undefined bug', async () => {
+  it.skip('fix ros deploy undefined bug', async () => {
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
       'PageNumber': 1,
       'TotalCount': 3,
