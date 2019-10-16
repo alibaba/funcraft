@@ -165,7 +165,7 @@ const listEventsResults = {
 };
 
 const answer = {
-  ok : true
+  ok: true
 };
 
 describe('test deploy support ros', () => {
