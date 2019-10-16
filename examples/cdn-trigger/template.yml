@@ -1,4 +1,5 @@
 ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
   cdn-test-service:
     Type: 'Aliyun::Serverless::Service'
