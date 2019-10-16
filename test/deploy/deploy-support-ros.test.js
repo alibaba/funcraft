@@ -9,6 +9,7 @@ const assert = sandbox.assert;
 const uuid = require('uuid');
 const inquirer = require('inquirer');
 const time = require('../../lib/time');
+const os = require('os');
 
 const changes = [
   {
@@ -70,6 +71,11 @@ const listEventsParams = {
   'RegionId': 'cn-beijing',
   'PageSize': 50,
   'PageNumber': 1
+};
+
+const getTemplateParams = {
+  'RegionId': 'cn-beijing',
+  'StackId': stackId
 };
 
 const updateParams = {
@@ -168,6 +174,10 @@ const answer = {
   ok: true
 };
 
+const getTemplateResults = {
+  'TemplateBody': '{\'ROSTemplateFormatVersion\': \'2015-09-01\', \'Resources\': {\'cdn-test-service\': {\'Type\': \'ALIYUN::FC::Service\', \'Properties\': {\'InternetAccess\': true, \'ServiceName\': \'coco-sunfeiyu-cdn-test-service-6C96318357A9\', \'Description\': \'sdasdsaffhgfhgf\', \'LogConfig\': {\'Project\': \'\', \'Logstore\': \'\'}}}, \'cdn-test-servicecdn-test-function\': {\'Type\': \'ALIYUN::FC::Function\', \'Properties\': {\'Code\': {\'OssBucketName\': \'ros-ellison\', \'OssObjectName\': \'6a9fc7e4fbf33530b676fa85c2834d8c\'}, \'FunctionName\': \'coco-sunfeiyu-cdn-test-function-70CA4250E896\', \'ServiceName\': \'coco-sunfeiyu-cdn-test-service-6C96318357A9\', \'EnvironmentVariables\': {\'PATH\': \'/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin\', \'LD_LIBRARY_PATH\': \'/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib\', \'PYTHONUSERBASE\': \'/code/.fun/python\'}, \'Handler\': \'index.handler\', \'Runtime\': \'nodejs6\'}, \'DependsOn\': \'cdn-test-service\'}}}',
+  'RequestId': '783233CD-C3C1-4A4A-A8D8-09515781F74E'
+};
 describe('test deploy support ros', () => {
   const requestOption = {
     method: 'POST'
@@ -228,15 +238,16 @@ describe('test deploy support ros', () => {
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).onFirstCall().resolves(resultsForStackProcess);
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).onSecondCall().resolves(listEventsResults);
+    requestStub.withArgs('GetTemplate', getTemplateParams, requestOption).resolves(getTemplateResults);
 
-    await deployByRos(stackName, tpl, true);
+    await deployByRos(os.tmpdir(), stackName, tpl, true);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetTemplate', getTemplateParams, requestOption);
 
-    assert.callCount(requestStub, 6);
+    assert.callCount(requestStub, 7);
     assert.notCalled(inquirer.prompt);
   });
 
@@ -264,14 +275,16 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
+    requestStub.withArgs('GetTemplate', getTemplateParams, requestOption).resolves(getTemplateResults);
 
-    await deployByRos(stackName, tpl, true);
+    await deployByRos(os.tmpdir(), stackName, tpl, true);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetTemplate', getTemplateParams, requestOption);
 
+    assert.callCount(requestStub, 6);
     assert.notCalled(inquirer.prompt);
   });
 
