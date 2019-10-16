@@ -83,12 +83,6 @@ const updateParams = {
   TimeoutInMinutes: 10
 };
 
-const getStackParams = {
-  'StackId': stackId,
-  'RegionId': 'cn-beijing'
-};
-
-
 const getChangeSetParam = {
   'RegionId': 'cn-beijing',
   'ChangeSetId': 'changeSetId',
@@ -170,12 +164,13 @@ const listEventsResults = {
   'Events': events
 };
 
+const answer = {
+  ok : true
+};
+
 describe('test deploy support ros', () => {
   const requestOption = {
     method: 'POST'
-  };
-  const answer = {
-    'ok': true
   };
 
   let rosClient;
@@ -192,7 +187,7 @@ describe('test deploy support ros', () => {
 
     requestStub = sandbox.stub();
 
-    sandbox.stub(inquirer, 'prompt').resolves(answer);
+    sandbox.stub(inquirer, 'prompt').withArgs('Please confirm to continue.').resolves(answer);
 
     rosClient = {
       request: requestStub
@@ -223,10 +218,6 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('CreateChangeSet', updateParams, requestOption).resolves({
       ChangeSetId: 'changeSetId'
-    });
-
-    requestStub.withArgs('GetStack', getStackParams).resolves({
-      'Status': 'UPDATE_COMPLETE'
     });
 
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
@@ -266,10 +257,6 @@ describe('test deploy support ros', () => {
       ChangeSetId: 'changeSetId'
     });
 
-    requestStub.withArgs('GetStack', getStackParams).resolves({
-      'Status': 'UPDATE_COMPLETE'
-    });
-
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
       'Status': 'COMPLETE',
       'Changes': changes
@@ -288,7 +275,6 @@ describe('test deploy support ros', () => {
     assert.notCalled(inquirer.prompt);
   });
 
-  // Causes travis mac nodejs9 and nodejs10 to fail
   it.skip('test deploy by ros with assumeYes is false', async () => {
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
       'PageNumber': 1,
@@ -304,10 +290,6 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('CreateChangeSet', updateParams, requestOption).resolves({
       ChangeSetId: 'changeSetId'
-    });
-
-    requestStub.withArgs('GetStack', getStackParams).resolves({
-      'Status': 'UPDATE_COMPLETE'
     });
 
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
