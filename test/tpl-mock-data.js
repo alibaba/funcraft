@@ -100,4 +100,41 @@ const tplWithDuplicatedFunction = {
   }
 };
 
-module.exports = { tpl, tplWithDuplicatedFunction, tplWithDuplicatedFunctionsInService };
+const rosTemplate = {
+  'ROSTemplateFormatVersion': '2015-09-01',
+  'Resources': {
+    'localdemo': {
+      'Type': 'ALIYUN::FC::Service',
+      'Properties': {
+        'InternetAccess': true,
+        'ServiceName': 'ros-ellison-localdemo-6E86262F4770',
+        'Description': 'cstsadasdasdas',
+        'LogConfig': {
+          'Project': '',
+          'Logstore': ''
+        }
+      }
+    },
+    'localdemopython3': {
+      'Type': 'ALIYUN::FC::Function',
+      'Properties': {
+        'Code': {
+          'OssBucketName': 'ros-ellison',
+          'OssObjectName': '6a9fc7e4fbf33530b676fa85c2834d8c'
+        },
+        'FunctionName': 'ros-ellison-python3-BD6A72101919',
+        'ServiceName': 'ros-ellison-localdemo-6E86262F4770',
+        'EnvironmentVariables': {
+          'PATH': '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+          'LD_LIBRARY_PATH': '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+          'PYTHONUSERBASE': '/code/.fun/python'
+        },
+        'Handler': 'index.handler',
+        'Runtime': 'nodejs10'
+      },
+      'DependsOn': 'localdemo'
+    }
+  }
+};
+
+module.exports = { tpl, tplWithDuplicatedFunction, tplWithDuplicatedFunctionsInService, rosTemplate };
