@@ -102,6 +102,7 @@
     "os-name": "^3.1.0",
     "progress": "^2.0.3",
     "promise-retry": "^1.1.1",
+    "promise.prototype.finally": "^3.1.1",
     "raw-body": "^2.3.3",
     "readdirp": "^3.1.2",
     "require-from-string": "^2.0.2",
