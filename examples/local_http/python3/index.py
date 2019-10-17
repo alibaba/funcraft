@@ -5,6 +5,7 @@ def handler(environ, start_response):
 
     request_uri = environ['fc.request_uri']
 
+
     headers = {}
     for k, v in environ.items():
         if k.startswith("HTTP_"):
