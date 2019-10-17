@@ -14,6 +14,6 @@
     "http-trigger-python2.7":  "{{ templatePath }}/http-trigger-python2.7",
     "http-trigger-java8":  "{{ templatePath }}/http-trigger-java8",
     "http-trigger-php7.2":  "{{ templatePath }}/http-trigger-php7.2",
-    "http-trigger-dotnetcore2.1":  "{{ templatePath }}/http-trigger-dotnetcore2.1"
-
+    "http-trigger-dotnetcore2.1":  "{{ templatePath }}/http-trigger-dotnetcore2.1",
+    "custom-springboot": "{{ templatePath }}/custom-springboot"
 }
