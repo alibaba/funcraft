@@ -1,0 +1,21 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  springboot: # service name
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: This is a FC service for springboot
+    helloworld: # function name
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: com.example.demo.DemoApplication::main
+        Runtime: custom
+        CodeUri: ./
+        MemorySize: 1024
+        Timeout: 15
+      Events:
+        httpTrigger:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT']
