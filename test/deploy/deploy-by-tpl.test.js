@@ -162,6 +162,41 @@ describe('deploy', () => {
     }).deploy(path.join('./examples', example, 'template.yml'), {});
   }
 
+  it('deploy local http trigger', async () => {
+    await deploy('local_http');
+
+    assert.calledWith(fc.makeService.firstCall, {
+      description: 'local invoke demo',
+      internetAccess: null,
+      logConfig: {},
+      nasConfig: undefined,
+      role: '',
+      serviceName: 'local-http-demo',
+      vpcConfig: undefined
+    });
+
+    assert.calledWith(fc.makeFunction.firstCall,
+      path.join(process.cwd(), 'examples', 'local_http'), {
+        codeUri: 'nodejs8/',
+        description: 'http trigger demo with nodejs8!',
+        environmentVariables: undefined,
+        functionName: 'nodejs8',
+        handler: 'index.handler',
+        initializationTimeout: undefined,
+        initializer: 'index.initializer',
+        memorySize: undefined,
+        nasConfig: undefined,
+        runtime: 'nodejs8',
+        serviceName: 'local-http-demo',
+        timeout: undefined
+      });
+
+    assert.calledWith(trigger.displayTriggerInfo.firstCall, 'local-http-demo', 'nodejs8', 'http-test', 'HTTP', {
+      AuthType: 'ANONYMOUS',
+      Methods: ['GET', 'POST', 'PUT']
+    }, '\t\t');
+  });
+
   it('deploy datahub', async () => {
     await deploy('datahub');
 
