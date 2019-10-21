@@ -49,7 +49,7 @@ describe('test fun nas init', () => {
       headers: 200, 
       data: {
         path: '/mnt/nas',
-        isExist: true,
+        exists: true,
         isDir: true,
         isFile: false, 
         UserId: 100, 

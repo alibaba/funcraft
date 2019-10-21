@@ -98,19 +98,19 @@ describe('checkWritePerm test', () => {
   });
 
   it('path not exist', () => {
-    const stats = { isExist: false };
+    const stats = { exists: false };
     let nasId = {
       UserId: -1, 
       GroupId: -1
     };
     const res = supportStub.checkWritePerm(stats, nasId, nasPath);
 
-    expect(res).to.eql(`${nasPath} not exist`);
+    expect(res).to.be.undefined;
   });
 
   it('file has no write permission', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: false,
       isFile: true, 
       UserId: 10, 
@@ -127,7 +127,7 @@ describe('checkWritePerm test', () => {
 
   it('folder has no write permission', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: true,
       isFile: false, 
       UserId: 10, 
@@ -144,7 +144,7 @@ describe('checkWritePerm test', () => {
 
   it('userId and groupId mismatch', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: true,
       isFile: false, 
       UserId: 10, 
@@ -161,7 +161,7 @@ which may cause permission problem, more information please refer to https://git
   });
   it('userId match', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: true,
       isFile: false, 
       UserId: 10, 
@@ -177,7 +177,7 @@ which may cause permission problem, more information please refer to https://git
   });
   it('groupId match', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: true,
       isFile: false, 
       UserId: 10, 
@@ -193,7 +193,7 @@ which may cause permission problem, more information please refer to https://git
   });
   it('file userId and groupId have no write permission', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: false,
       isFile: true, 
       UserId: 10, 
@@ -210,7 +210,7 @@ more information please refer to https://github.com/alibaba/funcraft/blob/master
   });
   it('floder userId and groupId have no write permission', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: true,
       isFile: false, 
       UserId: 10, 
@@ -228,7 +228,7 @@ more information please refer to https://github.com/alibaba/funcraft/blob/master
   
   it('isFile and isDir are both true', () => {
     const stats = {
-      isExist: true, 
+      exists: true, 
       isDir: true,
       isFile: true, 
       UserId: 10, 
@@ -276,7 +276,6 @@ describe('isSameVersion test', () => {
 
 describe('isSameNasConfig test', () => {
   beforeEach(() => {
-    
     requestStub.getNasConfig.returns({
       userId: 1000,
       groupId: 1000,
@@ -303,7 +302,26 @@ describe('isSameNasConfig test', () => {
     expect(res).to.eql(false);
     assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
   });
-  it('config not matched', async() => {
+
+  it('auto nas config not matched', async() => {
+    const res = await supportStub.isSameNasConfig(mockdata.serviceName, 'Auto');
+    expect(res).to.eql(false);
+    assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
+  });
+  it('auto nas config matched', async() => {
+    requestStub.getNasConfig.returns({
+      userId: 10003,
+      groupId: 10003,
+      mountPoints: [{
+        serverAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        mountDir: '/mnt/auto'
+      }]
+    });
+    const res = await supportStub.isSameNasConfig(mockdata.serviceName, 'Auto');
+    expect(res).to.eql(true);
+    assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
+  }); 
+  it('config matched', async() => {
     const nasConig = {
       UserId: 1000,
       GroupId: 1000, 
@@ -317,3 +335,31 @@ describe('isSameNasConfig test', () => {
     assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
   });
 });
+describe('getNasId test', () => {
+  it('normal nas config test', () => {
+    const res = supportStub.getNasId(mockdata.tpl, mockdata.serviceName);
+    expect(res).to.eql(mockdata.nasId);
+  });
+  it('empty nas config test', () => {
+    const res = supportStub.getNasId(mockdata.tplWithoutNasConfig, mockdata.serviceName);
+    expect(res).to.eql({});
+  });
+});
+describe('getNasPathAndServiceFromNasUri test', () => {
+  const nasUri = 'nas:///mnt/auto';
+  it('normal nas config test', () => {
+    const res = supportStub.getNasPathAndServiceFromNasUri(nasUri, mockdata.tpl);
+    expect(res).to.eql({
+      nasPath: '/mnt/auto', 
+      serviceName: mockdata.serviceName
+    });
+  });
+  it('empty nas config test', () => {
+    const res = supportStub.getNasPathAndServiceFromNasUri(nasUri, mockdata.tplWithoutNasConfig);
+    expect(res).to.eql({
+      nasPath: '/mnt/auto', 
+      serviceName: mockdata.serviceName
+    });
+  });
+});
+
