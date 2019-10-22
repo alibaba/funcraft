@@ -1,0 +1,7 @@
+{
+    "name": "http-trigger-spirng-boot",
+    "description": "Serverless SpringBoot Demo",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
