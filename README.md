@@ -44,8 +44,6 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
       - [es6 代码编译成 es5 项目模板](https://github.com/muxiangqiu/fc-skeleton-nodejs8)：提供一个 fun 模板，通过 webpack 将 es6 代码编译成 es5，并且剪切打包压缩成一个 js 文件，然后将该 js 文件上传到函数计算中运行。
       - [函数计算狗和猫图像分类模版项目](https://github.com/awesome-fc/cat-dog-classify)：轻松搭建一个可以实现狗和猫图像分类器的深度学习模版项目。
       - [Serverless 微服务实践-移动应用包分发服务](https://github.com/coco-super/package-distribution-service-for-serverless)：提供一个基于函数计算 Serverless 架构的包分发服务模版项目。
-  - **源码编译**：关于如何使用 fun build 编译 java 等编译型语言函数代码的文章。
-    - [开发函数计算的正确姿势 —— 使用 Fun Build 构建函数](https://yq.aliyun.com/articles/719102)：介绍了使用 Fun Build 实现从源码到交付产物的构建过程。
   - **依赖安装**：关于如何使用 fun install 快速安装函数依赖的文章。
     - [开发函数计算的正确姿势 —— 依赖安装方法一览](https://yq.aliyun.com/articles/719107)：从用户需求的视角对安装依赖的方式进行简单分类，以便于用户可以根据自己的需求，寻找到正确的解决方法。
     - [开发函数计算的正确姿势——使用交互模式安装依赖](https://yq.aliyun.com/articles/716663)：介绍了 Fun 使用交互模式安装依赖，除了支持交互模式，沿用了指定 runtime 启动 sbox，也实现了 fun 风格的指定函数启动 sbox，更加便利。
@@ -56,6 +54,8 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
         - [函数计算安装依赖库方法小结](https://yq.aliyun.com/articles/602147)：总结了各个语言依赖安装的方法。
         - [函数计算 Python 连接 SQL Server 小结](https://yq.aliyun.com/articles/672131)：介绍了如何利用 fc-docker 安装 pymssql 库。该文章介绍的思路，与 fun install 的底层实现思路是类似的。
         - [手把手教您将 libreoffice 移植到函数计算平台](https://yq.aliyun.com/articles/674330)：介绍了如何利用 fc-docker 将 libreoffice 移植到函数计算。
+  - **源码编译**：关于如何使用 fun build 编译 java 等编译型语言函数代码的文章。
+    - [开发函数计算的正确姿势 —— 使用 Fun Build 构建函数](https://yq.aliyun.com/articles/719102)：介绍了使用 Fun Build 实现从源码到交付产物的构建过程。
   - **本地运行与调试**：关于如何本地运行、调试函数，以及介绍排查 bug 技巧的系列文章。
     - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](https://yq.aliyun.com/articles/672623)：介绍了 Fun Local 基本用法。
     - [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683): 介绍了如何使用 Fun Local 在本地运行、单步调试配置了 Http Trigger 的函数。
