@@ -3,7 +3,7 @@ Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
   cdn-test-service:
     Type: 'Aliyun::Serverless::Service'
-    Properties: 
+    Properties:
       Description: 'cdn trigger test'
 
     cdn-test-function:
@@ -20,6 +20,5 @@ Resources:
             EventName: CachedObjectsRefreshed
             EventVersion: '1.0.0'
             Notes: cdn events trigger test
-            Filter: 
+            Filter:
               Domain: ['cdn-trigger.sunfeiyu.top']
-               

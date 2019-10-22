@@ -56,9 +56,9 @@ describe('test event start init', async () => {
     await invoke.init();
 
     expect(invoke.opts.Cmd).to.eql([ '--server' ]);
-    
+
     assert.calledWith(docker.generateDockerEnvs,
-      '.', invoke.functionProps, invoke.debugPort, null,
+      '.', serviceName, serviceRes.Properties, functionName, functionRes.Properties, invoke.debugPort, null,
       invoke.nasConfig, false, invoke.debugIde, invoke.debugArgs
     );
 

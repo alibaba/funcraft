@@ -50,12 +50,12 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
     - [Funfile 功能介绍](https://yq.aliyun.com/articles/719100)：介绍了使用 Funfile 构造函数计算的交付产物。Funfile 中包含了一系列的命令，Fun 会忠实地执行这些步骤，最终产出“交付产物”。
     - [开发函数计算的正确姿势 —— 安装第三方依赖](https://yq.aliyun.com/articles/688062)：介绍了 fun install 的基本用法。
     - [函数运行环境系统动态链接库版本太低？函数计算 fun 神助力分忧解难](https://yq.aliyun.com/articles/690856)：介绍了如何利用 fun install，升级系统动态链接库。
-    - **源码编译**：关于如何使用 fun build 编译 java 等编译型语言函数代码的文章。
-      - [开发函数计算的正确姿势 —— 使用 Fun Build 构建函数](https://yq.aliyun.com/articles/719102)：介绍了使用 Fun Build 实现从源码到交付产物的构建过程。
     - **install 原理介绍**：fun install 功能推出之前推荐的方法，现在更推荐优先使用 fun install。下面的文章，可以作为了解 install 的原理，以便更好的使用 fun install。
         - [函数计算安装依赖库方法小结](https://yq.aliyun.com/articles/602147)：总结了各个语言依赖安装的方法。
         - [函数计算 Python 连接 SQL Server 小结](https://yq.aliyun.com/articles/672131)：介绍了如何利用 fc-docker 安装 pymssql 库。该文章介绍的思路，与 fun install 的底层实现思路是类似的。
         - [手把手教您将 libreoffice 移植到函数计算平台](https://yq.aliyun.com/articles/674330)：介绍了如何利用 fc-docker 将 libreoffice 移植到函数计算。
+  - **源码编译**：关于如何使用 fun build 编译 java 等编译型语言函数代码的文章。
+    - [开发函数计算的正确姿势 —— 使用 Fun Build 构建函数](https://yq.aliyun.com/articles/719102)：介绍了使用 Fun Build 实现从源码到交付产物的构建过程。
   - **本地运行与调试**：关于如何本地运行、调试函数，以及介绍排查 bug 技巧的系列文章。
     - [开发函数计算的正确姿势 —— 使用 Fun Local 本地运行与调试](https://yq.aliyun.com/articles/672623)：介绍了 Fun Local 基本用法。
     - [开发函数计算的正确姿势 —— Http Trigger 本地运行调试](https://yq.aliyun.com/articles/683683): 介绍了如何使用 Fun Local 在本地运行、单步调试配置了 Http Trigger 的函数。
