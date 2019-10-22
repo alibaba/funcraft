@@ -1,0 +1,31 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  # Service Name
+  demo-springboot-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'Hello SpringBoot On FC'
+
+    # Function Name
+    demo-springboot:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Initializer: hello.FcHandler::initialize
+        Handler: hello.FcHandler::handleRequest
+        Runtime: java8
+        CodeUri: './'
+        MemorySize: 512
+        Timeout: 60
+        InitializationTimeout: 60
+        EnvironmentVariables:
+          'USER_CONTEXT_PATH': '/2016-08-15/proxy/demo-springboot-service/demo-springboot'
+          'APP_BASE_DIR': '/tmp'
+      
+      # Create http trigger
+      Events:
+        http: # trigger name
+          Type: HTTP # http trigger
+          Properties:
+              AuthType: ANONYMOUS
+              Methods: ['GET', 'POST']
