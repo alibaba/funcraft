@@ -6,11 +6,10 @@ Resources:
     Properties:
       Protocol: HTTP
       RouteConfig:
-        Routes: 
+        Routes:
           '/a':
             ServiceName: serviceA
             FunctionName: functionA
           '/b':
             ServiceName: serviceB
             FunctionName: functionB
-  

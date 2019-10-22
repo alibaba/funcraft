@@ -1106,6 +1106,46 @@ describe('custom domain', () => {
     }).deployCustomDomain(domainName, domainDefinition);
   }
 
+  it('add qualifier field test', async () => {
+    await customDomain('domainName', {
+      'Type': 'Aliyun::Serverless::CustomDomain',
+      'Properties': {
+        'Protocol': 'HTTP',
+        'RouteConfig': {
+          'Routes': {
+            '/a': {
+              'serviceName': 'serviceA',
+              'functionName': 'functionA',
+              'Qualifier': 'Prod'
+            },
+            '/b': {
+              'serviceName': 'serviceB',
+              'functionName': 'functionB'
+            }
+          }
+        }
+      }
+    });
+    assert.calledWith(deploySupport.makeCustomDomain, {
+      domainName: 'domainName',
+      protocol: 'HTTP',
+      routeConfig: {
+        routes: [{
+          path: '/a',
+          serviceName: 'serviceA',
+          functionName: 'functionA',
+          qualifier: 'Prod'
+        },
+        {
+          path: '/b',
+          serviceName: 'serviceB',
+          functionName: 'functionB'
+        }]
+      },
+      certConfig: {}
+    });
+  });
+
   it('lowercase custom domain', async () => {
     await customDomain('domainName', {
       'Type': 'Aliyun::Serverless::CustomDomain',
