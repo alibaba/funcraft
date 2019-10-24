@@ -180,16 +180,6 @@ const getTemplateResults = {
   'RequestId': '783233CD-C3C1-4A4A-A8D8-09515781F74E'
 };
 
-const getStackResults = {
-  'Outputs': [
-    {
-      'Description': 'cdn trigge',
-      'OutputValue': 'e6ca1ac3-953a-46e3-b33d-7f59b7dd3bf0',
-      'OutputKey': 'cdn-trigger-id'
-    }
-  ]
-};
-
 describe('test deploy support ros', () => {
   const requestOption = {
     method: 'POST'
@@ -284,12 +274,12 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
       'Status': 'COMPLETE',
-      'Changes': changes
+      'Changes': changes,
+      'TemplateBody': '{"ROSTemplateFormatVersion": "2015-09-01", "Transform": "Aliyun::Serverless-2018-04-03", "Resources": {"cdn-test-service": {"cdn-test-function": {"Type": "Aliyun::Serverless::Function", "Properties": {"CodeUri": "oss://ros-ellison/afd55baf6a9cf552d09c7d9828015f02", "Handler": "index.handler", "Runtime": "nodejs6"}}, "Type": "Aliyun::Serverless::Service", "Properties": {"Description": "cdn triggerssss"}}}, "Outputs": {"cdn-trigger-id": {"Value": {"Ref": "cdn-test-service"}, "Description": "cdn trigge12312312312", "Condition": false}}}'
     });
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
-    requestStub.withArgs('GetStack', getTemplateParams, requestOption).resolves(getStackResults);
     requestStub.withArgs('GetTemplate', getTemplateParams, requestOption).resolves(getTemplateResults);
 
     await deployByRos(os.tmpdir(), stackName, tpl, true);
@@ -297,9 +287,9 @@ describe('test deploy support ros', () => {
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'GetStack', getTemplateParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetTemplate', getTemplateParams, requestOption);
 
-    assert.callCount(requestStub, 7);
+    assert.callCount(requestStub, 6);
     assert.notCalled(inquirer.prompt);
 
     assert.calledWith(trigger.displayTriggerInfo, 'ros-http-cdn-test-service-6FAACA49EA80', 'ros-http-cdn-test-function-22509E326CCF', 'http-test', 'http', {
