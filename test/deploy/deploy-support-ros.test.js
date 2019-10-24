@@ -179,6 +179,17 @@ const getTemplateResults = {
   'TemplateBody': JSON.stringify({'ROSTemplateFormatVersion': '2015-09-01', 'Resources': {'cdn-test-service': {'Type': 'ALIYUN::FC::Service', 'Properties': {'InternetAccess': true, 'ServiceName': 'ros-http-cdn-test-service-6FAACA49EA80', 'Description': 'cdn trigger test5', 'LogConfig': {'Project': '', 'Logstore': ''}}}, 'cdn-test-servicecdn-test-function': {'Type': 'ALIYUN::FC::Function', 'Properties': {'Code': {'OssBucketName': 'ros-http', 'OssObjectName': 'eac787304be9978d81a408699a3a0dc9'}, 'FunctionName': 'ros-http-cdn-test-function-22509E326CCF', 'ServiceName': 'ros-http-cdn-test-service-6FAACA49EA80', 'EnvironmentVariables': {'PATH': '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin', 'LD_LIBRARY_PATH': '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib', 'PYTHONUSERBASE': '/code/.fun/python'}, 'Handler': 'index.handler', 'Runtime': 'nodejs10'}, 'DependsOn': 'cdn-test-service'}, 'cdn-test-servicecdn-test-functionhttp-test': {'Type': 'ALIYUN::FC::Trigger', 'Properties': {'ServiceName': 'ros-http-cdn-test-service-6FAACA49EA80', 'TriggerConfig': {'authType': 'anonymous', 'methods': ['GET', 'POST', 'PUT']}, 'FunctionName': 'ros-http-cdn-test-function-22509E326CCF', 'TriggerName': 'http-test', 'TriggerType': 'http'}, 'DependsOn': 'cdn-test-servicecdn-test-function'}}}),
   'RequestId': '783233CD-C3C1-4A4A-A8D8-09515781F74E'
 };
+
+const getStackResults = {
+  'Outputs': [
+    {
+      'Description': 'cdn trigge',
+      'OutputValue': 'e6ca1ac3-953a-46e3-b33d-7f59b7dd3bf0',
+      'OutputKey': 'cdn-trigger-id'
+    }
+  ]
+};
+
 describe('test deploy support ros', () => {
   const requestOption = {
     method: 'POST'
@@ -278,6 +289,7 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
+    requestStub.withArgs('GetStack', getTemplateParams, requestOption).resolves(getStackResults);
     requestStub.withArgs('GetTemplate', getTemplateParams, requestOption).resolves(getTemplateResults);
 
     await deployByRos(os.tmpdir(), stackName, tpl, true);
@@ -285,9 +297,9 @@ describe('test deploy support ros', () => {
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'GetTemplate', getTemplateParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetStack', getTemplateParams, requestOption);
 
-    assert.callCount(requestStub, 6);
+    assert.callCount(requestStub, 7);
     assert.notCalled(inquirer.prompt);
 
     assert.calledWith(trigger.displayTriggerInfo, 'ros-http-cdn-test-service-6FAACA49EA80', 'ros-http-cdn-test-function-22509E326CCF', 'http-test', 'http', {
