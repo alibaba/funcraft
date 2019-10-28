@@ -207,6 +207,14 @@ const parameters = [
   }
 ];
 
+const outputsFromStack = {
+  Outputs: [{
+    Description: 'cdn trigge12312312312',
+    OutputValue: '64497a31-de68-4cb2-9257-89352c012186',
+    OutputKey: 'cdn-trigger-id'
+  }]
+};
+
 describe('test deploy support ros', () => {
   const requestOption = {
     method: 'POST'
@@ -306,6 +314,8 @@ describe('test deploy support ros', () => {
       'Parameters': parameters
     });
 
+    requestStub.withArgs('GetStack', getTemplateParams, requestOption).resolves(outputsFromStack);
+
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
     requestStub.withArgs('GetTemplate', getTemplateParams, requestOption).resolves(getTemplateResults);
@@ -315,9 +325,9 @@ describe('test deploy support ros', () => {
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
     assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'GetTemplate', getTemplateParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'GetStack', getTemplateParams, requestOption);
 
-    assert.callCount(requestStub, 6);
+    assert.callCount(requestStub, 7);
     assert.notCalled(inquirer.prompt);
 
     assert.calledWith(trigger.displayTriggerInfo, 'ros-http-cdn-test-service-6FAACA49EA80', 'ros-http-cdn-test-function-22509E326CCF', 'http-test', 'http', {
