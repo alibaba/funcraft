@@ -115,7 +115,7 @@
     "tar-fs": "^2.0.0",
     "temp-dir": "^1.0.0",
     "universal-analytics": "^0.4.20",
-    "unzipper": "^0.10.2",
+    "unzipper": "0.10.4",
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0"
   },
