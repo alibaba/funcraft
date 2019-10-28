@@ -4,7 +4,7 @@ set -e
 PKG_VERSION=`node -p "require('./package').version"`
 
 ## package to binary
-pkg -t node8-linux-x64,node8-macos-x64,node8-win-x64 --out-path output .
+pkg -t node12-linux-x64,node12-macos-x64,node12-win-x64 --out-path output .
 
 ## rename and zip output files
 cd output
