@@ -5,9 +5,10 @@
 'use strict';
 
 const program = require('commander');
-
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
+
+const { parsePairs } = require('../lib/build/parser');
 
 const examples =
   `
@@ -30,20 +31,6 @@ const examples =
     $ fun init -n fun-app -V foo=bar /path/foo/bar
   `;
 
-const parseVars = (val, vars) => {
-  /*
-   * Key-value pairs, separated by equal signs
-   * keys can only contain letters, numbers, and underscores
-   * values can be any character
-   */
-  const group = val.match(/(^[a-zA-Z_][a-zA-Z\d_]*)=(.*)/);
-  vars = vars || {};
-  if (group) {
-    vars[group[1]] = group[2];
-  }
-  return vars;
-};
-
 program
   .name('fun init')
   .usage('[options] [template]')
@@ -52,7 +39,7 @@ program
   .option('-n, --name [name]', 'The name of your project to be generated as a folder', '')
   .option('-m, --merge [merge]', 'Merge into the template.[yml|yaml] file if it already exist', false)
   .option('--no-input', 'Disable prompting and accept default values defined template config')
-  .option('-V, --var [vars]', 'Template variable', parseVars)
+  .option('-V, --var [vars]', 'Template variable', parsePairs)
   .on('--help', () => {
     console.log(examples);
   })
@@ -91,7 +78,7 @@ getVisitor().then(visitor => {
         el: 'error',
         dp: '/fun/init'
       }).send();
-  
+
       require('../lib/exception-handler')(error);
     });
 });

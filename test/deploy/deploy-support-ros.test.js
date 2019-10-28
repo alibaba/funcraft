@@ -180,6 +180,33 @@ const getTemplateResults = {
   'RequestId': '783233CD-C3C1-4A4A-A8D8-09515781F74E'
 };
 
+const parameters = [
+  {
+    'ParameterValue': 'AccountId',
+    'ParameterKey': 'ALIYUN::AccountId'
+  },
+  {
+    'ParameterValue': 'None',
+    'ParameterKey': 'ALIYUN::NoValue'
+  },
+  {
+    'ParameterValue': 'cn-shanghai',
+    'ParameterKey': 'ALIYUN::Region'
+  },
+  {
+    'ParameterValue': 'cb0a3c50-64b5-4ead-80ab-1405c083108d',
+    'ParameterKey': 'ALIYUN::StackId'
+  },
+  {
+    'ParameterValue': 'ros-param',
+    'ParameterKey': 'ALIYUN::StackName'
+  },
+  {
+    'ParameterValue': 'service-description',
+    'ParameterKey': 'Desc'
+  }
+];
+
 describe('test deploy support ros', () => {
   const requestOption = {
     method: 'POST'
@@ -275,7 +302,8 @@ describe('test deploy support ros', () => {
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
       'Status': 'COMPLETE',
       'Changes': changes,
-      'TemplateBody': '{"ROSTemplateFormatVersion": "2015-09-01", "Transform": "Aliyun::Serverless-2018-04-03", "Resources": {"cdn-test-service": {"cdn-test-function": {"Type": "Aliyun::Serverless::Function", "Properties": {"CodeUri": "oss://ros-ellison/afd55baf6a9cf552d09c7d9828015f02", "Handler": "index.handler", "Runtime": "nodejs6"}}, "Type": "Aliyun::Serverless::Service", "Properties": {"Description": "cdn triggerssss"}}}, "Outputs": {"cdn-trigger-id": {"Value": {"Ref": "cdn-test-service"}, "Description": "cdn trigge12312312312", "Condition": false}}}'
+      'TemplateBody': '{"ROSTemplateFormatVersion": "2015-09-01", "Transform": "Aliyun::Serverless-2018-04-03", "Resources": {"cdn-test-service": {"cdn-test-function": {"Type": "Aliyun::Serverless::Function", "Properties": {"CodeUri": "oss://ros-ellison/afd55baf6a9cf552d09c7d9828015f02", "Handler": "index.handler", "Runtime": "nodejs6"}}, "Type": "Aliyun::Serverless::Service", "Properties": {"Description": "cdn triggerssss"}}}, "Outputs": {"cdn-trigger-id": {"Value": {"Ref": "cdn-test-service"}, "Description": "cdn trigge12312312312", "Condition": false}}}',
+      'Parameters': parameters
     });
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
