@@ -8,9 +8,11 @@ const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
+const { parsePairs } = require('../lib/build/parser');
+
 program
   .name('fun deploy')
-  .usage('[options] [resource]') 
+  .usage('[options] [resource]')
   .description(`
   Deploy a serverless application.
 
@@ -18,19 +20,25 @@ program
   use 'fun deploy serviceName' to deploy all functions under a service
   use 'fun deploy functionName' to deploy only a function resource
 
-  with '--only-config' parameter, will only update resource config without updating the function code`)
+  with '--only-config' parameter, will only update resource config without updating the function code
+
+  use '--parameter-override', A parameter structures that specify input parameters for your stack template.
+                              If you're updating a stack and you don't specify a parameter, the command uses the stack's existing value.
+                              For new stacks, you must specify parameters that don't have a default value. Syntax: parameterkey=parametervalue.
+  `)
+
 
   .option('-t, --template [template]', 'The path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
-  .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.')
+  .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.\n')
   .option('--use-ros', 'Deploy resources using ROS')
   .option('--stack-name <stackName>', 'The name of the ROS stack')
+  .option('--parameter-override <parameter>', `A parameter structures that specify input parameters for your stack template.`, parsePairs)
   .parse(process.argv);
 
-
-if (program.args.length > 1) {
+if (program.args.length > 0) {
   console.error();
-  console.error("  error: unexpected argument '%s'", program.args[1]);
+  console.error("  error: unexpected argument '%s'", program.args[0]);
   program.help();
 }
 
@@ -40,7 +48,8 @@ const context = {
   template: program.template,
   useRos: program.useRos,
   stackName: program.stackName,
-  assumeYes: program.assumeYes || false
+  assumeYes: program.assumeYes || false,
+  parameterOverride: program.parameterOverride
 };
 
 notifier.notify();
@@ -73,7 +82,7 @@ getVisitor().then(visitor => {
         el: 'error',
         dp: '/fun/deploy'
       }).send();
-  
+
       require('../lib/exception-handler')(error);
     });
 });
