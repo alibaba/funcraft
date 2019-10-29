@@ -323,11 +323,11 @@ describe('test deploy support ros', () => {
     await deployByRos(os.tmpdir(), stackName, tpl, true);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
-    assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
-    assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
+    assert.calledWith(requestStub.secondCall, 'GetStack', getTemplateParams, requestOption);
+    assert.calledWith(requestStub.thirdCall, 'CreateChangeSet', updateParams, requestOption);
     assert.calledWith(requestStub.lastCall, 'GetStack', getTemplateParams, requestOption);
 
-    assert.callCount(requestStub, 7);
+    assert.callCount(requestStub, 8);
     assert.notCalled(inquirer.prompt);
 
     assert.calledWith(trigger.displayTriggerInfo, 'ros-http-cdn-test-service-6FAACA49EA80', 'ros-http-cdn-test-function-22509E326CCF', 'http-test', 'http', {
