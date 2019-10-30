@@ -1,28 +1,27 @@
 'use strict';
 
-const expect = require('expect.js');
-const tempDir = require('temp-dir');
+const os = require('os');
+const fs = require('fs-extra');
+const path = require('path');
 
 let docker = require('../lib/docker');
-
-const os = require('os');
-
 const DockerCli = require('dockerode');
+const DockerModem = require('docker-modem');
+const dockerOpts = require('../lib/docker-opts');
 
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
-const { DEFAULT_NAS_PATH_SUFFIX } = require('../lib/tpl');
+const sandbox = sinon.createSandbox();
+const expect = require('expect.js');
+const proxyquire = require('proxyquire');
 
+const { sleep } = require('../lib/time');
 const { setProcess } = require('./test-utils');
 const { hasDocker } = require('./conditions');
-
-const path = require('path');
-const { sleep } = require('../lib/time');
+const { DEFAULT_NAS_PATH_SUFFIX } = require('../lib/tpl');
 
 const baseDir = path.resolve('/');
-const fs = require('fs-extra');
+const tempDir = require('temp-dir');
 
 describe('test generateDockerCmd', () => {
   const functionProps = {
@@ -94,7 +93,6 @@ describe('test generateDockerCmd', () => {
     ]);
   });
 });
-
 
 describe('test imageExist', async () => {
 
@@ -514,7 +512,6 @@ describe('test conventInstallTargetsToMounts', () => {
   });
 });
 
-
 describe('test isDockerToolBox', () => {
 
   var isWin = process.platform === 'win32';
@@ -543,6 +540,42 @@ describe('test resolveDebuggerPathToMount', () => {
       Source: path.resolve('/path'),
       Target: '/tmp/debugger_files',
       ReadOnly: false
+    });
+  });
+});
+
+describe('#test rename images', () => {
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('test rename images', async () => {
+    const dockerRegistry = 'registry.cn-beijing.aliyuncs.com';
+    const resolveImageName = 'registry.cn-beijing.aliyuncs.com/aliyunfc/runtime-python2.7:1.6.8';
+    const newImageName = 'aliyunfc/runtime-python2.7';
+    const newTag = '1.6.8';
+
+    const image = {
+      tag: sandbox.stub()
+    };
+
+    sandbox.stub(DockerCli.prototype, 'pull');
+    sandbox.stub(DockerCli.prototype, 'getImage').resolves(image);
+    sandbox.stub(DockerModem.prototype, 'followProgress')
+      .callsFake(function (stream, onFinished, onProgress) {
+        onFinished(null);
+      });
+
+    sandbox.stub(dockerOpts, 'resolveImageNameForPull').returns(resolveImageName);
+    sandbox.stub(dockerOpts, 'resolveDockerRegistry').returns(dockerRegistry);
+
+    await docker.pullImage('aliyunfc/runtime-python2.7:1.6.8');
+
+    assert.calledWith(image.tag, {
+      name: resolveImageName,
+      repo: newImageName,
+      tag: newTag
     });
   });
 });
