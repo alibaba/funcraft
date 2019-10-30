@@ -8,6 +8,9 @@ let docker = require('../lib/docker');
 const os = require('os');
 
 const DockerCli = require('dockerode');
+const DockerModem = require('docker-modem');
+
+const dockerOpts = require('../lib/docker-opts');
 
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
@@ -543,6 +546,42 @@ describe('test resolveDebuggerPathToMount', () => {
       Source: path.resolve('/path'),
       Target: '/tmp/debugger_files',
       ReadOnly: false
+    });
+  });
+});
+
+describe('#test rename images', () => {
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('test rename images', async () => {
+    const dockerRegistry = 'registry.cn-beijing.aliyuncs.com';
+    const resolveImageName = 'registry.cn-beijing.aliyuncs.com/aliyunfc/runtime-python2.7:1.6.8';
+    const newImageName = 'aliyunfc/runtime-python2.7';
+    const newTag = '1.6.8';
+
+    const image = {
+      tag: sandbox.stub()
+    };
+
+    sandbox.stub(DockerCli.prototype, 'pull');
+    sandbox.stub(DockerCli.prototype, 'getImage').resolves(image);
+    sandbox.stub(DockerModem.prototype, 'followProgress')
+      .callsFake(function (stream, onFinished, onProgress) {
+        onFinished(null);
+      });
+
+    sandbox.stub(dockerOpts, 'resolveImageNameForPull').returns(resolveImageName);
+    sandbox.stub(dockerOpts, 'resolveDockerRegistry').returns(dockerRegistry);
+
+    await docker.pullImage('aliyunfc/runtime-python2.7:1.6.8');
+
+    assert.calledWith(image.tag, {
+      name: resolveImageName,
+      repo: newImageName,
+      tag: newTag
     });
   });
 });
