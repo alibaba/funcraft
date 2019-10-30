@@ -39,9 +39,9 @@ if (program.args.length > 1) {
 
 if (program.debugPort && program.args.length === 0) {
 
-  console.error();
-  console.error('  error: missing argument <[service/]function>\n');
-  program.help();
+  console.error(`Must specify the '<[service/]function>' parameter when using '-d, --debug-port ' option.
+For example, you can use 'fun local start -d 3000 functionName' to start your function locally with debugging mode.`);
+  return ;
 }
 
 notifier.notify();
