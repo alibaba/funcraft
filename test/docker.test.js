@@ -1,31 +1,27 @@
 'use strict';
 
-const expect = require('expect.js');
-const tempDir = require('temp-dir');
+const os = require('os');
+const fs = require('fs-extra');
+const path = require('path');
 
 let docker = require('../lib/docker');
-
-const os = require('os');
-
 const DockerCli = require('dockerode');
 const DockerModem = require('docker-modem');
-
 const dockerOpts = require('../lib/docker-opts');
 
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
-const { DEFAULT_NAS_PATH_SUFFIX } = require('../lib/tpl');
+const sandbox = sinon.createSandbox();
+const expect = require('expect.js');
+const proxyquire = require('proxyquire');
 
+const { sleep } = require('../lib/time');
 const { setProcess } = require('./test-utils');
 const { hasDocker } = require('./conditions');
-
-const path = require('path');
-const { sleep } = require('../lib/time');
+const { DEFAULT_NAS_PATH_SUFFIX } = require('../lib/tpl');
 
 const baseDir = path.resolve('/');
-const fs = require('fs-extra');
+const tempDir = require('temp-dir');
 
 describe('test generateDockerCmd', () => {
   const functionProps = {
@@ -97,7 +93,6 @@ describe('test generateDockerCmd', () => {
     ]);
   });
 });
-
 
 describe('test imageExist', async () => {
 
@@ -516,7 +511,6 @@ describe('test conventInstallTargetsToMounts', () => {
     ]);
   });
 });
-
 
 describe('test isDockerToolBox', () => {
 
