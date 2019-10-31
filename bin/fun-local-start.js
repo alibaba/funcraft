@@ -9,6 +9,8 @@ const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
+const { red } = require('colors');
+
 program
   .name('fun local start')
   .description(`
@@ -16,7 +18,7 @@ program
     It will start a http server locally to receive requests for http triggers and apis.
     It scans all functions in template.yml. If the resource type is HTTP, it will be registered to this http server, which can be triggered by the browser or any http tools.
     For other types of functions, they will be registered as apis, which can be called by sdk in each language or directly via api.
-    
+
     Function Compute will look up the code by CodeUri in template.yml.
     For interpreted languages, such as node, python, php, the modified code will take effect immediately without restarting the http server.
     For compiled languages such as java, we recommend you set CodeUri to the compiled or packaged location.
@@ -25,7 +27,7 @@ program
   .usage('[options] <[service/]function>')
   .option('-d, --debug-port <port>', 'Specify the sandbox container starting in debug' +
     ' mode, and exposing this port on localhost')
-  .option('-c, --config <ide/debugger>', 
+  .option('-c, --config <ide/debugger>',
     'Select which IDE to use when debugging and output related debug config tips for the IDE. Options：\'vscode\', \'pycharm\'')
   .option('--debugger-path <debuggerPath>', 'The path of the debugger on the host')
   .option('--debug-args <debugArgs>', 'Additional parameters that will be passed to the debugger')
@@ -35,6 +37,12 @@ if (program.args.length > 1) {
   console.error();
   console.error("  error: unexpected argument `%s'", program.args[1]);
   program.help();
+}
+
+if (program.debugPort && program.args.length === 0) {
+  console.error(red(`\nMust specify the '<[service/]function>' parameter when using '-d, --debug-port' option.
+For example, you can use 'fun local start -d 3000 functionName' to start your function locally with debugging mode.`));
+  return ;
 }
 
 notifier.notify();
@@ -58,7 +66,7 @@ getVisitor().then(visitor => {
         el: 'error',
         dp: '/fun/local/start'
       }).send();
-  
+
       require('../lib/exception-handler')(error);
     });
 });
