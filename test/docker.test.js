@@ -527,7 +527,7 @@ describe('test isDockerToolBox', () => {
 
   (isWin ? it : it.skip)('test isDockerToolBox', async () => {
 
-    const result = await docker.isDockerToolBox();
+    const result = await docker.isDockerToolBoxAndEnsureDockerVersion();
     expect(result).to.be(true);
   });
 });

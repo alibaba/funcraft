@@ -26,7 +26,7 @@ describe('test invoke construct and init', async () => {
 
   beforeEach(() => {
 
-    sandbox.stub(docker, 'isDockerToolBox').resolves({});
+    sandbox.stub(docker, 'isDockerToolBoxAndEnsureDockerVersion').resolves({});
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
@@ -98,7 +98,7 @@ describe('test invoke construct and init', async () => {
     }]);
 
     assert.calledWith(docker.pullImageIfNeed, `aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
-    assert.called(docker.isDockerToolBox);
+    assert.called(docker.isDockerToolBoxAndEnsureDockerVersion);
   });
 
   it('test init with nas config', async () => {
@@ -154,7 +154,7 @@ describe('test showDebugIdeTips', async () => {
 
   beforeEach(() => {
 
-    sandbox.stub(docker, 'isDockerToolBox').resolves({});
+    sandbox.stub(docker, 'isDockerToolBoxAndEnsureDockerVersion').resolves({});
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
