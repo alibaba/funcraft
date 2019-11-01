@@ -28,6 +28,8 @@ You can refer to the official [Tutorial](https://docs.docker.com/install/linux/d
 
 If you encounter network problems, you can use Alibaba Cloud Docker CE mirror to download. please refer to this [tutorial](https://yq.aliyun.com/articles/110806).
 
+#### [More platform references](https://hub.docker.com/search/?type=edition&offering=community)
+
 ### Configuring Docker Registry Mirror
 
 Once docker is installed, you can use docker to download the image. If you encounter network problems, it is recommended to configure aliyun [Registry Mirror](https://yq.aliyun.com/articles/29941).
