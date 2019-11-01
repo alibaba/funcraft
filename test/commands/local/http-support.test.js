@@ -37,7 +37,8 @@ describe('test registerHttpTriggers', () => {
     const app = {
       'get': sandbox.stub(),
       'put': sandbox.stub(),
-      'post': sandbox.stub()
+      'post': sandbox.stub(),
+      'use': sandbox.stub()
     };
 
     const tplPath = os.tmpdir();
