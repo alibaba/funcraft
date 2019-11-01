@@ -32,6 +32,19 @@ const tpl = {
     }
   }
 };
+const tplWithoutNasConfig = {
+  ROSTemplateFormatVersion: '2015-09-01',
+  Transform: 'Aliyun::Serverless-2018-04-03',
+  Resources: {
+    [serviceName]: {
+      Type: 'Aliyun::Serverless::Service',
+      Properties: {
+        Policies: policies, 
+        VpcConfig: vpcConfig
+      }
+    }
+  }
+};
 const nasId = 
 {
   UserId: 1000,
@@ -42,5 +55,6 @@ module.exports = {
   tpl, 
   vpcConfig, 
   serviceName, 
-  nasId
+  nasId, 
+  tplWithoutNasConfig
 };

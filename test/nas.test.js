@@ -609,6 +609,11 @@ describe('test convertTplToServiceNasIdMappings', () => {
     });
   });
 
+  it('tpl without NasConfig', () => {
+    const res = nas.convertTplToServiceNasIdMappings(mockdata.tplWithoutNasConfig);
+    expect(res).to.eql({[mockdata.serviceName]: {}});
+  });
+
   it('empty tpl resource', () => {
     const tpl = {
       ROSTemplateFormatVersion: '2015-09-01',
