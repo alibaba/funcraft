@@ -21,12 +21,16 @@ const tpl = {
 const init = {
   deployNasService: sandbox.stub().resolves()
 };
+const support = {
+  toBeUmountedDirs: sandbox.spy()
+};
 
 const syncStub = proxyquire('../../../lib/commands/nas/sync', {
   '../../validate/validate': validate,
   '../../nas/cp': cp,
   '../../tpl': tpl,
-  '../../nas/init': init
+  '../../nas/init': init, 
+  '../../nas/support': support
 });
 
 describe('fun nas sync test', () => {
@@ -54,17 +58,33 @@ describe('fun nas sync test', () => {
 
     await syncStub(options);
     const localNasDir = path.join(path.resolve('/'), 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
+    assert.notCalled(support.toBeUmountedDirs);
     assert.calledWith(cp, localNasDir, 'nas://fun-nas-test/mnt/nas/', true, localNasTmpDir, mockdata.nasId);
   });
 
   it('sync test with service', async () => {
     const options = {
       service: mockdata.serviceName, 
-      mountDir: ['/mnt']
+      mountDir: undefined
     };
     await syncStub(options);
     const localNasDir = path.join(path.resolve('/'), 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
     const baseDir = path.dirname(tplPath);
+    assert.notCalled(support.toBeUmountedDirs);
+    assert.calledWith(cp, localNasDir, `nas://${mockdata.serviceName}/mnt/nas/`, true, localNasTmpDir, mockdata.nasId);
+    assert.calledWith(init.deployNasService, baseDir, mockdata.tpl, options.service);
+  });
+
+  it('sync test with service', async () => {
+    const options = {
+      service: mockdata.serviceName, 
+      mountDir: ['/mnt/nas']
+    };
+    await syncStub(options);
+    const localNasDir = path.join(path.resolve('/'), 'demo', DEFAULT_NAS_PATH_SUFFIX, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com', '/');
+    const baseDir = path.dirname(tplPath);
+    
+    assert.calledWith(support.toBeUmountedDirs, ['/mnt/nas'], ['/mnt/nas']);
     assert.calledWith(cp, localNasDir, `nas://${mockdata.serviceName}/mnt/nas/`, true, localNasTmpDir, mockdata.nasId);
     assert.calledWith(init.deployNasService, baseDir, mockdata.tpl, options.service);
   });
