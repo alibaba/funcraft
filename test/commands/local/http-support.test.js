@@ -32,7 +32,7 @@ describe('test registerHttpTriggers', () => {
     sandbox.restore();
   });
 
-  it('test register http trigger', async () => {  
+  it('test register http trigger', async () => {
 
     const app = {
       'get': sandbox.stub(),
@@ -41,6 +41,12 @@ describe('test registerHttpTriggers', () => {
       'use': sandbox.stub()
     };
 
+    const router = {
+      'get': sandbox.stub(),
+      'put': sandbox.stub(),
+      'post': sandbox.stub(),
+      'use': sandbox.stub()
+    };
     const tplPath = os.tmpdir();
 
     const triggers = [{
@@ -52,16 +58,16 @@ describe('test registerHttpTriggers', () => {
       triggerRes: triggerRes
     }];
 
-    await httpSupport.registerHttpTriggers(app, 8080, triggers, null, null, path.dirname(tplPath));
+    await httpSupport.registerHttpTriggers(app, router, 8080, triggers, null, null, path.dirname(tplPath));
 
-    assert.calledWith(fc.detectLibrary, 
-      httpTriggerFunctionRes.Properties.CodeUri, 
+    assert.calledWith(fc.detectLibrary,
+      httpTriggerFunctionRes.Properties.CodeUri,
       httpTriggerFunctionRes.Properties.Runtime,
       path.dirname(tplPath));
 
-    assert.calledWith(app['get'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
-    assert.calledWith(app['post'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
-    assert.calledWith(app['put'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
+    assert.calledWith(router['get'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
+    assert.calledWith(router['post'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
+    assert.calledWith(router['put'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
   });
 });
 
