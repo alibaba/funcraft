@@ -205,7 +205,7 @@ describe('test findHttpTriggersInFunction', () => {
       }
     }
   };
-  
+
   it('test normal', () => {
     const triggers = definition.findHttpTriggersInFunction(functionRes.python27);
     expect(triggers).to.be.eql([{
@@ -218,24 +218,30 @@ describe('test findHttpTriggersInFunction', () => {
 });
 
 describe('test isNasAutoConfig', () => {
-  
   it('test nasConfig is obj', () => {
     const nasConfig = {};
-
     expect(definition.isNasAutoConfig(nasConfig)).to.be(false);
-    
   });
 
-    
   it('isNasAutoConfig is null', () => {
     const nasConfig = null;
-
     expect(definition.isNasAutoConfig(nasConfig)).to.be(false);
   });
 
   it('isNasAutoConfig is Auto', () => {
     const nasConfig = 'Auto';
-
     expect(definition.isNasAutoConfig(nasConfig)).to.be(true);
+  });
+});
+
+describe('test parseDomainRoutePath', () => {
+  it('#test domainRoutePath with domainName and routePath', () => {
+    const result = ['fc.com', '/a'];
+    expect(definition.parseDomainRoutePath('fc.com/a')).to.eql(result);
+  });
+
+  it('#test domainRoutePath with domainName', () => {
+    const result = ['fc.com', null];
+    expect(definition.parseDomainRoutePath('fc.com')).to.eql(result);
   });
 });
