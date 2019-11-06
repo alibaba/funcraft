@@ -125,4 +125,42 @@ describe('prompt', () => {
       functionName: 'function'
     });
   });
+
+  it('#test promptForDebugaHttptriggers with path', async () => {
+    const httpTriggers = [{
+      path: 'path',
+      serviceName: 'serviceName',
+      functionName: 'functionName'
+    },
+    {
+      path: 'path1',
+      serviceName: 'serviceName1',
+      functionName: 'functionName1'
+    }];
+    inquirer.prompt.returns(Promise.resolve({function: 'path:serviceName/functionName'}));
+    const func = await promptStub.promptForDebugaHttptriggers(httpTriggers);
+    expect(func).to.eql({
+      path: 'path',
+      serviceName: 'serviceName',
+      functionName: 'functionName'
+    });
+  });
+
+  it('#test promptForDebugaHttptriggers without path', async () => {
+    const httpTriggers = [{
+      serviceName: 'serviceName',
+      functionName: 'functionName'
+    },
+    {
+      serviceName: 'serviceName1',
+      functionName: 'functionName1'
+    }];
+    inquirer.prompt.returns(Promise.resolve({function: 'serviceName/functionName'}));
+    const func = await promptStub.promptForDebugaHttptriggers(httpTriggers);
+    expect(func).to.eql({
+      path: undefined,
+      serviceName: 'serviceName',
+      functionName: 'functionName'
+    });
+  });
 });
