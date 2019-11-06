@@ -9,8 +9,6 @@ const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
-const { red } = require('colors');
-
 program
   .name('fun local start')
   .description(`
@@ -37,12 +35,6 @@ if (program.args.length > 1) {
   console.error();
   console.error("  error: unexpected argument `%s'", program.args[1]);
   program.help();
-}
-
-if (program.debugPort && program.args.length === 0) {
-  console.error(red(`\nMust specify the '<[service/]function>' parameter when using '-d, --debug-port' option.
-For example, you can use 'fun local start -d 3000 functionName' to start your function locally with debugging mode.`));
-  return ;
 }
 
 notifier.notify();
