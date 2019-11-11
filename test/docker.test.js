@@ -305,8 +305,11 @@ describe('test docker run', async () => {
   let streamMock;
   let logStreamMock;
   var isWin = process.platform === 'win32';
+  let fcErrorTransformStub;
+  let errorStream = {};
 
   beforeEach(() => {
+    fcErrorTransformStub = sandbox.stub().returns(errorStream);
 
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
@@ -342,7 +345,8 @@ describe('test docker run', async () => {
     sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
 
     docker = proxyquire('../lib/docker', {
-      'dockerode': DockerCli
+      'dockerode': DockerCli,
+      './fc-error-transform': fcErrorTransformStub
     });
 
     restoreProcess = setProcess({
@@ -380,22 +384,18 @@ describe('test docker run', async () => {
       assert.calledWith(containerMock.modem.demuxStream,
         logStreamMock,
         process.stdout,
-        process.stderr);
+        errorStream);
     } else {
       assert.calledWith(containerMock.modem.demuxStream,
         streamMock,
         process.stdout,
-        process.stderr);
+        errorStream);
     }
 
     assert.calledOnce(containerMock.start);
-
     assert.calledWith(streamMock.write, 'event');
-
     assert.calledOnce(streamMock.end);
-
     assert.calledOnce(containerMock.wait);
-
   });
 
   it('test cancel invoke function', async () => {
@@ -421,12 +421,12 @@ describe('test docker run', async () => {
       assert.calledWith(containerMock.modem.demuxStream,
         logStreamMock,
         process.stdout,
-        process.stderr);
+        errorStream);
     } else {
       assert.calledWith(containerMock.modem.demuxStream,
         streamMock,
         process.stdout,
-        process.stderr);
+        errorStream);
     }
 
     assert.calledOnce(containerMock.start);
