@@ -3,13 +3,12 @@
 const fcErrorTransform = require('../lib/fc-error-transform');
 const streams = require('memory-streams');
 const expect = require('expect.js');
-const cheerio = require('cheerio');
 const sinon = require('sinon');
 const snadbox = sinon.createSandbox();
 const httpx = require('httpx');
 const assert = snadbox.assert;
 
-describe("test fc-error-transform", async () => {
+describe('test fc-error-transform', async () => {
 
   beforeEach(() => {
     snadbox.stub(httpx, 'request').resolves('response');
@@ -22,7 +21,7 @@ describe("test fc-error-transform", async () => {
 
   it('test normal', (done) => {
 
-    const testNormal = "test\nlogtest"
+    const testNormal = 'test\nlogtest';
 
     const errorStream = new streams.WritableStream();
 
@@ -51,7 +50,7 @@ describe("test fc-error-transform", async () => {
 
   it('test .so tips', (done) => {
 
-    const errorMEssage = "error while loading shared libraries: libnss3.so: cannot open shared object file: No such file or directory";
+    const errorMEssage = 'error while loading shared libraries: libnss3.so: cannot open shared object file: No such file or directory';
 
     const errorStream = new streams.WritableStream();
 
