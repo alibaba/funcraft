@@ -15,13 +15,6 @@ program
   .command('start', 'Launch one local Link IoT Edge environment, or create one if none exist')
   .command('stop', 'Stop the local Link IoT Edge environment');
 
-// Print help information if commands are unknown.
-program.on('command:*', (cmds) => {
-  if (!program.commands.map((command) => command.name()).includes(cmds[0])) {
-    console.error();
-    console.error("  error: unknown command `%s'", cmds[0]);
-    program.help();
-  }
-});
+require('../lib/utils/command').registerCommandChecker(program);
 
 program.parse(process.argv);
