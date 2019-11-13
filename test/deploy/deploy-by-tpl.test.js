@@ -339,7 +339,7 @@ describe('deploy', () => {
           VSwitchIds: ['vsw-bp1gitru7oicyyb4uiylj'],
           VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
         }
-      }, undefined, getTplPath('read-write'));
+      }, undefined, getTplPath('nas/read-write'));
 
     assert.calledWith(fc.makeFunction.secondCall,
       path.join(process.cwd(), 'examples', 'nas', 'read-write'), {
@@ -367,7 +367,7 @@ describe('deploy', () => {
           VSwitchIds: ['vsw-bp1gitru7oicyyb4uiylj'],
           VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
         }
-      }, undefined, getTplPath('read-write'));
+      }, undefined, getTplPath('nas/read-write'));
   });
 
   it('deploy openid_connect', async () => {
