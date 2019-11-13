@@ -72,6 +72,6 @@ describe('funignore', async () => {
     expect(funignore(path.join(baseDir, 'node_modules'))).to.be.ok();
     expect(funignore(path.join(baseDir, '.fun/root'))).to.be.ok();
 
-    await fs.remove(nasMappingsPath)
+    await fs.remove(nasMappingsPath);
   });
 });
