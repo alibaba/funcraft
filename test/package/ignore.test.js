@@ -4,6 +4,8 @@ const path = require('path'),
   expect = require('expect.js'),
   ignore = require('../../lib/package/ignore');
 
+const sinon = require('sinon');
+const sandbox = sinon.createSandbox();
 const fs = require('fs-extra');
 
 describe('funignore', async () => {
@@ -44,34 +46,39 @@ describe('funignore', async () => {
     expect(funignore(path.join(baseDir, '.env'))).not.to.be.ok();
   });
 
+});
+
+describe('test funignore with nasMappings.json', () => {
+  const baseDir = path.join(__dirname);
+
+  const content = {
+    'MyService': [
+      {
+        'localNasDir': `${baseDir}/.fun/root`,
+        'remoteNasDir': '/mnt/auto/root'
+      },
+      {
+        'localNasDir': `${baseDir}/node_modules`,
+        'remoteNasDir': '/mnt/auto/node_modules'
+      }
+    ]
+  };
+
+  beforeEach(() => {
+    sandbox.stub(fs, 'pathExists').resolves(true);
+    sandbox.stub(fs, 'readFile').resolves(JSON.stringify(content));
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+
   it('test nasMappings.json', async () => {
-    const baseDir = process.cwd();
-    const nasMappingsPath = path.resolve(baseDir, '.fun', 'nasMappings.json');
 
-    await fs.ensureFile(nasMappingsPath);
+    const funignore = await ignore(baseDir);
 
-    const content = {
-      'MyService': [
-        {
-          'localNasDir': '/Users/ellison/fun/.fun/root',
-          'remoteNasDir': '/mnt/auto/root'
-        },
-        {
-          'localNasDir': '/Users/ellison/fun/node_modules',
-          'remoteNasDir': '/mnt/auto/node_modules'
-        }
-      ]
-    };
-
-    await fs.outputFile(nasMappingsPath, JSON.stringify(content, null, 4));
-
-    var funignore = await ignore(baseDir);
-
-    expect(funignore(path.join(baseDir, 'fun', 'nasMappings.json'))).to.be.ok();
-    expect(funignore(path.join(baseDir, 'fun', '1.log'))).not.to.be.ok();
+    expect(funignore(path.join(baseDir, '.fun', 'nasMappings.json'))).to.be.ok();
+    expect(funignore(path.join(baseDir, 'fun', '1.txt'))).not.to.be.ok();
     expect(funignore(path.join(baseDir, 'node_modules'))).to.be.ok();
     expect(funignore(path.join(baseDir, '.fun/root'))).to.be.ok();
-
-    await fs.remove(nasMappingsPath);
   });
-});
+})
