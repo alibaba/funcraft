@@ -22,14 +22,6 @@ describe('function zipWithArchiver test', () => {
   let inputPath = path.join(os.tmpdir(), '.zip-test', '/');
   const localNasTmpDir = path.join(os.tmpdir(), '.nasTmp', '/');
 
-  let tmpInputPath = path.dirname(inputPath);
-  if (tmpInputPath.indexOf(':\\') !== -1) {
-    const pos = tmpInputPath.indexOf(':\\');
-    tmpInputPath = tmpInputPath.substr(0, pos) + tmpInputPath.substr(pos + 1, tmpInputPath.length);
-  }
-
-  const zipDir = path.join(localNasTmpDir, tmpInputPath);
-  const zipDst = path.join(zipDir, `.fun-nas-generated-${path.basename(inputPath)}.zip`);
   let fsExists;
   beforeEach(async () => {
     fsExists = sandbox.spy(fsExtra, 'exists');
@@ -46,11 +38,8 @@ describe('function zipWithArchiver test', () => {
     
   it('test zip file exist', async () => {
     
-    let res = await file.zipWithArchiver(inputPath, localNasTmpDir);
+    await file.zipWithArchiver(inputPath, localNasTmpDir);
     assert.calledWith(fsExists, inputPath);
-    
-    expect(res).to.eql(zipDst);
-
   });
 
   it('zip file not exist test', async () => {
