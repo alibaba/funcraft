@@ -3,7 +3,7 @@ Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
   oss-test-service:
     Type: 'Aliyun::Serverless::Service'
-    Properties: 
+    Properties:
       Description: 'oss trigger test'
 
     oss-test-function:
@@ -19,9 +19,8 @@ Resources:
             BucketName: coco-superme # oss bucket name
             Events:
               - oss:ObjectCreated:*
-              - oss:ObjectRemoved:DeleteObject        
-            Filter: 
+              - oss:ObjectRemoved:DeleteObject
+            Filter:
               Key:
                 Prefix: source/
                 Suffix: .png
-               
