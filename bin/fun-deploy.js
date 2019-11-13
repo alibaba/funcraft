@@ -36,9 +36,9 @@ program
   .option('--parameter-override <parameter>', `A parameter structures that specify input parameters for your stack template.`, parsePairs)
   .parse(process.argv);
 
-if (program.args.length > 0) {
+if (program.args.length > 1) {
   console.error();
-  console.error("  error: unexpected argument '%s'", program.args[0]);
+  console.error("  error: unexpected argument '%s'", program.args[1]);
   program.help();
 }
 
