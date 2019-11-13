@@ -37,11 +37,11 @@ const noClobber = false;
 
 
 describe('fun nas sync test with empty nas config', () => {
-  
+
   beforeEach(() => {
     const fsPathExists = sandbox.stub(fs, 'pathExists');
-    fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
+    fsPathExists.onCall(2).resolves(true);
     tpl.detectTplPath.returns(tplPath);
     tpl.getTpl.returns(mockdata.tplWithoutNasConfig);
   });
@@ -51,7 +51,7 @@ describe('fun nas sync test with empty nas config', () => {
   });
   it('sync test without service option and mountDir option, with empty nas config', async() => {
     const options = {
-      service: undefined, 
+      service: undefined,
       mountDir: undefined
     };
     await syncStub(options);
@@ -78,7 +78,7 @@ describe('fun nas sync test with empty nas config', () => {
 });
 
 describe('fun nas sync test with normal nas config', () => {
-  
+
   beforeEach(() => {
     const fsPathExists = sandbox.stub(fs, 'pathExists');
     fsPathExists.onCall(0).resolves(true);
@@ -92,32 +92,32 @@ describe('fun nas sync test with normal nas config', () => {
   });
 
   it('sync test without service option and mountDir option, with normal nas config', async () => {
-    
+
     const options = {
-      service: undefined, 
+      service: undefined,
       mountDir: undefined
     };
 
     await syncStub(options);
-    
+
     assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, baseDir, isSync);
   });
 
   it('sync test with service option but without mountDir option, with normal nas config ', async () => {
-    
+
     const options = {
-      service: mockdata.serviceName, 
+      service: mockdata.serviceName,
       mountDir: undefined
     };
     await syncStub(options);
-    
+
     assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, baseDir, isSync);
   });
 
-  
+
   it('sync test with service and mountDir option, with normal nas config', async () => {
     const options = {
-      service: mockdata.serviceName, 
+      service: mockdata.serviceName,
       mountDir: [mockdata.remoteNasDir]
     };
     await syncStub(options);

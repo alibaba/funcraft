@@ -188,8 +188,9 @@ describe('deploy', () => {
         nasConfig: undefined,
         runtime: 'nodejs8',
         serviceName: 'local-http-demo',
-        timeout: undefined
-      });
+        timeout: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('local_http'));
 
     assert.calledWith(trigger.displayTriggerInfo.firstCall, 'local-http-demo', 'nodejs8', 'http-test', 'HTTP', {
       AuthType: 'ANONYMOUS',
@@ -223,8 +224,9 @@ describe('deploy', () => {
         serviceName: 'MyService',
         timeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('datahub'));
   });
 
   it('deploy helloworld', async () => {
@@ -252,8 +254,9 @@ describe('deploy', () => {
         timeout: 60,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('helloworld'));
   });
 
   it('deploy java', async () => {
@@ -281,9 +284,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
-
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('java'));
   });
 
   it('deploy nas', async () => {
@@ -330,8 +333,13 @@ describe('deploy', () => {
             MountDir: '/mnt/test',
             ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
           }]
+        },
+        vpcConfig: {
+          SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks',
+          VSwitchIds: ['vsw-bp1gitru7oicyyb4uiylj'],
+          VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
         }
-      });
+      }, undefined, getTplPath('nas/read-write'));
 
     assert.calledWith(fc.makeFunction.secondCall,
       path.join(process.cwd(), 'examples', 'nas', 'read-write'), {
@@ -353,8 +361,13 @@ describe('deploy', () => {
             MountDir: '/mnt/test',
             ServerAddr: '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com:/'
           }]
+        },
+        vpcConfig: {
+          SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks',
+          VSwitchIds: ['vsw-bp1gitru7oicyyb4uiylj'],
+          VpcId: 'vpc-bp12hm92gdpcjtai7ua82'
         }
-      });
+      }, undefined, getTplPath('nas/read-write'));
   });
 
   it('deploy openid_connect', async () => {
@@ -383,8 +396,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('openid_connect'));
     assert.calledWith(deploySupport.makeGroup, {
       name: 'aliyunfcdemo2',
       description: 'api group for function compute'
@@ -451,8 +465,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('tablestore-trigger'));
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'test-tableStore-service',
       functionName: 'fun-ots-func',
@@ -490,8 +505,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('sls_demo'));
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'log-compute',
       functionName: 'log-compute',
@@ -531,8 +547,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('rds-trigger'));
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'rds-service',
       functionName: 'rds-function',
@@ -573,8 +590,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('oss-trigger'));
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'oss-test-service',
       functionName: 'oss-test-function',
@@ -617,8 +635,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('cdn-trigger'));
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'cdn-test-service',
       functionName: 'cdn-test-function',
@@ -667,8 +686,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('mnsTopic-trigger'));
     assert.calledWith(trigger.makeTrigger, {
       serviceName: 'mnsTopic-service',
       functionName: 'mnsTopic-function',
@@ -708,8 +728,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('python'));
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
       name: 'apigw_fc'
@@ -720,12 +741,12 @@ describe('deploy', () => {
       disableInternet: true,
       errorCodeSamples: [
         {
-          code: 400, description: 'error description', message: 'error' 
-        }, 
+          code: 400, description: 'error description', message: 'error'
+        },
         {
           code: 300, description: 'error description', message: 'error'
         }
-      ],      
+      ],
       forceNonceCheck: false,
       webSocketApiType: 'REGISTER',
       apiName: 'pythonhello',
@@ -780,8 +801,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('segment'));
 
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
@@ -837,8 +859,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('timer'));
     assert.calledWith(trigger.makeTrigger, {
       functionName: 'MyFunction',
       serviceName: 'MyService',
@@ -876,8 +899,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('wechat'));
     assert.alwaysCalledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
       name: 'wechat_group'
@@ -927,8 +951,9 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('wechat'));
     assert.calledWith(deploySupport.makeApi.secondCall, {}, {
       allowSignatureMethod: undefined,
       appCodeAuthType: undefined,
@@ -1009,8 +1034,9 @@ describe('deploy', () => {
         runtime: 'python2.7',
         serviceName: 'initializerdemo',
         timeout: undefined,
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('initializer'));
     assert.calledWith(deploySupport.makeGroup, {
       description: 'api group for function compute',
       name: 'apigw_fc'
@@ -1044,6 +1070,10 @@ describe('deploy', () => {
     });
   });
 
+  function getTplPath(dir) {
+    return path.join('examples', dir, 'template.yml');
+  }
+
   it('deploy service role', async () => {
     await deploy('service_role');
 
@@ -1070,8 +1100,9 @@ describe('deploy', () => {
         serviceName: 'localdemo',
         timeout: undefined,
         environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' },
-        nasConfig: undefined
-      });
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('service_role'));
     // add test => no events on local but have onLine 
     assert.notCalled(trigger.makeTrigger);
     assert.calledOnce(console.warn);
