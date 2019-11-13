@@ -122,7 +122,7 @@ describe('Incorrect environmental variables', () => {
       runtime: 'nodejs6',
       codeUri: 'nodejs6',
       environmentVariables: { 'StringTypeValue1': 123, 'StringTypeValue2': 'test' }
-    });
+    }, undefined, path.join('examples', 'local', 'template.yml'));
 
     assert.calledWith(
       FC.prototype.updateFunction,
