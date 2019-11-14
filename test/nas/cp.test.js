@@ -63,7 +63,7 @@ describe('nas cp src path check error', () => {
   });
   it('src path not exist', async() => {
     try {
-      await cpStub(localNotExistPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localNotExistPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`${localNotExistPath} not exist`));
     }
@@ -73,7 +73,7 @@ describe('nas cp src path check error', () => {
   });
   it('src path is empty dir', async() => {
     try {
-      await cpStub(localEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`${localEmptyPath} is empty, skip uploading`));
     }
@@ -83,7 +83,7 @@ describe('nas cp src path check error', () => {
   });
   it('cp localDir without recursive option', async() => {
     try {
-      await cpStub(localNotEmptyPath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localNotEmptyPath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error('Can not copy folder without option -r/--recursive'));
     }
@@ -124,10 +124,10 @@ describe('nas cp local file to remote NAS', () => {
         mode: 123
       }
     });
-    await cpStub(localFilePath, dstPath, !recursive, !noClobber, localNasTmpDir, tpl, baseDir, isSync);
+    await cpStub(localFilePath, dstPath, !recursive, !noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
     assert.calledWith(upload.uploadFile, localFilePath, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.notCalled(upload.uploadFolder);
   });
   it('cp localFile nasExistedFile -n', async() => {
@@ -145,12 +145,12 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`${dstPath} already exists.`));
     }
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
   });
@@ -169,11 +169,11 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localFilePath, `${dstPath}/`, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localFilePath, `${dstPath}/`, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`${dstPath} : Not a directory`));
     }
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(request.statsRequest, `${resolvedDst}/`, nasHttpTriggerPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
@@ -205,8 +205,8 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     const actualDst = newResolvedDst;
-    await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(request.statsRequest.firstCall, resolvedDst, nasHttpTriggerPath);
     assert.calledWith(request.statsRequest.secondCall, newResolvedDst, nasHttpTriggerPath);
     assert.notCalled(upload.uploadFolder);
@@ -242,8 +242,8 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     const actualDst = newResolvedDst;
-    await cpStub(localFilePath, dstPath, !recursive, !noClobber, localNasTmpDir, tpl, baseDir, isSync);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    await cpStub(localFilePath, dstPath, !recursive, !noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(request.statsRequest.firstCall, resolvedDst, nasHttpTriggerPath);
     assert.calledWith(request.statsRequest.secondCall, newResolvedDst, nasHttpTriggerPath);
     assert.notCalled(upload.uploadFolder);
@@ -279,11 +279,11 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`${newDstPath} already exists.`));
     }
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(request.statsRequest.firstCall, resolvedDst, nasHttpTriggerPath);
     assert.calledWith(request.statsRequest.secondCall, newResolvedDst, nasHttpTriggerPath);
     assert.notCalled(upload.uploadFolder);
@@ -301,11 +301,11 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localFilePath, `${dstPath}/`, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localFilePath, `${dstPath}/`, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`nas cp: cannot create regular file ${dstPath}: Not a directory`));
     }
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(request.statsRequest, `${resolvedDst}/`, nasHttpTriggerPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
@@ -322,11 +322,11 @@ describe('nas cp local file to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`nas cp: cannot create regular file ${dstPath}: No such file or directory`));
     }
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
@@ -342,9 +342,9 @@ describe('nas cp local file to remote NAS', () => {
         isFile: false
       }
     });
-    await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+    await cpStub(localFilePath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.notCalled(upload.uploadFolder);
     assert.calledWith(upload.uploadFile, localFilePath, resolvedDst, nasHttpTriggerPath);
   });
@@ -381,12 +381,12 @@ describe('nas cp local folder to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`nas cp: cannot overwrite non-directory ${dstPath} with directory ${localNotEmptyPath}`));
     }
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
   });
@@ -405,12 +405,12 @@ describe('nas cp local folder to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localNotEmptyPath, `${dstPath}/`, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localNotEmptyPath, `${dstPath}/`, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`nas cp: failed to access ${dstPath}/: Not a directory`));
     }
     assert.calledWith(request.statsRequest, `${resolvedDst}/`, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
   });
@@ -426,13 +426,13 @@ describe('nas cp local folder to remote NAS', () => {
       }
     });
     try {
-      await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+      await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     } catch (error) {
       expect(error).to.eql(new Error(`nas cp: cannot create directory ${dstPath}: No such file or directory`));
     }
     
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.notCalled(upload.uploadFolder);
     assert.notCalled(upload.uploadFile);
   });
@@ -451,9 +451,9 @@ describe('nas cp local folder to remote NAS', () => {
       }
     });
     const actualDst = path.posix.join(resolvedDst, path.basename(localNotEmptyPath));
-    await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+    await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(upload.uploadFolder, localNotEmptyPath, actualDst, nasHttpTriggerPath, localNasTmpDir, noClobber);
     assert.notCalled(upload.uploadFile);
   });
@@ -468,10 +468,10 @@ describe('nas cp local folder to remote NAS', () => {
         isFile: false
       }
     });
-    await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, baseDir, isSync);
+    await cpStub(localNotEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
     const actualDst = resolvedDst;
     assert.calledWith(request.statsRequest, resolvedDst, nasHttpTriggerPath);
-    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName);
+    assert.calledWith(init.deployNasService, baseDir, tpl, mockdata.serviceName, tplPath);
     assert.calledWith(upload.uploadFolder, localNotEmptyPath, actualDst, nasHttpTriggerPath, localNasTmpDir, noClobber);
     assert.notCalled(upload.uploadFile);
   });

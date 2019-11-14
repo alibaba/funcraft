@@ -44,6 +44,6 @@ describe('command cp test', () => {
 
     const baseDir = getBaseDir(tplPath);
     const localNasTmpDir = path.join(baseDir, '.fun', 'tmp', 'nas', 'cp');
-    assert.calledWith(nasCp, srcPath, dstPath, options.recursive, !options.clobber, localNasTmpDir, mockdata.tpl, baseDir, false);
+    assert.calledWith(nasCp, srcPath, dstPath, options.recursive, !options.clobber, localNasTmpDir, mockdata.tpl, tplPath, baseDir, false);
   });
 });
