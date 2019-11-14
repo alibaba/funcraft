@@ -1,5 +1,5 @@
 'use strict';
-
+const os = require('os');
 const path = require('path');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
@@ -9,8 +9,8 @@ const { setProcess } = require('../test-utils');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 
-const baseDir = path.join('/', 'test-dir');
-
+const baseDir = path.join(os.tmpdir(), '.nas-init');
+const tplPath = path.join(os.tmpdir(), '.nas-init', 'template');
 describe('test fun nas init', () => {
   
   let restoreProcess;
@@ -107,10 +107,10 @@ describe('test fun nas init', () => {
     };
     
     nas.convertNasConfigToNasMappings.returns([{localNasDir: baseDir, remoteNasDir: baseDir}]);
-    await nasInitStub.deployNasService(baseDir, nasMockData.tpl);
+    await nasInitStub.deployNasService(baseDir, nasMockData.tpl, undefined, tplPath);
 
     assert.calledWith(fs.pathExists, zipCodePath);
-    assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes);
+    assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes, false, tplPath);
 
   });
     

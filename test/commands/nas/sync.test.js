@@ -100,7 +100,7 @@ describe('fun nas sync test with normal nas config', () => {
 
     await syncStub(options);
 
-    assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, baseDir, isSync);
+    assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, tplPath, baseDir, isSync);
   });
 
   it('sync test with service option but without mountDir option, with normal nas config ', async () => {
@@ -111,7 +111,7 @@ describe('fun nas sync test with normal nas config', () => {
     };
     await syncStub(options);
 
-    assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, baseDir, isSync);
+    assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, tplPath, baseDir, isSync);
   });
 
 
@@ -121,7 +121,7 @@ describe('fun nas sync test with normal nas config', () => {
       mountDir: [mockdata.remoteNasDir]
     };
     await syncStub(options);
-    assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, baseDir, isSync);
+    assert.calledWith(cp, localNasDir, syncDstPath, recursive, noClobber, localNasTmpDir, mockdata.tpl, tplPath, baseDir, isSync);
   });
 
 });
