@@ -13,7 +13,8 @@ program
   .command('init', 'For each service with NAS config, create local NAS folder and deploy fun nas server service.')
   .command('sync', 'Synchronize the local NAS directory with the remote NAS file system.')
   .command('ls', 'List contents of remote NAS directory')
-  .command('rm', 'Remove remote NAS file.');
+  .command('rm', 'Remove remote NAS file.')
+  .command('cp', 'copy local file/folder to remote NAS');
 
 require('../lib/utils/command').registerCommandChecker(program);
 
