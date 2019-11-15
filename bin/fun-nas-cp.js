@@ -17,10 +17,11 @@ program
   .usage('[options] <src_path> <dst_path>')
   .option('-r, --recursive', 'copy folders recursively')
   .option('-n, --no-clobber', 'Do not overwrite an existing file')
-  .arguments("<srcPath> <dstPath>")
+  .arguments("<srcPathValue> <dstPathValue>")
   .action((srcPathValue, dstPathValue) => {
-    srcPath = dstPathValue;
-    dstPath = srcPathValue;
+
+    srcPath = srcPathValue;
+    dstPath = dstPathValue;
   })
   .parse(process.argv);
 
