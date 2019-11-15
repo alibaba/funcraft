@@ -40,7 +40,7 @@ program
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', (e, envs) => (envs.push(e), envs), [])
   .option('-d, --use-docker', 'Use docker container to install function dependencies')
   .option('--save', 'add task to fun.yml file.')
-  .option('-p, --package-type <type>', 'avaliable package type option: pip, apt.')
+  .option('-p, --package-type <type>', 'avaliable package type option: pip, apt, npm.')
   .arguments('[packageNames...]')
   .description('install dependencies which are described in fun.yml file.')
   .action(async (packageNames, program) => {
