@@ -72,7 +72,7 @@ describe('splitRangeBySize test', () => {
     expect(res).to.be.empty;
   });
   it('start < end', () => {
-    
+
     const res = supportStub.splitRangeBySize(1, 10, 4);
     expect(res).to.eql([{ start: 1, size: 4}, { start: 5, size: 4}, { start: 9, size: 1}]);
   });
@@ -92,7 +92,7 @@ describe('checkWritePerm test', () => {
   const mode_575 = 33149;
   const mode_666 = 33206;
   const mode_755 = 33261;
-  
+
   afterEach(() => {
     sandbox.restore();
   });
@@ -404,21 +404,21 @@ describe('# mergyNasMappings test', () => {
     expect(res).to.eql({
       'MyService': [
         {
-          'localNasDir': '/Users/ellison/fun/test/nas/java',
+          'localNasDir': `${path.posix.join(baseDir, 'java')}`,
           'remoteNasDir': '/mnt/auto/root'
         },
         {
-          'localNasDir': '/Users/ellison/fun/test/nas/node_modules',
+          'localNasDir': `${path.posix.join(baseDir, 'node_modules')}`,
           'remoteNasDir': '/mnt/auto/node_modules'
         }
       ],
       'ellison-serviceName': [
         {
-          'localNasDir': '/Users/ellison/fun/test/nas/.fun/root',
+          'localNasDir': `${path.posix.join(baseDir, '.fun/root')}`,
           'remoteNasDir': '/mnt/auto/root'
         },
         {
-          'localNasDir': '/Users/ellison/fun/test/nas/node_modules',
+          'localNasDir': `${path.posix.join(baseDir, 'node_modules')}`,
           'remoteNasDir': '/mnt/auto/node_modules'
         }
       ]
@@ -427,18 +427,7 @@ describe('# mergyNasMappings test', () => {
   it('nasMappings.json in empty', async () => {
     sandbox.stub(fs, 'readFile').resolves({});
     const res = await supportStub.mergyNasMappings(baseDir, serviceNasMappings);
-    expect(res).to.eql({
-      'ellison-serviceName': [
-        {
-          'localNasDir': '/Users/ellison/fun/test/nas/.fun/root',
-          'remoteNasDir': '/mnt/auto/root'
-        },
-        {
-          'localNasDir': '/Users/ellison/fun/test/nas/node_modules',
-          'remoteNasDir': '/mnt/auto/node_modules'
-        }
-      ]
-    });
+    expect(res).to.eql(serviceNasMappings);
   });
 });
 
