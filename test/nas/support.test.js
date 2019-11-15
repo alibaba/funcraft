@@ -1,6 +1,6 @@
 'use strict';
 const os = require('os');
-
+const fs = require('fs-extra');
 const path = require('path');
 const mockdata = require('../commands/nas/mock-data');
 const sinon = require('sinon');
@@ -12,7 +12,7 @@ const proxyquire = require('proxyquire');
 const request = require('../../lib/nas/request');
 
 const requestStub = {
-  getVersion: sandbox.stub(), 
+  getVersion: sandbox.stub(),
   getNasConfig: sandbox.stub()
 };
 
@@ -72,7 +72,7 @@ describe('splitRangeBySize test', () => {
     expect(res).to.be.empty;
   });
   it('start < end', () => {
-    
+
     const res = supportStub.splitRangeBySize(1, 10, 4);
     expect(res).to.eql([{ start: 1, size: 4}, { start: 5, size: 4}, { start: 9, size: 1}]);
   });
@@ -92,7 +92,7 @@ describe('checkWritePerm test', () => {
   const mode_575 = 33149;
   const mode_666 = 33206;
   const mode_755 = 33261;
-  
+
   afterEach(() => {
     sandbox.restore();
   });
@@ -250,7 +250,7 @@ more information please refer to https://github.com/alibaba/funcraft/blob/master
 describe('isSameVersion test', () => {
   const nasHttpTriggerPath = request.getNasHttpTriggerPath(mockdata.serviceName);
   beforeEach(() => {
-    
+
     requestStub.getVersion.returns({
       header: 200, 
       data: {
@@ -264,7 +264,7 @@ describe('isSameVersion test', () => {
   it('version not matched', async () => {
     const res = await supportStub.isSameVersion(mockdata.serviceName, '321');
     expect(res).to.eql(false);
-    
+
     assert.calledWith(requestStub.getVersion, nasHttpTriggerPath);
   });
   it('version matched', async () => {
@@ -292,7 +292,7 @@ describe('isSameNasConfig test', () => {
   it('config not matched', async() => {
     const nasConig = {
       UserId: 100,
-      GroupId: 100, 
+      GroupId: 100,
       MountPoints: [{
         ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
         MountDir: '/mnt/nas'
@@ -320,11 +320,11 @@ describe('isSameNasConfig test', () => {
     const res = await supportStub.isSameNasConfig(mockdata.serviceName, 'Auto');
     expect(res).to.eql(true);
     assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
-  }); 
+  });
   it('config matched', async() => {
     const nasConig = {
       UserId: 1000,
-      GroupId: 1000, 
+      GroupId: 1000,
       MountPoints: [{
         ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
         MountDir: '/mnt/nas'
@@ -350,16 +350,84 @@ describe('getNasPathAndServiceFromNasUri test', () => {
   it('normal nas config test', () => {
     const res = supportStub.getNasPathAndServiceFromNasUri(nasUri, mockdata.tpl);
     expect(res).to.eql({
-      nasPath: '/mnt/auto', 
+      nasPath: '/mnt/auto',
       serviceName: mockdata.serviceName
     });
   });
   it('empty nas config test', () => {
     const res = supportStub.getNasPathAndServiceFromNasUri(nasUri, mockdata.tplWithoutNasConfig);
     expect(res).to.eql({
-      nasPath: '/mnt/auto', 
+      nasPath: '/mnt/auto',
       serviceName: mockdata.serviceName
     });
+  });
+});
+
+describe('# mergeNasMappings test', () => {
+  const baseDir = path.join(__dirname);
+
+  const serviceNasMappings = {
+    'ellison-serviceName': [
+      {
+        'localNasDir': `${baseDir}/.fun/root`,
+        'remoteNasDir': '/mnt/auto/root'
+      },
+      {
+        'localNasDir': `${baseDir}/node_modules`,
+        'remoteNasDir': '/mnt/auto/node_modules'
+      }
+    ]
+  };
+
+  beforeEach(() => {
+    sandbox.stub(fs, 'pathExists').resolves(true);
+  });
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('nasMappings.json in not empty', async () => {
+    const content = {
+      'MyService': [
+        {
+          'localNasDir': `${baseDir}/java`,
+          'remoteNasDir': '/mnt/auto/root'
+        },
+        {
+          'localNasDir': `${baseDir}/node_modules`,
+          'remoteNasDir': '/mnt/auto/node_modules'
+        }
+      ]
+    };
+    sandbox.stub(fs, 'readFile').resolves(JSON.stringify(content));
+    const res = await supportStub.mergeNasMappings(baseDir, serviceNasMappings);
+    expect(res).to.eql({
+      'MyService': [
+        {
+          'localNasDir': `${path.posix.join(baseDir, 'java')}`,
+          'remoteNasDir': '/mnt/auto/root'
+        },
+        {
+          'localNasDir': `${path.posix.join(baseDir, 'node_modules')}`,
+          'remoteNasDir': '/mnt/auto/node_modules'
+        }
+      ],
+      'ellison-serviceName': [
+        {
+          'localNasDir': `${path.posix.join(baseDir, '.fun/root')}`,
+          'remoteNasDir': '/mnt/auto/root'
+        },
+        {
+          'localNasDir': `${path.posix.join(baseDir, 'node_modules')}`,
+          'remoteNasDir': '/mnt/auto/node_modules'
+        }
+      ]
+    });
+  });
+  it('nasMappings.json in empty', async () => {
+    sandbox.stub(fs, 'readFile').resolves({});
+    const res = await supportStub.mergeNasMappings(baseDir, serviceNasMappings);
+    expect(res).to.eql(serviceNasMappings);
   });
 });
 
