@@ -1302,9 +1302,7 @@ describe('custom domain', () => {
 
 
 describe('test partical deploy', () => {
-  
   beforeEach(() => {
-
     Object.keys(prompt).forEach(m => {
       if (m === 'promptForSameFunction') {
         sandbox.stub(prompt, m).resolves({
@@ -1324,9 +1322,7 @@ describe('test partical deploy', () => {
   async function partialDeployment(sourceName, tpl) {
     return await proxyquire('../../lib/deploy/deploy-by-tpl', {
       '../../lib/init/prompt': prompt
-    }).partialDeployment({
-      resourceName: sourceName
-    }, tpl);
+    }).partialDeployment(sourceName, tpl);
   }
 
   it('single functionName', async () => {

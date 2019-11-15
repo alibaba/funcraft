@@ -8,12 +8,21 @@ const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
 
+let srcPath;
+let dstPath;
+
 program
   .name('fun nas cp')
   .description('Copy file/folder between remote NAS and local path.')
   .usage('[options] <src_path> <dst_path>')
   .option('-r, --recursive', 'copy folders recursively')
   .option('-n, --no-clobber', 'Do not overwrite an existing file')
+  .arguments("<srcPathValue> <dstPathValue>")
+  .action((srcPathValue, dstPathValue) => {
+
+    srcPath = srcPathValue;
+    dstPath = dstPathValue;
+  })
   .parse(process.argv);
 
 if (program.args.length < 2) {
@@ -31,7 +40,7 @@ notifier.notify();
 getVisitor(true).then((visitor) => {
   visitor.pageview('/fun/nas/cp').send();
 
-  require('../lib/commands/nas/cp')(program.args[0], program.args[1], program)
+  require('../lib/commands/nas/cp')(srcPath, dstPath, program)
     .then(() => {
       visitor.event({
         ec: 'cp',
@@ -50,5 +59,4 @@ getVisitor(true).then((visitor) => {
 
       require('../lib/exception-handler')(error);
     });
-    
 });
