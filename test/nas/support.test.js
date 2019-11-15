@@ -363,7 +363,7 @@ describe('getNasPathAndServiceFromNasUri test', () => {
   });
 });
 
-describe('# mergyNasMappings test', () => {
+describe('# mergeNasMappings test', () => {
   const baseDir = path.join(__dirname);
 
   const serviceNasMappings = {
@@ -400,7 +400,7 @@ describe('# mergyNasMappings test', () => {
       ]
     };
     sandbox.stub(fs, 'readFile').resolves(JSON.stringify(content));
-    const res = await supportStub.mergyNasMappings(baseDir, serviceNasMappings);
+    const res = await supportStub.mergeNasMappings(baseDir, serviceNasMappings);
     expect(res).to.eql({
       'MyService': [
         {
@@ -426,7 +426,7 @@ describe('# mergyNasMappings test', () => {
   });
   it('nasMappings.json in empty', async () => {
     sandbox.stub(fs, 'readFile').resolves({});
-    const res = await supportStub.mergyNasMappings(baseDir, serviceNasMappings);
+    const res = await supportStub.mergeNasMappings(baseDir, serviceNasMappings);
     expect(res).to.eql(serviceNasMappings);
   });
 });
