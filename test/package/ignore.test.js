@@ -68,14 +68,13 @@ describe('test funignore with nasMappings.json', () => {
     sandbox.stub(fs, 'pathExists').resolves(true);
     sandbox.stub(fs, 'readFile').resolves(JSON.stringify(content));
   });
+
   afterEach(() => {
     sandbox.restore();
   });
 
   it('test nasMappings.json', async () => {
-
     const funignore = await ignore(baseDir);
-
     expect(funignore(path.join(baseDir, '.fun', 'nasMappings.json'))).to.be.ok();
     expect(funignore(path.join(baseDir, 'fun', '1.txt'))).not.to.be.ok();
     expect(funignore(path.join(baseDir, 'node_modules'))).to.be.ok();
