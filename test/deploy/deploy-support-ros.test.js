@@ -183,8 +183,12 @@ const listEventsResults = {
   'Events': events
 };
 
-const answer = {
+const answerForYes = {
   ok: true
+};
+
+const answerForNo = {
+  ok: false
 };
 
 const getTemplateResults = {
@@ -279,8 +283,6 @@ describe('test deploy support ros', () => {
 
     requestStub = sandbox.stub();
 
-    sandbox.stub(inquirer, 'prompt').withArgs('Please confirm to continue.').resolves(answer);
-
     sandbox.stub(trigger, 'displayTriggerInfo');
 
     rosClient = {
@@ -336,6 +338,9 @@ describe('test deploy support ros', () => {
   });
 
   it('test deploy by ros with assumeYes is true', async () => {
+
+    sandbox.stub(inquirer, 'prompt').resolves(answerForYes);
+
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
       'PageNumber': 1,
       'TotalCount': 3,
@@ -385,7 +390,10 @@ describe('test deploy support ros', () => {
     });
   });
 
-  it.skip('test deploy by ros with assumeYes is false', async () => {
+  it('test deploy by ros with assumeYes is false', async () => {
+
+    sandbox.stub(inquirer, 'prompt').resolves(answerForNo);
+
     requestStub.withArgs('ListStacks', listParams, requestOption).resolves({
       'PageNumber': 1,
       'TotalCount': 3,
@@ -398,13 +406,16 @@ describe('test deploy support ros', () => {
       ]
     });
 
-    requestStub.withArgs('CreateChangeSet', updateParams, requestOption).resolves({
+    requestStub.withArgs('GetStack', getTemplateParams, requestOption).resolves(getStackResult);
+
+    requestStub.withArgs('CreateChangeSet', Object.assign(updateParams, mergedParam), requestOption).resolves({
       ChangeSetId: 'changeSetId'
     });
 
     requestStub.withArgs('GetChangeSet', getChangeSetParam).resolves({
-      'Status': 'COMPLETE',
-      'Changes': changes
+      'Status': 'CREATE_COMPLETE',
+      'Changes': changes,
+      'ExecutionStatus': 'AVAILABLE'
     });
 
     requestStub.withArgs('ExecuteChangeSet', execChangeSetParams, requestOption).resolves();
@@ -417,12 +428,12 @@ describe('test deploy support ros', () => {
 
     requestStub.withArgs('ListStackEvents', listEventsParams, requestOption).resolves(listEventsResults);
 
-    await deployByRos(stackName, tpl, false);
+    await deployByRos(os.tmpdir(), stackName, tpl, false, parameterOverride);
 
     assert.calledWith(requestStub.firstCall, 'ListStacks', listParams, requestOption);
-    assert.calledWith(requestStub.secondCall, 'CreateChangeSet', updateParams, requestOption);
-    assert.calledWith(requestStub.thirdCall, 'GetChangeSet', getChangeSetParam, requestOption);
-    assert.calledWith(requestStub.lastCall, 'ListStackEvents', listEventsParams, requestOption);
+    assert.calledWith(requestStub.secondCall, 'GetStack', getTemplateParams, requestOption);
+    assert.calledWith(requestStub.thirdCall, 'CreateChangeSet', updateParams, requestOption);
+    assert.calledWith(requestStub.lastCall, 'DeleteStack', getTemplateParams, requestOption);
     assert.calledWith(inquirer.prompt, promptArguments);
   });
 });
