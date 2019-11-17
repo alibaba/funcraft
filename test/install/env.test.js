@@ -35,7 +35,7 @@ describe('install_env', ()=>{
       'PATH': '/usr/bin'
     });
 
-    expect(envs).to.have.property('PATH', '/usr/bin:/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin');
+    expect(envs).to.have.property('PATH', '/usr/bin:/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/bin');
   });
 
   it('with_PYTHONUSERBASE', () => {
@@ -45,6 +45,23 @@ describe('install_env', ()=>{
 
     expect(envs).to.have.property('PYTHONUSERBASE', '/mnt/nas/fun/python');
   });
+
+  it('with duplicate PATH', () => {
+    const envs = addEnv({
+      'PATH': '/usr/bin:/usr/bin:/usr/bin'
+    });
+
+    expect(envs).to.have.property('PATH', '/usr/bin:/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:/bin');
+  });
+
+  it('with duplicate LD_LIBRARY_PATH', () => {
+    const envs = addEnv({
+      'LD_LIBRARY_PATH': '/usr/lib:/usr/lib:/usr/lib'
+    });
+
+    expect(envs).to.have.property('LD_LIBRARY_PATH', '/usr/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib');
+  });
+
 });
 
 const file = {
