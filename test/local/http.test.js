@@ -136,6 +136,7 @@ describe('test validateSignature', async () => {
   const accessKeyId = 'testKeyId';
   const accessKeySecret = 'testKeySecret';
   const accountId = 'testAccountId';
+  const defaultRegion = 'cn-shanghai';
 
   beforeEach(() => {
 
@@ -155,7 +156,8 @@ describe('test validateSignature', async () => {
     restoreProcess = setProcess({
       ACCOUNT_ID: accountId,
       ACCESS_KEY_ID: accessKeyId,
-      ACCESS_KEY_SECRET: accessKeySecret
+      ACCESS_KEY_SECRET: accessKeySecret,
+      DEFULT_REGION: defaultRegion
     });
   });
 
