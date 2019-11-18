@@ -1,12 +1,11 @@
 'use strict';
 
+const fs = require('fs-extra');
+const path = require('path');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const expect = require('expect.js');
-const fs = require('fs-extra');
-const path = require('path');
-
 const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 
