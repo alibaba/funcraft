@@ -127,7 +127,7 @@ jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==`;
   });
 });
 
-describe('test validateSignature', async () => {
+describe.only('test validateSignature', async () => {
 
   let restoreProcess;
   let req;
@@ -157,7 +157,7 @@ describe('test validateSignature', async () => {
       ACCOUNT_ID: accountId,
       ACCESS_KEY_ID: accessKeyId,
       ACCESS_KEY_SECRET: accessKeySecret,
-      DEFULT_REGION: defaultRegion
+      DEFAULT_REGION: defaultRegion
     });
   });
 
