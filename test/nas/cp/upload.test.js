@@ -8,7 +8,7 @@ const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 const expect = require('expect.js');
 const writeFile = util.promisify(fs.writeFile);
-const { getFileHash } = require('../../../lib/nas/cp/file');
+const { getFileHash, getFilePermission } = require('../../../lib/nas/cp/file');
 const { readDirRecursive } = require('../../../lib/nas/path');
 const constants = require('../../../lib/nas/constants');
 const { chunk } = require('../../../lib/nas/support');
@@ -27,7 +27,8 @@ const request = {
   createSizedNasFile: sandbox.stub(), 
   uploadChunkFile: sandbox.stub(),
   checkFileHash: sandbox.stub(), 
-  checkRemoteNasTmpDir: sandbox.stub()
+  checkRemoteNasTmpDir: sandbox.stub(), 
+  changeNasFilePermission: sandbox.stub()
 };
 
 const uploadStub = proxyquire('../../../lib/nas/cp/upload', {
@@ -78,7 +79,13 @@ describe('upload folder test', () => {
     request.checkRemoteNasTmpDir.returns({
       desc: 'check tmpDir done!'
     });
-    
+    request.changeNasFilePermission.returns({
+      headers: 200,
+      data: {
+        stdout: 'stdout',
+        stderr: ''
+      }
+    });
   });
 
   afterEach(() => {
@@ -108,10 +115,12 @@ describe('upload file test', () => {
   const srcPathFile = path.join(srcPath, 'test-file');
   const fileSize = 2 * constants.FUN_NAS_CHUNK_SIZE;
   let fileHash;
+  let filePermission;
   beforeEach(async() => {
     await mkdirp(srcPath);
     await writeFile(srcPathFile, Buffer.alloc(fileSize));
     fileHash = await getFileHash(srcPathFile);
+    filePermission = await getFilePermission(srcPathFile);
     request.createSizedNasFile.returns({
       headers: 200,
       data: {
@@ -144,5 +153,6 @@ describe('upload file test', () => {
     assert.calledWith(request.createSizedNasFile, nasHttpTriggerPath, dstPath, fileSize);
     assert.calledTwice(request.uploadChunkFile);
     assert.calledWith(request.checkFileHash, nasHttpTriggerPath, dstPath, fileHash);
+    assert.calledWith(request.changeNasFilePermission, nasHttpTriggerPath, dstPath, filePermission);
   });
 });
