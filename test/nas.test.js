@@ -1,15 +1,17 @@
 'use strict';
 
-const expect = require('expect.js');
-let nas = require('../lib/nas');
 const fs = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
 const yaml = require('js-yaml');
-const mockdata = require('./commands/nas/mock-data');
-const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const expect = require('expect.js');
+const sandbox = sinon.createSandbox();
+const mockdata = require('./commands/nas/mock-data');
 
+let nas = require('../lib/nas');
+
+const { setProcess } = require('./test-utils');
 
 const region = 'cn-hangzhou';
 
@@ -622,5 +624,104 @@ describe('test convertTplToServiceNasIdMappings', () => {
     };
     const res = nas.convertTplToServiceNasIdMappings(tpl);
     expect(res).to.eql({});
+  });
+});
+
+const fileSystems = {
+  'FileSystems': {
+    'FileSystem': [
+      {
+        'Description': 'nasSuper',
+        'FileSystemId': '36939484ce',
+        'FileSystemType': 'standard',
+        'ZoneId': 'cn-shanghai-b',
+        'MountTargets': {
+          'MountTarget': [
+            {
+              'Status': 'active',
+              'NetworkType': 'vpc',
+              'VswId': 'vsw-uf6mp6edo41pzdeqb1ull',
+              'AccessGroupName': 'super',
+              'VpcId': 'vpc-uf6iihq1f24hhry437zty',
+              'MountTargetDomain': '36939484ce-yne69.cn-shanghai.nas.aliyuncs.com'
+            },
+            {
+              'Status': 'active',
+              'NetworkType': 'vpc',
+              'VswId': 'vsw-uf6ovr6bdrsd125cikf11',
+              'AccessGroupName': 'DEFAULT_VPC_GROUP_NAME',
+              'VpcId': 'vpc-uf65k1c9fr24ezunotu81',
+              'MountTargetDomain': '36939484ce-hdp6.cn-shanghai.nas.aliyuncs.com'
+            }
+          ]
+        },
+        'StorageType': 'Performance'
+      }
+    ]
+  }
+};
+
+describe('#test getAvailableNasFileSystems', async () => {
+
+  let restoreProcess;
+  beforeEach(() => {
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+      DEFAULT_REGION: 'cn-hangzhou'
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  it('getAvailableNasFileSystems', async () => {
+    const params = {
+      'RegionId': region,
+      'PageSize': 50,
+      'PageNumber': 1
+    };
+
+    const requestStub = sandbox.stub();
+
+    requestStub.withArgs('DescribeFileSystems', params, requestOption).resolves(fileSystems);
+
+    const nasPopClient = { request: requestStub };
+
+    const result = await nas.getAvailableNasFileSystems(nasPopClient);
+
+    const expectResult = [
+      {
+        'fileSystemId': '36939484ce',
+        'description': 'nasSuper',
+        'storageType': 'Performance',
+        'zoneId': 'cn-shanghai-b',
+        'mountTargets': [
+          {
+            'Status': 'active',
+            'NetworkType': 'vpc',
+            'VswId': 'vsw-uf6mp6edo41pzdeqb1ull',
+            'AccessGroupName': 'super',
+            'VpcId': 'vpc-uf6iihq1f24hhry437zty',
+            'MountTargetDomain': '36939484ce-yne69.cn-shanghai.nas.aliyuncs.com'
+          },
+          {
+            'Status': 'active',
+            'NetworkType': 'vpc',
+            'VswId': 'vsw-uf6ovr6bdrsd125cikf11',
+            'AccessGroupName': 'DEFAULT_VPC_GROUP_NAME',
+            'VpcId': 'vpc-uf65k1c9fr24ezunotu81',
+            'MountTargetDomain': '36939484ce-hdp6.cn-shanghai.nas.aliyuncs.com'
+          }
+        ]
+      }
+    ];
+
+    expect(result).to.eql(expectResult);
+    assert.calledWith(requestStub, 'DescribeFileSystems', params, requestOption);
   });
 });
