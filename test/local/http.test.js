@@ -127,7 +127,7 @@ jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==`;
   });
 });
 
-describe.only('test validateSignature', async () => {
+describe('test validateSignature', async () => {
 
   let restoreProcess;
   let req;
