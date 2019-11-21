@@ -8,6 +8,7 @@ let docker = require('../lib/docker');
 const DockerCli = require('dockerode');
 const DockerModem = require('docker-modem');
 const dockerOpts = require('../lib/docker-opts');
+const errorProcessor = require('../lib/error-processor');
 
 const sinon = require('sinon');
 const assert = sinon.assert;
@@ -311,6 +312,7 @@ describe('test docker run', async () => {
   beforeEach(() => {
     fcErrorTransformStub = sandbox.stub().returns(errorStream);
 
+    sandbox.stub(errorProcessor, 'processorTransformFactory').resolves(fcErrorTransformStub);
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
     sandbox.stub(DockerCli.prototype, 'getContainer').returns({
@@ -345,8 +347,7 @@ describe('test docker run', async () => {
     sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
 
     docker = proxyquire('../lib/docker', {
-      'dockerode': DockerCli,
-      './fc-error-transform': fcErrorTransformStub
+      'dockerode': DockerCli
     });
 
     restoreProcess = setProcess({

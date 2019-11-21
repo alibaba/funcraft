@@ -1,6 +1,6 @@
 'use strict';
 
-const fcErrorTransform = require('../lib/fc-error-transform');
+const { processorTransformFactory } = require('../lib/error-processor');
 const streams = require('memory-streams');
 const expect = require('expect.js');
 const sinon = require('sinon');
@@ -8,7 +8,7 @@ const snadbox = sinon.createSandbox();
 const httpx = require('httpx');
 const assert = snadbox.assert;
 
-describe('test fc-error-transform', async () => {
+describe('test error-processor', async () => {
 
   beforeEach(() => {
     snadbox.stub(httpx, 'request').resolves('response');
@@ -32,7 +32,7 @@ describe('test fc-error-transform', async () => {
       s.push(null);
     };
 
-    const transform = fcErrorTransform({
+    const transform = processorTransformFactory({
       serviceName: 'serviceName',
       functionName: 'functionName',
       errorStream
@@ -61,7 +61,7 @@ describe('test fc-error-transform', async () => {
       s.push(null);
     };
 
-    const transform = fcErrorTransform({
+    const transform = processorTransformFactory({
       serviceName: 'serviceName',
       functionName: 'functionName',
       errorStream
