@@ -71,16 +71,7 @@ describe('nas cp src path check error', () => {
     assert.notCalled(upload.uploadFile);
     assert.notCalled(upload.uploadFolder);
   });
-  it('src path is empty dir', async() => {
-    try {
-      await cpStub(localEmptyPath, dstPath, recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
-    } catch (error) {
-      expect(error).to.eql(new Error(`${localEmptyPath} is empty, skip uploading`));
-    }
-    assert.notCalled(request.statsRequest);
-    assert.notCalled(upload.uploadFile);
-    assert.notCalled(upload.uploadFolder);
-  });
+  
   it('cp localDir without recursive option', async() => {
     try {
       await cpStub(localNotEmptyPath, dstPath, !recursive, noClobber, localNasTmpDir, tpl, tplPath, baseDir, isSync);
