@@ -306,13 +306,13 @@ describe('test docker run', async () => {
   let streamMock;
   let logStreamMock;
   var isWin = process.platform === 'win32';
-  let fcErrorTransformStub;
+  let processorTransformFactory;
   let errorStream = {};
 
   beforeEach(() => {
-    fcErrorTransformStub = sandbox.stub().returns(errorStream);
+    processorTransformFactory = sandbox.stub().returns(errorStream);
 
-    sandbox.stub(errorProcessor, 'processorTransformFactory').resolves(fcErrorTransformStub);
+    sandbox.stub(errorProcessor, 'processorTransformFactory').resolves(processorTransformFactory);
     sandbox.stub(DockerCli.prototype, 'pull').resolves({});
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
     sandbox.stub(DockerCli.prototype, 'getContainer').returns({
@@ -347,7 +347,8 @@ describe('test docker run', async () => {
     sandbox.stub(DockerCli.prototype, 'createContainer').resolves(containerMock);
 
     docker = proxyquire('../lib/docker', {
-      'dockerode': DockerCli
+      'dockerode': DockerCli,
+      './error-processor': { processorTransformFactory }
     });
 
     restoreProcess = setProcess({

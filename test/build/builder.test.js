@@ -30,6 +30,7 @@ describe('test buildInDocker', () => {
   beforeEach(() => {
     sandbox.stub(docker, 'run').resolves({ StatusCode: 0 });
     sandbox.stub(buildOpts, 'generateBuildContainerBuildOpts').resolves(testOpts);
+    sandbox.stub(docker, 'pullImageIfNeed').resolves({});
   });
 
   afterEach(() => {
@@ -40,7 +41,7 @@ describe('test buildInDocker', () => {
     await builder.buildInDocker(serviceName, serviceRes, functionName, functionRes, baseDir, codeUri, funcArtifactDir, verbose);
 
     assert.calledWith(buildOpts.generateBuildContainerBuildOpts, serviceName, serviceRes, functionName, functionRes, baseDir, codeUri, funcArtifactDir, verbose);
-    assert.calledWith(docker.run, testOpts, null, process.stdout, process.stderr);
+    assert.calledWith(docker.run, testOpts, null, process.stdout, sinon.match.any);
   });
 });
 
