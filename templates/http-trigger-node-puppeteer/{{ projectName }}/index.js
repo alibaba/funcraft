@@ -18,7 +18,7 @@ module.exports.handler = function (request, response, context) {
       url = 'https://www.baidu.com';
     }
 
-    if (!url.startsWith('https://') || !url.startsWith('http://')) {
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
       url = 'http://' + url;
     }
 
