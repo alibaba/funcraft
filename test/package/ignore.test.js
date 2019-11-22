@@ -52,16 +52,18 @@ describe('test funignore with nasMappings.json', () => {
   const baseDir = path.join(__dirname);
 
   const content = {
-    'MyService': [
-      {
-        'localNasDir': `${baseDir}/java`,
-        'remoteNasDir': '/mnt/auto/root'
-      },
-      {
-        'localNasDir': `${baseDir}/node_modules`,
-        'remoteNasDir': '/mnt/auto/node_modules'
-      }
-    ]
+    'nasMappings': {
+      'MyService': [
+        {
+          'localNasDir': `${baseDir}/java`,
+          'remoteNasDir': '/mnt/auto/root'
+        },
+        {
+          'localNasDir': `${baseDir}/node_modules`,
+          'remoteNasDir': '/mnt/auto/node_modules'
+        }
+      ]
+    }
   };
 
   beforeEach(() => {
@@ -75,7 +77,7 @@ describe('test funignore with nasMappings.json', () => {
 
   it('test nasMappings.json', async () => {
     const funignore = await ignore(baseDir);
-    expect(funignore(path.join(baseDir, '.fun', 'nasMappings.json'))).to.be.ok();
+    expect(funignore(path.join(baseDir, '.fun', '.nas.yml'))).to.be.ok();
     expect(funignore(path.join(baseDir, 'fun', '1.txt'))).not.to.be.ok();
     expect(funignore(path.join(baseDir, 'node_modules'))).to.be.ok();
     expect(funignore(path.join(baseDir, 'java'))).to.be.ok();
