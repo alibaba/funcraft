@@ -1,0 +1,7 @@
+{
+    "name": "http-trigger-nodejs-puppeteer",
+    "description": "Serverless Puppeteer Demo",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
