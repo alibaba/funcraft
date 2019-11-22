@@ -16,5 +16,6 @@
     "http-trigger-php7.2":  "{{ templatePath }}/http-trigger-php7.2",
     "http-trigger-dotnetcore2.1":  "{{ templatePath }}/http-trigger-dotnetcore2.1",
     "http-trigger-spring-boot": "{{ templatePath }}/http-trigger-spring-boot",
-    "custom-springboot": "{{ templatePath }}/custom-springboot"
+    "custom-springboot": "{{ templatePath }}/custom-springboot",
+    "http-trigger-node-puppeteer": "{{ templatePath }}/http-trigger-node-puppeteer"
 }

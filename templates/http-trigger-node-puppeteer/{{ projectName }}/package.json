@@ -1,0 +1,30 @@
+{
+  "name": "puppeteer-example",
+  "version": "1.0.0",
+  "description": "该项目模板是一个基于 puppeteer 的截图 Web 应用",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "puppeteer": "^2.0.0"
+  },
+  "license": "ISC",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/funcraft"
+  },
+  "keywords": [
+    "puppeteer",
+    "fun",
+    "fc"
+  ],
+  "bugs": {
+    "url": "https://github.com/alibaba/funcraft/issues"
+  },
+  "homepage": "https://github.com/alibaba/funcraft/blob/master/README.md"
+}
