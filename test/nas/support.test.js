@@ -388,16 +388,18 @@ describe('# mergeNasMappings test', () => {
 
   it('nasMappings.json in not empty', async () => {
     const content = {
-      'MyService': [
-        {
-          'localNasDir': `${baseDir}/java`,
-          'remoteNasDir': '/mnt/auto/root'
-        },
-        {
-          'localNasDir': `${baseDir}/node_modules`,
-          'remoteNasDir': '/mnt/auto/node_modules'
-        }
-      ]
+      'nasMappings': {
+        'MyService': [
+          {
+            'localNasDir': `${baseDir}/java`,
+            'remoteNasDir': '/mnt/auto/root'
+          },
+          {
+            'localNasDir': `${baseDir}/node_modules`,
+            'remoteNasDir': '/mnt/auto/node_modules'
+          }
+        ]
+      }
     };
     sandbox.stub(fs, 'readFile').resolves(JSON.stringify(content));
     const res = await supportStub.mergeNasMappings(baseDir, serviceNasMappings);
