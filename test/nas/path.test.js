@@ -73,20 +73,22 @@ describe('resolveLocalPath test', () => {
 describe('readDirRecursive test', () => {
   const parentDir = path.join(os.tmpdir(), '.readDirRecursiveDir');
   const localDir = path.join(parentDir, 'tmp'); 
+  const localEmptyDir = path.join(parentDir, 'empty-dir');
   const filePath = path.join(localDir, 'test.txt');
   
   beforeEach(async () => {
     await mkdirp(localDir);
+    await mkdirp(localEmptyDir);
     await writeFile(`${filePath}`, 'this is a test');
   });
 
   afterEach(() => {
-    rimraf.sync(localDir);
+    rimraf.sync(parentDir);
     sandbox.restore();
   });
 
   it('normal path test', async() => {
     const res = await readDirRecursive(parentDir);
-    expect(res).to.eql(['tmp/test.txt']);
+    expect(res).to.eql(['tmp/test.txt', 'empty-dir/']);
   });
 });
