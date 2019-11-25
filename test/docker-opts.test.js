@@ -72,10 +72,10 @@ describe('test resolveDockerRegistry', () => {
     request.withArgs('https://registry.hub.docker.com/v2/aliyunfc/runtime-nodejs8/tags/list', { timeout: 3000 }).resolves();
     const dockerRegistry = await dockerOpts.resolveDockerRegistry();
     expect(dockerRegistry).to.be.eql('registry.cn-beijing.aliyuncs.com');
-    
   });
-
 });
+
+const LD_LIBRARY_PATH = 'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib';
 
 describe('test generateLocalInvokeOpts', () => {
   let restoreProcess;
@@ -131,7 +131,7 @@ describe('test generateLocalInvokeOpts', () => {
         'FC_ACCESS_KEY_ID=testKeyId',
         'FC_ACCESS_KEY_SECRET=testKeySecret',
         'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000',
-        'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+        `${LD_LIBRARY_PATH}`,
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
         'PYTHONUSERBASE=/code/.fun/python'
       ],
@@ -187,7 +187,7 @@ describe('test generateLocalInvokeOpts', () => {
       'User': null,
       'Image': `aliyunfc/runtime-nodejs8:${dockerOpts.IMAGE_VERSION}`,
       'Env': [
-        'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+        `${LD_LIBRARY_PATH}`,
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
         'PYTHONUSERBASE=/code/.fun/python'
       ],
@@ -212,7 +212,7 @@ describe('test resolveDockerEnv', () => {
     const resolved = dockerOpts.resolveDockerEnv(envs);
 
     expect(resolved).to.eql([
-      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+      `${LD_LIBRARY_PATH}`,
       'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
@@ -225,7 +225,7 @@ describe('test resolveDockerEnv', () => {
 
     expect(resolved).to.eql([
       'key=value',
-      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+      `${LD_LIBRARY_PATH}`,
       'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
@@ -237,9 +237,9 @@ describe('test resolveDockerEnv', () => {
     const resolved = dockerOpts.resolveDockerEnv(envs);
 
     expect(resolved).to.eql([
-      'key1=value1', 
+      'key1=value1',
       'key2=value2',
-      'LD_LIBRARY_PATH=/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+      `${LD_LIBRARY_PATH}`,
       'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
       'PYTHONUSERBASE=/code/.fun/python'
     ]);

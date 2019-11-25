@@ -11,7 +11,6 @@ const deploySupport = require('../../lib/deploy/deploy-support');
 
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
-const { red } = require('colors');
 const trigger = require('../../lib/trigger');
 const fc = require('../../lib/fc');
 const prompt = require('../../lib/init/prompt');
@@ -1103,10 +1102,9 @@ describe('deploy', () => {
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('service_role'));
-    // add test => no events on local but have onLine 
+    // add test => no events on local but have onLine
     assert.notCalled(trigger.makeTrigger);
-    assert.calledOnce(console.warn);
-    assert.calledWith(console.warn, red(`\t\tThe trigger my_trigger_name you configured in fc console does not match the local configuration.\n\t\tFun will not modify this trigger. You can remove this trigger manually through fc console if necessary`));
+    assert.notCalled(console.warn);
   });
 });
 
