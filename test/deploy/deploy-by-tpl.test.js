@@ -11,7 +11,6 @@ const deploySupport = require('../../lib/deploy/deploy-support');
 
 const ram = require('../../lib/ram');
 const { setProcess } = require('../test-utils');
-const { red } = require('colors');
 const trigger = require('../../lib/trigger');
 const fc = require('../../lib/fc');
 const prompt = require('../../lib/init/prompt');
