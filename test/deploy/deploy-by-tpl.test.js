@@ -179,6 +179,7 @@ describe('deploy', () => {
         codeUri: 'nodejs8/',
         description: 'http trigger demo with nodejs8!',
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         functionName: 'nodejs8',
         handler: 'index.handler',
         initializationTimeout: undefined,
@@ -223,6 +224,7 @@ describe('deploy', () => {
         serviceName: 'MyService',
         timeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('datahub'));
@@ -253,6 +255,7 @@ describe('deploy', () => {
         timeout: 60,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('helloworld'));
@@ -283,6 +286,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('java'));
@@ -325,6 +329,7 @@ describe('deploy', () => {
         timeout: 100,
         initializationTimeout: undefined,
         environmentVariables: { ROOT_DIR: '/mnt/test' },
+        instanceConcurrency: undefined,
         nasConfig: {
           GroupId: -1,
           UserId: -1,
@@ -353,6 +358,7 @@ describe('deploy', () => {
         timeout: 100,
         initializationTimeout: undefined,
         environmentVariables: { ROOT_DIR: '/mnt/test' },
+        instanceConcurrency: undefined,
         nasConfig: {
           GroupId: -1,
           UserId: -1,
@@ -395,6 +401,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('openid_connect'));
@@ -464,6 +471,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('tablestore-trigger'));
@@ -504,6 +512,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('sls_demo'));
@@ -546,6 +555,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('rds-trigger'));
@@ -589,6 +599,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('oss-trigger'));
@@ -634,6 +645,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: 100,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('cdn-trigger'));
@@ -685,6 +697,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('mnsTopic-trigger'));
@@ -727,6 +740,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('python'));
@@ -800,6 +814,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('segment'));
@@ -858,6 +873,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('timer'));
@@ -898,6 +914,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('wechat'));
@@ -950,6 +967,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('wechat'));
@@ -1025,6 +1043,7 @@ describe('deploy', () => {
         codeUri: './',
         description: 'Hello world with initializer!',
         environmentVariables: undefined,
+        instanceConcurrency: undefined,
         functionName: 'initializer',
         handler: 'main.my_handler',
         initializationTimeout: undefined,
@@ -1099,6 +1118,7 @@ describe('deploy', () => {
         serviceName: 'localdemo',
         timeout: undefined,
         environmentVariables: { StringTypeValue1: 123, StringTypeValue2: 'test' },
+        instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('service_role'));

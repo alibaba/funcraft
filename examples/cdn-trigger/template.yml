@@ -12,6 +12,7 @@ Resources:
         Handler: index.handler
         Runtime: nodejs8
         CodeUri: './'
+        InstanceConcurrency: 100
       Events:
         cdn-trigger-name: # trigger name
           Type: CDN # trigger type
