@@ -645,7 +645,7 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
-        instanceConcurrency: 100,
+        instanceConcurrency: 10,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('cdn-trigger'));
