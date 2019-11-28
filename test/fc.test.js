@@ -146,7 +146,7 @@ describe('Incorrect environmental variables', () => {
           PATH: '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
           PYTHONUSERBASE: '/code/.fun/python'
         },
-        instanceConcurrency: 1
+        instanceConcurrency: undefined
       });
   });
 
