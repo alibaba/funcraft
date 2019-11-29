@@ -232,6 +232,22 @@ describe('test isNasAutoConfig', () => {
     const nasConfig = 'Auto';
     expect(definition.isNasAutoConfig(nasConfig)).to.be(true);
   });
+  it('isNasAutoConfig is Auto(true) with userId and groupId', () => {
+    const nasConfig = {
+      Auto: true,
+      UserId: 33,
+      GroupId: 33
+    };
+    expect(definition.isNasAutoConfig(nasConfig)).to.be(true);
+  });
+  it('isNasAutoConfig is Auto(false) with userId and groupId', () => {
+    const nasConfig = {
+      Auto: false,
+      UserId: 33,
+      GroupId: 33
+    };
+    expect(definition.isNasAutoConfig(nasConfig)).to.be(false);
+  });
 });
 
 describe('test parseDomainRoutePath', () => {
