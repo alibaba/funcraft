@@ -334,7 +334,49 @@ describe('isSameNasConfig test', () => {
     expect(res).to.eql(true);
     assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
   });
+
+  it('nas auto config with userId and groupId matched', async() => {
+    requestStub.getNasConfig.returns({
+      userId: 10003,
+      groupId: 10003,
+      mountPoints: [{
+        serverAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        mountDir: '/mnt/auto'
+      }]
+    });
+
+    const nasConig = {
+      Auto: true,
+      UserId: 10003,
+      GroupId: 10003
+    };
+    const res = await supportStub.isSameNasConfig(mockdata.serviceName, nasConig);
+    expect(res).to.eql(true);
+    assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
+  });
+
+  it('nas auto config with userId and groupId not matched', async() => {
+
+    requestStub.getNasConfig.returns({
+      userId: 10003,
+      groupId: 10003,
+      mountPoints: [{
+        serverAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
+        mountDir: '/mnt/auto'
+      }]
+    });
+
+    const nasConig = {
+      Auto: true,
+      UserId: 10000,
+      GroupId: 10000
+    };
+    const res = await supportStub.isSameNasConfig(mockdata.serviceName, nasConig);
+    expect(res).to.eql(false);
+    assert.calledWith(requestStub.getNasConfig, mockdata.serviceName);
+  });
 });
+
 describe('getNasId test', () => {
   it('normal nas config test', () => {
     const res = supportStub.getNasId(mockdata.tpl, mockdata.serviceName);
