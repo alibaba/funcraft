@@ -42,7 +42,7 @@ describe('install_env', ()=>{
       'PYTHONUSERBASE': '/mnt/nas/fun/python'
     });
 
-    expect(envs).to.have.property('PYTHONUSERBASE', '/code/.fun/python:/mnt/nas/fun/python');
+    expect(envs).to.have.property('PYTHONUSERBASE', '/mnt/nas/fun/python');
   });
 
   it('with duplicate PATH', () => {
