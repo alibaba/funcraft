@@ -484,16 +484,15 @@ describe('test convertNasConfigToNasMappings', () => {
   afterEach(() => {
     sandbox.restore();
   });
-  
+
   it('empty nas config', async () => {
     const nasConfig = {};
     const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
     expect(res).to.eql([]);
-    
   });
 
   it('nas config auto', async () => {
-    
+
     const nasConfig = 'Auto';
     const nasDir = path.join(baseDir, 'auto-default');
 
@@ -505,18 +504,36 @@ describe('test convertNasConfigToNasMappings', () => {
 
     assert.calledWith(fsPathExists, res[0].localNasDir);
     assert.calledWith(fsEnsureDir, res[0].localNasDir);
-    
+
   });
-  
+
+  it('nas config auto with UserId and GroupId', async () => {
+    const nasConfig = {
+      Auto: true,
+      UserId: 1000,
+      GroupId: 10000
+    };
+
+    const nasDir = path.join(baseDir, 'auto-default');
+
+    fsPathExists.resolves(false);
+    const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
+
+    expect(res[0].localNasDir).to.eql(path.join(nasDir, serviceName));
+    expect(res[0].remoteNasDir).to.eql('/mnt/auto');
+
+    assert.calledWith(fsPathExists, res[0].localNasDir);
+    assert.calledWith(fsEnsureDir, res[0].localNasDir);
+  });
+
   it('nas config not auto', async () => {
-    
     const nasConfig = {
       UserId: 10003,
       GroupId: 10003,
       MountPoints: [{
         ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
         MountDir: '/mnt/nas'
-      }] 
+      }]
     };
 
     const nasDir = path.join(baseDir, '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com');
@@ -525,17 +542,15 @@ describe('test convertNasConfigToNasMappings', () => {
 
     fsPathExists.onCall(0).resolves(true);
     fsPathExists.onCall(1).resolves(true);
-    
+
     const res = await nas.convertNasConfigToNasMappings(baseDir, nasConfig, serviceName);
-    
+
     expect(res[0].localNasDir).to.eql(localNasDir);
     expect(res[0].remoteNasDir).to.eql(remoteNasDir);
-    
   });
 });
 
 describe('test convertTplToServiceNasMappings', () => {
-  
   const baseDir = '/service_test';
   let fsPathExists;
   let fsEnsureDir;
@@ -548,7 +563,7 @@ describe('test convertTplToServiceNasMappings', () => {
   });
 
   it('empty tpl resource', async () => {
-    
+
     const tpl = {
       ROSTemplateFormatVersion: '2015-09-01',
       Transform: 'Aliyun::Serverless-2018-04-03',
@@ -559,7 +574,6 @@ describe('test convertTplToServiceNasMappings', () => {
     expect(serviceNasMappings).to.eql({});
     assert.notCalled(fsPathExists);
     assert.notCalled(fsEnsureDir);
-    
   });
 
   it('normal tpl', async () => {
@@ -569,7 +583,7 @@ describe('test convertTplToServiceNasMappings', () => {
       MountPoints: [{
         ServerAddr: '359414a1be-lwl67.cn-shanghai.nas.aliyuncs.com:/',
         MountDir: '/mnt/nas'
-      }] 
+      }]
     };
     const tpl = {
       ROSTemplateFormatVersion: '2015-09-01',
