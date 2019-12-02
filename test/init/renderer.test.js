@@ -92,13 +92,23 @@ Resources:
 
 describe('renderer', () => {
 
+  beforeEach(() => {
+
+    const createReadStreamStub = sandbox.stub();
+    const pipeStub = sandbox.stub();
+
+    createReadStreamStub.returns({'on': pipeStub});
+    fs.createReadStream.returns({
+      pipe: createReadStreamStub
+    });
+  });
+
   afterEach(() => {
     sandbox.reset();
   });
 
   it('render', async () => {
     fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc', 'cba']).withArgs('foo').returns([]);
-    fs.createReadStream.returns({ pipe: () => {} });
     fs.statSync.returns({ mode: 123 });
     fs.statSync
       .withArgs('foo').returns({ isDirectory: () => true })
@@ -115,12 +125,11 @@ describe('renderer', () => {
     sandbox.assert.calledWith(fs.createReadStream, 'abc');
     sandbox.assert.calledOnce(fs.createWriteStream);
     sandbox.assert.calledWith(fs.createWriteStream, 'abc');
-    sandbox.assert.callCount(fs.chmodSync, 4);
+    sandbox.assert.callCount(fs.chmodSync, 3);
   });
 
   it('render with multi path', async () => {
     fs.readdirSync.withArgs('baz').returns(['foo', 'bar', 'abc', 'abc2', 'cba2']).withArgs('foo').returns([]);
-    fs.createReadStream.returns({ pipe: () => {} });
     fs.statSync.returns({ mode: 123 });
     fs.statSync
       .withArgs('foo').returns({ isDirectory: () => true })
@@ -142,7 +151,7 @@ describe('renderer', () => {
     sandbox.assert.calledWith(fs.createWriteStream, 'abc');
     sandbox.assert.calledWith(fs.createReadStream, 'abc2');
     sandbox.assert.calledWith(fs.createWriteStream, 'abc2');
-    sandbox.assert.callCount(fs.chmodSync, 5);
+    sandbox.assert.callCount(fs.chmodSync, 3);
   });
 
   it('render when merge is true', async () => {
