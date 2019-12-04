@@ -58,7 +58,7 @@ describe('test registerHttpTriggers', () => {
       triggerRes: triggerRes
     }];
 
-    await httpSupport.registerHttpTriggers(app, router, 8080, triggers, null, null, path.dirname(tplPath));
+    await httpSupport.registerHttpTriggers(app, router, 8080, triggers, null, null, path.dirname(tplPath), null, null, null, tplPath);
 
     assert.calledWith(fc.detectLibrary,
       httpTriggerFunctionRes.Properties.CodeUri,
@@ -102,10 +102,10 @@ describe('test registerApis', () => {
       functionRes
     }];
 
-    await httpSupport.registerApis(app, 8080, functions, null, null, baseDir);
+    await httpSupport.registerApis(app, 8080, functions, null, null, baseDir, null, null, null, tplPath);
 
-    assert.calledWith(fc.detectLibrary, 
-      httpTriggerFunctionRes.Properties.CodeUri, 
+    assert.calledWith(fc.detectLibrary,
+      httpTriggerFunctionRes.Properties.CodeUri,
       httpTriggerFunctionRes.Properties.Runtime,
       baseDir);
 
