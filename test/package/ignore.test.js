@@ -48,7 +48,7 @@ describe('funignore', async () => {
 
 });
 
-describe('test funignore with nasMappings.json', () => {
+describe('test funignore with .nas.yml', () => {
   const baseDir = path.join(__dirname);
 
   const content = {
@@ -75,7 +75,7 @@ describe('test funignore with nasMappings.json', () => {
     sandbox.restore();
   });
 
-  it('test nasMappings.json', async () => {
+  it('test .nas.yml', async () => {
     const funignore = await ignore(baseDir);
     expect(funignore(path.join(baseDir, '.fun', '.nas.yml'))).to.be.ok();
     expect(funignore(path.join(baseDir, 'fun', '1.txt'))).not.to.be.ok();
