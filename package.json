@@ -50,6 +50,7 @@
     "@alicloud/fc": "^1.2.3",
     "@alicloud/fc-builders": "^0.7.0",
     "@alicloud/fc2": "^2.1.1",
+    "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
     "@alicloud/pop-core": "^1.6.0",
