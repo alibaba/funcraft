@@ -33,7 +33,7 @@ program
   .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.\n')
   .option('--use-ros', 'Deploy resources using ROS')
   .option('--stack-name <stackName>', 'The name of the ROS stack')
-  .option('--parameter-override <parameter>', `A parameter structures that specify input parameters for your stack template.`, parsePairs)
+  .option('-p, --parameter-override <parameter>', `A parameter structures that specify input parameters for your stack template.`, parsePairs)
   .parse(process.argv);
 
 if (program.args.length > 1) {
