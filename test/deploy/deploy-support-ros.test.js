@@ -58,13 +58,21 @@ const tpl = {
     'Desc': {
       'Type': 'String',
       'Default': 'default'
+    },
+    'key': {
+      'Type': 'String',
+      'Default': 'value'
     }
   }
 };
 
 const mergedParam = {
+  'Parameters.3.ParameterKey': 'key',
+  'Parameters.3.ParameterValue': 'value',
+  'Parameters.2.ParameterKey': 'Desc',
+  'Parameters.2.ParameterValue': 'ellison',
   'Parameters.1.ParameterKey': 'Desc',
-  'Parameters.1.ParameterValue': 'ellison'
+  'Parameters.1.ParameterValue': 'ecs.t1.small'
 };
 
 const stackName = 'stackName';
@@ -252,7 +260,8 @@ const originParameters = [
 
 
 const parameterOverride = {
-  'Desc': 'ellison'
+  'Desc': 'ellison',
+  'key': 'value'
 };
 
 const getStackResult = {
