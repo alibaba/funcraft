@@ -43,8 +43,21 @@ describe('test buildFunction', () => {
   const codeUri = path.resolve(baseDir, functionRes.Properties.CodeUri);
   const runtime = functionRes.Properties.Runtime;
 
+  const tplPath = path.join(baseDir, 'template.yml');
+
+  let pathExistsStub;
+
   beforeEach(() => {
     sandbox.stub(fs, 'writeFile');
+
+    pathExistsStub = sandbox.stub(fs, 'pathExists');
+
+    pathExistsStub.withArgs(path.resolve(baseDir)).resolves(true);
+    pathExistsStub.withArgs(path.resolve(tplPath)).resolves(true);
+    sandbox.stub(fs, 'lstat').resolves({
+      'mtime': new Date('2019-12-16T09:30:55.325Z')
+    });
+    sandbox.stub(fs, 'outputFile');
 
     sandbox.stub(artifact, 'cleanDirectory').resolves({});
 
@@ -79,7 +92,7 @@ describe('test buildFunction', () => {
 
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(false);
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -114,7 +127,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -151,7 +164,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -180,7 +193,7 @@ describe('test buildFunction', () => {
     for (const bFunction of buildFuncs) {
       bFunction.functionRes.Properties.CodeUri = 'python3';
     }
-    
+
     const skippedBuildFuncs = [];
 
     const Builder = fcBuilders.Builder;
@@ -202,11 +215,10 @@ describe('test buildFunction', () => {
     const funfilePath = path.join(baseDir, 'Funfile');
     const codeUri = path.resolve(baseDir, 'python3');
 
-    const pathExistsStub = sandbox.stub(fs, 'pathExists');
     pathExistsStub.withArgs(funfilePath).resolves(true);
     pathExistsStub.withArgs(codeUri).resolves(true);
 
-    await build.buildFunction(buildName, cloneTpl, baseDir, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, cloneTpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, cloneTpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -245,7 +257,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -264,11 +276,9 @@ describe('test buildFunction', () => {
     const dockerFilePath = path.join(codeUri, '.Funfile.generated.dockerfile');
     const artifactDir = path.join(baseDir, '.fun', 'build', 'artifacts', serviceName, functionName);
 
-    const pathExistsStub = sandbox.stub(fs, 'pathExists');
     pathExistsStub.withArgs(codeUri).resolves(true);
     pathExistsStub.withArgs(funymlPath).resolves(true);
     pathExistsStub.withArgs(funfilePath).resolves(false);
-
 
     const useDocker = false;
 
@@ -295,7 +305,7 @@ describe('test buildFunction', () => {
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -316,7 +326,6 @@ describe('test buildFunction', () => {
     const funymlPath = path.join(codeUri, 'fun.yml');
     const dockerFilePath = path.join(codeUri, '.Funfile.generated.dockerfile');
 
-    const pathExistsStub = sandbox.stub(fs, 'pathExists');
     pathExistsStub.withArgs(codeUri).resolves(true);
     pathExistsStub.withArgs(funymlPath).resolves(true);
     pathExistsStub.withArgs(funfilePath).resolves(false);
@@ -333,7 +342,7 @@ describe('test buildFunction', () => {
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install'], verbose);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install'], verbose, tplPath);
 
     assert.calledWith(taskflow.isOnlyDefaultTaskFlow, [mockedTaskFlowConstructor]);
     assert.calledWith(parser.funymlToFunfile, funymlPath);

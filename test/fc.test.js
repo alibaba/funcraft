@@ -24,7 +24,8 @@ describe('test zipCode', () => {
     sandbox.stub(zip, 'pack').resolves({});
 
     sandbox.stub(fs, 'lstat').resolves({
-      isFile: function () { return false; }
+      isFile: function () { return false; },
+      size: '100'
     });
 
     sandbox.stub(fs, 'readFile').resolves('test');
@@ -75,7 +76,10 @@ describe('test zipCode', () => {
 
   it('test zipCode: relative codeUri for war', async () => {
     const content = await fc.zipCode('/a/b', './web.war');
-    expect(content).to.eql({ base64: Buffer.from('test').toString('base64') });
+    expect(content).to.eql({
+      base64: Buffer.from('test').toString('base64'),
+      compressedSize: '100'
+    });
 
     assert.calledWith(fs.readFile, path.resolve('/a/b/web.war'));
   });
