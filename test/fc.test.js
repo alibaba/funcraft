@@ -25,6 +25,9 @@ describe('test zipCode', () => {
 
     sandbox.stub(fs, 'lstat').resolves({
       isFile: function () { return false; },
+    });
+
+    sandbox.stub(fs, 'stat').resolves({
       size: '100'
     });
 
