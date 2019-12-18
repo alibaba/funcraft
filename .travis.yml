@@ -23,11 +23,6 @@ before_install:
       docker pull aliyunfc/runtime-nodejs8:build
       docker pull bitnami/minideb:jessie
     fi
-  # install make for windows
-  - > 
-    if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 
-      choco install make
-    fi
 
 install: 
   # Re-checkout files preserving line feeds. This prevents Windows builds from
@@ -45,7 +40,7 @@ install:
 
 before_script: 
   - env | sort
-  - make validate-lint
+  - npm run validate-lint
 
 script: 
   - |
