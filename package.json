@@ -17,7 +17,8 @@
     "assets": [
       "./templates/**/*",
       "./lib/utils/fun-nas-server/dist/fun-nas-server.zip",
-      "./lib/utils/fun-nas-server/dist/VERSION"
+      "./lib/utils/fun-nas-server/dist/VERSION",
+      "./lib/utils//classLoader/Entrypoint.java"
     ]
   },
   "scripts": {
