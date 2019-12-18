@@ -24,7 +24,7 @@ describe('test zipCode', () => {
     sandbox.stub(zip, 'pack').resolves({});
 
     sandbox.stub(fs, 'lstat').resolves({
-      isFile: function () { return false; },
+      isFile: function () { return false; }
     });
 
     sandbox.stub(fs, 'stat').resolves({
