@@ -1,5 +1,4 @@
-package example;
-
+package %s;
 import com.aliyun.fc.runtime.*;
 
 import javax.servlet.ServletException;
