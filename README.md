@@ -12,7 +12,9 @@
 
 ## 开始使用
 
-Fun 作为一个命令行工具，内置了多个子命令，比如 config、local、deploy 等。
+Fun 作为一个命令行工具，内置了多个子命令，比如 config、local、deploy 等。基础功能介绍：
+
+1. [Fun Config](): 介绍几本使用
 
 其中，config 子命令可以用来配置 fun，local 子命令可以用来本地运行调试函数，deploy 子命令可以将资源发布到线上。
 
