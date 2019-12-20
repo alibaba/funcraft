@@ -54,7 +54,7 @@
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
-    "@alicloud/pop-core": "^1.6.0",
+    "@alicloud/pop-core": "^1.7.9",
     "@alicloud/ram": "^1.0.0",
     "ajv": "^6.4.0",
     "ali-oss": "^6.1.1",
