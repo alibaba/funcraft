@@ -1345,25 +1345,27 @@ describe('test partical deploy', () => {
 
   it('single functionName', async () => {
 
-    const {serviceName, serviceRes} = await partialDeployment('python3', tpl);
+    const {resourceName, resourceRes} = await partialDeployment('python3', tpl);
 
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.be(tpl.Resources.localdemo);
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.be(tpl.Resources.localdemo);
+    expect(resourceRes.Type).to.be('Aliyun::Serverless::Service');
   });
 
   it('serviceName/functionName', async () => {
 
-    const {serviceName, serviceRes} = await partialDeployment('localdemo/python3', tpl);
+    const {resourceName, resourceRes} = await partialDeployment('localdemo/python3', tpl);
     
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.be(tpl.Resources.localdemo);
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.be(tpl.Resources.localdemo);
+    expect(resourceRes.Type).to.be('Aliyun::Serverless::Service');
   });
 
   it('more than one function', async () => {
 
-    const {serviceName, serviceRes} = await partialDeployment('localdemo/python3', tplWithDuplicatedFunction);
+    const {resourceName, resourceRes} = await partialDeployment('localdemo/python3', tplWithDuplicatedFunction);
     
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
   });
 });

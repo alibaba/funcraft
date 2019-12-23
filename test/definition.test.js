@@ -75,18 +75,18 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test matching service by sourceName', async function () {
 
-    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName(tpl.Resources, 'localdemo');
+    let {resourceName, resourceRes} = await definition.matchingResourceBySourceName(tpl.Resources, 'localdemo');
 
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.be(tpl.Resources.localdemo);
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.be(tpl.Resources.localdemo);
   });
 
   it('test more than one function under a service', async function () {
 
-    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName(tplWithDuplicatedFunctionsInService.Resources, 'nodejs6');
+    let {resourceName, resourceRes} = await definition.matchingResourceBySourceName(tplWithDuplicatedFunctionsInService.Resources, 'nodejs6');
 
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.eql(definition.deleteUnmatchFunctionsUnderServiceRes({
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.eql(definition.deleteUnmatchFunctionsUnderServiceRes({
       serviceName: 'localdemo',
       serviceRes: tplWithDuplicatedFunctionsInService.Resources.localdemo,
       functionName: 'nodejs6'
@@ -95,10 +95,10 @@ describe('test findFunctionByServiceAndFunctionName', () => {
 
   it('test matching function by sourceName', async function () {
 
-    let {serviceName, serviceRes} = await definition.matchingFuntionUnderServiceBySourceName(tpl.Resources, 'python3');
+    let {resourceName, resourceRes} = await definition.matchingResourceBySourceName(tpl.Resources, 'python3');
 
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.be(tpl.Resources.localdemo);
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.be(tpl.Resources.localdemo);
   });
 
   it('test find certain function by service and functionName', async function () {
@@ -150,15 +150,15 @@ describe('test matching function', () => {
   async function matchingFuntion(resources, sourceName) {
     return await proxyquire('../lib/definition', {
       '../lib/init/prompt': prompt
-    }).matchingFuntionUnderServiceBySourceName(resources, sourceName);
+    }).matchingResourceBySourceName(resources, sourceName);
   }
 
   it('test matching function by sourceName on tpl with duplicated function', async () => {
 
-    let {serviceName, serviceRes} = await matchingFuntion(tplWithDuplicatedFunction.Resources, 'python3');
+    let {resourceName, resourceRes} = await matchingFuntion(tplWithDuplicatedFunction.Resources, 'python3');
 
-    expect(serviceName).to.be('localdemo');
-    expect(serviceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
+    expect(resourceName).to.be('localdemo');
+    expect(resourceRes).to.be(tplWithDuplicatedFunction.Resources.localdemo);
   });
 });
 
