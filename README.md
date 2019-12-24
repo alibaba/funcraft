@@ -21,9 +21,18 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
 - [安装教程](https://github.com/aliyun/fun/blob/master/docs/usage/installation-zh.md)：介绍了如何在 Mac、Linux 或者 Windows 上安装 Fun。
 - [快速开始](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started-zh.md)：通过一个简单的示例介绍了 Fun 的基本用法。
 - [Fun 规范文档](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md): 详细介绍了 Fun 规范文档的细节。
-- 深度集成 Fun 的工具
+- Fun 基本功能介绍：
+	- [fun config 介绍](https://help.aliyun.com/document_detail/146702.html): 介绍如何进行 Fun 工具的配置。
+	- [fun Init 介绍](https://help.aliyun.com/document_detail/146946.html): 介绍如何使用 fun init 命令快速创建函数计算应用。
+	- [Fun Local 介绍](https://help.aliyun.com/document_detail/146711.html): 介绍如何使用 fun local 进行函数的本地运行、调试。
+	- [Fun Install 介绍](https://help.aliyun.com/document_detail/146967.html): fun install 是 fun 工具的一个子命令，用于安装 pip 和 apt 依赖，提供了命令行接口和 Funfile 描述文件两种形式。
+	- [Fun Build 介绍](https://help.aliyun.com/document_detail/147039.html): 介绍了如何使用 Fun Build 命令完成编译型 runtime 比如 java 函数的构建。
+	- [Fun Nas 介绍](https://help.aliyun.com/document_detail/147089.html): 介绍如何通过 fun nas 管理 nas 服务上的文件以及上传本地文件到 nas 服务。
+	- [Fun Deploy 介绍](https://help.aliyun.com/document_detail/147077.html): 介绍如何通过 Fun Deploy 命令部署函数。
+- 深度集成 Fun 的工具：
   - [Aliyun Serverless VSCode Extension](https://github.com/alibaba/serverless-vscode)
   - [FC WebIDE](https://ide.fc.aliyun.com/cn-hangzhou)
+  - [Cloud Toolkit](https://cn.aliyun.com/product/cloudtoolkit)
 - **系列文章**：
   - **语法校验**：Fun 提供了比较强大的语法校验功能，并通过精准的报错信息，让用户可以方便的将其修正。
     - [开发函数计算的正确姿势 —— Fun validate 语法校验排错指南](https://yq.aliyun.com/articles/703144)：介绍了根据报错信息修正 template.yml 中的错误语法描述。
