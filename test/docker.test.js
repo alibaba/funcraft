@@ -317,6 +317,7 @@ describe('test docker run', async () => {
     sandbox.stub(DockerCli.prototype, 'run').resolves({});
     sandbox.stub(DockerCli.prototype, 'getContainer').returns({
       'stop': sandbox.stub(),
+      'kill': sandbox.stub(),
       'inspect': sandbox.stub().resolves({})
     });
 
@@ -445,8 +446,7 @@ describe('test docker run', async () => {
     await sleep(10);
 
     assert.calledWith(DockerCli.prototype.getContainer, 'containerId');
-    assert.calledOnce(DockerCli.prototype.getContainer().inspect);
-    assert.calledOnce(DockerCli.prototype.getContainer().stop);
+    assert.calledOnce(DockerCli.prototype.getContainer().kill);
   });
 });
 
