@@ -254,7 +254,7 @@ describe('test resolveNasConfigToMounts', () => {
 
     expect(mount).to.eql([{
       Type: 'bind',
-      Source: path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),
+      Source: path.resolve(path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/')),
       Target: '/mnt/test',
       ReadOnly: false
     }]);

@@ -5,13 +5,13 @@ const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
+const docker = require('../../lib/docker');
+const dockerOpts = require('../../lib/docker-opts');
+const proxyquire = require('proxyquire');
 
 let Invoke = require('../../lib/local/invoke');
 
-const docker = require('../../lib/docker');
-const dockerOpts = require('../../lib/docker-opts');
-
-const proxyquire = require('proxyquire');
+const { DEFAULT_NAS_PATH_SUFFIX } = require('../../lib/tpl');
 
 const { functionName, functionRes,
   functionProps, serviceName,
@@ -26,7 +26,7 @@ describe('test invoke construct and init', async () => {
 
   beforeEach(() => {
 
-    sandbox.stub(docker, 'isDockerToolBoxAndEnsureDockerVersion').resolves({});
+    sandbox.stub(docker, 'isDockerToolBoxAndEnsureDockerVersion').resolves(false);
     sandbox.stub(docker, 'resolveCodeUriToMount').resolves(codeMount);
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
@@ -92,9 +92,9 @@ describe('test invoke construct and init', async () => {
 
     expect(invoke.mounts).to.eql([{
       Type: 'bind',
-      Source: '/.',
+      Source: '.',
       Target: '/',
-      ReadOnly: false 
+      ReadOnly: false
     }]);
 
     assert.calledWith(docker.pullImageIfNeed, `aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
@@ -135,13 +135,13 @@ describe('test invoke construct and init', async () => {
     expect(invoke.mounts).to.eql([
       {
         Type: 'bind',
-        Source: '/.',
+        Source: '.',
         Target: '/',
         ReadOnly: false
       },
       {
         Type: 'bind',
-        Source: '/.fun/nas/012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/',
+        Source: path.resolve(path.join(DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/')),
         Target: '/mnt/nas',
         ReadOnly: false }
     ]);
