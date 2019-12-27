@@ -22,8 +22,8 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
 - [快速开始](https://github.com/aliyun/fun/blob/master/docs/usage/getting_started-zh.md)：通过一个简单的示例介绍了 Fun 的基本用法。
 - [Fun 规范文档](https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md): 详细介绍了 Fun 规范文档的细节。
 - Fun 基本功能介绍：
-	- [fun config 介绍](https://help.aliyun.com/document_detail/146702.html): 介绍如何进行 Fun 工具的配置。
-	- [fun Init 介绍](https://help.aliyun.com/document_detail/146946.html): 介绍如何使用 fun init 命令快速创建函数计算应用。
+	- [Fun Config 介绍](https://help.aliyun.com/document_detail/146702.html): 介绍如何进行 Fun 工具的配置。
+	- [Fun Init 介绍](https://help.aliyun.com/document_detail/146946.html): 介绍如何使用 fun init 命令快速创建函数计算应用。
 	- [Fun Local 介绍](https://help.aliyun.com/document_detail/146711.html): 介绍如何使用 fun local 进行函数的本地运行、调试。
 	- [Fun Install 介绍](https://help.aliyun.com/document_detail/146967.html): fun install 是 fun 工具的一个子命令，用于安装 pip 和 apt 依赖，提供了命令行接口和 Funfile 描述文件两种形式。
 	- [Fun Build 介绍](https://help.aliyun.com/document_detail/147039.html): 介绍了如何使用 Fun Build 命令完成编译型 runtime 比如 java 函数的构建。
@@ -81,13 +81,12 @@ Fun 作为一个命令行工具，内置了多个子命令，比如 config、loc
   - **实战**：关于如何利用 init、local、install、deploy 等命令，快速开发一款 Serverless 应用的文章。
     - [开发函数计算的正确姿势 —— 爬虫](https://yq.aliyun.com/articles/672624): 通过一个实战场景，介绍了如何利用 Fun 工具从头开始开发一个 Serverless 应用。
     - [开发函数计算的正确姿势 —— 排查超时问题](https://yq.aliyun.com/articles/672627): 从一个 bug 出发，介绍了各种排查问题的技巧。
-    - [开发函数计算的正确姿势 —— 开发 WordPress 应用](https://yq.aliyun.com/articles/683686): 通过一个实战场景，介绍了如何利用 Fun 工具本地开发 WordPress Web 应用。
-    - [开发函数计算的正确姿势 —— 开发 NAS 文件管理应用](https://yq.aliyun.com/articles/685803): 介绍了如何使用 Fun Local 开发一个 NAS 文件管理 Web 应用。
+    - [一元建站-基于函数计算 + wordpress 构建 serverless 网站](https://yq.aliyun.com/articles/721594): 本文旨在通过快速部署一个 wordpress 网站到阿里云函数计算平台，来展示 serverless web 新的开发模式。
     - [开发函数计算的正确姿势——网页截图服务](https://yq.aliyun.com/articles/688927)：介绍了如何利用函数计算快速开发网页截图服务。
     - [五分钟教你如何用函数计算部署钉钉群发机器人](https://yq.aliyun.com/articles/682133)：介绍了如何利用函数计算快速搭建钉钉群发机器人。
     - [五分钟上线——函数计算 Word 转 PDF 云服务](https://yq.aliyun.com/articles/674284)：介绍了如何将 libreoffice 迁移到函数计算，并进行 word 到 pdf 的转换。
     - [用函数计算搭建微服务——云客服访客名片](https://yq.aliyun.com/articles/674378)：介绍了如何利用函数计算搭建云客服访客名片微服务。
-    - [三分钟学会如何在函数计算中使用 puppeteer](https://yq.aliyun.com/articles/602877)：介绍了如何在函数计算中使用 puppeteer。
+    - [Serverless 实战 —— 快速开发一个分布式 Puppeteer 网页截图服务](https://yq.aliyun.com/articles/727915)：介绍了如何在函数计算中使用 puppeteer。
     - [函数计算部署机器学习遇到的问题和解法](https://yq.aliyun.com/articles/630289)：介绍了机器学习部署到函数计算时可能会遇到的一些问题以及相关问的解法。
     - [开发函数计算的正确姿势——借助 Ghostscript 将 PDF 转换成 JPG](https://yq.aliyun.com/articles/718747)：介绍了使用函数计算并借助 Ghostscript 进行 word 到 pdf 的转换。
 

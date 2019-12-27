@@ -59,9 +59,8 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
   - **Fun in action**:
     - [Guidelines for Function Compute Development - Crawler](https://yq.aliyun.com/articles/686340): How to use the Fun tool to develop a Serverless application from scratch.
     - [Guidelines for Function Compute Development - Troubleshoot Timeout Issues](https://yq.aliyun.com/articles/686349): Demonstrates how to solve a series of bugs and introduces the tricks of debug.
-    - [开发函数计算的正确姿势 —— 开发 WordPress 应用](https://yq.aliyun.com/articles/683686): Demonstrates how to develop and debug a WordPress web application locally.
-    - [开发函数计算的正确姿势 —— 开发 NAS 文件管理应用](https://yq.aliyun.com/articles/685803): Demonstrates how to develop and debug a NAS file manager web application locally.
-    - [开发函数计算的正确姿势——网页截图服务](https://yq.aliyun.com/articles/688927): Introduce how to use Function Compute to quickly develop web page screenshot service.
+    - [一元建站-基于函数计算 + wordpress 构建 serverless 网站](https://yq.aliyun.com/articles/721594): Demonstrates how to develop and debug a WordPress web application locally.
+    - [Serverless 实战 —— 快速开发一个分布式 Puppeteer 网页截图服务](https://yq.aliyun.com/articles/727915): Introduce how to use Function Compute to quickly develop web page screenshot service.
     - [五分钟教你如何用函数计算部署钉钉群发机器人](https://yq.aliyun.com/articles/682133)：Introduce how to use the Function Compute to quickly build a DingTalk robot.
     - [五分钟上线——函数计算 Word 转 PDF 云服务](https://yq.aliyun.com/articles/674284): ：Introduce how to migrate ibreoffice to Function Compute in order to convert word to pdf.
     - [用函数计算搭建微服务——云客服访客名片](https://yq.aliyun.com/articles/674378): Introduce how to use the Function Compute to build a micro service of visitor card.
