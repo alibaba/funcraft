@@ -60,11 +60,10 @@ We have prepared a series of tutorials to help you use the Fun tool more easily:
     - [Guidelines for Function Compute Development - Crawler](https://yq.aliyun.com/articles/686340): How to use the Fun tool to develop a Serverless application from scratch.
     - [Guidelines for Function Compute Development - Troubleshoot Timeout Issues](https://yq.aliyun.com/articles/686349): Demonstrates how to solve a series of bugs and introduces the tricks of debug.
     - [一元建站-基于函数计算 + wordpress 构建 serverless 网站](https://yq.aliyun.com/articles/721594): Demonstrates how to develop and debug a WordPress web application locally.
-    - [Serverless 实战 —— 快速开发一个分布式 Puppeteer 网页截图服务](https://yq.aliyun.com/articles/727915): Introduce how to use Function Compute to quickly develop web page screenshot service.
     - [五分钟教你如何用函数计算部署钉钉群发机器人](https://yq.aliyun.com/articles/682133)：Introduce how to use the Function Compute to quickly build a DingTalk robot.
     - [五分钟上线——函数计算 Word 转 PDF 云服务](https://yq.aliyun.com/articles/674284): ：Introduce how to migrate ibreoffice to Function Compute in order to convert word to pdf.
     - [用函数计算搭建微服务——云客服访客名片](https://yq.aliyun.com/articles/674378): Introduce how to use the Function Compute to build a micro service of visitor card.
-    - [三分钟学会如何在函数计算中使用 puppeteer](https://yq.aliyun.com/articles/602877): Introduce how to use puppeteer in Function Compute.
+    - [Serverless 实战 —— 快速开发一个分布式 Puppeteer 网页截图服务](https://yq.aliyun.com/articles/727915): Introduce how to use Function Compute to quickly develop web page screenshot service.
     - [函数计算部署机器学习遇到的问题和解法](https://yq.aliyun.com/articles/630289)：Some problems that may be encountered when machine learning is deployed to Function Compute and some solutions to related problems.
 - [FAQ](https://github.com/aliyun/fun/blob/master/docs/usage/faq.md): Frequently asked questions and answers when using fun.
 - [More Examples](https://github.com/aliyun/fun/tree/master/examples)
