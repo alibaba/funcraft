@@ -98,7 +98,7 @@ const codeMount = {
 
 const nasMounts = [{
   Type: 'bind',
-  Source: path.join(DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/'),
+  Source: path.resolve(path.join(DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com', '/')),
   Target: '/mnt/nas',
   ReadOnly: false
 }];

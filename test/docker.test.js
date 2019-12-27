@@ -250,11 +250,11 @@ describe('test resolveNasConfigToMounts', () => {
       ]
     };
 
-    const mount = await docker.resolveNasConfigToMounts('', nasConfig, path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX));
+    const mount = await docker.resolveNasConfigToMounts(baseDir, '', nasConfig, path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX));
 
     expect(mount).to.eql([{
       Type: 'bind',
-      Source: path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/'),
+      Source: path.resolve(path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX, '012194b28f-ujc20.cn-hangzhou.nas.aliyuncs.com/')),
       Target: '/mnt/test',
       ReadOnly: false
     }]);
@@ -273,14 +273,14 @@ describe('test resolveNasConfigToMounts', () => {
     };
 
     try {
-      await docker.resolveNasConfigToMounts(nasConfig, path.posix.join(projectDir, 'template.yml'));
+      await docker.resolveNasConfigToMounts(baseDir, nasConfig, path.posix.join(projectDir, 'template.yml'));
     } catch (e) {
       expect(e).to.be.an(Error);
     }
   });
 
   it('test empty nas config', async () => {
-    const mount = await docker.resolveNasConfigToMounts(null, null, null);
+    const mount = await docker.resolveNasConfigToMounts(baseDir, null, null, null);
 
     expect(mount).to.eql([]);
   });
@@ -288,7 +288,7 @@ describe('test resolveNasConfigToMounts', () => {
   it('test NasConfig: Auto', async () => {
     const nasConfig = 'Auto';
 
-    const mount = await docker.resolveNasConfigToMounts('serviceName', nasConfig, path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX));
+    const mount = await docker.resolveNasConfigToMounts(baseDir, 'serviceName', nasConfig, path.join(projectDir, DEFAULT_NAS_PATH_SUFFIX));
 
     expect(mount).to.eql([{
       Type: 'bind',
