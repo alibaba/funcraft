@@ -53,7 +53,7 @@ getVisitor().then(visitor => {
         el: 'error',
         dp: '/fun/nas/sync'
       }).send();
-  
+
       require('../lib/exception-handler')(error);
     });
 });

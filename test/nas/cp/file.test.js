@@ -24,7 +24,7 @@ describe('function zipWithArchiver test', () => {
 
   let fsExists;
   beforeEach(async () => {
-    fsExists = sandbox.spy(fsExtra, 'exists');
+    fsExists = sandbox.spy(fsExtra, 'pathExists');
     await mkdirp(inputPath);
     await mkdirp(localNasTmpDir);
     await writeFile(path.join(inputPath, 'test.txt'), 'this is a test');
@@ -35,9 +35,9 @@ describe('function zipWithArchiver test', () => {
     rimraf.sync(localNasTmpDir);
     sandbox.restore();
   });
-    
+
   it('test zip file exist', async () => {
-    
+
     await file.zipWithArchiver(inputPath, localNasTmpDir);
     assert.calledWith(fsExists, inputPath);
   });
@@ -50,7 +50,7 @@ describe('function zipWithArchiver test', () => {
       expect(error).to.eql(new Error('folder not exist: ' + inputPath));
     }
   });
-  
+
   it('test zip file is not folder', async () => {
     inputPath = path.join(inputPath, 'test.txt');
     try {
