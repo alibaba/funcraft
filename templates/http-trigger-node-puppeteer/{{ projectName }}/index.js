@@ -1,7 +1,7 @@
 const fs = require('fs');
+const puppeteer = require('puppeteer');
 
 module.exports.handler = function (request, response, context) {
-  const puppeteer = require('puppeteer');
 
   (async () => {
     const browser = await puppeteer.launch({
@@ -23,6 +23,7 @@ module.exports.handler = function (request, response, context) {
     }
 
     const page = await browser.newPage();
+
     await page.emulateTimezone('Asia/Shanghai');
     await page.goto(url, {
       'waitUntil': 'networkidle2'
@@ -47,5 +48,10 @@ module.exports.handler = function (request, response, context) {
     response.setStatusCode(200);
     response.setHeader('content-type', contentType);
     response.send(fs.readFileSync(path))
-  })();
+  })().catch(err => {
+    resp.setStatusCode(500);
+    resp.setHeader('content-type', 'text/plain');
+
+    resp.send(err.message);
+  });
 };
