@@ -20,6 +20,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "ali-oss": "^6.3.1",
     "@webserverless/fc-express": "latest",
     "body-parser": "^1.19.0",
     "express": "^4.17.0",
