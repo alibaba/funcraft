@@ -49,9 +49,9 @@ module.exports.handler = function (request, response, context) {
     response.setHeader('content-type', contentType);
     response.send(fs.readFileSync(path))
   })().catch(err => {
-    resp.setStatusCode(500);
-    resp.setHeader('content-type', 'text/plain');
+    response.setStatusCode(500);
+    response.setHeader('content-type', 'text/plain');
 
-    resp.send(err.message);
+    response.send(err.message);
   });
 };
