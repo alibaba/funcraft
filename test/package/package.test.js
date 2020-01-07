@@ -30,9 +30,12 @@ describe('test package', () => {
     sandbox.stub(template, 'zipToOss').resolves('objectName');
     sandbox.stub(template, 'uploadNasService').resolves('./');
     sandbox.stub(template, 'generateRosTemplateForNasService').returns({});
-    sandbox.stub(template, 'generateRosTemplateForResources').returns({});
-    sandbox.stub(template, 'generateRosTemplateForOutputs').returns({});
+    sandbox.stub(template, 'generateRosTemplateForDefaultResources').returns({});
+    sandbox.stub(template, 'generateRosTemplateForEventOutputs').returns({});
     sandbox.stub(template, 'generateRosTemplateForRegionMap').returns({});
+    sandbox.stub(template, 'generateRosTemplateForWaitCondition').returns({});
+    sandbox.stub(template, 'generateRosTemplateForDefaultOutputs').returns({});
+    sandbox.stub(template, 'generateRosTemplateForNasCpInvoker').returns({});
     sandbox.stub(util, 'outputTemplateFile').returns();
 
     pack = proxyquire('../../lib/package/package', {
