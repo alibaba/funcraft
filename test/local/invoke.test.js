@@ -31,6 +31,7 @@ describe('test invoke construct and init', async () => {
     sandbox.stub(docker, 'pullImageIfNeed').resolves({});
     sandbox.stub(docker, 'resolveTmpDirToMount').resolves({});
     sandbox.stub(dockerOpts, 'resolveRuntimeToDockerImage').resolves(`aliyunfc/runtime-python3.6:${dockerOpts.IMAGE_VERSION}`);
+    sandbox.stub(dockerOpts, 'resolveDockerUser').resolves('10003:10003');
 
     Invoke = proxyquire('../../lib/local/invoke', {
       '../docker': docker,
