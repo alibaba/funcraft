@@ -8,6 +8,7 @@ const program = require('commander');
 
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
+const { collectOptions } = require('../lib/options');
 
 program
   .name('fun local start')
@@ -23,6 +24,7 @@ program
     Once compiled or packaged result changed, the modified code will take effect immediately without restarting the http server.`
   )
   .usage('[options] <[service/]function>')
+  .option('-t, --template [template]', 'The path of fun template file.', collectOptions)
   .option('-d, --debug-port <port>', 'Specify the sandbox container starting in debug' +
     ' mode, and exposing this port on localhost')
   .option('-c, --config <ide/debugger>',

@@ -8,6 +8,7 @@ const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const unrefTimeout = require('../lib/unref-timeout');
 const notifier = require('../lib/update-notifier');
+const { collectOptions } = require('../lib/options');
 
 program
   .name('fun local invoke')
@@ -16,7 +17,7 @@ program
   almost identically. You can pass in the event body via stdin or by using the -e (--event)
   parameter.`)
   .usage('[options] <[service/]function>')
-  .option('-t, --template [template]', 'The path of fun template file.')
+  .option('-t, --template [template]', 'The path of fun template file.', collectOptions)
   .option('-d, --debug-port <port>',
     `Specify the sandboxed container starting in debug mode,
                              and exposing this port on localhost`)
