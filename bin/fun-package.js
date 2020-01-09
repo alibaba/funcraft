@@ -45,7 +45,7 @@ getVisitor().then(visitor => {
         el: 'error',
         dp: '/fun/package'
       }).send();
-  
+
       require('../lib/exception-handler')(error);
     });
 });
