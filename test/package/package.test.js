@@ -65,7 +65,12 @@ describe('test package', () => {
 
     assert.calledWith(tpl.getTpl, tplPath);
     assert.calledWith(client.getOssClient, bucket);
-    assert.calledWith(template.uploadAndUpdateFunctionCode, path.dirname(tplPath), mock.tpl, ossClient);
+    assert.calledWith(template.uploadAndUpdateFunctionCode, {
+      tpl: mock.tpl,
+      tplPath,
+      baseDir: path.dirname(tplPath),
+      ossClient
+    });
     assert.calledWith(util.outputTemplateFile, packedYmlPath, mock.tpl);
   });
 
@@ -76,7 +81,12 @@ describe('test package', () => {
 
     assert.calledWith(tpl.getTpl, tplPath);
     assert.calledWith(client.getOssClient, bucket);
-    assert.calledWith(template.uploadAndUpdateFunctionCode, path.dirname(tplPath), mock.tpl, ossClient);
+    assert.calledWith(template.uploadAndUpdateFunctionCode, {
+      tpl: mock.tpl,
+      tplPath,
+      baseDir: path.dirname(tplPath),
+      ossClient
+    });
     assert.calledWith(util.outputTemplateFile, packedYmlPath, mock.tpl);
   });
 
@@ -86,7 +96,12 @@ describe('test package', () => {
 
     assert.calledWith(tpl.getTpl, tplPath);
     assert.calledWith(client.getOssClient, `fun-gen-${getProfileRes.defaultRegion}-${getProfileRes.accountId}`);
-    assert.calledWith(template.uploadAndUpdateFunctionCode, path.dirname(tplPath), mock.tpl, ossClient);
+    assert.calledWith(template.uploadAndUpdateFunctionCode, {
+      tpl: mock.tpl,
+      tplPath,
+      baseDir: path.dirname(tplPath),
+      ossClient
+    });
     assert.calledWith(util.outputTemplateFile, packedYmlPath, mock.tpl);
   });
 });

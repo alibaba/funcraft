@@ -16,6 +16,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
 
   const bucket = 'bucket';
   const baseDir = 'baseDir';
+  const tplPath = 'tplPath';
 
   const absCodeUri = path.resolve(baseDir, 'php7.2/index.php');
 
@@ -171,7 +172,12 @@ describe('test uploadAndUpdateFunctionCode', () => {
     pathExistsStub.withArgs(path.resolve(baseDir, path.join('.fun', 'nasMappings.json'))).resolves(false);
     pathExistsStub.withArgs(path.resolve(baseDir, tpl.Resources.localdemo.php72.Properties.CodeUri)).resolves(true);
 
-    const t = await template.uploadAndUpdateFunctionCode(baseDir, tpl, ossClient);
+    const t = await template.uploadAndUpdateFunctionCode({
+      baseDir,
+      tpl,
+      ossClient,
+      tplPath
+    });
 
     const randomDir = path.join(tempDir, 'random');
     const zipPath = path.join(randomDir, 'code.zip');
@@ -195,7 +201,10 @@ describe('test uploadAndUpdateFunctionCode', () => {
     pathExistsStub.withArgs(path.resolve(baseDir, tplWithSameCodeUri.Resources.localdemo.nodejs8.Properties.CodeUri)).resolves(true);
     pathExistsStub.withArgs(path.resolve(baseDir, tplWithSameCodeUri.Resources.localdemo.php72.Properties.CodeUri)).resolves(true);
 
-    const t = await template.uploadAndUpdateFunctionCode(baseDir, tplWithSameCodeUri, ossClient);
+    const t = await template.uploadAndUpdateFunctionCode({
+      baseDir, ossClient, tplPath,
+      tpl: tplWithSameCodeUri
+    });
 
     const randomDir = path.join(tempDir, 'random');
     const zipPath = path.join(randomDir, 'code.zip');
@@ -221,7 +230,10 @@ describe('test uploadAndUpdateFunctionCode', () => {
     pathExistsStub.withArgs(path.resolve(baseDir, path.join('.fun', 'nasMappings.json'))).resolves(false);
     pathExistsStub.withArgs(path.resolve(baseDir, ossTpl.Resources.localdemo.php72.Properties.CodeUri)).resolves(true);
 
-    const updatedTpl = await template.uploadAndUpdateFunctionCode(baseDir, ossTpl, ossClient);
+    const updatedTpl = await template.uploadAndUpdateFunctionCode({
+      baseDir, ossClient, tplPath,
+      tpl: ossTpl
+    });
 
     assert.notCalled(fs.pathExists);
     assert.notCalled(fs.ensureDir);
