@@ -23,6 +23,61 @@ const tpl = {
 };
 
 
+const tplWithNasAuto = {
+  'ROSTemplateFormatVersion': '2015-09-01',
+  'Transform': 'Aliyun::Serverless-2018-04-03',
+  'Resources': {
+    'localdemo': {
+      'Type': 'Aliyun::Serverless::Service',
+      'Properties': {
+        'Description': 'php local invoke demo',
+        'NasConfig': 'Auto'
+      },
+      'python3': {
+        'Type': 'Aliyun::Serverless::Function',
+        'Properties': {
+          'Handler': 'index.handler',
+          'CodeUri': 'python3',
+          'Description': 'Hello world with python3!',
+          'Runtime': 'python3'
+        }
+      }
+    }
+  }
+};
+
+const tplWithTheSameCodeUriAndRuntime = {
+  'ROSTemplateFormatVersion': '2015-09-01',
+  'Transform': 'Aliyun::Serverless-2018-04-03',
+  'Resources': {
+    'localdemo': {
+      'Type': 'Aliyun::Serverless::Service',
+      'Properties': {
+        'Description': 'php local invoke demo',
+        'NasConfig': 'Auto'
+      },
+      'fun1': {
+        'Type': 'Aliyun::Serverless::Function',
+        'Properties': {
+          'Handler': 'index.handler',
+          'CodeUri': './',
+          'Description': 'Hello world with nodejs6!',
+          'Runtime': 'nodejs6'
+        }
+      },
+      'fun2': {
+        'Type': 'Aliyun::Serverless::Function',
+        'Properties': {
+          'Handler': 'index.handler',
+          'CodeUri': './',
+          'Description': 'Hello world with nodejs6!',
+          'Runtime': 'nodejs6'
+        }
+      }
+    }
+  }
+};
+
 const tplWithDuplicatedFunctionsInService = {
   'ROSTemplateFormatVersion': '2015-09-01',
   'Transform': 'Aliyun::Serverless-2018-04-03',
@@ -137,4 +192,10 @@ const rosTemplate = {
   }
 };
 
-module.exports = { tpl, tplWithDuplicatedFunction, tplWithDuplicatedFunctionsInService, rosTemplate };
+module.exports = {
+  tpl, rosTemplate,
+  tplWithNasAuto,
+  tplWithDuplicatedFunction,
+  tplWithTheSameCodeUriAndRuntime,
+  tplWithDuplicatedFunctionsInService
+};

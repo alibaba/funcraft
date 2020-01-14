@@ -1,19 +1,25 @@
 'use strict';
 
-const FC = require('@alicloud/fc2');
-
+const zip = require('../lib/package/zip');
+const path = require('path');
+const fs = require('fs-extra');
+const util = require('../lib/import/utils');
+const yaml = require('js-yaml');
+const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const assert = sinon.assert;
 const proxyquire = require('proxyquire');
-const { setProcess } = require('./test-utils');
-const zip = require('../lib/package/zip');
+
 let fc = require('../lib/fc');
-const path = require('path');
-const fs = require('fs-extra');
-const expect = require('expect.js');
+const FC = require('@alicloud/fc2');
 
 const { green } = require('colors');
+const { setProcess } = require('./test-utils');
+const { tplWithNasAuto, tplWithTheSameCodeUriAndRuntime } = require('./tpl-mock-data');
+
+const tplPath = 'tplPath';
+const baseDir = path.resolve(path.dirname(tplPath));
 
 describe('test zipCode', () => {
 
@@ -250,5 +256,117 @@ describe('Incorrect environmental variables', () => {
       },
       'data': '[\'OK\']'
     });
+  });
+});
+
+
+describe('test processNasAutoConfiguration', ()=> {
+  let restoreProcess;
+
+  const serviceName = 'localdemo';
+  const functionName = 'python3';
+  const runtime = tplWithNasAuto.Resources.localdemo.python3.Properties.Runtime;
+  const codeUri = tplWithNasAuto.Resources.localdemo.python3.Properties.CodeUri;
+
+  const localSystemDependency = path.resolve(codeUri, path.join('.fun', 'root'));
+  const nasYmlPath = path.resolve(baseDir, '.nas.yml');
+
+  let pathExistsStub;
+  let safeLoadStub;
+
+  beforeEach(async () => {
+
+    pathExistsStub = sandbox.stub(fs, 'pathExists');
+    pathExistsStub.withArgs(localSystemDependency).resolves(true);
+    pathExistsStub.withArgs(nasYmlPath).resolves(false);
+
+    safeLoadStub = sandbox.stub(yaml, 'safeLoad');
+    sandbox.stub(fs, 'writeFile');
+    sandbox.stub(fs, 'readFileSync');
+    sandbox.stub(util, 'outputTemplateFile');
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret'
+    });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    restoreProcess();
+  });
+
+  it('# nas auto-configuration fot fun package.', async () => {
+    safeLoadStub.returns(tplWithNasAuto);
+    const stage = 'package';
+    const tplChanged = await fc.processNasAutoConfiguration({ tpl: tplWithNasAuto, tplPath, runtime, codeUri, stage,
+      serviceName,
+      functionName
+    });
+
+    expect(tplChanged).to.be(false);
+  });
+
+  it('# test processNasMappingsAndEnvs', async () => {
+    const localDir = path.relative(baseDir, path.join(codeUri, '.fun/python'));
+    pathExistsStub.withArgs(localDir).resolves(true);
+
+    safeLoadStub.returns(tplWithNasAuto);
+
+    const { tplChanged, remoteNasDirPrefix, updatedTpl } = await fc.processNasMappingsAndEnvs({ tpl: tplWithNasAuto,
+      tplPath, runtime,
+      codeUri, baseDir,
+      serviceName, functionName
+    });
+
+    const functionProp = tplWithNasAuto.Resources.localdemo.python3.Properties;
+    functionProp.EnvironmentVariables = {
+      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64',
+      'PYTHONUSERBASE': '/mnt/auto/python'
+    };
+
+    expect(tplChanged).to.eql(false);
+    expect(remoteNasDirPrefix).to.eql('/mnt/auto/');
+    expect(updatedTpl).to.eql(tplWithNasAuto);
+  });
+
+  it('# test processNasMappingsAndEnvs with the same codeUri and runtime of funtions under a service fot fun package', async () => {
+
+    safeLoadStub.returns(tplWithTheSameCodeUriAndRuntime);
+
+    const functionName = 'fun1';
+    const runtime = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun1.Properties.Runtime;
+    const codeUri = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun2.Properties.CodeUri;
+    const asbCodeUri = path.resolve(baseDir, codeUri);
+
+    const localSystemDependency = path.resolve(codeUri, path.join('.fun', 'root'));
+    const nasYmlPath = path.resolve(baseDir, '.nas.yml');
+    const localDir = path.relative(baseDir, path.join(codeUri, 'node_modules'));
+
+    pathExistsStub.withArgs(localDir).resolves(true);
+    pathExistsStub.withArgs(localSystemDependency).resolves(true);
+    pathExistsStub.withArgs(nasYmlPath).resolves(false);
+
+    const { tplChanged, remoteNasDirPrefix, updatedTpl } = await fc.processNasMappingsAndEnvs({ tpl: tplWithTheSameCodeUriAndRuntime,
+      tplPath, runtime, baseDir,
+      codeUri: asbCodeUri,
+      serviceName, functionName
+    });
+
+    const envs = {
+      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64',
+      'NODE_PATH': '/usr/local/lib/node_modules:/mnt/auto/node_modules'
+    };
+
+    const functionProp_1 = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun1.Properties;
+    const functionProp_2 = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun2.Properties;
+
+    functionProp_1.EnvironmentVariables = envs;
+    functionProp_2.EnvironmentVariables = envs;
+
+    expect(tplChanged).to.be.eql(true);
+    expect(remoteNasDirPrefix).to.be.eql('/mnt/auto/');
+    expect(updatedTpl).to.be.eql(tplWithTheSameCodeUriAndRuntime);
   });
 });
