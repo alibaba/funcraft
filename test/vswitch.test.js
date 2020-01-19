@@ -56,7 +56,39 @@ describe('test selectVSwitchZoneId', async () => {
       }
     ];
 
-    const rs = await vswitch.selectVSwitchZoneId(fcAllowedzones, vpcZones);
+    const nasZones = [
+      {
+        'Performance': {
+          'Protocol': []
+        },
+        'Capacity': {
+          'Protocol': [
+            'nfs',
+            'smb',
+            'nasplus'
+          ]
+        },
+        'ZoneId': 'cn-hangzhou-b'
+      },
+      {
+        'Performance': {
+          'Protocol': [
+            'nfs',
+            'smb'
+          ]
+        },
+        'Capacity': {
+          'Protocol': [
+            'nfs',
+            'smb',
+            'nasplus'
+          ]
+        },
+        'ZoneId': 'cn-hangzhou-g'
+      }
+    ];
+
+    const rs = await vswitch.selectVSwitchZoneId(fcAllowedzones, vpcZones, nasZones);
     expect(rs).to.eql('cn-hangzhou-g');
   });
 });
