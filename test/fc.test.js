@@ -356,7 +356,7 @@ describe('test processNasAutoConfiguration', ()=> {
 
     const envs = {
       'LD_LIBRARY_PATH': '/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64',
-      'NODE_PATH': '/usr/local/lib/node_modules:/mnt/auto/node_modules'
+      'NODE_PATH': '/mnt/auto/node_modules:/usr/local/lib/node_modules'
     };
 
     const functionProp_1 = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun1.Properties;
