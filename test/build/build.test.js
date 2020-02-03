@@ -22,6 +22,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const { red } = require('colors');
 const _ = require('lodash');
+
 const { DEFAULT_NAS_PATH_SUFFIX, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX } = require('../../lib/tpl');
 
 const { tpl,
@@ -49,7 +50,6 @@ describe('test buildFunction', () => {
 
   beforeEach(() => {
     sandbox.stub(fs, 'writeFile');
-
     pathExistsStub = sandbox.stub(fs, 'pathExists');
 
     pathExistsStub.withArgs(path.resolve(baseDir)).resolves(true);
