@@ -7,6 +7,7 @@
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
+const unrefTimeout = require('../lib/unref-timeout');
 
 program
   .name('fun package')
@@ -37,6 +38,11 @@ getVisitor().then(visitor => {
         el: 'success',
         dp: '/fun/package'
       }).send();
+
+      // fix windows not auto exit bug after docker operation
+      unrefTimeout(() => {
+        process.exit(0); // eslint-disable-line
+      });
     })
     .catch(error => {
       visitor.event({
