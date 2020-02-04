@@ -6,8 +6,8 @@
 
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
-const unrefTimeout = require('../lib/unref-timeout');
 const notifier = require('../lib/update-notifier');
+const { autoExit } = require('../lib/unref-timeout');
 const { collectOptions } = require('../lib/options');
 
 program
@@ -52,20 +52,17 @@ getVisitor().then(visitor => {
         el: 'success',
         dp: '/fun/local/invoke'
       }).send();
-  
-      // fix windows not auto exit bug after docker operation
-      unrefTimeout(() => {
-        process.exit(0); // eslint-disable-line
-      });
+
+      autoExit();
     })
-    .catch(error => {    
+    .catch(error => {
       visitor.event({
         ec: 'local invoke',
         ea: 'invoke',
         el: 'error',
         dp: '/fun/local/invoke'
       }).send();
-  
+
       require('../lib/exception-handler')(error);
-    });  
+    });
 });

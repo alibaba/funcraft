@@ -7,6 +7,7 @@
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
+const { autoExit } = require('../lib/unref-timeout');
 
 program
   .name('fun config')
@@ -32,6 +33,8 @@ getVisitor(true).then((visitor) => {
         el: 'success',
         dp: '/fun/config'
       }).send();
+
+      autoExit();
     })
     .catch(error => {
       visitor.event({
