@@ -7,7 +7,7 @@
 const program = require('commander');
 const getVisitor = require('../lib/visitor').getVisitor;
 const notifier = require('../lib/update-notifier');
-
+const { autoExit } = require('../lib/unref-timeout');
 const { parsePairs } = require('../lib/build/parser');
 
 program
@@ -74,6 +74,8 @@ getVisitor().then(visitor => {
         el: 'success',
         dp: '/fun/deploy'
       }).send();
+
+      autoExit();
     })
     .catch(error => {
       visitor.event({

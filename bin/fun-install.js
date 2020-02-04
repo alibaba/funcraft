@@ -1,25 +1,17 @@
 #!/usr/bin/env node
 
 'use strict';
-
-const _ = require('lodash');
 const Command = require('commander').Command;
 const program = new Command('fun install');
 const getVisitor = require('../lib/visitor').getVisitor;
 const handler = require('../lib/exception-handler');
-const { install, installAll, init, env, sbox } = require('../lib/commands/install');
-const unrefTimeout = require('../lib/unref-timeout');
 const notifier = require('../lib/update-notifier');
+
+const { autoExit } = require('../lib/unref-timeout');
 const { getSupportedRuntimesAsString } = require('../lib/common/model/runtime');
+const { install, installAll, init, env, sbox } = require('../lib/commands/install');
 
-
-const autoExit = () => {
-  // fix not auto exit bug after docker operation
-  unrefTimeout(() => {
-    // in order visitor request has been sent out
-    process.exit(0); // eslint-disable-line
-  });
-};
+const _ = require('lodash');
 
 const convertOptions = (program) => {
   // convert long option to camelCase variable name,such as '--package-type' to 'packageType'
@@ -104,7 +96,6 @@ program
         }).send();
 
         autoExit();
-
       }).catch((error) => {
 
         visitor.event({
@@ -216,7 +207,6 @@ if (!program.args.length) {
       }).send();
 
       autoExit();
-
     }).catch(error => {
       visitor.event({
         ec: 'installAll',
