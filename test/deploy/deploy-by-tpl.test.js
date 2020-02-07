@@ -1126,6 +1126,38 @@ describe('deploy', () => {
     assert.notCalled(trigger.makeTrigger);
     assert.notCalled(console.warn);
   });
+
+  it('deploy sls auto', async () => {
+    await deploy('sls_auto');
+
+    assert.calledWith(fc.makeService, {
+      serviceName: 'sls-auto-service',
+      role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
+      internetAccess: null,
+      description: 'sls auto',
+      logConfig: 'Auto',
+      nasConfig: undefined,
+      vpcConfig: undefined
+    });
+
+    assert.calledWith(fc.makeFunction,
+      path.join(process.cwd(), 'examples', 'sls_auto'), {
+        codeUri: './index.js',
+        description: undefined,
+        functionName: 'sls-auto-function',
+        handler: 'index.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        runtime: 'nodejs8',
+        initializationTimeout: undefined,
+        serviceName: 'sls-auto-service',
+        timeout: undefined,
+        environmentVariables: undefined,
+        instanceConcurrency: undefined,
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('sls_auto'));
+  });
 });
 
 describe('custom domain', () => {

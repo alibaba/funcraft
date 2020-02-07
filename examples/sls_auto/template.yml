@@ -1,0 +1,19 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  sls-auto-service:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'sls auto'
+      LogConfig: Auto
+      Policies:
+        - AliyunLogFullAccess
+
+    sls-auto-function:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs8
+        CodeUri: './index.js'
+
+
