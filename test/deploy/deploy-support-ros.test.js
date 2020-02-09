@@ -398,7 +398,7 @@ describe('test deploy support ros', () => {
     });
   });
 
-  it('test deploy by ros with assumeYes is false', async () => {
+  it.skip('test deploy by ros with assumeYes is false', async () => {
 
     sandbox.stub(inquirer, 'prompt').resolves(answerForNo);
 
