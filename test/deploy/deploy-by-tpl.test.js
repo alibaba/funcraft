@@ -192,10 +192,18 @@ describe('deploy', () => {
         vpcConfig: undefined
       }, undefined, getTplPath('local_http'));
 
-    assert.calledWith(trigger.displayTriggerInfo.firstCall, 'local-http-demo', 'nodejs8', 'http-test', 'HTTP', {
-      AuthType: 'ANONYMOUS',
-      Methods: ['GET', 'POST', 'PUT']
-    }, '\t\t');
+    assert.calledWith(trigger.displayTriggerInfo.firstCall, {
+      serviceName: 'local-http-demo',
+      functionName: 'nodejs8',
+      wrap: '\t\t',
+      triggerName: 'http-test',
+      domainName: null,
+      triggerType: 'HTTP',
+      triggerProperties: {
+        AuthType: 'ANONYMOUS',
+        Methods: ['GET', 'POST', 'PUT']
+      }
+    });
   });
 
   it('deploy datahub', async () => {
