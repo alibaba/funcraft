@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
@@ -49,7 +49,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.9.0",
+    "@alicloud/fc-builders": "^0.10.0",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
@@ -89,6 +89,7 @@
     "ip": "^1.1.5",
     "js-yaml": "^3.13.1",
     "json-colorizer": "^2.2.0",
+    "json-diff": "^0.5.4",
     "jszip": "^3.1.5",
     "kitx": "^1.2.1",
     "klaw": "^3.0.0",
