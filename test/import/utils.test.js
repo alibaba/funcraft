@@ -12,7 +12,7 @@ const fs = {
 };
 
 const utilsStub = proxyquire('../../lib/import/utils', {
-  'fs': fs
+  'fs-extra': fs
 });
 
 describe('import utils', () => {

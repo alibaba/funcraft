@@ -7,11 +7,11 @@ const assert = sinon.assert;
 
 var express = require('express');
 const path = require('path');
-const mkdirp = require('mkdirp-promise');
+
 const { hasDocker } = require('../conditions');
 const tempDir = require('temp-dir');
 const rimraf = require('rimraf');
-const fs = require('fs');
+const fs = require('fs-extra');
 const expect = require('expect.js');
 const httpx = require('httpx');
 
@@ -109,7 +109,7 @@ describe('test http response', async () => {
   
   beforeEach(async () => {
 
-    await mkdirp(projectDir);
+    await fs.mkdirp(projectDir);
 
     app = express();
 

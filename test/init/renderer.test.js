@@ -29,7 +29,7 @@ const yaml = {
 };
 
 const rendererStub = proxyquire('../../lib/init/renderer', {
-  'fs': fs,
+  'fs-extra': fs,
   'path': path,
   'js-yaml': yaml
 });

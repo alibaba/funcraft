@@ -1,13 +1,13 @@
 'use strict';
 
 const path = require('path'), 
-  fs = require('fs');
+  fs = require('fs-extra');
 
 const tempDir = require('temp-dir');
 const { FunModule, FunTask } = require('../../lib/install/module');
 const { ShellTask } = require('../../lib/install/task');
 const { hasDocker } = require('../conditions');
-const mkdirp = require('mkdirp-promise');
+
 const chai = require('chai');
 const expect = chai.expect;
 chai.use(require('chai-fs'));
@@ -18,7 +18,7 @@ chai.use(require('chai-fs'));
   const ymlPath = path.join(funTempDir, 'fun.yml');
 
   beforeEach(async () => {
-    await mkdirp(funTempDir);
+    await fs.mkdirp(funTempDir);
     console.log('tempDir: %s', funTempDir);
   });
 

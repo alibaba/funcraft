@@ -1,13 +1,10 @@
 'use strict';
 
-const util = require('util');
 const os = require('os');
-const fs = require('fs');
+const fs = require('fs-extra');
 
-const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
 const expect = require('expect.js');
-const writeFile = util.promisify(fs.writeFile);
 const { getFileHash, getFilePermission } = require('../../../lib/nas/cp/file');
 const { readDirRecursive } = require('../../../lib/nas/path');
 const constants = require('../../../lib/nas/constants');
@@ -44,9 +41,9 @@ describe('upload folder test', () => {
   const srcPathFile = path.join(srcPath, 'test-file');
   
   beforeEach(async () => {
-    await mkdirp(srcPath);
-    await mkdirp(localNasTmpDir);
-    await writeFile(srcPathFile, 'this is a test');
+    await fs.mkdirp(srcPath);
+    await fs.mkdirp(localNasTmpDir);
+    await fs.writeFile(srcPathFile, 'this is a test');
 
     request.createSizedNasFile.returns({
       headers: 200,
@@ -117,8 +114,8 @@ describe('upload file test', () => {
   let fileHash;
   let filePermission;
   beforeEach(async() => {
-    await mkdirp(srcPath);
-    await writeFile(srcPathFile, Buffer.alloc(fileSize));
+    await fs.mkdirp(srcPath);
+    await fs.writeFile(srcPathFile, Buffer.alloc(fileSize));
     fileHash = await getFileHash(srcPathFile);
     filePermission = await getFilePermission(srcPathFile);
     request.createSizedNasFile.returns({

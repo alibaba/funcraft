@@ -6,20 +6,16 @@ const sandbox = sinon.createSandbox();
 const assert = sandbox.assert;
 
 const path = require('path');
-const mkdirp = require('mkdirp-promise');
+
 const { hasDocker } = require('../conditions');
 const tempDir = require('temp-dir');
 const rimraf = require('rimraf');
-const fs = require('fs');
+const fs = require('fs-extra');
 const streams = require('memory-streams');
 
 const Inovke = require('../../lib/local/invoke');
 const definition = require('../../lib/definition');
-
-const util = require('util');
 const yaml = require('js-yaml');
-const readFile = util.promisify(fs.readFile);
-
 let LocalInvoke = require('../../lib/local/local-invoke');
 
 const { functionName, functionRes,
@@ -82,7 +78,7 @@ describe('test local invoke init', async () => {
 
   it('default first function when fun local invoke', async () => {
     var tplPath = path.join('./examples', 'local', 'template.yml');
-    const tplContent = await readFile(tplPath, 'utf8');
+    const tplContent = await fs.readFile(tplPath, 'utf8');
     const tpl = yaml.safeLoad(tplContent);
     var firstFuntionName = definition.findFirstFunctionName(tpl);
     expect(firstFuntionName).equal('localdemo/php72');
@@ -217,7 +213,7 @@ describe('test local invoke reuse', async () => {
   const beforeCwd = process.cwd();
   
   beforeEach(async () => {
-    await mkdirp(projectDir);
+    await fs.mkdirp(projectDir);
     console.log('tempDir: %s', projectDir);
 
     fs.writeFileSync(ymlPath, tpl);

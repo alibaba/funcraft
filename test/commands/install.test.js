@@ -1,9 +1,9 @@
 'use strict';
 
 const path = require('path'),
-  fs = require('fs');
+  fs = require('fs-extra');
 const tempDir = require('temp-dir');
-const mkdirp = require('mkdirp-promise');
+
 const { ShellTask } = require('../../lib/install/task');
 const { hasDocker } = require('../conditions');
 
@@ -26,7 +26,7 @@ chai.use(require('chai-fs'));
   var prevCWD;
   beforeEach(async function () {
     prevCWD = process.cwd();
-    await mkdirp(funTempDir);
+    await fs.mkdirp(funTempDir);
     process.chdir(funTempDir);
   });
   afterEach(async function () {

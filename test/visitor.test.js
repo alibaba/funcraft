@@ -5,13 +5,9 @@ const expect = require('expect.js');
 const { setProcess } = require('./test-utils');
 const os = require('os');
 const rimraf = require('rimraf');
-const mkdirp = require('mkdirp-promise');
-const fs = require('fs');
-const util = require('util');
+const fs = require('fs-extra');
 const yaml = require('js-yaml');
 const proxyquire = require('proxyquire');
-const writeFile = util.promisify(fs.writeFile);
-
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 
@@ -39,8 +35,8 @@ describe('test getVisitor', () => {
   });
 
   it('test use fake when missing report config', async () => {
-    await mkdirp(`${os.homedir}/.fcli/`);
-    await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir}/.fcli/`);
+    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
       access_key_id: 'test'
     }));
 
@@ -51,8 +47,8 @@ describe('test getVisitor', () => {
   });
 
   it('test report config is false', async () => {
-    await mkdirp(`${os.homedir}/.fcli/`);
-    await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir}/.fcli/`);
+    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
       report: false
     }));
 
@@ -62,8 +58,8 @@ describe('test getVisitor', () => {
   });
 
   it('test report config is true', async () => {
-    await mkdirp(`${os.homedir}/.fcli/`);
-    await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir}/.fcli/`);
+    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
       report: true
     }));
     

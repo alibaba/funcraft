@@ -1,17 +1,11 @@
 'use strict';
 
 const os = require('os');
-const fs = require('fs');
-const util = require('util');
-
+const fs = require('fs-extra');
 const expect = require('expect.js');
 const yaml = require('js-yaml');
-const mkdirp = require('mkdirp-promise');
 const rimraf = require('rimraf');
-
 const getProfile = require('../lib/profile').getProfile;
-const writeFile = util.promisify(fs.writeFile);
-
 const { setProcess } = require('./test-utils');
 
 const { isShortDateStr } = require('../lib/profile');
@@ -60,8 +54,8 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
       HOME: os.tmpdir()
     });
 
-    await mkdirp(`${os.homedir}/.fcli/`);
-    await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir}/.fcli/`);
+    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://123344234.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15',       
       access_key_id: '22222',
@@ -127,8 +121,8 @@ describe('with local ~/.fcli/config.yaml for endpoint http', () => {
       HOME: os.tmpdir()
     });
 
-    await mkdirp(`${os.homedir}/.fcli/`);
-    await writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir}/.fcli/`);
+    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
       endpoint: `http://123344234.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15',       
       access_key_id: '22222',

@@ -20,7 +20,7 @@ const inquirer = {
 const promptStub = proxyquire('../../lib/init/prompt', {
   'rimraf': rimraf,
   'inquirer': inquirer,
-  'fs': fs
+  'fs-extra': fs
 });
 
 describe('prompt', () => {
