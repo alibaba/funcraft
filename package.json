@@ -120,7 +120,7 @@
     "universal-analytics": "^0.4.20",
     "unzipper": "0.10.4",
     "update-notifier": "^3.0.0",
-    "urlencode": "^1.1.0"
+    "uuid-by-string": "^3.0.2"
   },
   "files": [
     "bin",
