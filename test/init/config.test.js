@@ -15,7 +15,7 @@ const renderer = {
 
 const configStub = proxyquire('../../lib/init/config', {
   './renderer': renderer,
-  'fs': fs
+  'fs-extra': fs
 });
 
 describe('get config', () => {

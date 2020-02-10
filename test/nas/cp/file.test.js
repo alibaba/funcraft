@@ -1,13 +1,8 @@
 'use strict';
 
-const util = require('util');
 const os = require('os');
-const fs = require('fs');
-
-const mkdirp = require('mkdirp-promise');
+const fs = require('fs-extra');
 const rimraf = require('rimraf');
-const writeFile = util.promisify(fs.writeFile);
-
 const fsExtra = require('fs-extra');
 const path = require('path');
 const sinon = require('sinon');
@@ -25,9 +20,9 @@ describe('function zipWithArchiver test', () => {
   let fsExists;
   beforeEach(async () => {
     fsExists = sandbox.spy(fsExtra, 'pathExists');
-    await mkdirp(inputPath);
-    await mkdirp(localNasTmpDir);
-    await writeFile(path.join(inputPath, 'test.txt'), 'this is a test');
+    await fs.mkdirp(inputPath);
+    await fs.mkdirp(localNasTmpDir);
+    await fs.writeFile(path.join(inputPath, 'test.txt'), 'this is a test');
   });
   afterEach(() => {
     inputPath = path.join(os.tmpdir(), '.zip-test', '/');
@@ -66,7 +61,7 @@ describe('function isEmptyDir test', () => {
   const emptyDir = path.join(os.tmpdir(), '.empty-dir'); 
 
   beforeEach(async () => {
-    await mkdirp(emptyDir);
+    await fs.mkdirp(emptyDir);
   });
 
   afterEach(() => {
@@ -83,8 +78,8 @@ describe('getFileSize test', () => {
   const tmpDir = path.join(os.tmpdir(), '.file-size', '/');
   const filePath = path.join(tmpDir, 'test.txt');
   beforeEach(async () => {
-    await mkdirp(tmpDir);
-    await writeFile(filePath, Buffer.alloc(10));
+    await fs.mkdirp(tmpDir);
+    await fs.writeFile(filePath, Buffer.alloc(10));
   });
   afterEach(() => {
     rimraf.sync(tmpDir);
@@ -99,8 +94,8 @@ describe('readFileChunk test', () => {
   const tmpDir = path.join(os.tmpdir(), '.chunk-file', '/');
   const filePath = path.join(tmpDir, 'test.txt');
   beforeEach(async () => {
-    await mkdirp(tmpDir);
-    await writeFile(filePath, Buffer.alloc(10));
+    await fs.mkdirp(tmpDir);
+    await fs.writeFile(filePath, Buffer.alloc(10));
   });
   afterEach(() => {
     rimraf.sync(tmpDir);

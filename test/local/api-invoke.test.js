@@ -8,11 +8,11 @@ const assert = sinon.assert;
 var express = require('express');
 var app = express();
 const path = require('path');
-const mkdirp = require('mkdirp-promise');
+
 const { hasDocker } = require('../conditions');
 const tempDir = require('temp-dir');
 const rimraf = require('rimraf');
-const fs = require('fs');
+const fs = require('fs-extra');
 const expect = require('expect.js');
 
 const { serviceName, serviceRes, functionName, functionRes } = require('./mock-data');
@@ -71,7 +71,7 @@ describe('test responseApi', async () => {
     
   beforeEach(async () => {
 
-    await mkdirp(projectDir);
+    await fs.mkdirp(projectDir);
 
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',

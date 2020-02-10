@@ -1,21 +1,13 @@
 'use strict';
 
 const os = require('os');
-const fs = require('fs');
-const util = require('util');
-
-const mkdirp = require('mkdirp-promise');
+const fs = require('fs-extra');
 const rimraf = require('rimraf');
 const yaml = require('js-yaml');
 const expect = require('expect.js');
-
 const mocki = require('../inquirer-mock-prompt');
 const config = require('../../lib/commands/config');
-
 const { setProcess } = require('../test-utils');
-
-const writeFile = util.promisify(fs.writeFile);
-const readFile = util.promisify(fs.readFile);
 
 describe('config prompt', () => {
 
@@ -27,8 +19,8 @@ describe('config prompt', () => {
       HOME: os.tmpdir()
     });
 
-    await mkdirp(`${os.homedir()}/.fcli/`);
-    await writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir()}/.fcli/`);
+    await fs.writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://123344234.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15',       
       access_key_id: '22222',
@@ -51,7 +43,7 @@ describe('config prompt', () => {
 
     await config();
 
-    const profContent = await readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profContent = await fs.readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
     const profYml = yaml.safeLoad(profContent);
 
     expect(profYml.endpoint).to.be('https://123344234.cn-hangzhou.fc.aliyuncs.com');
@@ -67,7 +59,7 @@ describe('config prompt', () => {
 
     await config();
 
-    const profContent = await readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profContent = await fs.readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
     const profYml = yaml.safeLoad(profContent);
 
     expect(profYml.endpoint).to.be('https://3333555543.cn-shanghai.fc.aliyuncs.com');
@@ -85,8 +77,8 @@ describe('config api_version', () => {
       HOME: os.tmpdir()
     });
 
-    await mkdirp(`${os.homedir()}/.fcli/`);
-    await writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${os.homedir()}/.fcli/`);
+    await fs.writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://33232.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15T00:00:00.000Z',       
       access_key_id: '22222',
@@ -107,7 +99,7 @@ describe('config api_version', () => {
   it('config dateStr', async () => {  
     mocki({});
     await config();
-    const profContent = await readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profContent = await fs.readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
     const profYml = yaml.safeLoad(profContent, {
       schema: yaml.JSON_SCHEMA
     });

@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const puppeteer = require('puppeteer');
 
 module.exports.handler = function (request, response, context) {

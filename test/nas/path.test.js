@@ -1,11 +1,7 @@
 'use strict';
 const os = require('os');
-const fs = require('fs');
-const util = require('util');
-
-const mkdirp = require('mkdirp-promise');
+const fs = require('fs-extra');
 const rimraf = require('rimraf');
-const writeFile = util.promisify(fs.writeFile);
 const expect = require('expect.js');
 const USER_HOME = require('os').homedir();
 const sinon = require('sinon');
@@ -77,9 +73,9 @@ describe('readDirRecursive test', () => {
   const filePath = path.join(localDir, 'test.txt');
   
   beforeEach(async () => {
-    await mkdirp(localDir);
-    await mkdirp(localEmptyDir);
-    await writeFile(`${filePath}`, 'this is a test');
+    await fs.mkdirp(localDir);
+    await fs.mkdirp(localEmptyDir);
+    await fs.writeFile(`${filePath}`, 'this is a test');
   });
 
   afterEach(() => {
