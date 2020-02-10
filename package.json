@@ -49,7 +49,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.10.0",
+    "@alicloud/fc-builders": "^0.10.1",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
@@ -96,7 +96,6 @@
     "lodash": "^4.17.11",
     "md5-file": "^4.0.0",
     "memory-streams": "^0.1.3",
-    "mkdirp-promise": "^5.0.1",
     "ncp": "^2.0.0",
     "nested-object-assign": "^1.0.3",
     "node-machine-id": "^1.1.10",

@@ -5,7 +5,8 @@ const Context = require('../../lib/install/context');
 const { hasDocker } = require('../conditions');
 const tempDir = require('temp-dir');
 const path = require('path');
-const mkdirp = require('mkdirp-promise');
+const fs = require('fs-extra');
+
 const chai = require('chai');
 const expect = chai.expect;
 const docker = require('../../lib/docker');
@@ -60,7 +61,7 @@ describe('test PipTask', () => {
   const cleanTask = new ShellTask('clean task', 'python2.7', funTempDir, 'rm -rf ./{*,.[!.]*}');
 
   beforeEach(async () => {
-    await mkdirp(funTempDir);
+    await fs.mkdirp(funTempDir);
     console.log('tempDir: %s', funTempDir);
   });
 

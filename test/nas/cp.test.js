@@ -1,12 +1,8 @@
 'use strict';
-const util = require('util');
 const os = require('os');
-const fs = require('fs');
-
-const mkdirp = require('mkdirp-promise');
+const fs = require('fs-extra');
 const rimraf = require('rimraf');
 const mockdata = require('../commands/nas/mock-data');
-const writeFile = util.promisify(fs.writeFile);
 const expect = require('expect.js');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
@@ -51,9 +47,9 @@ describe('nas cp src path check error', () => {
 
 
   beforeEach(async () => {
-    await mkdirp(localEmptyPath);
-    await mkdirp(localNotEmptyPath);
-    await writeFile(`${localFilePath}`, 'this is a test');
+    await fs.mkdirp(localEmptyPath);
+    await fs.mkdirp(localNotEmptyPath);
+    await fs.writeFile(`${localFilePath}`, 'this is a test');
   });
 
   afterEach(() => {
@@ -91,8 +87,8 @@ describe('nas cp local file to remote NAS', () => {
   const localFilePath = path.join(localNotEmptyPath, 'test.txt');
   
   beforeEach(async () => {
-    await mkdirp(localNotEmptyPath);
-    await writeFile(`${localFilePath}`, 'this is a test');
+    await fs.mkdirp(localNotEmptyPath);
+    await fs.writeFile(`${localFilePath}`, 'this is a test');
   });
 
   afterEach(() => {
@@ -346,8 +342,8 @@ describe('nas cp local folder to remote NAS', () => {
   const localFilePath = path.join(localNotEmptyPath, 'test.txt');
 
   beforeEach(async () => {
-    await mkdirp(localNotEmptyPath);
-    await writeFile(`${localFilePath}`, 'this is a test');
+    await fs.mkdirp(localNotEmptyPath);
+    await fs.writeFile(`${localFilePath}`, 'this is a test');
   });
 
   afterEach(() => {

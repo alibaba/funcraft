@@ -19,7 +19,7 @@ const vcs = {
 };
 
 const repositoryStub = proxyquire('../../lib/init/repository', {
-  'fs': fs,
+  'fs-extra': fs,
   'path': path,
   './vcs': vcs
 });

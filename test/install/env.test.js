@@ -6,7 +6,7 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
 const expect = require('expect.js');
-const mkdirp = require('mkdirp-promise');
+
 const rimraf = require('rimraf');
 
 const { addEnv } = require('../../lib/install/env');
@@ -77,7 +77,7 @@ describe('resolveLibPathsFromLdConf', () => {
   const filePath = path.join(dirName, './test.conf');
 
   beforeEach(async () => {
-    await mkdirp(dirName);
+    await fs.mkdirp(dirName);
     await fs.createFile(filePath);
   });
 
