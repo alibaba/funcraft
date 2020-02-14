@@ -18,7 +18,8 @@
       "./templates/**/*",
       "./lib/utils/fun-nas-server/dist/fun-nas-server.zip",
       "./lib/utils/fun-nas-server/dist/VERSION",
-      "./lib/utils/classLoader/Entrypoint.java"
+      "./lib/utils/classLoader/Entrypoint.java",
+      "./lib/utils/tmp-domain-token.js"
     ]
   },
   "scripts": {
@@ -69,6 +70,7 @@
     "conf": "^4.0.2",
     "copy-dir": "^1.1.0",
     "crc64-ecma182.js": "^1.0.0",
+    "date-and-time": "^0.12.0",
     "debug": "^2.6.8",
     "detect-mocha": "^0.1.0",
     "dev-null": "^0.1.1",
@@ -108,6 +110,7 @@
     "promise.prototype.finally": "^3.1.1",
     "raw-body": "^2.3.3",
     "readdirp": "^3.1.2",
+    "request-promise": "^4.2.5",
     "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
     "semver": "^5.5.0",
