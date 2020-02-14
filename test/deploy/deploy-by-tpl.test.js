@@ -1181,10 +1181,10 @@ describe('custom domain', () => {
     restoreProcess();
   });
 
-  async function customDomain(domainName, domainDefinition) {
+  async function customDomain(domainName, domainDefinition, routes) {
     await proxyquire('../../lib/deploy/deploy-by-tpl', {
       './deploy-support': deploySupport
-    }).deployCustomDomain(domainName, domainDefinition);
+    }).deployCustomDomain(domainName, domainDefinition, routes);
   }
 
   it('add qualifier field test', async () => {
@@ -1206,7 +1206,17 @@ describe('custom domain', () => {
           }
         }
       }
-    });
+    }, [{
+      path: '/a',
+      serviceName: 'serviceA',
+      functionName: 'functionA',
+      qualifier: 'Prod'
+    },
+    {
+      path: '/b',
+      serviceName: 'serviceB',
+      functionName: 'functionB'
+    }]);
     assert.calledWith(deploySupport.makeCustomDomain, {
       domainName: 'domainName',
       protocol: 'HTTP',
@@ -1245,7 +1255,16 @@ describe('custom domain', () => {
           }
         }
       }
-    });
+    }, [{
+      path: '/a',
+      serviceName: 'serviceA',
+      functionName: 'functionA'
+    },
+    {
+      path: '/b',
+      serviceName: 'serviceB',
+      functionName: 'functionB'
+    }]);
     assert.calledWith(deploySupport.makeCustomDomain, {
       domainName: 'domainName',
       protocol: 'HTTP',
@@ -1282,7 +1301,16 @@ describe('custom domain', () => {
           }
         }
       }
-    });
+    }, [{
+      path: '/a',
+      serviceName: 'serviceA',
+      functionName: 'functionA'
+    },
+    {
+      path: '/b',
+      serviceName: 'serviceB',
+      functionName: 'functionB'
+    }]);
     assert.calledWith(deploySupport.makeCustomDomain, {
       domainName: 'domainName',
       protocol: 'HTTP',
@@ -1324,7 +1352,16 @@ describe('custom domain', () => {
           'Certificate': 'Certificate'
         }
       }
-    });
+    }, [{
+      path: '/a',
+      serviceName: 'serviceA',
+      functionName: 'functionA'
+    },
+    {
+      path: '/b',
+      serviceName: 'serviceB',
+      functionName: 'functionB'
+    }]);
     assert.calledWith(deploySupport.makeCustomDomain, {
       domainName: 'domainName',
       protocol: 'HTTP,HTTPS',
