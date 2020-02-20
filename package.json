@@ -78,6 +78,7 @@
     "dotenv": "^6.0.0",
     "draftlog": "^1.0.12",
     "express": "^4.16.4",
+    "extract-zip": "^1.6.7",
     "fs-extra": "^8.1.0",
     "get-stdin": "^6.0.0",
     "git-ignore-parser": "0.0.2",
