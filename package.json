@@ -21,6 +21,14 @@
       "./lib/utils/classLoader/Entrypoint.java"
     ]
   },
+  "fc-docker": {
+    "version": "1.9.2",
+    "registry_default": "registry.cn-beijing.aliyuncs.com",
+    "registry_mirrors": [
+      "registry.cn-beijing.aliyuncs.com",
+      "registry.hub.docker.com"
+    ]
+  },
   "scripts": {
     "test": "make test",
     "postinstall": "node ./lib/check-version.js",
@@ -49,7 +57,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.11.0",
+    "@alicloud/fc-builders": "^0.12.0",
     "@alicloud/fc2": "^2.1.1",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
