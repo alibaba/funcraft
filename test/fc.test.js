@@ -338,7 +338,7 @@ describe('test processNasAutoConfiguration', ()=> {
     const functionName = 'fun1';
     const runtime = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun1.Properties.Runtime;
     const codeUri = tplWithTheSameCodeUriAndRuntime.Resources.localdemo.fun2.Properties.CodeUri;
-    const asbCodeUri = path.resolve(baseDir, codeUri);
+    const absCodeUri = path.resolve(baseDir, codeUri);
 
     const localSystemDependency = path.resolve(codeUri, path.join('.fun', 'root'));
     const nasYmlPath = path.resolve(baseDir, '.nas.yml');
@@ -350,7 +350,7 @@ describe('test processNasAutoConfiguration', ()=> {
 
     const { tplChanged, remoteNasDirPrefix, updatedTpl } = await fc.processNasMappingsAndEnvs({ tpl: tplWithTheSameCodeUriAndRuntime,
       tplPath, runtime, baseDir,
-      codeUri: asbCodeUri,
+      codeUri: absCodeUri,
       serviceName, functionName
     });
 
