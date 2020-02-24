@@ -61,7 +61,7 @@ describe('test package', () => {
   it('test outputTemplateFile', async () => {
     const packedYmlPath = path.resolve(process.cwd(), outputTemplateFile);
 
-    await pack.pack(tplPath, bucket, outputTemplateFile);
+    await pack.pack(tplPath, bucket, outputTemplateFile, false);
 
     assert.calledWith(tpl.getTpl, tplPath);
     assert.calledWith(client.getOssClient, bucket);
@@ -69,7 +69,8 @@ describe('test package', () => {
       tpl: mock.tpl,
       tplPath,
       baseDir: path.dirname(tplPath),
-      ossClient
+      ossClient,
+      useNas: false
     });
     assert.calledWith(util.outputTemplateFile, packedYmlPath, mock.tpl);
   });
@@ -77,7 +78,7 @@ describe('test package', () => {
   it('test default outputTemplateFile', async () => {
     const packedYmlPath = path.resolve(process.cwd(), 'template.packaged.yml');
 
-    await pack.pack(tplPath, bucket);
+    await pack.pack(tplPath, bucket, null, false);
 
     assert.calledWith(tpl.getTpl, tplPath);
     assert.calledWith(client.getOssClient, bucket);
@@ -85,14 +86,15 @@ describe('test package', () => {
       tpl: mock.tpl,
       tplPath,
       baseDir: path.dirname(tplPath),
-      ossClient
+      ossClient,
+      useNas: false
     });
     assert.calledWith(util.outputTemplateFile, packedYmlPath, mock.tpl);
   });
 
   it('test generate default oss bucket when bucket did not specified', async () => {
     const packedYmlPath = path.resolve(process.cwd(), 'template.packaged.yml');
-    await pack.pack(tplPath);
+    await pack.pack(tplPath, null, null, false);
 
     assert.calledWith(tpl.getTpl, tplPath);
     assert.calledWith(client.getOssClient, `fun-gen-${getProfileRes.defaultRegion}-${getProfileRes.accountId}`);
@@ -100,7 +102,8 @@ describe('test package', () => {
       tpl: mock.tpl,
       tplPath,
       baseDir: path.dirname(tplPath),
-      ossClient
+      ossClient,
+      useNas: false
     });
     assert.calledWith(util.outputTemplateFile, packedYmlPath, mock.tpl);
   });

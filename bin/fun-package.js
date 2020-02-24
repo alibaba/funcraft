@@ -16,6 +16,7 @@ program
   .option('-t, --template <template>', 'The template file path')
   .option('-b, --oss-bucket <bucket>', 'The name of the oss bucket where Fun uploads local artifacts')
   .option('-o, --output-template-file <filename>', 'The output path of the packaged template file')
+  .option('--use-nas', 'Automatically upload local resources to NAS.')
   .parse(process.argv);
 
 if (program.args.length > 1) {
