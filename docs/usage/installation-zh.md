@@ -55,7 +55,7 @@ $ unzip fun-linux.zip
 Archive:  fun-v3.6.1-linux.zip
   inflating: fun-v3.6.1-linux
 
-# 移到到 PATH 目录
+# 移到 PATH 目录
 $ mv fun-*-linux /usr/local/bin/fun
 
 # 验证版本
@@ -82,7 +82,7 @@ $ unzip fun-macos.zip
 Archive:  fun-v3.6.1-macos.zip
   inflating: fun-v3.6.1-macos
 
-# 移到到 PATH 目录
+# 移到 PATH 目录
 $ mv fun-*-macos /usr/local/bin/fun
 
 # 验证版本
