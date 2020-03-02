@@ -60,21 +60,21 @@ describe('test fun nas init', () => {
     support.isNasServerStale.returns(true);
     fs.pathExists.returns(true);
     fs.readFile.returns(Buffer.from('123'));
-  }); 
+  });
 
   afterEach(() => {
     restoreProcess();
     sandbox.reset();
   });
-  
+
   it('function deployNasService without service', async () => {
-    
+
     const serviceName = 'fun-nas-test';
     const nasServiceName = constants.FUN_NAS_SERVICE_PREFIX + serviceName;
     const nasFunctionName = constants.FUN_NAS_FUNCTION;
-    
+
     const zipCodePath = path.resolve(__dirname, '../../lib/utils/fun-nas-server/dist/fun-nas-server.zip');
-    
+
     const nasServiceRes = {
       'Type': 'Aliyun::Serverless::Service',
       'Properties': {
@@ -105,13 +105,16 @@ describe('test fun nas init', () => {
         }
       }
     };
-    
+
     nas.convertNasConfigToNasMappings.returns([{localNasDir: baseDir, remoteNasDir: baseDir}]);
     await nasInitStub.deployNasService(baseDir, nasMockData.tpl, undefined, tplPath);
 
     assert.calledWith(fs.pathExists, zipCodePath);
-    assert.calledWith(deploy.deployService, baseDir, nasServiceName, nasServiceRes, false, tplPath);
-
+    assert.calledWith(deploy.deployService,
+      {
+        baseDir, tplPath,
+        serviceName: nasServiceName, serviceRes: nasServiceRes,
+        onlyConfig: false, useNas: false, skipTrigger: false
+      });
   });
-    
-}); 
+});

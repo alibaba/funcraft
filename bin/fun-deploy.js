@@ -30,10 +30,12 @@ program
 
   .option('-t, --template [template]', 'The path of fun template file.')
   .option('-c, --only-config', 'Update only configuration flags')
-  .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.\n')
-  .option('--use-ros', 'Deploy resources using ROS')
-  .option('--stack-name <stackName>', 'The name of the ROS stack')
   .option('-p, --parameter-override <parameter>', `A parameter structures that specify input parameters for your stack template.`, parsePairs)
+  .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.\n')
+
+  .option('--use-ros', 'Deploy resources using ROS')
+  .option('--use-nas', 'Automatically upload local resources to NAS.')
+  .option('--stack-name <stackName>', 'The name of the ROS stack')
   .parse(process.argv);
 
 if (program.args.length > 1) {
@@ -47,6 +49,7 @@ const context = {
   onlyConfig: program.onlyConfig || false,
   template: program.template,
   useRos: program.useRos,
+  useNas: program.useNas,
   stackName: program.stackName,
   assumeYes: program.assumeYes || false,
   parameterOverride: program.parameterOverride

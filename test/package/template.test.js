@@ -145,7 +145,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
 
   beforeEach(() => {
     sandbox.stub(fs, 'ensureDir').resolves(true);
-    sandbox.stub(zip, 'packTo').resolves(true);
+    sandbox.stub(zip, 'packTo').resolves({count: 10, compressedSize: 10});
     sandbox.stub(util, 'md5').resolves('md5');
     sandbox.stub(fs, 'remove').resolves(true);
     sandbox.stub(fs, 'createReadStream').returns('zipcontent');
