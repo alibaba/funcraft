@@ -22,5 +22,5 @@ RUN fun-install apt-get install php7.2-curl
 RUN fun-install apt-get install php7.2-json 
 RUN fun-install apt-get install php7.2-opcache 
 RUN fun-install apt-get install php7.2-readline
-RUN fun-install apt-get install libedit2
-RUN fun-install apt-get install libncurses5
+#RUN fun-install apt-get install libedit2
+#RUN fun-install apt-get install libncurses5
