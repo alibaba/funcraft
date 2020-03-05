@@ -29,5 +29,8 @@ package: update-version
 		&& cd .fun \
 		&& zip -q -r $$ZIP_NAME root/ -x ".fun/root/usr/share/*" -x ".fun/root/lib/systemd/*" \
 		&& mv $$ZIP_NAME ../dist
+	
+upload:
+	./upload.sh
 
 .PHONY: version
