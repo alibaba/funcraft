@@ -1,0 +1,27 @@
+RUNTIME custom
+RUN apt-get update
+RUN apt-get -y install apt-transport-https lsb-release ca-certificates wget
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+RUN sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+RUN apt-get update
+RUN fun-install apt-get install nginx 
+RUN fun-install apt-get install php7.2-common
+RUN fun-install apt-get install php7.2-fpm
+RUN fun-install apt-get install php7.2-cli
+RUN fun-install apt-get install php7.2-cgi
+RUN fun-install apt-get install php7.2-mbstring
+RUN fun-install apt-get install php7.2-mysql 
+RUN fun-install apt-get install php7.2-xml 
+RUN fun-install apt-get install php7.2-xmlrpc
+RUN fun-install apt-get install php7.2-soap 
+RUN fun-install apt-get install php7.2-gd
+RUN fun-install apt-get install php7.2-intl 
+RUN fun-install apt-get install php7.2-ldap 
+RUN fun-install apt-get install php7.2-zip 
+RUN fun-install apt-get install php7.2-curl
+RUN fun-install apt-get install php7.2-json 
+RUN fun-install apt-get install php7.2-opcache 
+RUN fun-install apt-get install php7.2-readline
+RUN fun-install apt-get install php7.2-simplexml
+#RUN fun-install apt-get install libedit2
+#RUN fun-install apt-get install libncurses5
