@@ -171,6 +171,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
     const pathExistsStub = sandbox.stub(fs, 'pathExists');
     pathExistsStub.withArgs(path.resolve(baseDir, path.join('.fun', 'nasMappings.json'))).resolves(false);
     pathExistsStub.withArgs(path.resolve(baseDir, tpl.Resources.localdemo.php72.Properties.CodeUri)).resolves(true);
+    pathExistsStub.withArgs(path.resolve(path.dirname(tplPath), '.fun', 'package', 'md5')).resolves(true);
 
     const t = await template.uploadAndUpdateFunctionCode({
       baseDir,
@@ -200,6 +201,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
     pathExistsStub.withArgs(path.resolve(baseDir, tplWithSameCodeUri.Resources.localdemo.nodejs6.Properties.CodeUri)).resolves(true);
     pathExistsStub.withArgs(path.resolve(baseDir, tplWithSameCodeUri.Resources.localdemo.nodejs8.Properties.CodeUri)).resolves(true);
     pathExistsStub.withArgs(path.resolve(baseDir, tplWithSameCodeUri.Resources.localdemo.php72.Properties.CodeUri)).resolves(true);
+    pathExistsStub.withArgs(path.resolve(path.dirname(tplPath), '.fun', 'package', 'md5')).resolves(true);
 
     const t = await template.uploadAndUpdateFunctionCode({
       baseDir, ossClient, tplPath,
@@ -209,7 +211,6 @@ describe('test uploadAndUpdateFunctionCode', () => {
     const randomDir = path.join(tempDir, 'random');
     const zipPath = path.join(randomDir, 'code.zip');
 
-    assert.callCount(fs.pathExists, 5);
     assert.calledWith(fs.ensureDir, randomDir);
     assert.calledTwice(zip.packTo);
 

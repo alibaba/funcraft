@@ -133,6 +133,7 @@ describe('test generateLocalInvokeOpts', () => {
         'DEBUG_OPTIONS=--inspect-brk=0.0.0.0:9000',
         `${LD_LIBRARY_PATH}`,
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
         'PYTHONUSERBASE=/code/.fun/python'
       ],
       'AttachStderr': true,
@@ -189,6 +190,7 @@ describe('test generateLocalInvokeOpts', () => {
       'Env': [
         `${LD_LIBRARY_PATH}`,
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
         'PYTHONUSERBASE=/code/.fun/python'
       ],
       'HostConfig': {
@@ -214,6 +216,7 @@ describe('test resolveDockerEnv', () => {
     expect(resolved).to.eql([
       `${LD_LIBRARY_PATH}`,
       'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+      'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
   });
@@ -227,6 +230,7 @@ describe('test resolveDockerEnv', () => {
       'key=value',
       `${LD_LIBRARY_PATH}`,
       'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+      'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
   });
@@ -241,6 +245,7 @@ describe('test resolveDockerEnv', () => {
       'key2=value2',
       `${LD_LIBRARY_PATH}`,
       'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+      'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
       'PYTHONUSERBASE=/code/.fun/python'
     ]);
   });
