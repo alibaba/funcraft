@@ -16,9 +16,11 @@ test: lint unit-test
 
 install: 
 	env -i PATH="$(PATH)" npm install
+	$(FUN) install
 
 clean: 
 	rm -rf ./dist
+	rm -rf .fun
 	
 build: clean install
 	env -i PATH="$(PATH)" npm run build
