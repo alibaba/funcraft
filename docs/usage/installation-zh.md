@@ -63,7 +63,7 @@ Archive:  fun-v3.6.1-linux.zip
 $ mv fun-*-linux /usr/local/bin/fun
 
 # 验证版本
-$ fun --verison
+$ fun --version
 3.6.1
 ```
 
@@ -90,7 +90,7 @@ Archive:  fun-v3.6.1-macos.zip
 $ mv fun-*-macos /usr/local/bin/fun
 
 # 验证版本
-$ fun --verison
+$ fun --version
 3.6.1
 ```
 
