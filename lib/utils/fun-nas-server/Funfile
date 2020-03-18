@@ -1,3 +1,4 @@
 RUNTIME nodejs10
 WORKDIR /code
 RUN fun-install apt-get install unzip
+RUN fun-install apt-get install zip
