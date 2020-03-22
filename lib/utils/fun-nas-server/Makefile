@@ -14,21 +14,19 @@ unit-test:
 
 test: lint unit-test
 
-install: 
+install:
 	env -i PATH="$(PATH)" npm install
-	$(FUN) install
 
-clean: 
+clean:
 	rm -rf ./dist
-	rm -rf .fun
-	
+
 build: clean install
 	env -i PATH="$(PATH)" npm run build
 	mkdir -p ./dist/.fun/root
 	cp -r ./.fun/root/ ./dist/.fun/root
 	git log -n 1 --pretty="format:%h" -- . > ./dist/VERSION
-	
-dev: 
+
+dev:
 	npm run dev
 	$(FUN) local start
 
