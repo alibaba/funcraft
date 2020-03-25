@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "lib": ["es6"],
+    "module": "commonjs",
+    "target": "es6",
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "outDir": "./"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

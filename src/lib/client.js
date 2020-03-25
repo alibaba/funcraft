@@ -51,6 +51,7 @@ const getOssClient = async (bucket) => {
     region: location.location,
     timeout: profile.timeout * 1000
   });
+
   
   return client;
 };
