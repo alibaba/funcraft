@@ -15,7 +15,7 @@
     ],
     "require-atomic-updates": "off",
     "semi": [2, "always"],
-    "strict": [2, "global"],
+    "strict": "off",
     "curly": 2,
     "eqeqeq": 2,
     "no-eval": 2,
@@ -65,9 +65,10 @@
     "beforeEach": true,
     "afterEach": true
   },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 8,
-    "sourceType": "script",
+    "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
     }

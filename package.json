@@ -31,12 +31,13 @@
   },
   "scripts": {
     "test": "make test",
-    "postinstall": "node ./lib/check-version.js",
     "binary": "make binary",
     "upload": "make upload",
-    "lint": "eslint --fix lib bin test",
-    "validate-lint": "eslint lib bin test",
-    "prepack": "make package-fun-nas-server"
+    "lint": "eslint --fix src/lib src/bin test",
+    "validate-lint": "eslint src/lib src/bin test",
+    "prepack": "npm install && npm run build && chmod +x bin/* && make package-fun-nas-server",
+    "build": "tsc -p ./",
+    "postbuild": "copyfiles -a -u 1 -e \"**/*.{js,ts}\" \"src/**/*\" ./"
   },
   "author": "Jackson Tian",
   "maintainers": [
@@ -136,12 +137,14 @@
     "uuid-by-string": "^3.0.2"
   },
   "files": [
-    "bin",
     "lib",
+    "bin",
     "templates"
   ],
   "devDependencies": {
+    "@typescript-eslint/parser": "^2.25.0",
     "chai-fs": "^2.0.0",
+    "copyfiles": "^2.2.0",
     "eslint": "^4.3.0",
     "expect.js": "^0.3.1",
     "memorystream": "^0.3.1",
@@ -151,7 +154,8 @@
     "pkg": "^4.4.0",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
-    "suppose": "^0.6.2"
+    "suppose": "^0.6.2",
+    "typescript": "^3.6.4"
   },
   "repository": {
     "type": "git",

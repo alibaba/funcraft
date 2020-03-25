@@ -57,7 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
-.fun/
 /fun.yml
 
 .settings
@@ -91,10 +90,19 @@ output
 *.iml
 *.class
 .DS_Store
-.fun/
 .classpath
 .project
 event.dat
 __pycache__/
 dist/
+/lib
+/bin
 template.packaged.yml
+
+!src/lib/utils/fun-nas-server/.fun/
+src/lib/utils/fun-nas-server/.fun/*
+!src/lib/utils/fun-nas-server/.fun/root
+src/lib/utils/fun-nas-server/.fun/root/*
+!src/lib/utils/fun-nas-server/.fun/root/usr
+src/lib/utils/fun-nas-server/.fun/root/usr/*
+!src/lib/utils/fun-nas-server/.fun/root/usr/bin
