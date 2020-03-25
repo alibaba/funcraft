@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const nas = require('../nas');
 const path = require('path');
 const util = require('../import/utils');
+const debug = require('debug')('fun:package');
 const nasSupport = require('../nas/support');
 
 const _ = require('lodash');
@@ -11,7 +12,7 @@ const _ = require('lodash');
 const { getProfile } = require('../profile');
 const { isEmptyDir } = require('../nas/cp/file');
 const { getOssClient } = require('../client');
-const { red, green, yellow } = require('colors');
+const { green, yellow } = require('colors');
 const { showPackageNextTips } = require('../build/tips');
 const { ensureFilesModified } = require('../utils/file');
 const { parseMountDirPrefix } = require('../fc');
@@ -103,7 +104,7 @@ async function processNasAutoToRosTemplate({ tpl, baseDir, tplPath,
     }
 
     if (_.isEmpty(objectNames)) {
-      console.warn(red(`\nwarning: There is no local NAS directory available under service: ${serviceName}.`));
+      debug(`\nwarning: There is no local NAS directory available under service: ${serviceName}.`);
       continue;
     }
 
@@ -262,10 +263,7 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas) {
   const updatedCodeTpl = await uploadAndUpdateFunctionCode({ tpl: updatedEnvTpl, tplPath, baseDir, ossClient, useNas });
   const updatedSlsTpl = await transformSlsAuto(updatedCodeTpl);
   const updatedFlowTpl = await transformFlowDefinition(baseDir, transformCustomDomain(updatedSlsTpl));
-  const updatedTpl = await processNasAutoToRosTemplate({ ossClient, baseDir, tplPath,
-    tpl: updatedFlowTpl,
-    bucketName: bucket
-  });
+  const updatedTpl = await processNasAutoToRosTemplate({ ossClient, baseDir, tplPath, tpl: updatedFlowTpl, bucketName: bucket });
 
   let packedYmlPath;
 
