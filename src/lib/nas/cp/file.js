@@ -54,6 +54,18 @@ async function isEmptyDir(path) {
   return false;
 }
 
+// only if the path is directory and there are files in the directory, will true be returned
+async function isNotEmptyDir(path) {
+  const lstat = await fs.lstat(path);
+  if (lstat.isDirectory()) {
+    const dirs = await fs.readdir(path);
+    if (!_.isEmpty(dirs)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 async function getFileSize(filePath) {
   const stat = await fs.lstat(filePath);
   return stat.size;
@@ -91,7 +103,7 @@ function writeBufToFile(dstPath, buf) {
 }
 
 module.exports = {
-  isDir, isFile, isEmptyDir,
+  isDir, isFile, isEmptyDir, isNotEmptyDir,
   getFileHash, getFileSize, getFilePermission,
   zipWithArchiver, readFileChunk, writeBufToFile
 };

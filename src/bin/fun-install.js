@@ -37,6 +37,8 @@ program
   .description('install dependencies which are described in fun.yml file.')
   .action(async (packageNames, program) => {
 
+    if (_.isEmpty(packageNames)) { return; }
+
     const options = convertOptions(program);
 
     // merge options default values.
@@ -180,7 +182,6 @@ program
 program.parse(process.argv);
 
 notifier.notify();
-
 
 if (!program.args.length) {
 

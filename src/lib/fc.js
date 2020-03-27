@@ -23,6 +23,7 @@ const getUuid = require('uuid-by-string');
 const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
+const { isNotEmptyDir } = require('./nas/cp/file');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
 const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
@@ -171,14 +172,19 @@ const CUSTOM_RUNTIME_JAVA_MAPPING = {
   'pathSuffix': '*'
 };
 
+const FONTS_MAPPING = {
+  'localDir': 'fonts',
+  'remoteDir': 'fonts'
+};
+
 const runtimeDependencyMappings = {
-  'nodejs6': [NODE_RUNTIME_MAPPING],
-  'nodejs8': [NODE_RUNTIME_MAPPING],
-  'nodejs10': [NODE_RUNTIME_MAPPING],
-  'python2.7': [PYTHON_RUNTIME_MAPPING],
-  'python3': [PYTHON_RUNTIME_MAPPING],
-  'java8': [JAVA_RUNTIME_MAPPING],
-  'custom': [NODE_RUNTIME_MAPPING, PYTHON_RUNTIME_MAPPING, CUSTOM_RUNTIME_JAVA_MAPPING]
+  'nodejs6': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'nodejs8': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'nodejs10': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'python2.7': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
+  'python3': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
+  'java8': [JAVA_RUNTIME_MAPPING, FONTS_MAPPING],
+  'custom': [NODE_RUNTIME_MAPPING, PYTHON_RUNTIME_MAPPING, CUSTOM_RUNTIME_JAVA_MAPPING, FONTS_MAPPING]
 };
 
 async function saveNasMappings(nasYmlPath, nasMappings) {
@@ -195,9 +201,10 @@ async function saveNasMappings(nasYmlPath, nasMappings) {
   return mergedNasMappings;
 }
 
-async function updateEnvironmentsInTpl({ tplPath, tpl, envs,
+function updateEnvironmentsInTpl({ tplPath, tpl, envs,
   serviceName,
-  functionName
+  functionName,
+  displayLog = true
 }) {
   const updatedTplContent = _.cloneDeep(tpl);
 
@@ -215,7 +222,9 @@ async function updateEnvironmentsInTpl({ tplPath, tpl, envs,
 
   util.outputTemplateFile(tplPath, updatedTplContent);
 
-  console.log(green(`Fun add environment variables to '${serviceName}/${functionName}' in ${tplPath}`));
+  if (displayLog) {
+    console.log(green(`Fun add environment variables to '${serviceName}/${functionName}' in ${tplPath}`));
+  }
 
   return updatedTplContent;
 }
@@ -347,9 +356,8 @@ async function generateNasMappingsAndEnvs({
         remoteNasDir: remoteDir
       });
 
-      Object.assign(envs, {
-        [mapping.env]: generateNasEnv(mapping.defaultEnv, mapping.pathSuffix ? remoteDir + '/' + mapping.pathSuffix : remoteDir)
-      });
+      const resolveNasDir = mapping.pathSuffix ? remoteDir + '/' + mapping.pathSuffix : remoteDir;
+      Object.assign(envs, generateNasEnv(mapping.defaultEnv, resolveNasDir, mapping.env));
 
       outputNasMappingLog(baseDir, nasMappingPath, localDir);
     }
@@ -364,15 +372,16 @@ async function generateNasMappingsAndEnvs({
   };
 }
 
-function generateNasEnv(defaultEnv, remoteNasDir) {
-  let nasEnv;
+function generateNasEnv(defaultEnvValue, remoteNasDir, envKey) {
+  const env = {};
 
-  if (defaultEnv) {
-    nasEnv = `${remoteNasDir}:${defaultEnv}`;
-  } else {
-    nasEnv = remoteNasDir;
+  if (!envKey) {
+    return env;
   }
-  return nasEnv;
+
+  env[envKey] = defaultEnvValue ? `${remoteNasDir}:${defaultEnvValue}` : remoteNasDir;
+
+  return env;
 }
 
 function resolveLocalNasDir(runtime, baseDir, codeUri, localDirInNasMappings, serviceName, functionName) {
@@ -450,7 +459,7 @@ async function processOtherFunctionsUnderServiceIfNecessary({
 
   for (const pendingFuntion of pendingFuntions) {
 
-    tpl = await updateEnvironmentsInTpl({
+    tpl = updateEnvironmentsInTpl({
       tplPath, tpl, envs,
       serviceName: originServiceName,
       functionName: pendingFuntion.functionName
@@ -472,13 +481,14 @@ async function processNasMappingsAndEnvs({ tpl, tplPath, runtime, codeUri, baseD
   const { serviceRes } = definition.findFunctionByServiceAndFunctionName(tpl.Resources, serviceName, functionName);
 
   const { envs, nasMappings, remoteNasDirPrefix } = await generateNasMappingsAndEnvs({
-    baseDir,
+    baseDir, runtime, codeUri,
     serviceName: serviceName,
     functionName: functionName,
-    runtime,
-    codeUri,
     nasConfig: convertedNasConfig || (serviceRes.Properties || {}).NasConfig
   });
+
+  const appendContet = `  <dir>${remoteNasDirPrefix}${FONTS_MAPPING.remoteDir}</dir>`;
+  await generateFontsConfAndEnv(baseDir, codeUri, appendContet);
 
   const localDirs = _.map(runtimeDependencyMappings[runtime], mapping => path.join(codeUri, mapping.localDir));
 
@@ -665,7 +675,6 @@ async function processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, con
   console.log(yellow(`\nFun has automatically uploaded your code dependency to NAS, then fun will use 'fun deploy ${serviceName}/${functionName}' to redeploy.`));
 
   console.log(`Waiting for service ${serviceName} to be deployed...`);
-
   const partialDeploy = await require('./deploy/deploy-by-tpl').partialDeployment(`${serviceName}/${functionName}`, updatedTplContent);
 
   if (partialDeploy.resourceName) {
@@ -686,7 +695,7 @@ async function updateEnvironments({
   serviceName, functionName
 }) {
 
-  const updatedTplContent = await updateEnvironmentsInTpl({ envs, tpl, tplPath, serviceName, functionName });
+  const updatedTplContent = updateEnvironmentsInTpl({ envs, tpl, tplPath, serviceName, functionName });
 
   return await processOtherFunctionsUnderServiceIfNecessary({
     tpl: updatedTplContent, tplPath,
@@ -983,6 +992,38 @@ function generateNasAndVpcConfig(mountTarget, securityGroupId, serviceName) {
   };
 }
 
+function writeFileToLine(filePath, content, lineNum) {
+  let data = fs.readFileSync(filePath, 'utf8').split(/\r?\n/gm);
+  data.splice(lineNum, 0, content);
+  fs.writeFileSync(filePath, data.join('\n'), {
+    encoding: 'utf8'
+  });
+}
+
+const DEFAULT_FONTS_CONFIG_ENV = {
+  'FONTCONFIG_FILE': '/code/.fonts.conf'
+};
+
+async function generateFontsConfAndEnv(baseDir, codeUri, appendContet) {
+  const absCodeUri = path.resolve(baseDir, codeUri);
+  const fontsDir = path.join(absCodeUri, 'fonts');
+
+  if (!await fs.pathExists(fontsDir) || !await isNotEmptyDir(fontsDir)) { return {}; }
+
+  const fontsConfPath = path.join(absCodeUri, '.fonts.conf');
+
+  if (!await fs.pathExists(fontsConfPath)) {
+    const sourcePath = path.resolve(__dirname, './utils/fonts/fonts.conf');
+    await fs.copyFile(sourcePath, fontsConfPath);
+  }
+
+  if (appendContet) {
+    writeFileToLine(fontsConfPath, appendContet, 29);
+  }
+
+  return DEFAULT_FONTS_CONFIG_ENV;
+}
+
 async function makeFunction(baseDir, {
   serviceName,
   functionName,
@@ -1021,6 +1062,17 @@ async function makeFunction(baseDir, {
     if (codeUri && codeUri.startsWith('oss://')) { // oss://my-bucket/function.zip
       code = extractOssCodeUri(codeUri);
     } else {
+
+      const fontsConfEnv = await generateFontsConfAndEnv(baseDir, codeUri);
+      if (!_.isEmpty(fontsConfEnv)) {
+
+        updateEnvironmentsInTpl({ serviceName, functionName, tplPath,
+          displayLog: false,
+          tpl: await getTpl(tplPath),
+          envs: DEFAULT_FONTS_CONFIG_ENV
+        });
+      }
+
       console.log(`\t\tWaiting for packaging function ${functionName} code...`);
       const { base64, count, compressedSize } = await zipCode(baseDir, codeUri, runtime, functionName);
 
