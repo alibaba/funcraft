@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::CR::Namespace",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CR::Namespace"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AutoCreate": {
+          "type": "boolean"
+        },
+        "DefaultVisibility": {
+          "type": "string"
+        },
+        "Namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Namespace"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CR::Namespace"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CR::Namespace"
+  },
+  "insertText": "${1:Namespace}:\n  Type: ALIYUN::CR::Namespace\n  Properties:\n    "
+}

@@ -1,0 +1,153 @@
+{
+  "$id": "ALIYUN::EHPC::Cluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::EHPC::Cluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ImageOwnerAlias": {
+          "type": "string"
+        },
+        "VolumeProtocol": {
+          "type": "string"
+        },
+        "EcsOrderComputeCount": {
+          "type": "integer"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "SecurityGroupName": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "boolean"
+        },
+        "ComputeSpotPriceLimit": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "VolumeId": {
+          "type": "string"
+        },
+        "VolumeType": {
+          "type": "string"
+        },
+        "DeployMode": {
+          "type": "string"
+        },
+        "PostInstallScript": {
+          "type": "array"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "AutoRenewPeriod": {
+          "type": "integer"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "RemoteDirectory": {
+          "type": "string"
+        },
+        "SccClusterId": {
+          "type": "string"
+        },
+        "EcsOrderLoginInstanceType": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "JobQueue": {
+          "type": "string"
+        },
+        "EcsOrderLoginCount": {
+          "type": "integer"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "SchedulerType": {
+          "type": "string"
+        },
+        "ComputeSpotStrategy": {
+          "type": "string"
+        },
+        "AccountType": {
+          "type": "string"
+        },
+        "EcsOrderManagerInstanceType": {
+          "type": "string"
+        },
+        "EhpcVersion": {
+          "type": "string"
+        },
+        "VolumeMountpoint": {
+          "type": "string"
+        },
+        "EcsOrderComputeInstanceType": {
+          "type": "string"
+        },
+        "HaEnable": {
+          "type": "boolean"
+        },
+        "OsTag": {
+          "type": "string"
+        },
+        "EcsChargeType": {
+          "type": "string"
+        },
+        "Application": {
+          "type": "array"
+        },
+        "PeriodUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "EcsOrderComputeCount",
+        "Name",
+        "VolumeId",
+        "EcsOrderLoginInstanceType",
+        "EcsOrderLoginCount",
+        "VSwitchId",
+        "EcsOrderManagerInstanceType",
+        "EhpcVersion",
+        "VolumeMountpoint",
+        "EcsOrderComputeInstanceType",
+        "OsTag"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EHPC::Cluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EHPC::Cluster"
+  },
+  "insertText": "${1:Cluster}:\n  Type: ALIYUN::EHPC::Cluster\n  Properties:\n    "
+}

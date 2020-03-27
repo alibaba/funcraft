@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::FC::Version",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::FC::Version"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "ServiceName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ServiceName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::Version"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::Version"
+  },
+  "insertText": "${1:Version}:\n  Type: ALIYUN::FC::Version\n  Properties:\n    "
+}

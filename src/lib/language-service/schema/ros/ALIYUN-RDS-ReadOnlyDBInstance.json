@@ -1,0 +1,78 @@
+{
+  "$id": "ALIYUN::RDS::ReadOnlyDBInstance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::ReadOnlyDBInstance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Category": {
+          "type": "string"
+        },
+        "EngineVersion": {
+          "type": "string"
+        },
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "VPCId": {
+          "type": "string"
+        },
+        "DBInstanceClass": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "PayType": {
+          "type": "string"
+        },
+        "DBInstanceStorageType": {
+          "type": "string"
+        },
+        "DBInstanceId": {
+          "type": "string"
+        },
+        "DBInstanceStorage": {
+          "type": "integer"
+        },
+        "DBInstanceDescription": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "EngineVersion",
+        "ZoneId",
+        "DBInstanceClass",
+        "DBInstanceId",
+        "DBInstanceStorage"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::ReadOnlyDBInstance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::ReadOnlyDBInstance"
+  },
+  "insertText": "${1:ReadOnlyDBInstance}:\n  Type: ALIYUN::RDS::ReadOnlyDBInstance\n  Properties:\n    "
+}

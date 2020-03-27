@@ -50,7 +50,15 @@
     "comma-spacing": 2,
     "key-spacing": 2,
     "comma-dangle": 2,
-    "space-infix-ops": 2
+    "space-infix-ops": 2,
+    "prefer-const": "off",
+    "no-var": "off",
+    "prefer-rest-params": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-this-alias": "off"
   },
   "env": {
     "es6": true,
@@ -73,5 +81,7 @@
       "jsx": true
     }
   },
-  "extends": "eslint:recommended"
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ]
 }

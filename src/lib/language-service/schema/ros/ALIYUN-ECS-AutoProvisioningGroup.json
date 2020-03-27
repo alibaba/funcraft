@@ -1,0 +1,93 @@
+{
+  "$id": "ALIYUN::ECS::AutoProvisioningGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::AutoProvisioningGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "TotalTargetCapacity": {
+          "type": "string"
+        },
+        "AutoProvisioningGroupName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ExcessCapacityTerminationPolicy": {
+          "type": "string"
+        },
+        "LaunchTemplateId": {
+          "type": "string"
+        },
+        "LaunchTemplateConfig": {
+          "type": "array"
+        },
+        "PayAsYouGoTargetCapacity": {
+          "type": "string"
+        },
+        "SpotInstanceInterruptionBehavior": {
+          "type": "string"
+        },
+        "AutoProvisioningGroupType": {
+          "type": "string"
+        },
+        "ValidUntil": {
+          "type": "string"
+        },
+        "TerminateInstancesWithExpiration": {
+          "type": "boolean"
+        },
+        "DefaultTargetCapacityType": {
+          "type": "string"
+        },
+        "SpotInstancePoolsToUseCount": {
+          "type": "integer"
+        },
+        "SpotTargetCapacity": {
+          "type": "string"
+        },
+        "LaunchTemplateVersion": {
+          "type": "string"
+        },
+        "ValidFrom": {
+          "type": "string"
+        },
+        "MaxSpotPrice": {
+          "type": "number"
+        },
+        "SpotAllocationStrategy": {
+          "type": "string"
+        },
+        "TerminateInstances": {
+          "type": "boolean"
+        },
+        "PayAsYouGoAllocationStrategy": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "TotalTargetCapacity",
+        "LaunchTemplateId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AutoProvisioningGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AutoProvisioningGroup"
+  },
+  "insertText": "${1:AutoProvisioningGroup}:\n  Type: ALIYUN::ECS::AutoProvisioningGroup\n  Properties:\n    "
+}

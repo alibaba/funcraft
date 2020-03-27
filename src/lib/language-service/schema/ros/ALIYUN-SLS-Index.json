@@ -1,0 +1,49 @@
+{
+  "$id": "ALIYUN::SLS::Index",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLS::Index"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LogstoreName": {
+          "type": "string"
+        },
+        "ProjectName": {
+          "type": "string"
+        },
+        "KeyIndices": {
+          "type": "array"
+        },
+        "FullTextIndex": {
+          "type": "object"
+        },
+        "LogReduce": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "LogstoreName",
+        "ProjectName",
+        "FullTextIndex"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLS::Index"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLS::Index"
+  },
+  "insertText": "${1:Index}:\n  Type: ALIYUN::SLS::Index\n  Properties:\n    "
+}

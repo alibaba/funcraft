@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::PVTZ::ZoneVpcBinder",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::PVTZ::ZoneVpcBinder"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Vpcs": {
+          "type": "array"
+        },
+        "ZoneId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Vpcs",
+        "ZoneId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::PVTZ::ZoneVpcBinder"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::PVTZ::ZoneVpcBinder"
+  },
+  "insertText": "${1:ZoneVpcBinder}:\n  Type: ALIYUN::PVTZ::ZoneVpcBinder\n  Properties:\n    "
+}

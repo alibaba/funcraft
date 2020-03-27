@@ -1,0 +1,47 @@
+{
+  "$id": "ALIYUN::ApiGateway::VpcAccessConfig",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::VpcAccessConfig"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "VpcId": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "Port": {
+          "type": "integer"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "VpcId",
+        "InstanceId",
+        "Port",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::VpcAccessConfig"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::VpcAccessConfig"
+  },
+  "insertText": "${1:VpcAccessConfig}:\n  Type: ALIYUN::ApiGateway::VpcAccessConfig\n  Properties:\n    "
+}

@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::ESS::ScalingGroupEnable",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::ScalingGroupEnable"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ScalingRuleArisExecuteVersion": {
+          "type": "integer"
+        },
+        "ScalingGroupId": {
+          "type": "string"
+        },
+        "ScalingRuleAris": {
+          "type": "array"
+        },
+        "RemoveInstanceIds": {
+          "type": "array"
+        },
+        "ScalingConfigurationId": {
+          "type": "string"
+        },
+        "InstanceIds": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "ScalingGroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScalingGroupEnable"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScalingGroupEnable"
+  },
+  "insertText": "${1:ScalingGroupEnable}:\n  Type: ALIYUN::ESS::ScalingGroupEnable\n  Properties:\n    "
+}

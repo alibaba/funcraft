@@ -1,0 +1,56 @@
+{
+  "$id": "ALIYUN::ECI::ImageCache",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECI::ImageCache"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "ImageRegistryCredential": {
+          "type": "array"
+        },
+        "ImageCacheName": {
+          "type": "string"
+        },
+        "Image": {
+          "type": "array"
+        },
+        "EipInstanceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SecurityGroupId",
+        "VSwitchId",
+        "ImageCacheName",
+        "Image"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECI::ImageCache"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECI::ImageCache"
+  },
+  "insertText": "${1:ImageCache}:\n  Type: ALIYUN::ECI::ImageCache\n  Properties:\n    "
+}

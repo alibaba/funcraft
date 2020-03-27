@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::POLARDB::DBClusterEndpointAddress",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::DBClusterEndpointAddress"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DBEndpointId": {
+          "type": "string"
+        },
+        "DBClusterId": {
+          "type": "string"
+        },
+        "ConnectionStringPrefix": {
+          "type": "string"
+        },
+        "NetType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DBEndpointId",
+        "DBClusterId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBClusterEndpointAddress"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBClusterEndpointAddress"
+  },
+  "insertText": "${1:DBClusterEndpointAddress}:\n  Type: ALIYUN::POLARDB::DBClusterEndpointAddress\n  Properties:\n    "
+}

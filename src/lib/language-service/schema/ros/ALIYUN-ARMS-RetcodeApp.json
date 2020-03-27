@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::ARMS::RetcodeApp",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ARMS::RetcodeApp"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RetcodeAppType": {
+          "type": "string"
+        },
+        "RetcodeAppName": {
+          "type": "string"
+        },
+        "RegionId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "RetcodeAppType",
+        "RetcodeAppName",
+        "RegionId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ARMS::RetcodeApp"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ARMS::RetcodeApp"
+  },
+  "insertText": "${1:RetcodeApp}:\n  Type: ALIYUN::ARMS::RetcodeApp\n  Properties:\n    "
+}

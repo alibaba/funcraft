@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::SAG::GrantCcnToCen",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SAG::GrantCcnToCen"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CenUid": {
+          "type": "string"
+        },
+        "CcnInstanceId": {
+          "type": "string"
+        },
+        "CenInstanceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "CenUid",
+        "CcnInstanceId",
+        "CenInstanceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SAG::GrantCcnToCen"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SAG::GrantCcnToCen"
+  },
+  "insertText": "${1:GrantCcnToCen}:\n  Type: ALIYUN::SAG::GrantCcnToCen\n  Properties:\n    "
+}

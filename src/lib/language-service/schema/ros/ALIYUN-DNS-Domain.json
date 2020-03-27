@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::DNS::Domain",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::DNS::Domain"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DomainName": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DomainName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DNS::Domain"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DNS::Domain"
+  },
+  "insertText": "${1:Domain}:\n  Type: ALIYUN::DNS::Domain\n  Properties:\n    "
+}

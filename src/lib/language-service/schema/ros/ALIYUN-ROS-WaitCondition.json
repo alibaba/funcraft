@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::ROS::WaitCondition",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ROS::WaitCondition"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Timeout": {
+          "type": "number"
+        },
+        "Count": {
+          "type": "number"
+        },
+        "Handle": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Timeout",
+        "Handle"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROS::WaitCondition"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROS::WaitCondition"
+  },
+  "insertText": "${1:WaitCondition}:\n  Type: ALIYUN::ROS::WaitCondition\n  Properties:\n    "
+}

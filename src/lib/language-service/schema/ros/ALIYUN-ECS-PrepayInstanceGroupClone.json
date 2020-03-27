@@ -1,0 +1,126 @@
+{
+  "$id": "ALIYUN::ECS::PrepayInstanceGroupClone",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::PrepayInstanceGroupClone"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PeriodType": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "SystemDiskDescription": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "string"
+        },
+        "SourceInstanceId": {
+          "type": "string"
+        },
+        "MaxAmount": {
+          "type": "integer"
+        },
+        "SystemDiskAutoSnapshotPolicyId": {
+          "type": "string"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "MinAmount": {
+          "type": "integer"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SystemDiskDiskName": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "AutoRenewPeriod": {
+          "type": "number"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "LaunchTemplateName": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "HpcClusterId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "LaunchTemplateId": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "EniMappings": {
+          "type": "array"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "DeploymentSetId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "LaunchTemplateVersion": {
+          "type": "string"
+        },
+        "PeriodUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PeriodType",
+        "SourceInstanceId",
+        "MaxAmount",
+        "MinAmount",
+        "Period"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::PrepayInstanceGroupClone"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::PrepayInstanceGroupClone"
+  },
+  "insertText": "${1:PrepayInstanceGroupClone}:\n  Type: ALIYUN::ECS::PrepayInstanceGroupClone\n  Properties:\n    "
+}

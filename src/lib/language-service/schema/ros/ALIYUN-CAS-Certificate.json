@@ -1,0 +1,49 @@
+{
+  "$id": "ALIYUN::CAS::Certificate",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CAS::Certificate"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SourceIp": {
+          "type": "string"
+        },
+        "Lang": {
+          "type": "string"
+        },
+        "Cert": {
+          "type": "string"
+        },
+        "Key": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Cert",
+        "Key",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CAS::Certificate"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CAS::Certificate"
+  },
+  "insertText": "${1:Certificate}:\n  Type: ALIYUN::CAS::Certificate\n  Properties:\n    "
+}

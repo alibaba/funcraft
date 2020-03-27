@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::NAS::AccessGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::NAS::AccessGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccessGroupType": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "AccessGroupName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccessGroupType",
+        "AccessGroupName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::NAS::AccessGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::NAS::AccessGroup"
+  },
+  "insertText": "${1:AccessGroup}:\n  Type: ALIYUN::NAS::AccessGroup\n  Properties:\n    "
+}

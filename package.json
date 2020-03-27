@@ -134,7 +134,8 @@
     "unzipper": "0.10.4",
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0",
-    "uuid-by-string": "^3.0.2"
+    "uuid-by-string": "^3.0.2",
+    "yaml-ast-parser": "0.0.43"
   },
   "files": [
     "lib",
@@ -142,10 +143,13 @@
     "templates"
   ],
   "devDependencies": {
+    "@types/fs-extra": "^8.1.0",
+    "@types/lodash": "^4.14.149",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "chai-fs": "^2.0.0",
     "copyfiles": "^2.2.0",
-    "eslint": "^4.3.0",
+    "eslint": "^6.8.0",
     "expect.js": "^0.3.1",
     "memorystream": "^0.3.1",
     "mocha": "^5.2.0",

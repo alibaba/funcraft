@@ -1,0 +1,61 @@
+{
+  "$id": "ALIYUN::OTS::Table",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::OTS::Table"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceName": {
+          "type": "string"
+        },
+        "TableName": {
+          "type": "string"
+        },
+        "TimeToLive": {
+          "type": "integer"
+        },
+        "MaxVersions": {
+          "type": "integer"
+        },
+        "SecondaryIndices": {
+          "type": "array"
+        },
+        "DeviationCellVersionInSec": {
+          "type": "integer"
+        },
+        "PrimaryKey": {
+          "type": "array"
+        },
+        "Columns": {
+          "type": "array"
+        },
+        "ReservedThroughput": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "InstanceName",
+        "TableName",
+        "PrimaryKey"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OTS::Table"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OTS::Table"
+  },
+  "insertText": "${1:Table}:\n  Type: ALIYUN::OTS::Table\n  Properties:\n    "
+}

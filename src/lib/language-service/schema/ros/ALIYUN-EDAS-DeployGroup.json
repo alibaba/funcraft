@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::EDAS::DeployGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::EDAS::DeployGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "AppId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GroupName",
+        "AppId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::DeployGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::DeployGroup"
+  },
+  "insertText": "${1:DeployGroup}:\n  Type: ALIYUN::EDAS::DeployGroup\n  Properties:\n    "
+}

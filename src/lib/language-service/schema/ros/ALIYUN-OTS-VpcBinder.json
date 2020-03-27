@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::OTS::VpcBinder",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::OTS::VpcBinder"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceName": {
+          "type": "string"
+        },
+        "Vpcs": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "InstanceName",
+        "Vpcs"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OTS::VpcBinder"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OTS::VpcBinder"
+  },
+  "insertText": "${1:VpcBinder}:\n  Type: ALIYUN::OTS::VpcBinder\n  Properties:\n    "
+}

@@ -1,0 +1,52 @@
+{
+  "$id": "ALIYUN::NAS::MountTarget",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::NAS::MountTarget"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Status": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "AccessGroupName": {
+          "type": "string"
+        },
+        "FileSystemId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "NetworkType",
+        "AccessGroupName",
+        "FileSystemId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::NAS::MountTarget"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::NAS::MountTarget"
+  },
+  "insertText": "${1:MountTarget}:\n  Type: ALIYUN::NAS::MountTarget\n  Properties:\n    "
+}

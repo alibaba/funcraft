@@ -1,0 +1,54 @@
+{
+  "$id": "ALIYUN::MarketPlace::Order",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::MarketPlace::Order"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ProductCode": {
+          "type": "string"
+        },
+        "Preference": {
+          "type": "object"
+        },
+        "SkuCode": {
+          "type": "string"
+        },
+        "PricingCycle": {
+          "type": "string"
+        },
+        "ChargeType": {
+          "type": "string"
+        },
+        "Quantity": {
+          "type": "number"
+        },
+        "Duration": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "ProductCode",
+        "SkuCode"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MarketPlace::Order"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MarketPlace::Order"
+  },
+  "insertText": "${1:Order}:\n  Type: ALIYUN::MarketPlace::Order\n  Properties:\n    "
+}

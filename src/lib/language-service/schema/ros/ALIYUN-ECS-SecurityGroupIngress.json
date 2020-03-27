@@ -1,0 +1,69 @@
+{
+  "$id": "ALIYUN::ECS::SecurityGroupIngress",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::SecurityGroupIngress"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SourceGroupId": {
+          "type": "string"
+        },
+        "Policy": {
+          "type": "string"
+        },
+        "PortRange": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "SourcePortRange": {
+          "type": "string"
+        },
+        "Priority": {
+          "type": "integer"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "SourceCidrIp": {
+          "type": "string"
+        },
+        "SourceGroupOwnerId": {
+          "type": "string"
+        },
+        "IpProtocol": {
+          "type": "string"
+        },
+        "Ipv6SourceCidrIp": {
+          "type": "string"
+        },
+        "NicType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PortRange",
+        "IpProtocol"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SecurityGroupIngress"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SecurityGroupIngress"
+  },
+  "insertText": "${1:SecurityGroupIngress}:\n  Type: ALIYUN::ECS::SecurityGroupIngress\n  Properties:\n    "
+}

@@ -1,0 +1,35 @@
+{
+  "$id": "ALIYUN::SAG::ACL",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SAG::ACL"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SAG::ACL"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SAG::ACL"
+  },
+  "insertText": "${1:ACL}:\n  Type: ALIYUN::SAG::ACL\n  Properties:\n    "
+}

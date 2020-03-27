@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::RAM::UserToGroupAddition",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RAM::UserToGroupAddition"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "Users": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "GroupName",
+        "Users"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::UserToGroupAddition"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::UserToGroupAddition"
+  },
+  "insertText": "${1:UserToGroupAddition}:\n  Type: ALIYUN::RAM::UserToGroupAddition\n  Properties:\n    "
+}

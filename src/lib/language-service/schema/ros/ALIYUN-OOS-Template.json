@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::OOS::Template",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::OOS::Template"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Content": {
+          "type": "string"
+        },
+        "TemplateName": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "Content",
+        "TemplateName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OOS::Template"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OOS::Template"
+  },
+  "insertText": "${1:Template}:\n  Type: ALIYUN::OOS::Template\n  Properties:\n    "
+}

@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::ROCKETMQ::Group",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ROCKETMQ::Group"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupType": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "Remark": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "GroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROCKETMQ::Group"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROCKETMQ::Group"
+  },
+  "insertText": "${1:Group}:\n  Type: ALIYUN::ROCKETMQ::Group\n  Properties:\n    "
+}

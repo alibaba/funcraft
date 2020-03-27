@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::ECS::DeploymentSet",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::DeploymentSet"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "OnUnableToRedeployFailedInstance": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "DeploymentSetName": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::DeploymentSet"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::DeploymentSet"
+  },
+  "insertText": "${1:DeploymentSet}:\n  Type: ALIYUN::ECS::DeploymentSet\n  Properties:\n    "
+}

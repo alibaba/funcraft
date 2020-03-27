@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::ApiGateway::Authorization",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::Authorization"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "StageName": {
+          "type": "string"
+        },
+        "ApiIds": {
+          "type": "array"
+        },
+        "AppIds": {
+          "type": "array"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "StageName",
+        "ApiIds",
+        "AppIds",
+        "GroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Authorization"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Authorization"
+  },
+  "insertText": "${1:Authorization}:\n  Type: ALIYUN::ApiGateway::Authorization\n  Properties:\n    "
+}

@@ -1,0 +1,56 @@
+{
+  "$id": "ALIYUN::DNS::DomainRecord",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::DNS::DomainRecord"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RR": {
+          "type": "string"
+        },
+        "Line": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string"
+        },
+        "DomainName": {
+          "type": "string"
+        },
+        "Priority": {
+          "type": "integer"
+        },
+        "Value": {
+          "type": "string"
+        },
+        "TTL": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "RR",
+        "Type",
+        "DomainName",
+        "Value"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DNS::DomainRecord"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DNS::DomainRecord"
+  },
+  "insertText": "${1:DomainRecord}:\n  Type: ALIYUN::DNS::DomainRecord\n  Properties:\n    "
+}

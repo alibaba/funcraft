@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::ECS::NetworkInterfacePermission",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::NetworkInterfacePermission"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccountId": {
+          "type": "string"
+        },
+        "Permission": {
+          "type": "string"
+        },
+        "NetworkInterfaceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccountId",
+        "Permission",
+        "NetworkInterfaceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::NetworkInterfacePermission"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::NetworkInterfacePermission"
+  },
+  "insertText": "${1:NetworkInterfacePermission}:\n  Type: ALIYUN::ECS::NetworkInterfacePermission\n  Properties:\n    "
+}

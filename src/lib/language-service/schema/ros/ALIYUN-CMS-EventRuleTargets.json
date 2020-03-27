@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::CMS::EventRuleTargets",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CMS::EventRuleTargets"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ContactParameters": {
+          "type": "array"
+        },
+        "SlsParameters": {
+          "type": "array"
+        },
+        "WebhookParameters": {
+          "type": "array"
+        },
+        "FcParameters": {
+          "type": "array"
+        },
+        "RuleName": {
+          "type": "string"
+        },
+        "MnsParameters": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "RuleName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CMS::EventRuleTargets"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CMS::EventRuleTargets"
+  },
+  "insertText": "${1:EventRuleTargets}:\n  Type: ALIYUN::CMS::EventRuleTargets\n  Properties:\n    "
+}

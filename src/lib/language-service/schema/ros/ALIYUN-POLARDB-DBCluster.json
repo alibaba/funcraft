@@ -1,0 +1,83 @@
+{
+  "$id": "ALIYUN::POLARDB::DBCluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::DBCluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AutoRenewPeriod": {
+          "type": "integer"
+        },
+        "CloneDataPoint": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "RenewalStatus": {
+          "type": "string"
+        },
+        "DBClusterDescription": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "SourceResourceId": {
+          "type": "string"
+        },
+        "DBType": {
+          "type": "string"
+        },
+        "PayType": {
+          "type": "string"
+        },
+        "CreationOption": {
+          "type": "string"
+        },
+        "DBNodeClass": {
+          "type": "string"
+        },
+        "DBVersion": {
+          "type": "string"
+        },
+        "ClusterNetworkType": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "MaintainTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DBType",
+        "PayType",
+        "DBNodeClass",
+        "DBVersion"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBCluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBCluster"
+  },
+  "insertText": "${1:DBCluster}:\n  Type: ALIYUN::POLARDB::DBCluster\n  Properties:\n    "
+}

@@ -1,0 +1,53 @@
+{
+  "$id": "ALIYUN::ARMS::AlertContact",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ARMS::AlertContact"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ProxyUserId": {
+          "type": "string"
+        },
+        "Email": {
+          "type": "string"
+        },
+        "DingRobotWebhookUrl": {
+          "type": "string"
+        },
+        "PhoneNum": {
+          "type": "string"
+        },
+        "RegionId": {
+          "type": "string"
+        },
+        "SystemNoc": {
+          "type": "boolean"
+        },
+        "ContactName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ContactName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ARMS::AlertContact"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ARMS::AlertContact"
+  },
+  "insertText": "${1:AlertContact}:\n  Type: ALIYUN::ARMS::AlertContact\n  Properties:\n    "
+}

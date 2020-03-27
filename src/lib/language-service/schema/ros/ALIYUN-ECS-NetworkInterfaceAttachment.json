@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::ECS::NetworkInterfaceAttachment",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::NetworkInterfaceAttachment"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceId": {
+          "type": "string"
+        },
+        "NetworkInterfaceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "NetworkInterfaceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::NetworkInterfaceAttachment"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::NetworkInterfaceAttachment"
+  },
+  "insertText": "${1:NetworkInterfaceAttachment}:\n  Type: ALIYUN::ECS::NetworkInterfaceAttachment\n  Properties:\n    "
+}

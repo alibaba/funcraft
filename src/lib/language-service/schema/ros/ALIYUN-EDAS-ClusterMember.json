@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::EDAS::ClusterMember",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::EDAS::ClusterMember"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ClusterId": {
+          "type": "string"
+        },
+        "InstanceIds": {
+          "type": "array"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ClusterId",
+        "InstanceIds",
+        "Password"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::ClusterMember"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::ClusterMember"
+  },
+  "insertText": "${1:ClusterMember}:\n  Type: ALIYUN::EDAS::ClusterMember\n  Properties:\n    "
+}

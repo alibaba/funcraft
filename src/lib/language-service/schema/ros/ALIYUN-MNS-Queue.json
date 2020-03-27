@@ -1,0 +1,53 @@
+{
+  "$id": "ALIYUN::MNS::Queue",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::MNS::Queue"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DelaySeconds": {
+          "type": "integer"
+        },
+        "PollingWaitSeconds": {
+          "type": "integer"
+        },
+        "MessageRetentionPeriod": {
+          "type": "integer"
+        },
+        "MaximumMessageSize": {
+          "type": "integer"
+        },
+        "VisibilityTimeout": {
+          "type": "integer"
+        },
+        "QueueName": {
+          "type": "string"
+        },
+        "LoggingEnabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "QueueName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MNS::Queue"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MNS::Queue"
+  },
+  "insertText": "${1:Queue}:\n  Type: ALIYUN::MNS::Queue\n  Properties:\n    "
+}

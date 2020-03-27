@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::PVTZ::Zone",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::PVTZ::Zone"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ZoneName": {
+          "type": "string"
+        },
+        "ProxyPattern": {
+          "type": "string"
+        },
+        "Remark": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ZoneName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::PVTZ::Zone"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::PVTZ::Zone"
+  },
+  "insertText": "${1:Zone}:\n  Type: ALIYUN::PVTZ::Zone\n  Properties:\n    "
+}

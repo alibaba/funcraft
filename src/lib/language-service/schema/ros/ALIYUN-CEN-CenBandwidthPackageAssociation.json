@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::CEN::CenBandwidthPackageAssociation",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CEN::CenBandwidthPackageAssociation"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CenId": {
+          "type": "string"
+        },
+        "CenBandwidthPackageId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "CenId",
+        "CenBandwidthPackageId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CEN::CenBandwidthPackageAssociation"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CEN::CenBandwidthPackageAssociation"
+  },
+  "insertText": "${1:CenBandwidthPackageAssociation}:\n  Type: ALIYUN::CEN::CenBandwidthPackageAssociation\n  Properties:\n    "
+}

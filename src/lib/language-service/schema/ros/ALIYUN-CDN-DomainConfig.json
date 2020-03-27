@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::CDN::DomainConfig",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CDN::DomainConfig"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Functions": {
+          "type": "string"
+        },
+        "DomainNames": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Functions",
+        "DomainNames"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CDN::DomainConfig"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CDN::DomainConfig"
+  },
+  "insertText": "${1:DomainConfig}:\n  Type: ALIYUN::CDN::DomainConfig\n  Properties:\n    "
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::ApiGateway::Group",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::Group"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GroupName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Group"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Group"
+  },
+  "insertText": "${1:Group}:\n  Type: ALIYUN::ApiGateway::Group\n  Properties:\n    "
+}

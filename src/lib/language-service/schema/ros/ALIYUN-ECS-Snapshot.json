@@ -1,0 +1,44 @@
+{
+  "$id": "ALIYUN::ECS::Snapshot",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::Snapshot"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "Timeout": {
+          "type": "integer"
+        },
+        "SnapshotName": {
+          "type": "string"
+        },
+        "DiskId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DiskId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Snapshot"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Snapshot"
+  },
+  "insertText": "${1:Snapshot}:\n  Type: ALIYUN::ECS::Snapshot\n  Properties:\n    "
+}

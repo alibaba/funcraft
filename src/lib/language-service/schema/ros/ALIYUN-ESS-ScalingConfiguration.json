@@ -1,0 +1,113 @@
+{
+  "$id": "ALIYUN::ESS::ScalingConfiguration",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::ScalingConfiguration"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ScalingConfigurationName": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "SystemDiskSize": {
+          "type": "integer"
+        },
+        "UserData": {
+          "type": "string"
+        },
+        "SystemDiskAutoSnapshotPolicyId": {
+          "type": "string"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "SpotPriceLimitForInstanceType": {
+          "type": "object"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SpotPriceLimit": {
+          "type": "number"
+        },
+        "TagList": {
+          "type": "array"
+        },
+        "InstanceTypes": {
+          "type": "array"
+        },
+        "InstanceType": {
+          "type": "string"
+        },
+        "SpotStrategy": {
+          "type": "string"
+        },
+        "PasswordInherit": {
+          "type": "boolean"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "IoOptimized": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "HpcClusterId": {
+          "type": "string"
+        },
+        "ScalingGroupId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "DeploymentSetId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ScalingGroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScalingConfiguration"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScalingConfiguration"
+  },
+  "insertText": "${1:ScalingConfiguration}:\n  Type: ALIYUN::ESS::ScalingConfiguration\n  Properties:\n    "
+}

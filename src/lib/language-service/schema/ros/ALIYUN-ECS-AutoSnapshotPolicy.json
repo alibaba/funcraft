@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::ECS::AutoSnapshotPolicy",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::AutoSnapshotPolicy"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DiskIds": {
+          "type": "array"
+        },
+        "TimePoints": {
+          "type": "array"
+        },
+        "RetentionDays": {
+          "type": "integer"
+        },
+        "RepeatWeekdays": {
+          "type": "array"
+        },
+        "AutoSnapshotPolicyName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DiskIds",
+        "TimePoints",
+        "RetentionDays",
+        "RepeatWeekdays"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AutoSnapshotPolicy"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AutoSnapshotPolicy"
+  },
+  "insertText": "${1:AutoSnapshotPolicy}:\n  Type: ALIYUN::ECS::AutoSnapshotPolicy\n  Properties:\n    "
+}

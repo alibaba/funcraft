@@ -1,0 +1,114 @@
+{
+  "$id": "ALIYUN::RDS::DBInstance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::DBInstance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PeriodType": {
+          "type": "string"
+        },
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "DBInstanceNetType": {
+          "type": "string"
+        },
+        "PreferredBackupPeriod": {
+          "type": "array"
+        },
+        "SecurityIPList": {
+          "type": "string"
+        },
+        "DBInstanceStorage": {
+          "type": "integer"
+        },
+        "DBMappings": {
+          "type": "array"
+        },
+        "MultiAZ": {
+          "type": "boolean"
+        },
+        "Engine": {
+          "type": "string"
+        },
+        "DBInstanceDescription": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "object"
+        },
+        "EngineVersion": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "DBInstanceClass": {
+          "type": "string"
+        },
+        "AllocatePublicConnection": {
+          "type": "boolean"
+        },
+        "PreferredBackupTime": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "PayType": {
+          "type": "string"
+        },
+        "MasterUserPassword": {
+          "type": "string"
+        },
+        "MasterUserType": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "MasterUsername": {
+          "type": "string"
+        },
+        "ConnectionMode": {
+          "type": "string"
+        },
+        "BackupRetentionPeriod": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "SecurityIPList",
+        "DBInstanceStorage",
+        "Engine",
+        "EngineVersion",
+        "DBInstanceClass"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::DBInstance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::DBInstance"
+  },
+  "insertText": "${1:DBInstance}:\n  Type: ALIYUN::RDS::DBInstance\n  Properties:\n    "
+}

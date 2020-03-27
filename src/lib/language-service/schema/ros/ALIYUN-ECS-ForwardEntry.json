@@ -1,0 +1,55 @@
+{
+  "$id": "ALIYUN::ECS::ForwardEntry",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::ForwardEntry"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ExternalPort": {
+          "type": "string"
+        },
+        "ExternalIp": {
+          "type": "string"
+        },
+        "IpProtocol": {
+          "type": "string"
+        },
+        "InternalPort": {
+          "type": "string"
+        },
+        "InternalIp": {
+          "type": "string"
+        },
+        "ForwardTableId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ExternalPort",
+        "ExternalIp",
+        "IpProtocol",
+        "InternalPort",
+        "InternalIp",
+        "ForwardTableId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::ForwardEntry"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::ForwardEntry"
+  },
+  "insertText": "${1:ForwardEntry}:\n  Type: ALIYUN::ECS::ForwardEntry\n  Properties:\n    "
+}

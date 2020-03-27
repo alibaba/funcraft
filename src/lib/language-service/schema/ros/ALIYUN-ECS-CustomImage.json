@@ -1,0 +1,57 @@
+{
+  "$id": "ALIYUN::ECS::CustomImage",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::CustomImage"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ImageName": {
+          "type": "string"
+        },
+        "SnapshotId": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Platform": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "Architecture": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "Tag": {
+          "type": "array"
+        },
+        "DiskDeviceMapping": {
+          "type": "array"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::CustomImage"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::CustomImage"
+  },
+  "insertText": "${1:CustomImage}:\n  Type: ALIYUN::ECS::CustomImage\n  Properties:\n    "
+}

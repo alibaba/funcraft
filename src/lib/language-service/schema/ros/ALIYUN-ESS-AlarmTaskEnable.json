@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::ESS::AlarmTaskEnable",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::AlarmTaskEnable"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Enable": {
+          "type": "boolean"
+        },
+        "AlarmTaskId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Enable",
+        "AlarmTaskId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::AlarmTaskEnable"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::AlarmTaskEnable"
+  },
+  "insertText": "${1:AlarmTaskEnable}:\n  Type: ALIYUN::ESS::AlarmTaskEnable\n  Properties:\n    "
+}

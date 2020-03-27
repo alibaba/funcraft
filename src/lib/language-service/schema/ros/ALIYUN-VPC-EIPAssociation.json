@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::VPC::EIPAssociation",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::EIPAssociation"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "Mode": {
+          "type": "string"
+        },
+        "AllocationId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "AllocationId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::EIPAssociation"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::EIPAssociation"
+  },
+  "insertText": "${1:EIPAssociation}:\n  Type: ALIYUN::VPC::EIPAssociation\n  Properties:\n    "
+}

@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::CEN::CenInstanceAttachment",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CEN::CenInstanceAttachment"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ChildInstanceType": {
+          "type": "string"
+        },
+        "CenId": {
+          "type": "string"
+        },
+        "ChildInstanceOwnerId": {
+          "type": "integer"
+        },
+        "ChildInstanceId": {
+          "type": "string"
+        },
+        "ChildInstanceRegionId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ChildInstanceType",
+        "CenId",
+        "ChildInstanceId",
+        "ChildInstanceRegionId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CEN::CenInstanceAttachment"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CEN::CenInstanceAttachment"
+  },
+  "insertText": "${1:CenInstanceAttachment}:\n  Type: ALIYUN::CEN::CenInstanceAttachment\n  Properties:\n    "
+}

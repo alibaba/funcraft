@@ -1,0 +1,47 @@
+{
+  "$id": "ALIYUN::POLARDB::AccountPrivilege",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::AccountPrivilege"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccountPrivilege": {
+          "type": "string"
+        },
+        "DBClusterId": {
+          "type": "string"
+        },
+        "DBName": {
+          "type": "string"
+        },
+        "AccountName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccountPrivilege",
+        "DBClusterId",
+        "DBName",
+        "AccountName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::AccountPrivilege"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::AccountPrivilege"
+  },
+  "insertText": "${1:AccountPrivilege}:\n  Type: ALIYUN::POLARDB::AccountPrivilege\n  Properties:\n    "
+}

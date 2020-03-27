@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::BSS::WaitOrder",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::BSS::WaitOrder"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CancelOnDelete": {
+          "type": "boolean"
+        },
+        "OrderIds": {
+          "type": "array"
+        },
+        "WaitForOrderProduced": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "OrderIds"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::BSS::WaitOrder"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::BSS::WaitOrder"
+  },
+  "insertText": "${1:WaitOrder}:\n  Type: ALIYUN::BSS::WaitOrder\n  Properties:\n    "
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::MNS::Topic",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::MNS::Topic"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "MaximumMessageSize": {
+          "type": "integer"
+        },
+        "LoggingEnabled": {
+          "type": "boolean"
+        },
+        "TopicName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "TopicName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MNS::Topic"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MNS::Topic"
+  },
+  "insertText": "${1:Topic}:\n  Type: ALIYUN::MNS::Topic\n  Properties:\n    "
+}

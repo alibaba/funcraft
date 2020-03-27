@@ -1,0 +1,53 @@
+{
+  "$id": "ALIYUN::OOS::Execution",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::OOS::Execution"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ParentExecutionId": {
+          "type": "string"
+        },
+        "ResourceOptions": {
+          "type": "object"
+        },
+        "Parameters": {
+          "type": "object"
+        },
+        "SafetyCheck": {
+          "type": "string"
+        },
+        "Mode": {
+          "type": "string"
+        },
+        "TemplateName": {
+          "type": "string"
+        },
+        "TemplateVersion": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "TemplateName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OOS::Execution"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OOS::Execution"
+  },
+  "insertText": "${1:Execution}:\n  Type: ALIYUN::OOS::Execution\n  Properties:\n    "
+}

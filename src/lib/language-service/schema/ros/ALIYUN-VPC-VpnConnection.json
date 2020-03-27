@@ -1,0 +1,62 @@
+{
+  "$id": "ALIYUN::VPC::VpnConnection",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::VpnConnection"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LocalSubnet": {
+          "type": "string"
+        },
+        "EffectImmediately": {
+          "type": "boolean"
+        },
+        "RemoteSubnet": {
+          "type": "string"
+        },
+        "CustomerGatewayId": {
+          "type": "string"
+        },
+        "VpnGatewayId": {
+          "type": "string"
+        },
+        "IpsecConfig": {
+          "type": "object"
+        },
+        "HealthCheckConfig": {
+          "type": "object"
+        },
+        "IkeConfig": {
+          "type": "object"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "LocalSubnet",
+        "RemoteSubnet",
+        "CustomerGatewayId",
+        "VpnGatewayId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::VpnConnection"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::VpnConnection"
+  },
+  "insertText": "${1:VpnConnection}:\n  Type: ALIYUN::VPC::VpnConnection\n  Properties:\n    "
+}

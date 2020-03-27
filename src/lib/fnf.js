@@ -166,7 +166,7 @@ const generateResourceMap = (tpl = {}) => {
     serviceName,
     serviceRes,
     functionName,
-    functionRes,
+    functionRes
   ) => {
     const properties = functionRes.Properties || {};
     properties.ARN = `acs:fc:::services/${serviceName}/functions/${functionName}`;

@@ -1,0 +1,44 @@
+{
+  "$id": "ALIYUN::SLB::BackendServerAttachment",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::BackendServerAttachment"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "BackendServerList": {
+          "type": "array"
+        },
+        "LoadBalancerId": {
+          "type": "string"
+        },
+        "BackendServerWeightList": {
+          "type": "array"
+        },
+        "BackendServers": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "LoadBalancerId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::BackendServerAttachment"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::BackendServerAttachment"
+  },
+  "insertText": "${1:BackendServerAttachment}:\n  Type: ALIYUN::SLB::BackendServerAttachment\n  Properties:\n    "
+}

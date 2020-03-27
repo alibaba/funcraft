@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::ApiGateway::App",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::App"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "AppName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AppName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::App"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::App"
+  },
+  "insertText": "${1:App}:\n  Type: ALIYUN::ApiGateway::App\n  Properties:\n    "
+}

@@ -1,0 +1,54 @@
+{
+  "$id": "ALIYUN::ESS::LifecycleHook",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::LifecycleHook"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LifecycleHookName": {
+          "type": "string"
+        },
+        "NotificationArn": {
+          "type": "string"
+        },
+        "ScalingGroupId": {
+          "type": "string"
+        },
+        "LifecycleTransition": {
+          "type": "string"
+        },
+        "HeartbeatTimeout": {
+          "type": "integer"
+        },
+        "NotificationMetadata": {
+          "type": "string"
+        },
+        "DefaultResult": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ScalingGroupId",
+        "LifecycleTransition"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::LifecycleHook"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::LifecycleHook"
+  },
+  "insertText": "${1:LifecycleHook}:\n  Type: ALIYUN::ESS::LifecycleHook\n  Properties:\n    "
+}

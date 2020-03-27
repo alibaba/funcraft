@@ -1,0 +1,51 @@
+{
+  "$id": "ALIYUN::FC::Alias",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::FC::Alias"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "VersionId": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ServiceName": {
+          "type": "string"
+        },
+        "AdditionalVersion": {
+          "type": "string"
+        },
+        "AliasName": {
+          "type": "string"
+        },
+        "AdditionalWeight": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ServiceName",
+        "AliasName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::Alias"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::Alias"
+  },
+  "insertText": "${1:Alias}:\n  Type: ALIYUN::FC::Alias\n  Properties:\n    "
+}

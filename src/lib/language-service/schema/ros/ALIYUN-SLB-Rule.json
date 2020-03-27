@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::SLB::Rule",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::Rule"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ListenerPort": {
+          "type": "integer"
+        },
+        "RuleList": {
+          "type": "array"
+        },
+        "LoadBalancerId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ListenerPort",
+        "RuleList",
+        "LoadBalancerId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::Rule"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::Rule"
+  },
+  "insertText": "${1:Rule}:\n  Type: ALIYUN::SLB::Rule\n  Properties:\n    "
+}

@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::CMS::MonitorGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CMS::MonitorGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "ContactGroups": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GroupName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CMS::MonitorGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CMS::MonitorGroup"
+  },
+  "insertText": "${1:MonitorGroup}:\n  Type: ALIYUN::CMS::MonitorGroup\n  Properties:\n    "
+}

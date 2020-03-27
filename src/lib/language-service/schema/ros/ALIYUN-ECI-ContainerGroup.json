@@ -1,0 +1,89 @@
+{
+  "$id": "ALIYUN::ECI::ContainerGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECI::ContainerGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "HostAliase": {
+          "type": "array"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "SecurityContextSysctl": {
+          "type": "array"
+        },
+        "Memory": {
+          "type": "number"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "InitContainer": {
+          "type": "array"
+        },
+        "SlsEnable": {
+          "type": "boolean"
+        },
+        "Cpu": {
+          "type": "number"
+        },
+        "RestartPolicy": {
+          "type": "string"
+        },
+        "EipInstanceId": {
+          "type": "string"
+        },
+        "ContainerGroupName": {
+          "type": "string"
+        },
+        "Container": {
+          "type": "array"
+        },
+        "ImageSnapshotId": {
+          "type": "string"
+        },
+        "DnsConfig": {
+          "type": "object"
+        },
+        "Volume": {
+          "type": "array"
+        },
+        "ImageRegistryCredential": {
+          "type": "array"
+        },
+        "Tag": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "SecurityGroupId",
+        "VSwitchId",
+        "ContainerGroupName",
+        "Container"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECI::ContainerGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECI::ContainerGroup"
+  },
+  "insertText": "${1:ContainerGroup}:\n  Type: ALIYUN::ECI::ContainerGroup\n  Properties:\n    "
+}

@@ -1,0 +1,55 @@
+{
+  "$id": "ALIYUN::POLARDB::Account",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::Account"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccountDescription": {
+          "type": "string"
+        },
+        "AccountPrivilege": {
+          "type": "string"
+        },
+        "DBClusterId": {
+          "type": "string"
+        },
+        "DBName": {
+          "type": "string"
+        },
+        "AccountType": {
+          "type": "string"
+        },
+        "AccountName": {
+          "type": "string"
+        },
+        "AccountPassword": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DBClusterId",
+        "AccountName",
+        "AccountPassword"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::Account"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::Account"
+  },
+  "insertText": "${1:Account}:\n  Type: ALIYUN::POLARDB::Account\n  Properties:\n    "
+}

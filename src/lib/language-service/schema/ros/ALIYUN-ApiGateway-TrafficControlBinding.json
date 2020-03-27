@@ -1,0 +1,47 @@
+{
+  "$id": "ALIYUN::ApiGateway::TrafficControlBinding",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::TrafficControlBinding"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "StageName": {
+          "type": "string"
+        },
+        "ApiIds": {
+          "type": "array"
+        },
+        "TrafficControlId": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "StageName",
+        "ApiIds",
+        "TrafficControlId",
+        "GroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::TrafficControlBinding"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::TrafficControlBinding"
+  },
+  "insertText": "${1:TrafficControlBinding}:\n  Type: ALIYUN::ApiGateway::TrafficControlBinding\n  Properties:\n    "
+}

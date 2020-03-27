@@ -1,0 +1,47 @@
+{
+  "$id": "ALIYUN::OTS::Instance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::OTS::Instance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Network": {
+          "type": "string"
+        },
+        "ClusterType": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "InstanceName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OTS::Instance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::OTS::Instance"
+  },
+  "insertText": "${1:Instance}:\n  Type: ALIYUN::OTS::Instance\n  Properties:\n    "
+}

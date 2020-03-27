@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::RAM::Group",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RAM::Group"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "Policies": {
+          "type": "array"
+        },
+        "Comments": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GroupName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::Group"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::Group"
+  },
+  "insertText": "${1:Group}:\n  Type: ALIYUN::RAM::Group\n  Properties:\n    "
+}

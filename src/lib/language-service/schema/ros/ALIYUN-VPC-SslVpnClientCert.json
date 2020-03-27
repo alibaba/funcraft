@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::VPC::SslVpnClientCert",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::SslVpnClientCert"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SslVpnServerId": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SslVpnServerId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::SslVpnClientCert"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::SslVpnClientCert"
+  },
+  "insertText": "${1:SslVpnClientCert}:\n  Type: ALIYUN::VPC::SslVpnClientCert\n  Properties:\n    "
+}

@@ -1,0 +1,53 @@
+{
+  "$id": "ALIYUN::SLB::Certificate",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::Certificate"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CertificateType": {
+          "type": "string"
+        },
+        "AliCloudCertificateName": {
+          "type": "string"
+        },
+        "PrivateKey": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "CertificateName": {
+          "type": "string"
+        },
+        "Certificate": {
+          "type": "string"
+        },
+        "AliCloudCertificateId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Certificate"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::Certificate"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::Certificate"
+  },
+  "insertText": "${1:Certificate}:\n  Type: ALIYUN::SLB::Certificate\n  Properties:\n    "
+}

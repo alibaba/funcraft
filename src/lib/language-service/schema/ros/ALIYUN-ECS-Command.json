@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::ECS::Command",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::Command"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "WorkingDir": {
+          "type": "string"
+        },
+        "CommandContent": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Timeout": {
+          "type": "integer"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Type"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Command"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Command"
+  },
+  "insertText": "${1:Command}:\n  Type: ALIYUN::ECS::Command\n  Properties:\n    "
+}

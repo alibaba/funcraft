@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::SLB::MasterSlaveServerGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::MasterSlaveServerGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LoadBalancerId": {
+          "type": "string"
+        },
+        "MasterSlaveServerGroupName": {
+          "type": "string"
+        },
+        "MasterSlaveBackendServers": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "LoadBalancerId",
+        "MasterSlaveBackendServers"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::MasterSlaveServerGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::MasterSlaveServerGroup"
+  },
+  "insertText": "${1:MasterSlaveServerGroup}:\n  Type: ALIYUN::SLB::MasterSlaveServerGroup\n  Properties:\n    "
+}

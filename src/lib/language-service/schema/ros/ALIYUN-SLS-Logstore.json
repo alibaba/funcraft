@@ -1,0 +1,60 @@
+{
+  "$id": "ALIYUN::SLS::Logstore",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLS::Logstore"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LogstoreName": {
+          "type": "string"
+        },
+        "PreserveStorage": {
+          "type": "boolean"
+        },
+        "ProjectName": {
+          "type": "string"
+        },
+        "AppendMeta": {
+          "type": "boolean"
+        },
+        "MaxSplitShard": {
+          "type": "integer"
+        },
+        "AutoSplit": {
+          "type": "boolean"
+        },
+        "EnableTracking": {
+          "type": "boolean"
+        },
+        "TTL": {
+          "type": "integer"
+        },
+        "ShardCount": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "LogstoreName",
+        "ProjectName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLS::Logstore"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLS::Logstore"
+  },
+  "insertText": "${1:Logstore}:\n  Type: ALIYUN::SLS::Logstore\n  Properties:\n    "
+}
