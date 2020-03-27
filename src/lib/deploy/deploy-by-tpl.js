@@ -703,7 +703,7 @@ async function partialDeployment(sourceName, tpl) {
   }
 
   if (nameArray.length === 2) {
-    
+
     const funcRes = definition.findServiceByCertainServiceAndFunctionName(tpl.Resources, _.first(nameArray), _.last(nameArray));
 
     return {
@@ -819,16 +819,9 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
     const { Type: resourceType = '' } = resourceRes;
     if (resourceType === definition.SERVICE_RESOURCE) {
 
-      await showResourcesChanges({
-        Resources: {
-          [resourceName]: resourceRes
-        }
-      }, remoteYml);
+      await showResourcesChanges({ Resources: { [resourceName]: resourceRes } }, remoteYml);
 
-      if (!context.assumeYes
-        && !await promptForConfirmContinue('Please confirm to continue.')) {
-        return;
-      }
+      if (!context.assumeYes && !await promptForConfirmContinue('Please confirm to continue.')) { return; }
 
       await deployTplService({ baseDir, tplPath,
         serviceName: resourceName,
@@ -846,10 +839,7 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
 
   await showResourcesChanges(tpl, remoteYml);
 
-  if (!context.assumeYes
-    && !await promptForConfirmContinue('Please confirm to continue.')) {
-    return;
-  }
+  if (!context.assumeYes && !await promptForConfirmContinue('Please confirm to continue.')) { return; }
 
   await deployLogs(tpl.Resources);
 
