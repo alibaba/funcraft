@@ -1,0 +1,92 @@
+{
+  "$id": "ALIYUN::ApiGateway::Api",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::Api"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RequestConfig": {
+          "type": "object"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ResultSample": {
+          "type": "string"
+        },
+        "ApiName": {
+          "type": "string"
+        },
+        "ResultType": {
+          "type": "string"
+        },
+        "FailResultSample": {
+          "type": "string"
+        },
+        "ErrorCodeSamples": {
+          "type": "array"
+        },
+        "ServiceParametersMap": {
+          "type": "array"
+        },
+        "GroupId": {
+          "type": "string"
+        },
+        "RequestParameters": {
+          "type": "array"
+        },
+        "AppCodeAuthType": {
+          "type": "string"
+        },
+        "ServiceConfig": {
+          "type": "object"
+        },
+        "ConstParameters": {
+          "type": "array"
+        },
+        "SystemParameters": {
+          "type": "array"
+        },
+        "OpenIdConnectConfig": {
+          "type": "object"
+        },
+        "Visibility": {
+          "type": "string"
+        },
+        "ServiceParameters": {
+          "type": "array"
+        },
+        "AuthType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "RequestConfig",
+        "ResultSample",
+        "ApiName",
+        "ResultType",
+        "GroupId",
+        "ServiceConfig",
+        "Visibility"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Api"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Api"
+  },
+  "insertText": "${1:Api}:\n  Type: ALIYUN::ApiGateway::Api\n  Properties:\n    "
+}

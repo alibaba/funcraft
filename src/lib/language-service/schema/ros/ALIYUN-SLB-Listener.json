@@ -1,0 +1,90 @@
+{
+  "$id": "ALIYUN::SLB::Listener",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::Listener"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RequestTimeout": {
+          "type": "integer"
+        },
+        "ListenerPort": {
+          "type": "integer"
+        },
+        "VServerGroupId": {
+          "type": "string"
+        },
+        "CACertificateId": {
+          "type": "string"
+        },
+        "Scheduler": {
+          "type": "string"
+        },
+        "AclId": {
+          "type": "string"
+        },
+        "HealthCheck": {
+          "type": "object"
+        },
+        "IdleTimeout": {
+          "type": "integer"
+        },
+        "LoadBalancerId": {
+          "type": "string"
+        },
+        "BackendServerPort": {
+          "type": "integer"
+        },
+        "Persistence": {
+          "type": "object"
+        },
+        "AclStatus": {
+          "type": "string"
+        },
+        "Bandwidth": {
+          "type": "integer"
+        },
+        "MasterSlaveServerGroupId": {
+          "type": "string"
+        },
+        "ServerCertificateId": {
+          "type": "string"
+        },
+        "HttpConfig": {
+          "type": "object"
+        },
+        "AclType": {
+          "type": "string"
+        },
+        "Protocol": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ListenerPort",
+        "LoadBalancerId",
+        "BackendServerPort",
+        "Bandwidth",
+        "Protocol"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::Listener"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::Listener"
+  },
+  "insertText": "${1:Listener}:\n  Type: ALIYUN::SLB::Listener\n  Properties:\n    "
+}

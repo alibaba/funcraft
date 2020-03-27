@@ -1,0 +1,49 @@
+{
+  "$id": "ALIYUN::ApiGateway::Deployment",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::Deployment"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "StageName": {
+          "type": "string"
+        },
+        "ApiId": {
+          "type": "string"
+        },
+        "HistoryVersion": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "StageName",
+        "ApiId",
+        "GroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Deployment"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Deployment"
+  },
+  "insertText": "${1:Deployment}:\n  Type: ALIYUN::ApiGateway::Deployment\n  Properties:\n    "
+}

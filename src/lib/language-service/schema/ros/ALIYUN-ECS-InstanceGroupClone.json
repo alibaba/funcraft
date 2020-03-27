@@ -1,0 +1,144 @@
+{
+  "$id": "ALIYUN::ECS::InstanceGroupClone",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::InstanceGroupClone"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "SystemDiskDescription": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "string"
+        },
+        "Ipv6Addresses": {
+          "type": "array"
+        },
+        "SourceInstanceId": {
+          "type": "string"
+        },
+        "MaxAmount": {
+          "type": "integer"
+        },
+        "SystemDiskAutoSnapshotPolicyId": {
+          "type": "string"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "Ipv6AddressCount": {
+          "type": "integer"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SpotPriceLimit": {
+          "type": "string"
+        },
+        "SystemDiskDiskName": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "SpotStrategy": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "AutoRenewPeriod": {
+          "type": "number"
+        },
+        "BackendServerWeight": {
+          "type": "integer"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "LaunchTemplateName": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "HpcClusterId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "LaunchTemplateId": {
+          "type": "string"
+        },
+        "DeletionProtection": {
+          "type": "boolean"
+        },
+        "LoadBalancerIdToAttach": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "EniMappings": {
+          "type": "array"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "DeploymentSetId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "LaunchTemplateVersion": {
+          "type": "string"
+        },
+        "PeriodUnit": {
+          "type": "string"
+        },
+        "AutoReleaseTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceInstanceId",
+        "MaxAmount"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::InstanceGroupClone"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::InstanceGroupClone"
+  },
+  "insertText": "${1:InstanceGroupClone}:\n  Type: ALIYUN::ECS::InstanceGroupClone\n  Properties:\n    "
+}

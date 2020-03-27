@@ -1,0 +1,178 @@
+{
+  "$id": "ALIYUN::ECS::InstanceGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::InstanceGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DedicatedHostId": {
+          "type": "string"
+        },
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "SystemDiskSize": {
+          "type": "number"
+        },
+        "UserData": {
+          "type": "string"
+        },
+        "SystemDiskDescription": {
+          "type": "string"
+        },
+        "InstanceChargeType": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "string"
+        },
+        "Ipv6Addresses": {
+          "type": "array"
+        },
+        "MaxAmount": {
+          "type": "integer"
+        },
+        "SystemDiskAutoSnapshotPolicyId": {
+          "type": "string"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "SystemDiskPerformanceLevel": {
+          "type": "string"
+        },
+        "Ipv6AddressCount": {
+          "type": "integer"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SystemDiskDiskName": {
+          "type": "string"
+        },
+        "SpotPriceLimit": {
+          "type": "string"
+        },
+        "InstanceType": {
+          "type": "string"
+        },
+        "AllocatePublicIP": {
+          "type": "boolean"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "HostName": {
+          "type": "string"
+        },
+        "SpotStrategy": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "AutoRenewPeriod": {
+          "type": "number"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "LaunchTemplateName": {
+          "type": "string"
+        },
+        "IoOptimized": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "HpcClusterId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "LaunchTemplateId": {
+          "type": "string"
+        },
+        "DeletionProtection": {
+          "type": "boolean"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "EniMappings": {
+          "type": "array"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "DeploymentSetId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "LaunchTemplateVersion": {
+          "type": "string"
+        },
+        "PeriodUnit": {
+          "type": "string"
+        },
+        "AutoReleaseTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MaxAmount",
+        "ImageId",
+        "InstanceType"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::InstanceGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::InstanceGroup"
+  },
+  "insertText": "${1:InstanceGroup}:\n  Type: ALIYUN::ECS::InstanceGroup\n  Properties:\n    "
+}

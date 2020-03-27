@@ -1,0 +1,55 @@
+{
+  "$id": "ALIYUN::ACTIONTRAIL::Trail",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ACTIONTRAIL::Trail"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SlsProjectArn": {
+          "type": "string"
+        },
+        "RoleName": {
+          "type": "string"
+        },
+        "EventRW": {
+          "type": "string"
+        },
+        "OssKeyPrefix": {
+          "type": "string"
+        },
+        "OssBucketName": {
+          "type": "string"
+        },
+        "SlsWriteRoleArn": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "RoleName",
+        "OssBucketName",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ACTIONTRAIL::Trail"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ACTIONTRAIL::Trail"
+  },
+  "insertText": "${1:Trail}:\n  Type: ALIYUN::ACTIONTRAIL::Trail\n  Properties:\n    "
+}

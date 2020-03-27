@@ -1,0 +1,52 @@
+{
+  "$id": "ALIYUN::EDAS::Cluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::EDAS::Cluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LogicalRegionId": {
+          "type": "string"
+        },
+        "OversoldFactor": {
+          "type": "integer"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "ClusterName": {
+          "type": "string"
+        },
+        "NetworkMode": {
+          "type": "integer"
+        },
+        "ClusterType": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ClusterName",
+        "NetworkMode",
+        "ClusterType"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::Cluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::Cluster"
+  },
+  "insertText": "${1:Cluster}:\n  Type: ALIYUN::EDAS::Cluster\n  Properties:\n    "
+}

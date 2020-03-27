@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::KMS::Alias",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::KMS::Alias"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AliasName": {
+          "type": "string"
+        },
+        "KeyId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AliasName",
+        "KeyId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::KMS::Alias"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::KMS::Alias"
+  },
+  "insertText": "${1:Alias}:\n  Type: ALIYUN::KMS::Alias\n  Properties:\n    "
+}

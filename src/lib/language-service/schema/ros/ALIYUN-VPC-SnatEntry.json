@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::VPC::SnatEntry",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::SnatEntry"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SnatEntryName": {
+          "type": "string"
+        },
+        "SourceVSwitchIds": {
+          "type": "array"
+        },
+        "SnatIp": {
+          "type": "string"
+        },
+        "SnatTableId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SnatIp",
+        "SnatTableId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::SnatEntry"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::SnatEntry"
+  },
+  "insertText": "${1:SnatEntry}:\n  Type: ALIYUN::VPC::SnatEntry\n  Properties:\n    "
+}

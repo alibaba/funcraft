@@ -1,0 +1,47 @@
+{
+  "$id": "ALIYUN::SLB::DomainExtension",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::DomainExtension"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ListenerPort": {
+          "type": "integer"
+        },
+        "ServerCertificateId": {
+          "type": "string"
+        },
+        "LoadBalancerId": {
+          "type": "string"
+        },
+        "Domain": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ListenerPort",
+        "ServerCertificateId",
+        "LoadBalancerId",
+        "Domain"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::DomainExtension"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::DomainExtension"
+  },
+  "insertText": "${1:DomainExtension}:\n  Type: ALIYUN::SLB::DomainExtension\n  Properties:\n    "
+}

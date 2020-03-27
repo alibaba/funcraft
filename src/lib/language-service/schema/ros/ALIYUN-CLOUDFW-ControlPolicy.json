@@ -1,0 +1,83 @@
+{
+  "$id": "ALIYUN::CLOUDFW::ControlPolicy",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CLOUDFW::ControlPolicy"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Destination": {
+          "type": "string"
+        },
+        "ApplicationName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "SourceType": {
+          "type": "string"
+        },
+        "DestPort": {
+          "type": "string"
+        },
+        "AclAction": {
+          "type": "string"
+        },
+        "DestinationType": {
+          "type": "string"
+        },
+        "Direction": {
+          "type": "string"
+        },
+        "Source": {
+          "type": "string"
+        },
+        "DestPortType": {
+          "type": "string"
+        },
+        "Proto": {
+          "type": "string"
+        },
+        "RegionId": {
+          "type": "string"
+        },
+        "NewOrder": {
+          "type": "integer"
+        },
+        "DestPortGroup": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Destination",
+        "ApplicationName",
+        "Description",
+        "SourceType",
+        "AclAction",
+        "DestinationType",
+        "Direction",
+        "Source",
+        "Proto",
+        "NewOrder"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CLOUDFW::ControlPolicy"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CLOUDFW::ControlPolicy"
+  },
+  "insertText": "${1:ControlPolicy}:\n  Type: ALIYUN::CLOUDFW::ControlPolicy\n  Properties:\n    "
+}

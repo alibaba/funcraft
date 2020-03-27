@@ -1,0 +1,54 @@
+{
+  "$id": "ALIYUN::CDN::Domain",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CDN::Domain"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CheckUrl": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "Scope": {
+          "type": "string"
+        },
+        "DomainName": {
+          "type": "string"
+        },
+        "CdnType": {
+          "type": "string"
+        },
+        "TopLevelDomain": {
+          "type": "string"
+        },
+        "Sources": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DomainName",
+        "CdnType"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CDN::Domain"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CDN::Domain"
+  },
+  "insertText": "${1:Domain}:\n  Type: ALIYUN::CDN::Domain\n  Properties:\n    "
+}

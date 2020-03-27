@@ -1,0 +1,52 @@
+{
+  "$id": "ALIYUN::MNS::Subscription",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::MNS::Subscription"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Endpoint": {
+          "type": "string"
+        },
+        "NotifyStrategy": {
+          "type": "string"
+        },
+        "NotifyContentFormat": {
+          "type": "string"
+        },
+        "FilterTag": {
+          "type": "string"
+        },
+        "SubscriptionName": {
+          "type": "string"
+        },
+        "TopicName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Endpoint",
+        "SubscriptionName",
+        "TopicName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MNS::Subscription"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MNS::Subscription"
+  },
+  "insertText": "${1:Subscription}:\n  Type: ALIYUN::MNS::Subscription\n  Properties:\n    "
+}

@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::ECS::Invocation",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::Invocation"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Timed": {
+          "type": "boolean"
+        },
+        "Frequency": {
+          "type": "string"
+        },
+        "CommandId": {
+          "type": "string"
+        },
+        "InstanceIds": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "CommandId",
+        "InstanceIds"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Invocation"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Invocation"
+  },
+  "insertText": "${1:Invocation}:\n  Type: ALIYUN::ECS::Invocation\n  Properties:\n    "
+}

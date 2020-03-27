@@ -1,0 +1,53 @@
+{
+  "$id": "ALIYUN::FC::Service",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::FC::Service"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Role": {
+          "type": "string"
+        },
+        "InternetAccess": {
+          "type": "boolean"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "VpcConfig": {
+          "type": "object"
+        },
+        "ServiceName": {
+          "type": "string"
+        },
+        "NasConfig": {
+          "type": "object"
+        },
+        "LogConfig": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "ServiceName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::Service"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::Service"
+  },
+  "insertText": "${1:Service}:\n  Type: ALIYUN::FC::Service\n  Properties:\n    "
+}

@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::ECS::HpcCluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::HpcCluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::HpcCluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::HpcCluster"
+  },
+  "insertText": "${1:HpcCluster}:\n  Type: ALIYUN::ECS::HpcCluster\n  Properties:\n    "
+}

@@ -1,0 +1,75 @@
+{
+  "$id": "ALIYUN::DTS::SynchronizationJob",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::DTS::SynchronizationJob"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SynchronizationObjects": {
+          "type": "array"
+        },
+        "Period": {
+          "type": "string"
+        },
+        "PayType": {
+          "type": "string"
+        },
+        "Topology": {
+          "type": "string"
+        },
+        "SourceRegion": {
+          "type": "string"
+        },
+        "DataInitialization": {
+          "type": "boolean"
+        },
+        "DestinationEndpoint": {
+          "type": "object"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "SourceEndpoint": {
+          "type": "object"
+        },
+        "UsedTime": {
+          "type": "integer"
+        },
+        "StructureInitialization": {
+          "type": "boolean"
+        },
+        "SynchronizationJobClass": {
+          "type": "string"
+        },
+        "DestRegion": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceRegion",
+        "DestinationEndpoint",
+        "SourceEndpoint",
+        "SynchronizationJobClass",
+        "DestRegion"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DTS::SynchronizationJob"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DTS::SynchronizationJob"
+  },
+  "insertText": "${1:SynchronizationJob}:\n  Type: ALIYUN::DTS::SynchronizationJob\n  Properties:\n    "
+}

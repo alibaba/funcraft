@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::EDAS::UserDefineRegion",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::EDAS::UserDefineRegion"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "RegionName": {
+          "type": "string"
+        },
+        "RegionTag": {
+          "type": "string"
+        },
+        "DebugEnable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "RegionName",
+        "RegionTag"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::UserDefineRegion"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::UserDefineRegion"
+  },
+  "insertText": "${1:UserDefineRegion}:\n  Type: ALIYUN::EDAS::UserDefineRegion\n  Properties:\n    "
+}

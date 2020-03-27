@@ -1,0 +1,60 @@
+{
+  "$id": "ALIYUN::ESS::ScheduledTask",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::ScheduledTask"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "LaunchTime": {
+          "type": "string"
+        },
+        "RecurrenceType": {
+          "type": "string"
+        },
+        "ScheduledTaskName": {
+          "type": "string"
+        },
+        "ScheduledAction": {
+          "type": "string"
+        },
+        "RecurrenceEndTime": {
+          "type": "string"
+        },
+        "RecurrenceValue": {
+          "type": "string"
+        },
+        "TaskEnabled": {
+          "type": "boolean"
+        },
+        "LaunchExpirationTime": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "LaunchTime",
+        "ScheduledAction"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScheduledTask"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScheduledTask"
+  },
+  "insertText": "${1:ScheduledTask}:\n  Type: ALIYUN::ESS::ScheduledTask\n  Properties:\n    "
+}

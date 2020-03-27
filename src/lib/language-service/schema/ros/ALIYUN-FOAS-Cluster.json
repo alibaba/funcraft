@@ -1,0 +1,53 @@
+{
+  "$id": "ALIYUN::FOAS::Cluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::FOAS::Cluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Order": {
+          "type": "object"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "OssBucket": {
+          "type": "string"
+        },
+        "ClusterName": {
+          "type": "string"
+        },
+        "OrderId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Description",
+        "VSwitchId",
+        "OssBucket",
+        "ClusterName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FOAS::Cluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FOAS::Cluster"
+  },
+  "insertText": "${1:Cluster}:\n  Type: ALIYUN::FOAS::Cluster\n  Properties:\n    "
+}

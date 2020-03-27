@@ -1,0 +1,38 @@
+{
+  "$id": "ALIYUN::ROCKETMQ::Instance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ROCKETMQ::Instance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceName": {
+          "type": "string"
+        },
+        "Remark": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROCKETMQ::Instance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROCKETMQ::Instance"
+  },
+  "insertText": "${1:Instance}:\n  Type: ALIYUN::ROCKETMQ::Instance\n  Properties:\n    "
+}

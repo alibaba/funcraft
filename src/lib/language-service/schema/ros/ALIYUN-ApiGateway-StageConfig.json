@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::ApiGateway::StageConfig",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::StageConfig"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Variables": {
+          "type": "object"
+        },
+        "StageName": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Variables",
+        "StageName",
+        "GroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::StageConfig"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::StageConfig"
+  },
+  "insertText": "${1:StageConfig}:\n  Type: ALIYUN::ApiGateway::StageConfig\n  Properties:\n    "
+}

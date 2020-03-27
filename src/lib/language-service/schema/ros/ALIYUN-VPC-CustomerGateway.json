@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::VPC::CustomerGateway",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::CustomerGateway"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "IpAddress": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "IpAddress"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::CustomerGateway"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::CustomerGateway"
+  },
+  "insertText": "${1:CustomerGateway}:\n  Type: ALIYUN::VPC::CustomerGateway\n  Properties:\n    "
+}

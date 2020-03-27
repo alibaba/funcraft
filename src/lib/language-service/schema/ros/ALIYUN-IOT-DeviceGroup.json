@@ -1,0 +1,44 @@
+{
+  "$id": "ALIYUN::IOT::DeviceGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::IOT::DeviceGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "IotInstanceId": {
+          "type": "string"
+        },
+        "SuperGroupId": {
+          "type": "string"
+        },
+        "GroupDesc": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GroupName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::IOT::DeviceGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::IOT::DeviceGroup"
+  },
+  "insertText": "${1:DeviceGroup}:\n  Type: ALIYUN::IOT::DeviceGroup\n  Properties:\n    "
+}

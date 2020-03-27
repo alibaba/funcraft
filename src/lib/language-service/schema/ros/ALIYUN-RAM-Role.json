@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::RAM::Role",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RAM::Role"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RoleName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Policies": {
+          "type": "array"
+        },
+        "AssumeRolePolicyDocument": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "RoleName",
+        "AssumeRolePolicyDocument"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::Role"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::Role"
+  },
+  "insertText": "${1:Role}:\n  Type: ALIYUN::RAM::Role\n  Properties:\n    "
+}

@@ -1,0 +1,63 @@
+{
+  "$id": "ALIYUN::REDIS::PrepayInstance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::REDIS::PrepayInstance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceName": {
+          "type": "string"
+        },
+        "EngineVersion": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "EvictionPolicy": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "Capacity": {
+          "type": "integer"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "InstanceClass": {
+          "type": "string"
+        },
+        "VpcPasswordFree": {
+          "type": "boolean"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::REDIS::PrepayInstance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::REDIS::PrepayInstance"
+  },
+  "insertText": "${1:PrepayInstance}:\n  Type: ALIYUN::REDIS::PrepayInstance\n  Properties:\n    "
+}

@@ -1,0 +1,55 @@
+{
+  "$id": "ALIYUN::ECS::BandwidthPackage",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::BandwidthPackage"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "BandwidthPackageName": {
+          "type": "string"
+        },
+        "IpCount": {
+          "type": "integer"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "Bandwidth": {
+          "type": "integer"
+        },
+        "NatGatewayId": {
+          "type": "string"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "IpCount",
+        "Bandwidth",
+        "NatGatewayId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::BandwidthPackage"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::BandwidthPackage"
+  },
+  "insertText": "${1:BandwidthPackage}:\n  Type: ALIYUN::ECS::BandwidthPackage\n  Properties:\n    "
+}

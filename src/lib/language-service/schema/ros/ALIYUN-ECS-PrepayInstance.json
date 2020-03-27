@@ -1,0 +1,148 @@
+{
+  "$id": "ALIYUN::ECS::PrepayInstance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::PrepayInstance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PeriodType": {
+          "type": "string"
+        },
+        "DedicatedHostId": {
+          "type": "string"
+        },
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "SystemDiskSize": {
+          "type": "number"
+        },
+        "UserData": {
+          "type": "string"
+        },
+        "SystemDiskDescription": {
+          "type": "string"
+        },
+        "InstanceChargeType": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "boolean"
+        },
+        "MaxAmount": {
+          "type": "integer"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "SystemDiskPerformanceLevel": {
+          "type": "string"
+        },
+        "MinAmount": {
+          "type": "integer"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SystemDiskDiskName": {
+          "type": "string"
+        },
+        "InstanceType": {
+          "type": "string"
+        },
+        "AllocatePublicIP": {
+          "type": "boolean"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "HostName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "AutoRenewPeriod": {
+          "type": "number"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "IoOptimized": {
+          "type": "boolean"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "HpcClusterId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "DeploymentSetId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "PeriodUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PeriodType",
+        "MaxAmount",
+        "MinAmount",
+        "ImageId",
+        "InstanceType",
+        "Period"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::PrepayInstance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::PrepayInstance"
+  },
+  "insertText": "${1:PrepayInstance}:\n  Type: ALIYUN::ECS::PrepayInstance\n  Properties:\n    "
+}

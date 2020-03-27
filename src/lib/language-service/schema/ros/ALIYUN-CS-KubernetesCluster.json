@@ -1,0 +1,169 @@
+{
+  "$id": "ALIYUN::CS::KubernetesCluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CS::KubernetesCluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "EndpointPublicAccess": {
+          "type": "boolean"
+        },
+        "WorkerPeriod": {
+          "type": "number"
+        },
+        "WorkerPeriodUnit": {
+          "type": "string"
+        },
+        "MasterSystemDiskCategory": {
+          "type": "string"
+        },
+        "Addons": {
+          "type": "array"
+        },
+        "MasterSystemDiskSize": {
+          "type": "number"
+        },
+        "WorkerSystemDiskCategory": {
+          "type": "string"
+        },
+        "NodePortRange": {
+          "type": "string"
+        },
+        "MasterCount": {
+          "type": "number"
+        },
+        "WorkerSystemDiskSize": {
+          "type": "number"
+        },
+        "SshFlags": {
+          "type": "boolean"
+        },
+        "MasterVSwitchIds": {
+          "type": "array"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Taint": {
+          "type": "array"
+        },
+        "MasterDataDisks": {
+          "type": "array"
+        },
+        "CloudMonitorFlags": {
+          "type": "boolean"
+        },
+        "ServiceCidr": {
+          "type": "string"
+        },
+        "WorkerAutoRenew": {
+          "type": "boolean"
+        },
+        "ProxyMode": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "DisableRollback": {
+          "type": "boolean"
+        },
+        "WorkerInstanceTypes": {
+          "type": "array"
+        },
+        "LoginPassword": {
+          "type": "string"
+        },
+        "MasterPeriod": {
+          "type": "number"
+        },
+        "KubernetesVersion": {
+          "type": "string"
+        },
+        "MasterInstanceChargeType": {
+          "type": "string"
+        },
+        "ContainerCidr": {
+          "type": "string"
+        },
+        "CpuPolicy": {
+          "type": "string"
+        },
+        "WorkerInstanceChargeType": {
+          "type": "string"
+        },
+        "KeyPair": {
+          "type": "string"
+        },
+        "MasterInstanceTypes": {
+          "type": "array"
+        },
+        "WorkerDataDisks": {
+          "type": "array"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "TimeoutMins": {
+          "type": "number"
+        },
+        "MasterPeriodUnit": {
+          "type": "string"
+        },
+        "MasterAutoRenewPeriod": {
+          "type": "number"
+        },
+        "WorkerDataDisk": {
+          "type": "boolean"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "NumOfNodes": {
+          "type": "number"
+        },
+        "MasterAutoRenew": {
+          "type": "boolean"
+        },
+        "WorkerAutoRenewPeriod": {
+          "type": "number"
+        },
+        "WorkerVSwitchIds": {
+          "type": "array"
+        },
+        "SnatEntry": {
+          "type": "boolean"
+        },
+        "MasterDataDisk": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "MasterVSwitchIds",
+        "Name",
+        "WorkerInstanceTypes",
+        "MasterInstanceTypes",
+        "VpcId",
+        "WorkerVSwitchIds"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CS::KubernetesCluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CS::KubernetesCluster"
+  },
+  "insertText": "${1:KubernetesCluster}:\n  Type: ALIYUN::CS::KubernetesCluster\n  Properties:\n    "
+}

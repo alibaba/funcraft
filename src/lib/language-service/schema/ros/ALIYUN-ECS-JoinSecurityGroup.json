@@ -1,0 +1,44 @@
+{
+  "$id": "ALIYUN::ECS::JoinSecurityGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::JoinSecurityGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "NetworkInterfaceList": {
+          "type": "array"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "InstanceIdList": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "SecurityGroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::JoinSecurityGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::JoinSecurityGroup"
+  },
+  "insertText": "${1:JoinSecurityGroup}:\n  Type: ALIYUN::ECS::JoinSecurityGroup\n  Properties:\n    "
+}

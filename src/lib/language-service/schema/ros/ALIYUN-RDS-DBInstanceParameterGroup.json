@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::RDS::DBInstanceParameterGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::DBInstanceParameterGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Parameters": {
+          "type": "array"
+        },
+        "DBInstanceId": {
+          "type": "string"
+        },
+        "Forcerestart": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Parameters",
+        "DBInstanceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::DBInstanceParameterGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::DBInstanceParameterGroup"
+  },
+  "insertText": "${1:DBInstanceParameterGroup}:\n  Type: ALIYUN::RDS::DBInstanceParameterGroup\n  Properties:\n    "
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::KMS::Key",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::KMS::Key"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "PendingWindowInDays": {
+          "type": "integer"
+        },
+        "KeyUsage": {
+          "type": "string"
+        },
+        "Enable": {
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::KMS::Key"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::KMS::Key"
+  },
+  "insertText": "${1:Key}:\n  Type: ALIYUN::KMS::Key\n  Properties:\n    "
+}

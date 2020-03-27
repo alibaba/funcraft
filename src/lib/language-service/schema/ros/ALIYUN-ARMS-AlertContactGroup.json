@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::ARMS::AlertContactGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ARMS::AlertContactGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ProxyUserId": {
+          "type": "string"
+        },
+        "ContactGroupName": {
+          "type": "string"
+        },
+        "RegionId": {
+          "type": "string"
+        },
+        "ContactIds": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "ContactGroupName",
+        "ContactIds"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ARMS::AlertContactGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ARMS::AlertContactGroup"
+  },
+  "insertText": "${1:AlertContactGroup}:\n  Type: ALIYUN::ARMS::AlertContactGroup\n  Properties:\n    "
+}

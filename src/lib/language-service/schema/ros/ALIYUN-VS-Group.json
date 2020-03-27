@@ -1,0 +1,70 @@
+{
+  "$id": "ALIYUN::VS::Group",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VS::Group"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "App": {
+          "type": "string"
+        },
+        "InProtocol": {
+          "type": "string"
+        },
+        "Callback": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "PlayDomain": {
+          "type": "string"
+        },
+        "Enabled": {
+          "type": "boolean"
+        },
+        "Region": {
+          "type": "string"
+        },
+        "PushDomain": {
+          "type": "string"
+        },
+        "LazyPull": {
+          "type": "boolean"
+        },
+        "OutProtocol": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InProtocol",
+        "PlayDomain",
+        "Region",
+        "PushDomain",
+        "OutProtocol",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VS::Group"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VS::Group"
+  },
+  "insertText": "${1:Group}:\n  Type: ALIYUN::VS::Group\n  Properties:\n    "
+}

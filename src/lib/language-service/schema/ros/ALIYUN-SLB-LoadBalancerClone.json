@@ -1,0 +1,56 @@
+{
+  "$id": "ALIYUN::SLB::LoadBalancerClone",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::LoadBalancerClone"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "LoadBalancerName": {
+          "type": "string"
+        },
+        "SourceLoadBalancerId": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "TagsPolicy": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "BackendServers": {
+          "type": "array"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "BackendServersPolicy": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceLoadBalancerId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::LoadBalancerClone"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::LoadBalancerClone"
+  },
+  "insertText": "${1:LoadBalancerClone}:\n  Type: ALIYUN::SLB::LoadBalancerClone\n  Properties:\n    "
+}

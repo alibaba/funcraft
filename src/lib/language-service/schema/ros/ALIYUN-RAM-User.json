@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::RAM::User",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RAM::User"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Policies": {
+          "type": "array"
+        },
+        "Groups": {
+          "type": "array"
+        },
+        "DisplayName": {
+          "type": "string"
+        },
+        "LoginProfile": {
+          "type": "object"
+        },
+        "MobilePhone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "UserName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::User"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::User"
+  },
+  "insertText": "${1:User}:\n  Type: ALIYUN::RAM::User\n  Properties:\n    "
+}

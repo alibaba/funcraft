@@ -1,0 +1,122 @@
+{
+  "$id": "ALIYUN::ECS::LaunchTemplate",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::LaunchTemplate"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "SystemDiskSize": {
+          "type": "number"
+        },
+        "UserData": {
+          "type": "string"
+        },
+        "SystemDiskDescription": {
+          "type": "string"
+        },
+        "TemplateTags": {
+          "type": "array"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "NetworkInterfaces": {
+          "type": "array"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SystemDiskDiskName": {
+          "type": "string"
+        },
+        "SpotPriceLimit": {
+          "type": "string"
+        },
+        "InstanceType": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "HostName": {
+          "type": "string"
+        },
+        "SpotStrategy": {
+          "type": "string"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "LaunchTemplateName": {
+          "type": "string"
+        },
+        "IoOptimized": {
+          "type": "string"
+        },
+        "VersionDescription": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "SecurityEnhancementStrategy": {
+          "type": "string"
+        },
+        "AutoReleaseTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "LaunchTemplateName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::LaunchTemplate"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::LaunchTemplate"
+  },
+  "insertText": "${1:LaunchTemplate}:\n  Type: ALIYUN::ECS::LaunchTemplate\n  Properties:\n    "
+}

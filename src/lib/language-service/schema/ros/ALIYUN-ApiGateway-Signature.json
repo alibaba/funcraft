@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::ApiGateway::Signature",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::Signature"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SignatureSecret": {
+          "type": "string"
+        },
+        "SignatureName": {
+          "type": "string"
+        },
+        "SignatureKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SignatureSecret",
+        "SignatureName",
+        "SignatureKey"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Signature"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::Signature"
+  },
+  "insertText": "${1:Signature}:\n  Type: ALIYUN::ApiGateway::Signature\n  Properties:\n    "
+}

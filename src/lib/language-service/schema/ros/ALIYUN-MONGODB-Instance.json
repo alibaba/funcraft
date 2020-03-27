@@ -1,0 +1,105 @@
+{
+  "$id": "ALIYUN::MONGODB::Instance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::MONGODB::Instance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CouponNo": {
+          "type": "string"
+        },
+        "BusinessInfo": {
+          "type": "string"
+        },
+        "EngineVersion": {
+          "type": "string"
+        },
+        "ReadonlyReplicas": {
+          "type": "integer"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "ReplicationFactor": {
+          "type": "integer"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "DBInstanceClass": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "boolean"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "SecurityIPArray": {
+          "type": "string"
+        },
+        "BackupId": {
+          "type": "string"
+        },
+        "VpcPasswordFree": {
+          "type": "boolean"
+        },
+        "StorageEngine": {
+          "type": "string"
+        },
+        "AccountPassword": {
+          "type": "string"
+        },
+        "RestoreTime": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "ChargeType": {
+          "type": "string"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "DBInstanceStorage": {
+          "type": "integer"
+        },
+        "DatabaseNames": {
+          "type": "string"
+        },
+        "SrcDBInstanceId": {
+          "type": "string"
+        },
+        "DBInstanceDescription": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DBInstanceClass",
+        "DBInstanceStorage"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MONGODB::Instance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MONGODB::Instance"
+  },
+  "insertText": "${1:Instance}:\n  Type: ALIYUN::MONGODB::Instance\n  Properties:\n    "
+}

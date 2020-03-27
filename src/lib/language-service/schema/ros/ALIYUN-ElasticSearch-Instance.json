@@ -1,0 +1,68 @@
+{
+  "$id": "ALIYUN::ElasticSearch::Instance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ElasticSearch::Instance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "MasterNode": {
+          "type": "object"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "PrivateWhitelist": {
+          "type": "array"
+        },
+        "PublicWhitelist": {
+          "type": "array"
+        },
+        "Version": {
+          "type": "string"
+        },
+        "DataNode": {
+          "type": "object"
+        },
+        "InstanceChargeType": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "KibanaWhitelist": {
+          "type": "array"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Version",
+        "DataNode",
+        "VSwitchId",
+        "Password"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ElasticSearch::Instance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ElasticSearch::Instance"
+  },
+  "insertText": "${1:Instance}:\n  Type: ALIYUN::ElasticSearch::Instance\n  Properties:\n    "
+}

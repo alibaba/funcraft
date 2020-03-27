@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::ECS::SSHKeyPairAttachment",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::SSHKeyPairAttachment"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "KeyPairName": {
+          "type": "string"
+        },
+        "InstanceIds": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "KeyPairName",
+        "InstanceIds"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SSHKeyPairAttachment"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SSHKeyPairAttachment"
+  },
+  "insertText": "${1:SSHKeyPairAttachment}:\n  Type: ALIYUN::ECS::SSHKeyPairAttachment\n  Properties:\n    "
+}

@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::VPC::RouteTableAssociation",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::RouteTableAssociation"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RouteTableId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "RouteTableId",
+        "VSwitchId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::RouteTableAssociation"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::RouteTableAssociation"
+  },
+  "insertText": "${1:RouteTableAssociation}:\n  Type: ALIYUN::VPC::RouteTableAssociation\n  Properties:\n    "
+}

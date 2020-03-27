@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::ECS::AssignPrivateIpAddresses",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::AssignPrivateIpAddresses"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SecondaryPrivateIpAddressCount": {
+          "type": "integer"
+        },
+        "PrivateIpAddresses": {
+          "type": "array"
+        },
+        "NetworkInterfaceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "NetworkInterfaceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AssignPrivateIpAddresses"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AssignPrivateIpAddresses"
+  },
+  "insertText": "${1:AssignPrivateIpAddresses}:\n  Type: ALIYUN::ECS::AssignPrivateIpAddresses\n  Properties:\n    "
+}

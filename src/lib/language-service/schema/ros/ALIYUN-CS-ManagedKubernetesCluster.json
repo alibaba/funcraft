@@ -1,0 +1,122 @@
+{
+  "$id": "ALIYUN::CS::ManagedKubernetesCluster",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CS::ManagedKubernetesCluster"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "EndpointPublicAccess": {
+          "type": "boolean"
+        },
+        "WorkerPeriod": {
+          "type": "number"
+        },
+        "WorkerPeriodUnit": {
+          "type": "string"
+        },
+        "Addons": {
+          "type": "array"
+        },
+        "WorkerSystemDiskCategory": {
+          "type": "string"
+        },
+        "WorkerSystemDiskSize": {
+          "type": "number"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Taint": {
+          "type": "array"
+        },
+        "CloudMonitorFlags": {
+          "type": "boolean"
+        },
+        "ServiceCidr": {
+          "type": "string"
+        },
+        "WorkerAutoRenew": {
+          "type": "boolean"
+        },
+        "ProxyMode": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "DisableRollback": {
+          "type": "boolean"
+        },
+        "WorkerInstanceTypes": {
+          "type": "array"
+        },
+        "LoginPassword": {
+          "type": "string"
+        },
+        "KubernetesVersion": {
+          "type": "string"
+        },
+        "ContainerCidr": {
+          "type": "string"
+        },
+        "KeyPair": {
+          "type": "string"
+        },
+        "WorkerInstanceChargeType": {
+          "type": "string"
+        },
+        "VSwitchIds": {
+          "type": "array"
+        },
+        "WorkerDataDisks": {
+          "type": "array"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "TimeoutMins": {
+          "type": "number"
+        },
+        "WorkerDataDisk": {
+          "type": "boolean"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "NumOfNodes": {
+          "type": "number"
+        },
+        "WorkerAutoRenewPeriod": {
+          "type": "number"
+        },
+        "SnatEntry": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "Name",
+        "WorkerInstanceTypes",
+        "VSwitchIds",
+        "VpcId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CS::ManagedKubernetesCluster"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CS::ManagedKubernetesCluster"
+  },
+  "insertText": "${1:ManagedKubernetesCluster}:\n  Type: ALIYUN::CS::ManagedKubernetesCluster\n  Properties:\n    "
+}

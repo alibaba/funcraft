@@ -1,0 +1,52 @@
+{
+  "$id": "ALIYUN::REDIS::Account",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::REDIS::Account"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccountDescription": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "AccountPrivilege": {
+          "type": "string"
+        },
+        "AccountType": {
+          "type": "string"
+        },
+        "AccountName": {
+          "type": "string"
+        },
+        "AccountPassword": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "AccountName",
+        "AccountPassword"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::REDIS::Account"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::REDIS::Account"
+  },
+  "insertText": "${1:Account}:\n  Type: ALIYUN::REDIS::Account\n  Properties:\n    "
+}

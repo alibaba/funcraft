@@ -1,0 +1,56 @@
+{
+  "$id": "ALIYUN::DATAHUB::Topic",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::DATAHUB::Topic"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Comment": {
+          "type": "string"
+        },
+        "RecordType": {
+          "type": "string"
+        },
+        "ProjectName": {
+          "type": "string"
+        },
+        "Lifecycle": {
+          "type": "integer"
+        },
+        "RecordSchema": {
+          "type": "string"
+        },
+        "ShardCount": {
+          "type": "integer"
+        },
+        "TopicName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Comment",
+        "RecordType",
+        "ProjectName",
+        "TopicName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DATAHUB::Topic"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DATAHUB::Topic"
+  },
+  "insertText": "${1:Topic}:\n  Type: ALIYUN::DATAHUB::Topic\n  Properties:\n    "
+}

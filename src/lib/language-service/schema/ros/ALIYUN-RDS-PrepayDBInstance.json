@@ -1,0 +1,125 @@
+{
+  "$id": "ALIYUN::RDS::PrepayDBInstance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::PrepayDBInstance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PeriodType": {
+          "type": "string"
+        },
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "DBInstanceNetType": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "boolean"
+        },
+        "PreferredBackupPeriod": {
+          "type": "array"
+        },
+        "DBInstanceStorage": {
+          "type": "integer"
+        },
+        "CommodityCode": {
+          "type": "string"
+        },
+        "DBMappings": {
+          "type": "array"
+        },
+        "MultiAZ": {
+          "type": "boolean"
+        },
+        "Engine": {
+          "type": "string"
+        },
+        "DBInstanceDescription": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "object"
+        },
+        "EngineVersion": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "DBInstanceClass": {
+          "type": "string"
+        },
+        "AllocatePublicConnection": {
+          "type": "boolean"
+        },
+        "PreferredBackupTime": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "Quantity": {
+          "type": "number"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "AutoPay": {
+          "type": "boolean"
+        },
+        "MasterUserPassword": {
+          "type": "string"
+        },
+        "CouponCode": {
+          "type": "string"
+        },
+        "MasterUserType": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "MasterUsername": {
+          "type": "string"
+        },
+        "ConnectionMode": {
+          "type": "string"
+        },
+        "BackupRetentionPeriod": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "PeriodType",
+        "DBInstanceStorage",
+        "CommodityCode",
+        "Engine",
+        "EngineVersion",
+        "DBInstanceClass",
+        "Period"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::PrepayDBInstance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::PrepayDBInstance"
+  },
+  "insertText": "${1:PrepayDBInstance}:\n  Type: ALIYUN::RDS::PrepayDBInstance\n  Properties:\n    "
+}

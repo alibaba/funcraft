@@ -1,0 +1,58 @@
+{
+  "$id": "ALIYUN::VPC::SslVpnServer",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::SslVpnServer"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Compress": {
+          "type": "boolean"
+        },
+        "LocalSubnet": {
+          "type": "string"
+        },
+        "ClientIpPool": {
+          "type": "string"
+        },
+        "Proto": {
+          "type": "string"
+        },
+        "VpnGatewayId": {
+          "type": "string"
+        },
+        "Port": {
+          "type": "integer"
+        },
+        "Cipher": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "LocalSubnet",
+        "ClientIpPool",
+        "VpnGatewayId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::SslVpnServer"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::SslVpnServer"
+  },
+  "insertText": "${1:SslVpnServer}:\n  Type: ALIYUN::VPC::SslVpnServer\n  Properties:\n    "
+}

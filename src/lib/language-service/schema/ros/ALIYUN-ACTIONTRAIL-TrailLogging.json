@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::ACTIONTRAIL::TrailLogging",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ACTIONTRAIL::TrailLogging"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Enable": {
+          "type": "boolean"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Enable",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ACTIONTRAIL::TrailLogging"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ACTIONTRAIL::TrailLogging"
+  },
+  "insertText": "${1:TrailLogging}:\n  Type: ALIYUN::ACTIONTRAIL::TrailLogging\n  Properties:\n    "
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::RDS::DBInstanceSecurityIps",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::DBInstanceSecurityIps"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DBInstanceIPArrayAttribute": {
+          "type": "string"
+        },
+        "DBInstanceId": {
+          "type": "string"
+        },
+        "DBInstanceIPArrayName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DBInstanceIPArrayAttribute",
+        "DBInstanceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::DBInstanceSecurityIps"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::DBInstanceSecurityIps"
+  },
+  "insertText": "${1:DBInstanceSecurityIps}:\n  Type: ALIYUN::RDS::DBInstanceSecurityIps\n  Properties:\n    "
+}

@@ -1,0 +1,92 @@
+{
+  "$id": "ALIYUN::ECS::InstanceClone",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::InstanceClone"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "BackendServerWeight": {
+          "type": "integer"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "InstanceChargeType": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "DeletionProtection": {
+          "type": "boolean"
+        },
+        "SourceInstanceId": {
+          "type": "string"
+        },
+        "LoadBalancerIdToAttach": {
+          "type": "string"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SpotPriceLimit": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "SpotStrategy": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceInstanceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::InstanceClone"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::InstanceClone"
+  },
+  "insertText": "${1:InstanceClone}:\n  Type: ALIYUN::ECS::InstanceClone\n  Properties:\n    "
+}

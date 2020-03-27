@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::SLB::BackendServerToVServerGroupAddition",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::BackendServerToVServerGroupAddition"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "VServerGroupId": {
+          "type": "string"
+        },
+        "BackendServers": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "VServerGroupId",
+        "BackendServers"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::BackendServerToVServerGroupAddition"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::BackendServerToVServerGroupAddition"
+  },
+  "insertText": "${1:BackendServerToVServerGroupAddition}:\n  Type: ALIYUN::SLB::BackendServerToVServerGroupAddition\n  Properties:\n    "
+}

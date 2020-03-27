@@ -1,0 +1,48 @@
+{
+  "$id": "ALIYUN::FC::CustomDomain",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::FC::CustomDomain"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ApiVersion": {
+          "type": "string"
+        },
+        "CertConfig": {
+          "type": "object"
+        },
+        "DomainName": {
+          "type": "string"
+        },
+        "RouteConfig": {
+          "type": "object"
+        },
+        "Protocol": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DomainName",
+        "Protocol"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::CustomDomain"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FC::CustomDomain"
+  },
+  "insertText": "${1:CustomDomain}:\n  Type: ALIYUN::FC::CustomDomain\n  Properties:\n    "
+}

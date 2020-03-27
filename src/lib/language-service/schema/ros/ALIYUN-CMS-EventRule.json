@@ -1,0 +1,51 @@
+{
+  "$id": "ALIYUN::CMS::EventRule",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CMS::EventRule"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "EventPattern": {
+          "type": "array"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "EventType": {
+          "type": "string"
+        },
+        "State": {
+          "type": "string"
+        },
+        "RuleName": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "EventPattern",
+        "RuleName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CMS::EventRule"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CMS::EventRule"
+  },
+  "insertText": "${1:EventRule}:\n  Type: ALIYUN::CMS::EventRule\n  Properties:\n    "
+}

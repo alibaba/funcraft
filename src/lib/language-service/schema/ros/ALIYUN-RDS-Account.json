@@ -1,0 +1,49 @@
+{
+  "$id": "ALIYUN::RDS::Account",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::Account"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccountDescription": {
+          "type": "string"
+        },
+        "DBInstanceId": {
+          "type": "string"
+        },
+        "AccountType": {
+          "type": "string"
+        },
+        "AccountPassword": {
+          "type": "string"
+        },
+        "AccountName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DBInstanceId",
+        "AccountPassword",
+        "AccountName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::Account"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::Account"
+  },
+  "insertText": "${1:Account}:\n  Type: ALIYUN::RDS::Account\n  Properties:\n    "
+}

@@ -1,0 +1,77 @@
+{
+  "$id": "ALIYUN::ECS::Disk",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::Disk"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "KMSKeyId": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "Encrypted": {
+          "type": "boolean"
+        },
+        "PerformanceLevel": {
+          "type": "string"
+        },
+        "Size": {
+          "type": "integer"
+        },
+        "DeleteAutoSnapshot": {
+          "type": "boolean"
+        },
+        "DiskCategory": {
+          "type": "string"
+        },
+        "AutoSnapshotPolicyId": {
+          "type": "string"
+        },
+        "StorageSetPartitionNumber": {
+          "type": "integer"
+        },
+        "DiskName": {
+          "type": "string"
+        },
+        "SnapshotId": {
+          "type": "string"
+        },
+        "StorageSetId": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "ZoneId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Disk"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Disk"
+  },
+  "insertText": "${1:Disk}:\n  Type: ALIYUN::ECS::Disk\n  Properties:\n    "
+}

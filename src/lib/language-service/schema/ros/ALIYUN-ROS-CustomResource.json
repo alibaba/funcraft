@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::ROS::CustomResource",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ROS::CustomResource"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ServiceToken": {
+          "type": "string"
+        },
+        "Parameters": {
+          "type": "object"
+        },
+        "Timeout": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "ServiceToken",
+        "Timeout"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROS::CustomResource"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROS::CustomResource"
+  },
+  "insertText": "${1:CustomResource}:\n  Type: ALIYUN::ROS::CustomResource\n  Properties:\n    "
+}

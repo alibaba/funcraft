@@ -1,0 +1,46 @@
+{
+  "$id": "ALIYUN::WAF::WafSwitch",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::WAF::WafSwitch"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceId": {
+          "type": "string"
+        },
+        "Region": {
+          "type": "string"
+        },
+        "ServiceOn": {
+          "type": "integer"
+        },
+        "Domain": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "ServiceOn",
+        "Domain"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::WAF::WafSwitch"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::WAF::WafSwitch"
+  },
+  "insertText": "${1:WafSwitch}:\n  Type: ALIYUN::WAF::WafSwitch\n  Properties:\n    "
+}

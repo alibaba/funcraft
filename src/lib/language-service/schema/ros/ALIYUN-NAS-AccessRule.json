@@ -1,0 +1,48 @@
+{
+  "$id": "ALIYUN::NAS::AccessRule",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::NAS::AccessRule"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "UserAccessType": {
+          "type": "string"
+        },
+        "Priority": {
+          "type": "integer"
+        },
+        "AccessGroupName": {
+          "type": "string"
+        },
+        "SourceCidrIp": {
+          "type": "string"
+        },
+        "RWAccessType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccessGroupName",
+        "SourceCidrIp"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::NAS::AccessRule"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::NAS::AccessRule"
+  },
+  "insertText": "${1:AccessRule}:\n  Type: ALIYUN::NAS::AccessRule\n  Properties:\n    "
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::SLB::AccessControl",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SLB::AccessControl"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AclEntrys": {
+          "type": "array"
+        },
+        "AddressIPVersion": {
+          "type": "string"
+        },
+        "AclName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AclName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::AccessControl"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SLB::AccessControl"
+  },
+  "insertText": "${1:AccessControl}:\n  Type: ALIYUN::SLB::AccessControl\n  Properties:\n    "
+}

@@ -1,0 +1,48 @@
+{
+  "$id": "ALIYUN::FNF::Flow",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::FNF::Flow"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "RequestId": {
+          "type": "string"
+        },
+        "Definition": {
+          "type": "string"
+        },
+        "RoleArn": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Definition",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FNF::Flow"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::FNF::Flow"
+  },
+  "insertText": "${1:Flow}:\n  Type: ALIYUN::FNF::Flow\n  Properties:\n    "
+}

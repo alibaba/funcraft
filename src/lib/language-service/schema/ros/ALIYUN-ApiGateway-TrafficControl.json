@@ -1,0 +1,55 @@
+{
+  "$id": "ALIYUN::ApiGateway::TrafficControl",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ApiGateway::TrafficControl"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "TrafficControlUnit": {
+          "type": "string"
+        },
+        "TrafficControlName": {
+          "type": "string"
+        },
+        "AppDefault": {
+          "type": "string"
+        },
+        "Special": {
+          "type": "array"
+        },
+        "UserDefault": {
+          "type": "string"
+        },
+        "ApiDefault": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "TrafficControlUnit",
+        "TrafficControlName",
+        "ApiDefault"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::TrafficControl"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ApiGateway::TrafficControl"
+  },
+  "insertText": "${1:TrafficControl}:\n  Type: ALIYUN::ApiGateway::TrafficControl\n  Properties:\n    "
+}

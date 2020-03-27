@@ -1,0 +1,56 @@
+{
+  "$id": "ALIYUN::VPC::CommonBandwidthPackage",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::CommonBandwidthPackage"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "Zone": {
+          "type": "string"
+        },
+        "ISP": {
+          "type": "string"
+        },
+        "Bandwidth": {
+          "type": "integer"
+        },
+        "Ratio": {
+          "type": "integer"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Bandwidth"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::CommonBandwidthPackage"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::CommonBandwidthPackage"
+  },
+  "insertText": "${1:CommonBandwidthPackage}:\n  Type: ALIYUN::VPC::CommonBandwidthPackage\n  Properties:\n    "
+}

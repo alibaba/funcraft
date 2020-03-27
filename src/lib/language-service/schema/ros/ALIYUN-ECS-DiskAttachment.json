@@ -1,0 +1,48 @@
+{
+  "$id": "ALIYUN::ECS::DiskAttachment",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::DiskAttachment"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceId": {
+          "type": "string"
+        },
+        "Device": {
+          "type": "string"
+        },
+        "DeleteWithInstance": {
+          "type": "boolean"
+        },
+        "DeleteAutoSnapshot": {
+          "type": "boolean"
+        },
+        "DiskId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "DiskId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::DiskAttachment"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::DiskAttachment"
+  },
+  "insertText": "${1:DiskAttachment}:\n  Type: ALIYUN::ECS::DiskAttachment\n  Properties:\n    "
+}

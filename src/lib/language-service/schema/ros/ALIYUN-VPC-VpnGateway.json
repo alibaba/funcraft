@@ -1,0 +1,63 @@
+{
+  "$id": "ALIYUN::VPC::VpnGateway",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::VpnGateway"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "EnableIpsec": {
+          "type": "boolean"
+        },
+        "EnableSsl": {
+          "type": "boolean"
+        },
+        "SslConnections": {
+          "type": "integer"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "InstanceChargeType": {
+          "type": "string"
+        },
+        "Bandwidth": {
+          "type": "integer"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "AutoPay": {
+          "type": "boolean"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "VpcId",
+        "Bandwidth"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::VpnGateway"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::VpnGateway"
+  },
+  "insertText": "${1:VpnGateway}:\n  Type: ALIYUN::VPC::VpnGateway\n  Properties:\n    "
+}

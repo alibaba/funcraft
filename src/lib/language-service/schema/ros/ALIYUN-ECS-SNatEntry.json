@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::ECS::SNatEntry",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::SNatEntry"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SourceVSwitchId": {
+          "type": "string"
+        },
+        "SNatTableId": {
+          "type": "string"
+        },
+        "SNatIp": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceVSwitchId",
+        "SNatTableId",
+        "SNatIp"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SNatEntry"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SNatEntry"
+  },
+  "insertText": "${1:SNatEntry}:\n  Type: ALIYUN::ECS::SNatEntry\n  Properties:\n    "
+}

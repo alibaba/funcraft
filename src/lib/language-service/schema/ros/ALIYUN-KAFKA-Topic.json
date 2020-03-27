@@ -1,0 +1,46 @@
+{
+  "$id": "ALIYUN::KAFKA::Topic",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::KAFKA::Topic"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PartitionNum": {
+          "type": "integer"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "Topic": {
+          "type": "string"
+        },
+        "Remark": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "Topic",
+        "Remark"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::KAFKA::Topic"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::KAFKA::Topic"
+  },
+  "insertText": "${1:Topic}:\n  Type: ALIYUN::KAFKA::Topic\n  Properties:\n    "
+}

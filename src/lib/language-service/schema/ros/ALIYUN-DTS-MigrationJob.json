@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::DTS::MigrationJob",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::DTS::MigrationJob"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "MigrationObject": {
+          "type": "array"
+        },
+        "DestinationEndpoint": {
+          "type": "object"
+        },
+        "MigrationJobClass": {
+          "type": "string"
+        },
+        "SourceEndpoint": {
+          "type": "object"
+        },
+        "MigrationJobName": {
+          "type": "string"
+        },
+        "MigrationMode": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "MigrationJobClass"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DTS::MigrationJob"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DTS::MigrationJob"
+  },
+  "insertText": "${1:MigrationJob}:\n  Type: ALIYUN::DTS::MigrationJob\n  Properties:\n    "
+}

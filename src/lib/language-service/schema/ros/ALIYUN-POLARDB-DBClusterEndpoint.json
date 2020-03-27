@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::POLARDB::DBClusterEndpoint",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::DBClusterEndpoint"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AutoAddNewNodes": {
+          "type": "string"
+        },
+        "DBClusterId": {
+          "type": "string"
+        },
+        "EndpointType": {
+          "type": "string"
+        },
+        "ReadWriteMode": {
+          "type": "string"
+        },
+        "EndpointConfig": {
+          "type": "object"
+        },
+        "Nodes": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "DBClusterId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBClusterEndpoint"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBClusterEndpoint"
+  },
+  "insertText": "${1:DBClusterEndpoint}:\n  Type: ALIYUN::POLARDB::DBClusterEndpoint\n  Properties:\n    "
+}

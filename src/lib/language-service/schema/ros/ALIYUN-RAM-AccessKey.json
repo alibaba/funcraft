@@ -1,0 +1,35 @@
+{
+  "$id": "ALIYUN::RAM::AccessKey",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RAM::AccessKey"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "UserName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "UserName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::AccessKey"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::AccessKey"
+  },
+  "insertText": "${1:AccessKey}:\n  Type: ALIYUN::RAM::AccessKey\n  Properties:\n    "
+}

@@ -1,0 +1,148 @@
+{
+  "$id": "ALIYUN::ECS::Instance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::Instance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "DedicatedHostId": {
+          "type": "string"
+        },
+        "PrivateIpAddress": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "DiskMappings": {
+          "type": "array"
+        },
+        "UserData": {
+          "type": "string"
+        },
+        "SystemDiskSize": {
+          "type": "number"
+        },
+        "SystemDiskDescription": {
+          "type": "string"
+        },
+        "InstanceChargeType": {
+          "type": "string"
+        },
+        "AutoRenew": {
+          "type": "string"
+        },
+        "RamRoleName": {
+          "type": "string"
+        },
+        "SystemDiskPerformanceLevel": {
+          "type": "string"
+        },
+        "ImageId": {
+          "type": "string"
+        },
+        "SystemDiskDiskName": {
+          "type": "string"
+        },
+        "SpotPriceLimit": {
+          "type": "string"
+        },
+        "InstanceType": {
+          "type": "string"
+        },
+        "AllocatePublicIP": {
+          "type": "boolean"
+        },
+        "Tags": {
+          "type": "array"
+        },
+        "HostName": {
+          "type": "string"
+        },
+        "SpotStrategy": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "AutoRenewPeriod": {
+          "type": "number"
+        },
+        "KeyPairName": {
+          "type": "string"
+        },
+        "IoOptimized": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "HpcClusterId": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "Period": {
+          "type": "number"
+        },
+        "DeletionProtection": {
+          "type": "boolean"
+        },
+        "InternetChargeType": {
+          "type": "string"
+        },
+        "SystemDiskCategory": {
+          "type": "string"
+        },
+        "InstanceName": {
+          "type": "string"
+        },
+        "DeploymentSetId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthOut": {
+          "type": "integer"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "InternetMaxBandwidthIn": {
+          "type": "integer"
+        },
+        "PeriodUnit": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ImageId",
+        "InstanceType",
+        "SecurityGroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Instance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::Instance"
+  },
+  "insertText": "${1:Instance}:\n  Type: ALIYUN::ECS::Instance\n  Properties:\n    "
+}

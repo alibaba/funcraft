@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::POLARDB::DBNodes",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::DBNodes"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Amount": {
+          "type": "integer"
+        },
+        "DBClusterId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Amount",
+        "DBClusterId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBNodes"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBNodes"
+  },
+  "insertText": "${1:DBNodes}:\n  Type: ALIYUN::POLARDB::DBNodes\n  Properties:\n    "
+}

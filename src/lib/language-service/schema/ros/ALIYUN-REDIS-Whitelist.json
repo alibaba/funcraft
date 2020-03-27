@@ -1,0 +1,45 @@
+{
+  "$id": "ALIYUN::REDIS::Whitelist",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::REDIS::Whitelist"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SecurityIpGroupAttribute": {
+          "type": "string"
+        },
+        "SecurityIps": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "SecurityIpGroupName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SecurityIps",
+        "InstanceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::REDIS::Whitelist"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::REDIS::Whitelist"
+  },
+  "insertText": "${1:Whitelist}:\n  Type: ALIYUN::REDIS::Whitelist\n  Properties:\n    "
+}

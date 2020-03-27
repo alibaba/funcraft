@@ -1,0 +1,49 @@
+{
+  "$id": "ALIYUN::WAF::AclRule",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::WAF::AclRule"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceId": {
+          "type": "string"
+        },
+        "RuleId": {
+          "type": "integer"
+        },
+        "Region": {
+          "type": "string"
+        },
+        "Domain": {
+          "type": "string"
+        },
+        "Rules": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "Domain",
+        "Rules"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::WAF::AclRule"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::WAF::AclRule"
+  },
+  "insertText": "${1:AclRule}:\n  Type: ALIYUN::WAF::AclRule\n  Properties:\n    "
+}

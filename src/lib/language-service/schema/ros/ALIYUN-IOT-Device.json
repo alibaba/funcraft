@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::IOT::Device",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::IOT::Device"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "IotInstanceId": {
+          "type": "string"
+        },
+        "DevEui": {
+          "type": "string"
+        },
+        "ProductKey": {
+          "type": "string"
+        },
+        "DeviceName": {
+          "type": "string"
+        },
+        "PinCode": {
+          "type": "string"
+        },
+        "Nickname": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ProductKey"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::IOT::Device"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::IOT::Device"
+  },
+  "insertText": "${1:Device}:\n  Type: ALIYUN::IOT::Device\n  Properties:\n    "
+}

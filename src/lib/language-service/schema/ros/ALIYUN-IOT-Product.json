@@ -1,0 +1,75 @@
+{
+  "$id": "ALIYUN::IOT::Product",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::IOT::Product"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PublishAuto": {
+          "type": "boolean"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "IotInstanceId": {
+          "type": "string"
+        },
+        "ProductName": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "AliyunCommodityCode": {
+          "type": "string"
+        },
+        "CategoryKey": {
+          "type": "string"
+        },
+        "ProtocolType": {
+          "type": "string"
+        },
+        "Id2": {
+          "type": "boolean"
+        },
+        "NodeType": {
+          "type": "integer"
+        },
+        "DataFormat": {
+          "type": "integer"
+        },
+        "AuthType": {
+          "type": "string"
+        },
+        "JoinPermissionId": {
+          "type": "string"
+        },
+        "NetType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ProductName",
+        "NodeType"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::IOT::Product"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::IOT::Product"
+  },
+  "insertText": "${1:Product}:\n  Type: ALIYUN::IOT::Product\n  Properties:\n    "
+}

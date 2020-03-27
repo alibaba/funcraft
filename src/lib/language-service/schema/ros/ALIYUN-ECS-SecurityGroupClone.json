@@ -1,0 +1,56 @@
+{
+  "$id": "ALIYUN::ECS::SecurityGroupClone",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::SecurityGroupClone"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "SecurityGroupName": {
+          "type": "string"
+        },
+        "ResourceGroupId": {
+          "type": "string"
+        },
+        "DestinationRegionId": {
+          "type": "string"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "SecurityGroupType": {
+          "type": "string"
+        },
+        "SourceSecurityGroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SourceSecurityGroupId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SecurityGroupClone"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SecurityGroupClone"
+  },
+  "insertText": "${1:SecurityGroupClone}:\n  Type: ALIYUN::ECS::SecurityGroupClone\n  Properties:\n    "
+}

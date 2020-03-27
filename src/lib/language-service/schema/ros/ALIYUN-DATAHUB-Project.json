@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::DATAHUB::Project",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::DATAHUB::Project"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Comment": {
+          "type": "string"
+        },
+        "ProjectName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Comment",
+        "ProjectName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DATAHUB::Project"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::DATAHUB::Project"
+  },
+  "insertText": "${1:Project}:\n  Type: ALIYUN::DATAHUB::Project\n  Properties:\n    "
+}

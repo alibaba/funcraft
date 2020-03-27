@@ -1,0 +1,71 @@
+{
+  "$id": "ALIYUN::WAF::DomainConfig",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::WAF::DomainConfig"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "HttpToUserIp": {
+          "type": "integer"
+        },
+        "HttpPort": {
+          "type": "string"
+        },
+        "IsAccessProduct": {
+          "type": "integer"
+        },
+        "RsType": {
+          "type": "integer"
+        },
+        "Protocols": {
+          "type": "string"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "SourceIps": {
+          "type": "string"
+        },
+        "HttpsRedirect": {
+          "type": "integer"
+        },
+        "Region": {
+          "type": "string"
+        },
+        "Domain": {
+          "type": "string"
+        },
+        "LoadBalancing": {
+          "type": "integer"
+        },
+        "HttpsPort": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "IsAccessProduct",
+        "Protocols",
+        "InstanceId",
+        "Domain"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::WAF::DomainConfig"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::WAF::DomainConfig"
+  },
+  "insertText": "${1:DomainConfig}:\n  Type: ALIYUN::WAF::DomainConfig\n  Properties:\n    "
+}

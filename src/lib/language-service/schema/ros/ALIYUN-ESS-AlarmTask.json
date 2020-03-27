@@ -1,0 +1,74 @@
+{
+  "$id": "ALIYUN::ESS::AlarmTask",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::AlarmTask"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ComparisonOperator": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "ScalingGroupId": {
+          "type": "string"
+        },
+        "MetricType": {
+          "type": "string"
+        },
+        "EvaluationCount": {
+          "type": "integer"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "Dimensions": {
+          "type": "array"
+        },
+        "Statistics": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "GroupId": {
+          "type": "integer"
+        },
+        "MetricName": {
+          "type": "string"
+        },
+        "AlarmAction": {
+          "type": "array"
+        },
+        "Threshold": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "ScalingGroupId",
+        "MetricName",
+        "AlarmAction",
+        "Threshold"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::AlarmTask"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::AlarmTask"
+  },
+  "insertText": "${1:AlarmTask}:\n  Type: ALIYUN::ESS::AlarmTask\n  Properties:\n    "
+}

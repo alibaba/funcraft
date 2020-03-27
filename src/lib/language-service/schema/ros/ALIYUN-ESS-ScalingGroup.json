@@ -1,0 +1,90 @@
+{
+  "$id": "ALIYUN::ESS::ScalingGroup",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ESS::ScalingGroup"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "VSwitchIds": {
+          "type": "array"
+        },
+        "InstanceId": {
+          "type": "string"
+        },
+        "NotificationConfigurations": {
+          "type": "array"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "LoadBalancerIds": {
+          "type": "array"
+        },
+        "DesiredCapacity": {
+          "type": "integer"
+        },
+        "GroupDeletionProtection": {
+          "type": "boolean"
+        },
+        "LaunchTemplateId": {
+          "type": "string"
+        },
+        "MaxSize": {
+          "type": "integer"
+        },
+        "ScalingGroupName": {
+          "type": "string"
+        },
+        "MinSize": {
+          "type": "integer"
+        },
+        "DefaultCooldown": {
+          "type": "integer"
+        },
+        "StandbyInstances": {
+          "type": "array"
+        },
+        "LaunchTemplateVersion": {
+          "type": "string"
+        },
+        "MultiAZPolicy": {
+          "type": "string"
+        },
+        "ProtectedInstances": {
+          "type": "array"
+        },
+        "RemovalPolicys": {
+          "type": "array"
+        },
+        "DBInstanceIds": {
+          "type": "array"
+        },
+        "HealthCheckType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "MaxSize",
+        "MinSize"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScalingGroup"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ESS::ScalingGroup"
+  },
+  "insertText": "${1:ScalingGroup}:\n  Type: ALIYUN::ESS::ScalingGroup\n  Properties:\n    "
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::ECS::AssignIpv6Addresses",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::AssignIpv6Addresses"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Ipv6AddressCount": {
+          "type": "integer"
+        },
+        "Ipv6Addresses": {
+          "type": "array"
+        },
+        "NetworkInterfaceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "NetworkInterfaceId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AssignIpv6Addresses"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::AssignIpv6Addresses"
+  },
+  "insertText": "${1:AssignIpv6Addresses}:\n  Type: ALIYUN::ECS::AssignIpv6Addresses\n  Properties:\n    "
+}

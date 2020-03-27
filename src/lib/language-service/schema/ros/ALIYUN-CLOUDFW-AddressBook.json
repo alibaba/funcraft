@@ -1,0 +1,58 @@
+{
+  "$id": "ALIYUN::CLOUDFW::AddressBook",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CLOUDFW::AddressBook"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "GroupName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "TagRelation": {
+          "type": "string"
+        },
+        "GroupType": {
+          "type": "string"
+        },
+        "TagList": {
+          "type": "array"
+        },
+        "RegionId": {
+          "type": "string"
+        },
+        "AutoAddTagEcs": {
+          "type": "boolean"
+        },
+        "AddressList": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GroupName",
+        "Description",
+        "GroupType"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CLOUDFW::AddressBook"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CLOUDFW::AddressBook"
+  },
+  "insertText": "${1:AddressBook}:\n  Type: ALIYUN::CLOUDFW::AddressBook\n  Properties:\n    "
+}

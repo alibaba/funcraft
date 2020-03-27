@@ -1,0 +1,61 @@
+{
+  "$id": "ALIYUN::CEN::CenBandwidthPackage",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CEN::CenBandwidthPackage"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
+        },
+        "BandwidthPackageChargeType": {
+          "type": "string"
+        },
+        "GeographicRegionBId": {
+          "type": "string"
+        },
+        "GeographicRegionAId": {
+          "type": "string"
+        },
+        "PricingCycle": {
+          "type": "string"
+        },
+        "Bandwidth": {
+          "type": "integer"
+        },
+        "Period": {
+          "type": "integer"
+        },
+        "AutoPay": {
+          "type": "boolean"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "GeographicRegionBId",
+        "GeographicRegionAId",
+        "Bandwidth"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CEN::CenBandwidthPackage"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CEN::CenBandwidthPackage"
+  },
+  "insertText": "${1:CenBandwidthPackage}:\n  Type: ALIYUN::CEN::CenBandwidthPackage\n  Properties:\n    "
+}

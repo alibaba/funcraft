@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::VPC::CommonBandwidthPackageIp",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::VPC::CommonBandwidthPackageIp"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Eips": {
+          "type": "array"
+        },
+        "BandwidthPackageId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Eips",
+        "BandwidthPackageId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::CommonBandwidthPackageIp"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::VPC::CommonBandwidthPackageIp"
+  },
+  "insertText": "${1:CommonBandwidthPackageIp}:\n  Type: ALIYUN::VPC::CommonBandwidthPackageIp\n  Properties:\n    "
+}

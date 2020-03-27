@@ -1,0 +1,39 @@
+{
+  "$id": "ALIYUN::SAG::SmartAccessGatewayBinding",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::SAG::SmartAccessGatewayBinding"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "CcnId": {
+          "type": "string"
+        },
+        "SmartAGId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "CcnId",
+        "SmartAGId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SAG::SmartAccessGatewayBinding"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::SAG::SmartAccessGatewayBinding"
+  },
+  "insertText": "${1:SmartAccessGatewayBinding}:\n  Type: ALIYUN::SAG::SmartAccessGatewayBinding\n  Properties:\n    "
+}

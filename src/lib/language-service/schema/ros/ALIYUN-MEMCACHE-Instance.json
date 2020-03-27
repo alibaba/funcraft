@@ -1,0 +1,60 @@
+{
+  "$id": "ALIYUN::MEMCACHE::Instance",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::MEMCACHE::Instance"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceName": {
+          "type": "string"
+        },
+        "VpcId": {
+          "type": "string"
+        },
+        "ZoneId": {
+          "type": "string"
+        },
+        "Capacity": {
+          "type": "integer"
+        },
+        "NetworkType": {
+          "type": "string"
+        },
+        "PrivateIpAddr": {
+          "type": "string"
+        },
+        "VSwitchId": {
+          "type": "string"
+        },
+        "SecurityIPArray": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Capacity",
+        "Password"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MEMCACHE::Instance"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::MEMCACHE::Instance"
+  },
+  "insertText": "${1:Instance}:\n  Type: ALIYUN::MEMCACHE::Instance\n  Properties:\n    "
+}

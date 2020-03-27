@@ -1,0 +1,50 @@
+{
+  "$id": "ALIYUN::CR::Repository",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::CR::Repository"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "RepoNamespace": {
+          "type": "string"
+        },
+        "RepoType": {
+          "type": "string"
+        },
+        "RepoName": {
+          "type": "string"
+        },
+        "Summary": {
+          "type": "string"
+        },
+        "Detail": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "RepoNamespace",
+        "RepoType",
+        "RepoName",
+        "Summary"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CR::Repository"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::CR::Repository"
+  },
+  "insertText": "${1:Repository}:\n  Type: ALIYUN::CR::Repository\n  Properties:\n    "
+}

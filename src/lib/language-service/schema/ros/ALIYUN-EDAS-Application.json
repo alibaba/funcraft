@@ -1,0 +1,60 @@
+{
+  "$id": "ALIYUN::EDAS::Application",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::EDAS::Application"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "ComponentIds": {
+          "type": "string"
+        },
+        "LogicalRegionId": {
+          "type": "string"
+        },
+        "ApplicationName": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "EcuInfo": {
+          "type": "string"
+        },
+        "HealthCheckURL": {
+          "type": "string"
+        },
+        "ClusterId": {
+          "type": "string"
+        },
+        "PackageType": {
+          "type": "string"
+        },
+        "BuildPackId": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ApplicationName",
+        "ClusterId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::Application"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::EDAS::Application"
+  },
+  "insertText": "${1:Application}:\n  Type: ALIYUN::EDAS::Application\n  Properties:\n    "
+}

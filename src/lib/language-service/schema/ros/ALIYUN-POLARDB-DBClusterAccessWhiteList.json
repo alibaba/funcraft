@@ -1,0 +1,42 @@
+{
+  "$id": "ALIYUN::POLARDB::DBClusterAccessWhiteList",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::POLARDB::DBClusterAccessWhiteList"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "SecurityIps": {
+          "type": "string"
+        },
+        "DBClusterIPArrayName": {
+          "type": "string"
+        },
+        "DBClusterId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SecurityIps",
+        "DBClusterId"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBClusterAccessWhiteList"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::POLARDB::DBClusterAccessWhiteList"
+  },
+  "insertText": "${1:DBClusterAccessWhiteList}:\n  Type: ALIYUN::POLARDB::DBClusterAccessWhiteList\n  Properties:\n    "
+}

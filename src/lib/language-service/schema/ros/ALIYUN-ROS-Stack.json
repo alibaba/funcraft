@@ -1,0 +1,41 @@
+{
+  "$id": "ALIYUN::ROS::Stack",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ROS::Stack"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "TemplateURL": {
+          "type": "string"
+        },
+        "Parameters": {
+          "type": "object"
+        },
+        "TimeoutMins": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "TemplateURL"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROS::Stack"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROS::Stack"
+  },
+  "insertText": "${1:Stack}:\n  Type: ALIYUN::ROS::Stack\n  Properties:\n    "
+}

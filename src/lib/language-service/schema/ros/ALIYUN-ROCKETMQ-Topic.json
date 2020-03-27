@@ -1,0 +1,49 @@
+{
+  "$id": "ALIYUN::ROCKETMQ::Topic",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ROCKETMQ::Topic"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "InstanceId": {
+          "type": "string"
+        },
+        "Perm": {
+          "type": "integer"
+        },
+        "Topic": {
+          "type": "string"
+        },
+        "MessageType": {
+          "type": "integer"
+        },
+        "Remark": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "InstanceId",
+        "Topic",
+        "MessageType"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROCKETMQ::Topic"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ROCKETMQ::Topic"
+  },
+  "insertText": "${1:Topic}:\n  Type: ALIYUN::ROCKETMQ::Topic\n  Properties:\n    "
+}

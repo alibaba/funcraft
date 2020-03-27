@@ -1,0 +1,47 @@
+{
+  "$id": "ALIYUN::RDS::AccountPrivilege",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RDS::AccountPrivilege"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "AccountPrivilege": {
+          "type": "string"
+        },
+        "DBInstanceId": {
+          "type": "string"
+        },
+        "DBName": {
+          "type": "string"
+        },
+        "AccountName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "AccountPrivilege",
+        "DBInstanceId",
+        "DBName",
+        "AccountName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::AccountPrivilege"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RDS::AccountPrivilege"
+  },
+  "insertText": "${1:AccountPrivilege}:\n  Type: ALIYUN::RDS::AccountPrivilege\n  Properties:\n    "
+}

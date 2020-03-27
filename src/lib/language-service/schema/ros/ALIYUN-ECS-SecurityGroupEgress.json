@@ -1,0 +1,66 @@
+{
+  "$id": "ALIYUN::ECS::SecurityGroupEgress",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::ECS::SecurityGroupEgress"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "Policy": {
+          "type": "string"
+        },
+        "PortRange": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Priority": {
+          "type": "integer"
+        },
+        "SecurityGroupId": {
+          "type": "string"
+        },
+        "DestGroupOwnerId": {
+          "type": "string"
+        },
+        "IpProtocol": {
+          "type": "string"
+        },
+        "DestCidrIp": {
+          "type": "string"
+        },
+        "NicType": {
+          "type": "string"
+        },
+        "Ipv6DestCidrIp": {
+          "type": "string"
+        },
+        "DestGroupId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PortRange",
+        "IpProtocol"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SecurityGroupEgress"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::ECS::SecurityGroupEgress"
+  },
+  "insertText": "${1:SecurityGroupEgress}:\n  Type: ALIYUN::ECS::SecurityGroupEgress\n  Properties:\n    "
+}
