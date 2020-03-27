@@ -2,6 +2,7 @@
 
 const definition = require('../definition');
 const _ = require('lodash');
+const fs = require('fs-extra');
 const path = require('path');
 
 function findBuildFuncs(buildName, tpl) {
@@ -13,7 +14,7 @@ function findBuildFuncs(buildName, tpl) {
     }
 
     return [func];
-  } 
+  }
   return definition.findFunctionsInTpl(tpl);
 }
 
@@ -25,7 +26,7 @@ function updateTemplateResources(originTplContent, buildFuncs, skippedBuildFuncs
 
   definition.iterateFunctions(updatedTplcontent, (serviceName, serviceRes, functionName, functionRes) => {
     const found = _.filter(buildFuncs, (buildFunc) => {
-      
+
       if (_.includes(skippedBuildFuncs, buildFunc)) { return false; }
 
       if (_.isEqual(serviceName, buildFunc.serviceName) && _.isEqual(functionName, buildFunc.functionName)) { return true; }
@@ -45,6 +46,18 @@ function updateTemplateResources(originTplContent, buildFuncs, skippedBuildFuncs
 
       functionRes.Properties.CodeUri = relativeCodeUri;
     }
+  });
+
+  definition.iterateResources(updatedTplcontent.Resources, definition.FLOW_RESOURCE, (flowName, flowRes) => {
+    const { Properties: flowProperties = {} } = flowRes;
+
+    const absDefinitionUri = path.resolve(baseDir, flowProperties.DefinitionUri);
+
+    if (!fs.pathExistsSync(absDefinitionUri)) {
+      throw new Error(`DefinitionUri ${absDefinitionUri} is not exist`);
+    }
+
+    flowProperties.DefinitionUri = path.relative(rootArtifactsDir, absDefinitionUri);
   });
 
   return updatedTplcontent;

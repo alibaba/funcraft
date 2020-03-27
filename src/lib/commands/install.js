@@ -124,7 +124,9 @@ function convertPackageToCmd(pkgType, pkg) {
     return `fun-install apt-get install ${pkg}`;
   } else if (pkgType === 'pip') {
     return `fun-install pip install ${pkg}`;
-  } 
+  } else if (pkgType === 'npm') {
+    return `fun-install npm install ${pkg}`;
+  }
   throw new Error(`unknow package type %${pkgType}`);
 }
 
