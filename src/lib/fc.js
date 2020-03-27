@@ -172,19 +172,19 @@ const CUSTOM_RUNTIME_JAVA_MAPPING = {
   'pathSuffix': '*'
 };
 
-const FONTS__MAPPING = {
+const FONTS_MAPPING = {
   'localDir': 'fonts',
   'remoteDir': 'fonts'
 };
 
 const runtimeDependencyMappings = {
-  'nodejs6': [NODE_RUNTIME_MAPPING, FONTS__MAPPING],
-  'nodejs8': [NODE_RUNTIME_MAPPING, FONTS__MAPPING],
-  'nodejs10': [NODE_RUNTIME_MAPPING, FONTS__MAPPING],
-  'python2.7': [PYTHON_RUNTIME_MAPPING, FONTS__MAPPING],
-  'python3': [PYTHON_RUNTIME_MAPPING, FONTS__MAPPING],
-  'java8': [JAVA_RUNTIME_MAPPING, FONTS__MAPPING],
-  'custom': [NODE_RUNTIME_MAPPING, PYTHON_RUNTIME_MAPPING, CUSTOM_RUNTIME_JAVA_MAPPING, FONTS__MAPPING]
+  'nodejs6': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'nodejs8': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'nodejs10': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'python2.7': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
+  'python3': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
+  'java8': [JAVA_RUNTIME_MAPPING, FONTS_MAPPING],
+  'custom': [NODE_RUNTIME_MAPPING, PYTHON_RUNTIME_MAPPING, CUSTOM_RUNTIME_JAVA_MAPPING, FONTS_MAPPING]
 };
 
 async function saveNasMappings(nasYmlPath, nasMappings) {
@@ -487,7 +487,7 @@ async function processNasMappingsAndEnvs({ tpl, tplPath, runtime, codeUri, baseD
     nasConfig: convertedNasConfig || (serviceRes.Properties || {}).NasConfig
   });
 
-  const appendContet = `  <dir>${remoteNasDirPrefix}${FONTS__MAPPING.remoteDir}</dir>`;
+  const appendContet = `  <dir>${remoteNasDirPrefix}${FONTS_MAPPING.remoteDir}</dir>`;
   await generateFontsConfAndEnv(baseDir, codeUri, appendContet);
 
   const localDirs = _.map(runtimeDependencyMappings[runtime], mapping => path.join(codeUri, mapping.localDir));
@@ -993,7 +993,7 @@ function generateNasAndVpcConfig(mountTarget, securityGroupId, serviceName) {
 }
 
 function writeFileToLine(filePath, content, lineNum) {
-  let data = fs.readFileSync(filePath, 'utf8').split(/\r\n|\n|\r/gm);
+  let data = fs.readFileSync(filePath, 'utf8').split(/\r?\n/gm);
   data.splice(lineNum, 0, content);
   fs.writeFileSync(filePath, data.join('\n'), {
     encoding: 'utf8'

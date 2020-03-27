@@ -54,6 +54,7 @@ async function isEmptyDir(path) {
   return false;
 }
 
+// only if the path is directory and there are files in the directory, will true be returned
 async function isNotEmptyDir(path) {
   const lstat = await fs.lstat(path);
   if (lstat.isDirectory()) {
