@@ -1005,7 +1005,6 @@ const DEFAULT_FONTS_CONFIG_ENV = {
 };
 
 async function generateFontsConfAndEnv(baseDir, codeUri, appendContet) {
-
   const absCodeUri = path.resolve(baseDir, codeUri);
   const fontsDir = path.join(absCodeUri, 'fonts');
 
