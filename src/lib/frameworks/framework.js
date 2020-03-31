@@ -3,8 +3,8 @@
 const fs = require('fs-extra');
 const path = require('path');
 const _ = require('lodash');
-const { red, green } = require('colors');
 const debug = require('debug')('fun:deploy');
+const { generateFile } = require('./common/file');
 
 const frameworks = [
   // php
@@ -218,21 +218,8 @@ async function execProcessor(codeDir, processor) {
     const mode = processor.mode;
     const content = processor.content;
 
-    console.log(green('Generating ' + p + '...'));
-    if (await fs.pathExists(p)) {
-      const backup = processor.backup;
-      if (_.isNil(backup) || backup) {
-        console.warn(red(`File ${p} already exists, Fun will rename to ${p}.bak`));
-
-        await fs.copyFile(p, `${p}.bak`, {
-          overwrite: true
-        });
-      }
-    }
-
-    await fs.writeFile(p, content, {
-      mode
-    });
+    await generateFile(p, processor.backup, mode, content);
+    
     return;
   }
   default:

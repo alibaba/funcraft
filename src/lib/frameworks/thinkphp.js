@@ -65,6 +65,7 @@ const thinkphp = {
           'type': 'generateFile',
           'path': ['.fun', 'root', 'etc', 'php', '7.2', 'fpm', 'php-fpm.conf'],
           'mode': '0755',
+          'backup': false,
           'content': `[global]
 pid = /tmp/php7.2-fpm.pid
 error_log = /tmp/php7.2-fpm.log

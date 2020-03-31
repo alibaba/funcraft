@@ -42,6 +42,7 @@ const DEFAULT_VALUES = {
     MemorySize: 128,
     Timeout: 3,
     InitializationTimeout: 3,
+    InstanceConcurrency: 1,
     CodeUri: () => {
       return false;
     },

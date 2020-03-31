@@ -7,55 +7,7 @@ const _ = require('lodash');
 const { promptForConfirmContinue } = require('../init/prompt');
 const { findBinName } = require('./common/go');
 const { exec } = require('./common/exec');
-const debug = require('debug')('fun:deploy');
-
-async function findMainFile(codeDir) {
-  const regex = new RegExp('func\\s+main\\s*\\(', 'm');
-
-  const files = await fs.readdir(codeDir);
-  for (const file of files) {
-    if (!_.endsWith(file, '.go')) { continue; }
-    const contents = await fs.readFile(file, 'utf8');
-    if (regex.test(contents)) {
-      debug('mainFile is ', file);
-
-      return file;
-    }
-  }
-
-  return null;
-}
-
-async function detectAndReplaceAddr(codeDir) {
-  const mainFile = await findMainFile(codeDir);
-  if (!mainFile) { return; }
-
-  const mainFileContents = await fs.readFile(mainFile, 'utf8');
-
-  // check gin and beego addr
-  const addrRegexs = [new RegExp('\\.Run\\s*\\(\\s*\\)', 'm'), new RegExp('\\.Run\\s*\\(\\s*":\\d+"\\)', 'm')];
-
-  for (const addrRegex of addrRegexs) {
-    if (addrRegex.test(mainFileContents)) {
-      console.log(yellow(`Fun detected your application doesn't listen on '0.0.0.0:9000' in ${mainFile}`));
-      console.log(yellow(`Fun will replace your addr to '0.0.0.0:9000', and also backup your origin file ${mainFile} to ${mainFile}.bak`));
-
-      if (!await promptForConfirmContinue(yellow(`Are your sure?`))) {
-        console.warn(red(`Fun will not modify your application listen addr, but if you want deploy to fc, you must listen on '0.0.0.0:9000'`));
-        return;
-      }
-
-      const replacedContent = mainFileContents.replace(addrRegex, (match, p1) => {
-        return `.Run("0.0.0.0:9000")`;
-      });
-
-      await fs.copyFile(mainFile, mainFile + '.bak');
-      await fs.writeFile(mainFile, replacedContent);
-
-      return ;
-    }
-  }
-}
+const { detectAndReplaceAddr } = require('./common/file');
 
 const go = {
   'id': 'gomodules',
@@ -70,7 +22,22 @@ const go = {
         {
           'type': 'function',
           'function': async (codeDir) => {
-            await detectAndReplaceAddr(codeDir);
+            await detectAndReplaceAddr({
+              codeDir,
+              mainFileSuffix: '.go',
+              mainFileRegex: 'func\\s+main\\s*\\(',
+              addrProcessores: [
+                // check gin and beego addr
+                {
+                  regex: new RegExp('\\.Run\\s*\\(\\s*\\)', 'm'),
+                  replacer: `.Run("0.0.0.0:9000")`
+                },
+                {
+                  regex: new RegExp('\\.Run\\s*\\(\\s*":\\d+"\\)', 'm'),
+                  replacer: `.Run("0.0.0.0:9000")`
+                },
+              ]
+            });
 
             let needBuild = true;
             let binName = await findBinName(codeDir);
