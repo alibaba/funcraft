@@ -1159,13 +1159,13 @@ function generateSlsProjectName(accountId, region) {
 async function generateDefaultLogConfig() {
   const profile = await getProfile();
   return {
-    Project: generateSlsProjectName(profile.accountId, profile.defaultRegion),
-    Logstore: `function-log`
+    project: generateSlsProjectName(profile.accountId, profile.defaultRegion),
+    logstore: `function-log`
   };
 }
 
 async function transformLogConfig(logConfig) {
-  if (logConfig === 'Auto') {
+  if (definition.isLogAutoConfig(logConfig)) {
     const defaultLogConfig = await generateDefaultLogConfig();
 
     console.log(yellow(`\tusing 'LogConfig: Auto'. Fun will generate default sls project.`));
