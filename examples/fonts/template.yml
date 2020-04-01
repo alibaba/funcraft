@@ -12,8 +12,6 @@ Resources:
         Runtime: nodejs8
         CodeUri: ./
         InstanceConcurrency: 10
-        EnvironmentVariables:
-          FONTCONFIG_FILE: /code/.fonts.conf
       Events:
         http-test:
           Type: HTTP
