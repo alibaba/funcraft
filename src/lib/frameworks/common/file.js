@@ -61,16 +61,18 @@ async function detectAndReplaceAddr({
   addrProcessores
 }) {
   const mainFile = await findMainFile(codeDir, mainFileSuffix, mainFileRegex);
-  if (!mainFile) { return; }
+  if (!mainFile) {
+    return { mainFile: null };
+  }
 
   await detectAndReplacePort(mainFile, addrProcessores);
 
-  return { mainFile }
+  return { mainFile };
 }
 
 async function generateFile(p, backup, mode, content) {
   console.log(green('Generating ' + p + '...'));
-  
+
   if (await fs.pathExists(p)) {
     if (_.isNil(backup) || backup) {
       console.warn(red(`File ${p} already exists, Fun will rename to ${p}.bak`));
@@ -88,4 +90,4 @@ async function generateFile(p, backup, mode, content) {
 
 module.exports = {
   detectAndReplaceAddr, generateFile
-}
+};

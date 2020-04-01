@@ -42,8 +42,8 @@ const DEFAULT_VALUES = {
         const project = oldPropsValue.Project;
         const logstore = oldPropsValue.Logstore;
 
-        if (project && logstore)  {
-          if (project.startsWith('aliyun-fc-') && logstore === 'function-log')  {
+        if (project && logstore) {
+          if (project.startsWith('aliyun-fc-') && logstore === 'function-log') {
             return true;
           }
         }

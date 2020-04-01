@@ -556,7 +556,7 @@ async function detectJarfilePathFromBootstrap(bootstrapContent) {
       if (matchedJar) {
         jarfilePath = matchedJar[0];
       } else {
-        throw new Error('not supported your java project'); 
+        throw new Error('not supported your java project');
       }
     }
 
@@ -760,11 +760,11 @@ Fun has detected that there is a model folder. It is recommend to synchronize yo
 You can add the following configuration to ` + yellow(`'nasMapping.${serviceName}'`) + ` in ` + yellow(`${nasYmlPath}
 `)
 
-+ yellow(`
+    + yellow(`
   - localNasDir: ${absModelPath}
     remoteNasDir: ${remoteNasDir}
     `)
-+ `
+    + `
 After adding, fun is going to automatically synchronize the ` + yellow(`local`) + ` directory ${absModelPath} to ` + yellow(`remote`) + ` ${remoteNasDir}.
 If these files ` + yellow('under') + ` model directory are used on your function code, you need to ${remoteNasDir} update these files path manully.
 `);
@@ -886,7 +886,8 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         }
         await backupTemplateFile(tplPath); // backup tpl
 
-        tplChanged = await processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, stage,
+        tplChanged = await processNasAutoConfiguration({
+          tpl, tplPath, runtime, codeUri, stage,
           serviceName: nasServiceName,
           functionName: nasFunctionName
         });
@@ -908,7 +909,8 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         if (yes) {
           await backupTemplateFile(tplPath);
 
-          tplChanged = await processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, stage,
+          tplChanged = await processNasAutoConfiguration({
+            tpl, tplPath, runtime, codeUri, stage,
             serviceName: nasServiceName,
             functionName: nasFunctionName
           });
@@ -920,7 +922,8 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         const convertedNasConfig = replaceNasConfig(nasConfig, answer.mountDir);
         await backupTemplateFile(tplPath);
 
-        tplChanged = await processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, stage,
+        tplChanged = await processNasAutoConfiguration({
+          tpl, tplPath, runtime, codeUri, stage,
           convertedNasConfig,
           serviceName: nasServiceName,
           functionName: nasFunctionName
@@ -935,7 +938,8 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         // write back to yml
         const updatedTpl = await updateNasAutoConfigure(tplPath, tpl, nasServiceName);
 
-        tplChanged = await processNasAutoConfiguration({ tpl: updatedTpl, tplPath, runtime, codeUri, stage,
+        tplChanged = await processNasAutoConfiguration({
+          tpl: updatedTpl, tplPath, runtime, codeUri, stage,
           serviceName: nasServiceName,
           functionName: nasFunctionName
         });
@@ -948,7 +952,8 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         const nasAndVpcConfig = generateNasAndVpcConfig(mountTarget, securityGroupId, nasServiceName);
         const updatedTpl = await updateNasAndVpc(tplPath, tpl, nasServiceName, nasAndVpcConfig);
 
-        tplChanged = await processNasAutoConfiguration({ tpl: updatedTpl, tplPath, runtime, codeUri, stage,
+        tplChanged = await processNasAutoConfiguration({
+          tpl: updatedTpl, tplPath, runtime, codeUri, stage,
           serviceName: nasServiceName,
           functionName: nasFunctionName
         });
@@ -1066,7 +1071,8 @@ async function makeFunction(baseDir, {
       const fontsConfEnv = await generateFontsConfAndEnv(baseDir, codeUri);
       if (!_.isEmpty(fontsConfEnv)) {
 
-        updateEnvironmentsInTpl({ serviceName, functionName, tplPath,
+        updateEnvironmentsInTpl({
+          serviceName, functionName, tplPath,
           displayLog: false,
           tpl: await getTpl(tplPath),
           envs: DEFAULT_FONTS_CONFIG_ENV
@@ -1183,6 +1189,32 @@ async function transformLogConfig(logConfig) {
   };
 }
 
+// make sure sls project and logstore is created
+async function doMakeServiceWithSlsRetry(serviceName, options, create, fcClient) {
+  let slsRetry = 0;
+  let service;
+  do {
+    try {
+      if (create) {
+        debug('create service %s, options is %j', serviceName, options);
+        service = await fcClient.createService(serviceName, options);
+      } else {
+        debug('update service %s, options is %j', serviceName, options);
+        service = await fcClient.updateService(serviceName, options);
+      }
+      return service;
+    } catch (e) {
+      if (e.code === 'InvalidArgument'
+        && _.includes(e.message, 'not exist')
+        && (_.includes(e.message, 'logstore') || _.includes(e.message, 'project'))) {
+        slsRetry++;
+        await sleep(3000);
+      } else { throw e; }
+    }
+
+  } while (slsRetry <= 12);
+}
+
 async function makeService({
   serviceName,
   role,
@@ -1262,14 +1294,9 @@ async function makeService({
   });
 
   await promiseRetry(async (retry, times) => {
+
     try {
-      if (!service) {
-        debug('create service %s, options is %j', serviceName, options);
-        service = await fc.createService(serviceName, options);
-      } else {
-        debug('update service %s, options is %j', serviceName, options);
-        service = await fc.updateService(serviceName, options);
-      }
+      await doMakeServiceWithSlsRetry(serviceName, options, !service, fc);
     } catch (ex) {
       if (ex.code === 'AccessDenied') {
         throw ex;
@@ -1472,13 +1499,12 @@ permission, more information please refer to https://github.com/alibaba/funcraft
   }
 }
 
-async function makeFcUtilsFunctionTmpDomainToken(token, role) {
+async function makeFcUtilsFunctionTmpDomainToken(token) {
 
   const tmpServiceName = 'fc-domain-challenge';
 
   await makeService({
     serviceName: tmpServiceName,
-    role,
     description: 'generated by Funcraft for authentication',
     vpcConfig: {},
     nasConfig: {}

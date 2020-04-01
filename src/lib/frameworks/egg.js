@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const file = require('./common/file');
 const path = require('path');
-const { yellow, red, green } = require('colors');
+const { yellow } = require('colors');
 const { promptForConfirmContinue } = require('../init/prompt');
 
 const nuxtjs = {
@@ -40,16 +40,15 @@ module.exports = {
     dir: '/tmp/log'
   }
 };
-`
+`;
             const exists = await fs.pathExists(prodConfigPath);
 
             if (exists) {
               console.log(`${yellow('Fun detected')} your production config '${yellow(prodConfigPath)}' file already exists`);
               console.log(`You need to add these content to your production config file:`);
               console.log(yellow(prodConfigContent));
-              if (!await promptForConfirmContinue(yellow(`Continue`))) {
-                process.exit(0);
-              }
+              
+              await promptForConfirmContinue(yellow(`Continue`));
             } else {
               await file.generateFile(prodConfigPath, true, parseInt('0755', 8), prodConfigContent);
             }

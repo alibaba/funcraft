@@ -3,7 +3,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { red, yellow } = require('colors');
-const _ = require('lodash');
 const { promptForConfirmContinue } = require('../init/prompt');
 const { findBinName } = require('./common/go');
 const { exec } = require('./common/exec');
@@ -35,7 +34,7 @@ const go = {
                 {
                   regex: new RegExp('\\.Run\\s*\\(\\s*":\\d+"\\)', 'm'),
                   replacer: `.Run("0.0.0.0:9000")`
-                },
+                }
               ]
             });
 

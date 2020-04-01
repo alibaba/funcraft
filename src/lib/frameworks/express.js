@@ -25,7 +25,7 @@ const addrProcessores = [
     replacer: (match) => {
       return `.listen(process.env.PORT || 9000)`;
     }
-  },
+  }
 ];
 
 const express = {
@@ -124,7 +124,7 @@ export PORT=9000
 node ${mainFile}`;
 
             if (!mainFile) {
-              throw new Error(red("Could not find any express main file. You must add 'start' script to package.json manully"));
+              throw new Error(red('Could not find any express main file. You must add \'start\' script to package.json manully'));
             }
 
             generateFile(path.join(codeDir, 'bootstrap'), true, parseInt('0755', 8), bootstrap);
