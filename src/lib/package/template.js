@@ -374,6 +374,18 @@ function generateRosTemplateForRegionMap() {
   };
 }
 
+function generateServiceLogConfig(projectName, logstoreName) {
+  return {
+    'Project': {
+      'Fn::GetAtt': [
+        projectName,
+        'Name'
+      ]
+    },
+    'Logstore': logstoreName
+  };
+}
+
 function generateRosTemplateForSLS(projectName, logstoreName) {
   return {
     [projectName]: {
@@ -390,25 +402,24 @@ function generateRosTemplateForSLS(projectName, logstoreName) {
           'TTL': 10,
           'ShardCount': 1
         }
-      },
-
-      'functionLogIndex': {
-        'Type': 'ALIYUN::SLS::Index',
-        'Properties': {
-          'ProjectName': {
-            'Fn::GetAtt': [
-              projectName,
-              'Name'
-            ]
-          },
-          'FullTextIndex': {
-            'Enable': true,
-            'IncludeChinese': true
-          },
-          'LogstoreName': logstoreName,
-          'DependsOn': [projectName, `${projectName}${logstoreName}`]
-        }
       }
+    },
+    'functionLogIndex': {
+      'Type': 'ALIYUN::SLS::Index',
+      'Properties': {
+        'ProjectName': {
+          'Fn::GetAtt': [
+            projectName,
+            'Name'
+          ]
+        },
+        'FullTextIndex': {
+          'Enable': true,
+          'IncludeChinese': true
+        },
+        'LogstoreName': logstoreName
+      },
+      'DependsOn': [projectName, `${projectName}${logstoreName}`]
     }
   };
 }
@@ -700,6 +711,7 @@ module.exports = {
   uploadNasService,
   processNasPythonPaths,
   transformFlowDefinition,
+  generateServiceLogConfig,
   generateRosTemplateForSLS,
   uploadAndUpdateFunctionCode,
   generateRosTemplateForRegionMap,

@@ -1161,7 +1161,7 @@ function castEnvironmentVariables(environments) {
 
 function generateSlsProjectName(accountId, region) {
   const uuidHash = getUuid(accountId);
-  return `fc-${region}-${uuidHash.substring(0, 13)}`;
+  return `aliyun-fc-${region}-${uuidHash}`;
 }
 
 async function generateDefaultLogConfig() {
@@ -1637,5 +1637,5 @@ module.exports = {
   detectLibrary, generateFunIngore, parseMountDirPrefix,
   FUN_GENERATED_SERVICE, invokeFcUtilsFunction, getFcUtilsFunctionCode, deleteFunction,
   processNasMappingsAndEnvs, processNasAutoConfiguration, nasAutoConfigurationIfNecessary,
-  makeFcUtilsFunctionNasDirChecker, generateDefaultLogConfig, makeFcUtilsFunctionTmpDomainToken
+  makeFcUtilsFunctionNasDirChecker, makeFcUtilsFunctionTmpDomainToken
 };

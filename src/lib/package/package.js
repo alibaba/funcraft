@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const nas = require('../nas');
 const path = require('path');
 const util = require('../import/utils');
+const uuid = require('uuid');
 const debug = require('debug')('fun:package');
 const nasSupport = require('../nas/support');
 
@@ -16,7 +17,6 @@ const { green, yellow } = require('colors');
 const { showPackageNextTips } = require('../build/tips');
 const { ensureFilesModified } = require('../utils/file');
 const { parseMountDirPrefix } = require('../fc');
-const { generateDefaultLogConfig } = require('../fc');
 const { getTpl, detectNasBaseDir, getNasYmlPath } = require('../tpl');
 const { promptForConfirmContinue, promptForInputContinue } = require('../init/prompt');
 const { validateNasAndVpcConfig, SERVICE_RESOURCE, iterateResources, isNasAutoConfig, isVpcAutoConfig, getUserIdAndGroupId } = require('../definition');
@@ -26,6 +26,7 @@ const {
   uploadNasService,
   processNasPythonPaths,
   transformFlowDefinition,
+  generateServiceLogConfig,
   generateRosTemplateForSLS,
   uploadAndUpdateFunctionCode,
   generateRosTemplateForRegionMap,
@@ -230,17 +231,16 @@ async function transformSlsAuto(tpl) {
 
   if (_.isEmpty(servicesNeedUpdate)) { return cloneTpl; }
 
-  const defaultLogConfig = await generateDefaultLogConfig();
+  const projectName = `fc-${uuid.v1()}`;
+  const logstoreName = 'function-log';
 
   for (const { serviceRes } of servicesNeedUpdate) {
     const serviceProp = (serviceRes.Properties || {});
-    serviceProp.LogConfig = {
-      Project: defaultLogConfig.project,
-      Logstore: defaultLogConfig.logstore
-    };
+
+    serviceProp.LogConfig = generateServiceLogConfig(projectName, logstoreName);
   }
 
-  Object.assign(cloneTpl.Resources, generateRosTemplateForSLS(defaultLogConfig.project, defaultLogConfig.logstore));
+  Object.assign(cloneTpl.Resources, generateRosTemplateForSLS(projectName, logstoreName));
 
   return cloneTpl;
 }
