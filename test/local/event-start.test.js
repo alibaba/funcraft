@@ -32,6 +32,7 @@ describe('test event start init', async () => {
     sandbox.stub(docker, 'createAndRunContainer').resolves(container);
 
     sandbox.stub(Invoke.prototype, 'init').resolves({});
+    sandbox.stub(Invoke.prototype, 'showDebugIdeTips').resolves({});
 
     EventStart = proxyquire('../../lib/local/event-start', {
       '../docker': docker,

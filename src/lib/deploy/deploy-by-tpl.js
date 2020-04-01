@@ -275,6 +275,12 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
     }
   } else if (logConfig.LogStore || logConfig.Project) {
     throw new Error('LogStore and Project must both exist');
+  } else if (definition.isLogConfigAuto(logConfig)) {
+    if (!roleArn) {
+      console.log('\tattaching police \'AliyunLogFullAccess\' to role: ' + roleName);
+      await attachPolicyToRole('AliyunLogFullAccess', roleName);
+      console.log(green('\tattached police \'AliyunLogFullAccess\' to role: ' + roleName));
+    }
   }
 
   return ((role || {}).Role || {}).Arn || roleArn || '';
@@ -367,21 +373,13 @@ async function processTemporaryDomain(resources, { serviceName, functionName }) 
   const tokenRs = await sendHttpRequest('POST', TMP_DOMAIN_URL, { accountID: accountId, region });
   const token = tokenRs.token;
 
-  const { serviceRes, functionRes } = definition.findFunctionByServiceAndFunctionName(resources, serviceName, functionName);
+  const { functionRes } = definition.findFunctionByServiceAndFunctionName(resources, serviceName, functionName);
 
   if (_.isEmpty(functionRes)) {
     throw new Error(`could not found service/function：${serviceName}/${functionName}`);
   }
 
-  const properties = (serviceRes.Properties || {});
-
-  const role = await generateServiceRole({ serviceName, roleArn: properties.Role, policies: properties.Policies,
-    vpcConfig: properties.VpcConfig,
-    nasConfig: properties.NasConfig,
-    logConfig: properties.LogConfig || {}
-  });
-
-  const { tmpServiceName, tmpFunctionName, tmpTriggerName } = await makeFcUtilsFunctionTmpDomainToken(token, role);
+  const { tmpServiceName, tmpFunctionName, tmpTriggerName } = await makeFcUtilsFunctionTmpDomainToken(token);
 
   const domainRs = await sendHttpRequest('POST', TMP_DOMAIN_URL, { accountID: accountId, region, token });
   const domainName = domainRs.domain;
@@ -393,7 +391,6 @@ async function processTemporaryDomain(resources, { serviceName, functionName }) 
   const currentTimestamp = Math.round(new Date().getTime() / 1000);
 
   if (expiredTime > currentTimestamp) {
-
     console.log(`The assigned temporary domain is ${yellow(domainName)}，expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.`);
   } else {
     console.log(`The temporary domain ${yellow(domainName)} of previous depoyment is expried.`);

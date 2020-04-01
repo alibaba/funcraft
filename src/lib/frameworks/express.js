@@ -1,9 +1,32 @@
 'use strict';
 
-const { promptForConfirmContinue } = require('../init/prompt');
-const { yellow, red } = require('colors');
-const fs = require('fs-extra');
 const path = require('path');
+const { detectAndReplaceAddr, generateFile } = require('./common/file');
+const { red } = require('colors');
+
+const mainFileSuffix = '.js';
+const mainFileRegex = '\\.listen\\s*\\(';
+
+const addrProcessores = [
+  { // .listen(8000, () => console.log('server started'));
+    regex: new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*,', 'm'),
+    replacer: (match, p1) => {
+      return `.listen(process.env.PORT || ${p1},`;
+    }
+  },
+  { // .listen(8000);
+    regex: new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*\\)', 'm'),
+    replacer: (match, p1) => {
+      return `.listen(process.env.PORT || ${p1})`;
+    }
+  },
+  { // .listen();
+    regex: new RegExp('\\.listen\\s*\\(\\s*\\)', 'm'),
+    replacer: (match) => {
+      return `.listen(process.env.PORT || 9000)`;
+    }
+  }
+];
 
 const express = {
   'id': 'Express',
@@ -55,45 +78,21 @@ npm run start
             'type': 'json',
             'path': 'package.json',
             'jsonKey': 'scripts.start'
-          },
-          {
-            'type': 'regex',
-            'paths': ['index.js', 'application.js', 'server.js', 'app.js'],
-            'content': '\\.listen\\s*\\('
           }
         ]
       },
-      'description': 'express custom port',
+      'description': 'if found start script, use npm run start directly',
       'processors': [
         {
           'type': 'function',
           'function': async (codeDir) => {
-            const regex = new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*,', 'm');
-            const paths = ['index.js', 'application.js', 'server.js'];
-            for (const p of paths) {
-              const indexPath = path.join(codeDir, p);
-              if (!await fs.pathExists(indexPath)) { continue; }
 
-              const indexContent = (await fs.readFile(indexPath)).toString();
-              const matched = indexContent.match(regex);
-              if (matched) {
-                const port = matched[1];
-                console.log(yellow(`Fun detected your application use port ${port} in ${p}`));
-                console.log(yellow(`Fun will replace your port ${port} to 'process.env.PORT || ${port}', and also backup your origin file ${p} to ${p}.bak`));
-
-                if (!await promptForConfirmContinue(yellow(`Are your sure?`))) {
-                  console.warn(red('Fun will not modify your application port, but if you want deploy to fc, you must use 9000 as your application server port'));
-                  return;
-                }
-
-                const replacedContent = indexContent.replace(regex, (match, p1) => {
-                  return `.listen(process.env.PORT || ${p1},`;
-                });
-
-                await fs.copyFile(indexPath, indexPath + '.bak');
-                await fs.writeFile(indexPath, replacedContent);
-              }
-            }
+            await detectAndReplaceAddr({
+              codeDir,
+              mainFileSuffix,
+              mainFileRegex,
+              addrProcessores
+            });
           }
         },
         {
@@ -103,6 +102,33 @@ npm run start
           'content': `#!/usr/bin/env bash
 export PORT=9000
 npm run start`
+        }
+      ]
+    },
+    {
+      'condition': true,
+      'description': '如果不是 generator 生成的，且没有 start script，则直接查找 mainFile',
+      'processors': [
+        {
+          'type': 'function',
+          'function': async (codeDir) => {
+            const { mainFile } = await detectAndReplaceAddr({
+              codeDir,
+              mainFileSuffix,
+              mainFileRegex,
+              addrProcessores
+            });
+
+            const bootstrap = `#!/usr/bin/env bash
+export PORT=9000
+node ${mainFile}`;
+
+            if (!mainFile) {
+              throw new Error(red('Could not find any express main file. You must add \'start\' script to package.json manully'));
+            }
+
+            generateFile(path.join(codeDir, 'bootstrap'), true, parseInt('0755', 8), bootstrap);
+          }
         }
       ]
     }

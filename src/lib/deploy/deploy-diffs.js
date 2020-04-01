@@ -36,12 +36,27 @@ const DEFAULT_VALUES = {
       }
 
       return false;
+    },
+    LogConfig: ({ action, newPropsValue, oldPropsValue }) => {
+      if (action === 'Modify' && newPropsValue === 'Auto') {
+        const project = oldPropsValue.Project;
+        const logstore = oldPropsValue.Logstore;
+
+        if (project && logstore) {
+          if (project.startsWith('aliyun-fc-') && logstore === 'function-log') {
+            return true;
+          }
+        }
+      }
+
+      return false;
     }
   },
   'Aliyun::Serverless::Function': {
     MemorySize: 128,
     Timeout: 3,
     InitializationTimeout: 3,
+    InstanceConcurrency: 1,
     CodeUri: () => {
       return false;
     },

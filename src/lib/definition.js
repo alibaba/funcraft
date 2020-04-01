@@ -428,6 +428,10 @@ function isNasAutoConfig(nasConfig) {
   return false;
 }
 
+function isLogConfigAuto(logConfig) {
+  return logConfig === 'Auto';
+}
+
 function getUserIdAndGroupId(nasConfig) {
   if (_.isEmpty(nasConfig)) { return {}; }
 
@@ -483,5 +487,5 @@ module.exports = {
   findServiceByCertainServiceAndFunctionName, deleteUnmatchFunctionsUnderServiceRes,
   isNasAutoConfig, isVpcAutoConfig, parseFunctionPath, iterateFunctions, parseDomainRoutePath,
   onlyOneNASExists, findServiceByServiceName, findFunctionByServiceAndFunctionName, getUserIdAndGroupId,
-  SERVICE_RESOURCE, FUNCTION_RESOURCE, FLOW_RESOURCE, validateNasAndVpcConfig
+  SERVICE_RESOURCE, FUNCTION_RESOURCE, FLOW_RESOURCE, validateNasAndVpcConfig, isLogConfigAuto
 };

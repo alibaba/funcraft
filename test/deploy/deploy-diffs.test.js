@@ -650,12 +650,6 @@ describe('test function props', () => {
         'id': 'php72',
         'propsName': 'MemorySize',
         'resourceType': 'Aliyun::Serverless::Function'
-      },
-      {
-        'action': 'Delete',
-        'id': 'php72',
-        'propsName': 'InstanceConcurrency',
-        'resourceType': 'Aliyun::Serverless::Function'
       }
     ]);
   });
