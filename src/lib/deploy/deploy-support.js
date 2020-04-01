@@ -179,7 +179,7 @@ async function makeSlsProject(projectName, description) {
 }
 
 async function makeSlsAuto(projectName, description, logstoreName) {
-  const create = await makeSlsProject(projectName, description);
+  await makeSlsProject(projectName, description);
 
   await makeLogstore({
     projectName,
