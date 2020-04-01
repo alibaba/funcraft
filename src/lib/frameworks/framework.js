@@ -14,6 +14,7 @@ const frameworks = [
   require('./spring-boot'),
 
   // node
+  require('./egg'),
   require('./nuxt'),
   require('./express'),
   require('./next'),
@@ -288,6 +289,7 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: This is FC service
+      LogConfig: Auto
     ${folderName}: # function name
       Type: 'Aliyun::Serverless::Function'
       Properties:
