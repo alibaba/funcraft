@@ -1161,7 +1161,7 @@ function castEnvironmentVariables(environments) {
 
 function generateSlsProjectName(accountId, region) {
   const uuidHash = getUuid(accountId);
-  return `aliyun-fc-${region}-${uuidHash}`;
+  return `fc-${region}-${uuidHash.substring(0, 13)}`;
 }
 
 async function generateDefaultLogConfig() {

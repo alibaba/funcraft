@@ -374,9 +374,9 @@ function generateRosTemplateForRegionMap() {
   };
 }
 
-function generateSlsService(logConfig) {
+function generateRosTemplateForSLS(projectName, logstoreName) {
   return {
-    [logConfig.project]: {
+    [projectName]: {
       'Type': 'Aliyun::Serverless::Log',
       'Properties': {
         'Description': 'create by fun.',
@@ -384,11 +384,29 @@ function generateSlsService(logConfig) {
           'AliyunLogFullAccess'
         ]
       },
-      [logConfig.logstore]: {
+      [logstoreName]: {
         'Type': 'Aliyun::Serverless::Log::Logstore',
         'Properties': {
           'TTL': 10,
           'ShardCount': 1
+        }
+      },
+
+      'functionLogIndex': {
+        'Type': 'ALIYUN::SLS::Index',
+        'Properties': {
+          'ProjectName': {
+            'Fn::GetAtt': [
+              projectName,
+              'Name'
+            ]
+          },
+          'FullTextIndex': {
+            'Enable': true,
+            'IncludeChinese': true
+          },
+          'LogstoreName': logstoreName,
+          'DependsOn': [projectName, `${projectName}${logstoreName}`]
         }
       }
     }
@@ -680,9 +698,9 @@ async function transformFlowDefinition(baseDir, tpl) {
 module.exports = {
   zipToOss,
   uploadNasService,
-  generateSlsService,
   processNasPythonPaths,
   transformFlowDefinition,
+  generateRosTemplateForSLS,
   uploadAndUpdateFunctionCode,
   generateRosTemplateForRegionMap,
   generateRosTemplateForNasConfig,

@@ -24,9 +24,9 @@ const { validateNasAndVpcConfig, SERVICE_RESOURCE, iterateResources, isNasAutoCo
 const {
   zipToOss,
   uploadNasService,
-  generateSlsService,
   processNasPythonPaths,
   transformFlowDefinition,
+  generateRosTemplateForSLS,
   uploadAndUpdateFunctionCode,
   generateRosTemplateForRegionMap,
   generateRosTemplateForVpcConfig,
@@ -234,10 +234,13 @@ async function transformSlsAuto(tpl) {
 
   for (const { serviceRes } of servicesNeedUpdate) {
     const serviceProp = (serviceRes.Properties || {});
-    serviceProp.LogConfig = defaultLogConfig;
+    serviceProp.LogConfig = {
+      Project: defaultLogConfig.project,
+      Logstore: defaultLogConfig.logstore
+    };
   }
 
-  Object.assign(cloneTpl.Resources, generateSlsService(defaultLogConfig));
+  Object.assign(cloneTpl.Resources, generateRosTemplateForSLS(defaultLogConfig.project, defaultLogConfig.logstore));
 
   return cloneTpl;
 }
