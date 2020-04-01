@@ -28,7 +28,8 @@ const springboot = {
             const targetPath = path.join(codeDir, 'target');
 
             if (!await fs.pathExists(targetPath)) {
-              throw new Error(`you must package your spring boot project before deploying. For example, you can use 'mvn package' to package spring boot to a jar.`);
+              throw new Error(`You must package your SpringBoot project before deploying.
+You can use 'mvn package' to package SpringBoot to a jar.`);
             }
             const targetContents = await fs.readdir(targetPath);
 
@@ -43,11 +44,12 @@ const springboot = {
             }
             
             if (jarFiles.length === 0) {
-              throw new Error(`could not find any jar from 'target' folder`);
+              throw new Error(`Could not find any jar from 'target' folder.
+You can use 'mvn package' to package SpringBoot to a jar.`);
             }
 
             if (jarFiles.length > 1) {
-              throw new Error(`found more than one jar files from 'target' folder`);
+              throw new Error(`Found more than one jar files from 'target' folder`);
             }
 
             const bootstrap = `#!/usr/bin/env bash
