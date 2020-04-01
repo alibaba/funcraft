@@ -27,7 +27,7 @@ const eggjs = {
   'actions': [
     {
       'condition': true,
-      'description': 'use npx nuxt to start server',
+      'description': 'use npx egg-scripts to start server',
       'processors': [
         {
           'type': 'function',

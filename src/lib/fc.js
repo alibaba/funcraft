@@ -1171,7 +1171,7 @@ async function generateDefaultLogConfig() {
 }
 
 async function transformLogConfig(logConfig) {
-  if (definition.isLogAutoConfig(logConfig)) {
+  if (definition.isLogConfigAuto(logConfig)) {
     const defaultLogConfig = await generateDefaultLogConfig();
 
     console.log(yellow(`\tusing 'LogConfig: Auto'. Fun will generate default sls project.`));
@@ -1190,7 +1190,7 @@ async function transformLogConfig(logConfig) {
 }
 
 // make sure sls project and logstore is created
-async function doMakeServiceWithSlsRetry(serviceName, options, create, fcClient) {
+async function retryUntilSlsCreated(serviceName, options, create, fcClient) {
   let slsRetry = 0;
   let service;
   do {
@@ -1296,7 +1296,7 @@ async function makeService({
   await promiseRetry(async (retry, times) => {
 
     try {
-      service = await doMakeServiceWithSlsRetry(serviceName, options, !service, fc);
+      service = await retryUntilSlsCreated(serviceName, options, !service, fc);
     } catch (ex) {
       if (ex.code === 'AccessDenied') {
         throw ex;

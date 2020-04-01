@@ -275,7 +275,7 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
     }
   } else if (logConfig.LogStore || logConfig.Project) {
     throw new Error('LogStore and Project must both exist');
-  } else if (definition.isLogAutoConfig(logConfig)) {
+  } else if (definition.isLogConfigAuto(logConfig)) {
     if (!roleArn) {
       console.log('\tattaching police \'AliyunLogFullAccess\' to role: ' + roleName);
       await attachPolicyToRole('AliyunLogFullAccess', roleName);
