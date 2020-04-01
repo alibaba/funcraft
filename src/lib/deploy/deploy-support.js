@@ -180,8 +180,6 @@ async function makeSlsProject(projectName, description) {
 
 async function makeSlsAuto(projectName, description, logstoreName) {
   const create = await makeSlsProject(projectName, description);
-  // to ensure that sls project exists when fun deploy
-  if (create) { await sleep(1000); }
 
   await makeLogstore({
     projectName,
