@@ -1,0 +1,14 @@
+{
+  "name": "fonts",
+  "version": "1.0.0",
+  "description": "fonts example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ellison",
+  "license": "ISC",
+  "dependencies": {
+    "font-list": "^1.2.6"
+  }
+}
