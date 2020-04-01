@@ -1071,6 +1071,8 @@ async function makeFunction(baseDir, {
           tpl: await getTpl(tplPath),
           envs: DEFAULT_FONTS_CONFIG_ENV
         });
+
+        Object.assign(environmentVariables, DEFAULT_FONTS_CONFIG_ENV);
       }
 
       console.log(`\t\tWaiting for packaging function ${functionName} code...`);
