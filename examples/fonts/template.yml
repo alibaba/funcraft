@@ -23,3 +23,13 @@ Resources:
               - GET
               - POST
               - PUT
+  tmp_domain:
+    Type: 'Aliyun::Serverless::CustomDomain'
+    Properties:
+      DomainName: Auto
+      Protocol: HTTP
+      RouteConfig:
+        Routes:
+          /:
+            ServiceName: fonts-service
+            FunctionName: fonts-function
