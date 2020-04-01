@@ -6,10 +6,10 @@ const path = require('path');
 const { yellow } = require('colors');
 const { promptForConfirmContinue } = require('../init/prompt');
 
-const nuxtjs = {
-  'id': 'nuxtjs',
+const eggjs = {
+  'id': 'egg.js',
   'runtime': 'nodejs',
-  'website': 'https://nuxtjs.org/',
+  'website': 'https://eggjs.org/',
   'detectors': {
     'or': [
       {
@@ -47,7 +47,7 @@ module.exports = {
               console.log(`${yellow('Fun detected')} your production config '${yellow(prodConfigPath)}' file already exists`);
               console.log(`You need to add these content to your production config file:`);
               console.log(yellow(prodConfigContent));
-              
+
               await promptForConfirmContinue(yellow(`Continue`));
             } else {
               await file.generateFile(prodConfigPath, true, parseInt('0755', 8), prodConfigContent);
@@ -69,4 +69,4 @@ npx --no-install egg-scripts start --workers=1
   ]
 };
 
-module.exports = nuxtjs;
+module.exports = eggjs;

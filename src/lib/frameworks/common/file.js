@@ -23,7 +23,7 @@ async function findMainFile(codeDir, fileSuffix, mainRegex) {
   return null;
 }
 
-async function detectAndReplacePort(mainFile, addrProcessores) {
+async function detectAndReplaceMainFileAddr(mainFile, addrProcessores) {
   const mainFileContents = await fs.readFile(mainFile, 'utf8');
 
   for (const addrProcessor of addrProcessores) {
@@ -65,7 +65,7 @@ async function detectAndReplaceAddr({
     return { mainFile: null };
   }
 
-  await detectAndReplacePort(mainFile, addrProcessores);
+  await detectAndReplaceMainFileAddr(mainFile, addrProcessores);
 
   return { mainFile };
 }

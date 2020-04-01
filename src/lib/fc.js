@@ -1296,7 +1296,7 @@ async function makeService({
   await promiseRetry(async (retry, times) => {
 
     try {
-      await doMakeServiceWithSlsRetry(serviceName, options, !service, fc);
+      service = await doMakeServiceWithSlsRetry(serviceName, options, !service, fc);
     } catch (ex) {
       if (ex.code === 'AccessDenied') {
         throw ex;
