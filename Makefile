@@ -47,4 +47,4 @@ package-fun-nas-server:
 upload: 
 	@script/upload.sh
 
-.PHONY: test clean binary build
+.PHONY: test clean binary build postbuild
