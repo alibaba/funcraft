@@ -30,6 +30,13 @@ test-coveralls:
 
 clean: 
 	@rm -rf output
+	
+build:
+	tsc -p ./
+
+postbuild:
+	copyfiles -a -u 1 -e \"**/*.{js,ts}\" \"src/**/*\" ./
+	chmod +x bin/*.js
 
 binary: clean package-fun-nas-server
 	@script/binary.sh
@@ -40,4 +47,4 @@ package-fun-nas-server:
 upload: 
 	@script/upload.sh
 
-.PHONY: test clean binary
+.PHONY: test clean binary build postbuild

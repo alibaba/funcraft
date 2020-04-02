@@ -106,3 +106,5 @@ src/lib/utils/fun-nas-server/.fun/root/*
 !src/lib/utils/fun-nas-server/.fun/root/usr
 src/lib/utils/fun-nas-server/.fun/root/usr/*
 !src/lib/utils/fun-nas-server/.fun/root/usr/bin
+
+.fun

@@ -69,7 +69,10 @@ async function invoke(invokeName, options) {
 
   debug(`found serviceName: ${serviceName}, functionName: ${functionName}, functionRes: ${functionRes}`);
 
-  const absTmpDir = await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
+  // env 'DISABLE_BIND_MOUNT_TMP_DIR' to disable bind mount of tmp dir.
+  // libreoffice will failed if /tmp directory is bind mount by docker.
+  const absTmpDir = process.env.DISABLE_BIND_MOUNT_TMP_DIR ? 
+    undefined : await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
 
   // Lazy loading to avoid stdin being taken over twice.
   const LocalInvoke = require('../../local/local-invoke');
