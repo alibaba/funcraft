@@ -176,7 +176,7 @@ async function packFromJson(files) {
   return await generateAsync(zip);
 }
 
-async function packTo(file, funignore, targetPath, prefix = '') {
+async function packTo(file, funignore, targetPath, prefix = '', zlibOptions = {}) {
   if (!(await fs.pathExists(file))) {
     throw new Error(`zip file ${file} is not exist.`);
   }
@@ -195,9 +195,9 @@ async function packTo(file, funignore, targetPath, prefix = '') {
 
   const output = fs.createWriteStream(targetPath);
   const zipArchiver = archiver('zip', {
-    zlib: {
+    zlib: _.merge({
       level: 6
-    }
+    }, zlibOptions)
   }).on('progress', (progress) => {
     bar.total = progress.entries.total;
     bar.tick({
