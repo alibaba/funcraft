@@ -37,8 +37,8 @@
     "lint": "eslint --fix src/lib src/bin test",
     "validate-lint": "eslint src/lib src/bin test",
     "prepack": "npm install && npm run build && chmod +x bin/* && make package-fun-nas-server",
-    "build": "tsc -p ./",
-    "postbuild": "copyfiles -a -u 1 -e \"**/*.{js,ts}\" \"src/**/*\" ./"
+    "build": "make build",
+    "postbuild": "make postbuild"
   },
   "author": "Jackson Tian",
   "maintainers": [
