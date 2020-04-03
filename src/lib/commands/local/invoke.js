@@ -60,7 +60,7 @@ async function invoke(invokeName, options) {
     console.log(`\nMissing invokeName argument, Fun will use the first function ${yellow(invokeName)} as invokeName\n`);
   }
 
-  const event = await eventPriority(options, 'local invoke', '/fun/local/invoke');
+  const event = await eventPriority(options);
   debug('event content: ' + event);
 
   const debugPort = getDebugPort(options);

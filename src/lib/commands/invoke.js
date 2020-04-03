@@ -153,7 +153,7 @@ async function invoke(invokeName, options) {
     throw new Error(red(`error: unexpected argument：${invocationType}`));
   }
 
-  const event = await eventPriority(options, 'fun invoke', '/fun/invoke');
+  const event = await eventPriority(options);
 
   const httpTriggers = await getHttpTrigger(serviceName, functionName);
 
