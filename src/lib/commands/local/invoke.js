@@ -8,9 +8,22 @@ const definition = require('../../definition');
 const { red, yellow } = require('colors');
 const { ensureTmpDir } = require('../../utils/path');
 const { getDebugPort, getDebugIde } = require('../../debug');
-const { getEvent, ensureFilesModified } = require('../../utils/file');
+const { ensureFilesModified, eventPriority } = require('../../utils/file');
 const { generateMergedTpl, detectNasBaseDir } = require('../../tpl');
 const { mergeTplWithoutBuildYml, transformDotnetCodeUri } = require('./util');
+
+function findFunctionInTpl(invokeName, tpl) {
+  const { serviceName, serviceRes, functionName, functionRes } = definition.findFunctionInTpl(invokeName, tpl);
+  if (!functionRes) {
+    throw new Error(red(`invokeName ${invokeName} is invalid`));
+  }
+  return {
+    serviceName,
+    serviceRes,
+    functionName,
+    functionRes
+  };
+}
 
 async function invoke(invokeName, options) {
   let isDotnetcore = false;
@@ -47,7 +60,7 @@ async function invoke(invokeName, options) {
     console.log(`\nMissing invokeName argument, Fun will use the first function ${yellow(invokeName)} as invokeName\n`);
   }
 
-  const event = await getEvent(options.event);
+  const event = await eventPriority(options, 'local invoke', '/fun/local/invoke');
   debug('event content: ' + event);
 
   const debugPort = getDebugPort(options);
@@ -86,19 +99,6 @@ async function invoke(invokeName, options) {
   );
 
   await localInvoke.invoke(event);
-}
-
-function findFunctionInTpl(invokeName, tpl) {
-  const { serviceName, serviceRes, functionName, functionRes } = definition.findFunctionInTpl(invokeName, tpl);
-  if (!functionRes) {
-    throw new Error(red(`invokeName ${invokeName} is invalid`));
-  }
-  return {
-    serviceName,
-    serviceRes,
-    functionName,
-    functionRes
-  };
 }
 
 module.exports = { invoke };

@@ -61,6 +61,7 @@ async function getEvent(eventFile, ec = 'local invoke', dp = '/fun/local/invoke'
       event += line;
     });
     rl.on('close', () => {
+      console.log();
       getVisitor().then(visitor => {
         visitor.event({
           ec,
@@ -87,6 +88,33 @@ async function getEvent(eventFile, ec = 'local invoke', dp = '/fun/local/invoke'
       });
     });
   });
+}
+
+function isLocalEventString(options, ec) {
+  return ec === 'local invoke' && options.event && !fs.pathExistsSync(options.event);
+}
+
+function isInvokeEventString(options, ec) {
+  return ec === 'fun invoke' && options.event;
+}
+
+function isEventString(options, ec) {
+  return isInvokeEventString(options, ec) || isLocalEventString(options, ec);
+}
+
+async function eventPriority(options, ec, dp) {
+  if (isEventString(options, ec)) { return options.event; }
+  let eventFile;
+
+  if (options.eventStdin) {
+    eventFile = '-';
+  } else if (options.eventFile) {
+    eventFile = path.resolve(process.cwd(), options.eventFile);
+  } else if (options.event) {
+    eventFile = path.resolve(process.cwd(), options.event);
+  }
+
+  return await getEvent(eventFile, ec, dp);
 }
 
 async function recordMtimes(filePaths, buildOps, recordedPath) {
@@ -163,9 +191,7 @@ async function getModifiedTimestamps(tplPath) {
 
   const metaObj = await readJsonFromFile(metaPath);
 
-  if (_.isEmpty(metaObj)) {
-    return {};
-  }
+  if (_.isEmpty(metaObj)) { return {}; }
 
   return _.pickBy((metaObj.modifiedTimestamps || {}), (mtime, filePath) => {
     const lstat = fs.lstatSync(filePath);
@@ -184,4 +210,7 @@ Fun detected the above path have been modified. Please execute ‘fun build’ t
   }
 }
 
-module.exports = { readLines, getEvent, recordMtimes, readJsonFromFile, ensureFilesModified, updateTimestamps };
+module.exports = {
+  readLines, getEvent, recordMtimes, eventPriority,
+  readJsonFromFile, ensureFilesModified, updateTimestamps
+};

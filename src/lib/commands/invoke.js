@@ -6,12 +6,12 @@ const path = require('path');
 const validate = require('../../lib/commands/validate');
 const getProfile = require('../../lib/profile').getProfile;
 
-const { getTpl, detectTplPath } = require('../tpl');
-const { getTriggerMetas } = require('../../lib/import/service');
-const { promptForFunctionSelection } = require('../init/prompt');
-const { findFunctionsInTpl, parseFunctionPath, findFirstFunctionName } = require('../definition');
-const { getEvent, readJsonFromFile } = require('../utils/file');
 const { red, yellow } = require('colors');
+const { getTriggerMetas } = require('../../lib/import/service');
+const { getTpl, detectTplPath } = require('../tpl');
+const { promptForFunctionSelection } = require('../init/prompt');
+const { eventPriority, readJsonFromFile } = require('../utils/file');
+const { findFunctionsInTpl, parseFunctionPath, findFirstFunctionName } = require('../definition');
 
 const _ = require('lodash');
 
@@ -64,7 +64,6 @@ async function getAndVerifyTpl() {
   return await getTpl(tplPath);
 }
 
-
 async function certainInvokeName(invokeName) {
 
   const [parsedServiceName, parsedFunctionName] = parseFunctionPath(invokeName);
@@ -78,18 +77,6 @@ async function certainInvokeName(invokeName) {
     serviceName: parsedServiceName,
     functionName: parsedFunctionName
   };
-}
-
-async function eventPriority(options) {
-  if (options.eventStdin) {
-    return await getEvent('-', 'fun invoke', '/fun/invoke');
-  }
-
-  if (options.eventFile) {
-    return await getEvent(path.resolve(options.eventFile), 'fun invoke', '/fun/invoke');
-  }
-
-  return options.event;
 }
 
 function displayTriggerInfo(httpTrigger, accountId, region, serviceName, functionName) {
@@ -166,7 +153,7 @@ async function invoke(invokeName, options) {
     throw new Error(red(`error: unexpected argument：${invocationType}`));
   }
 
-  const event = await eventPriority(options);
+  const event = await eventPriority(options, 'fun invoke', '/fun/invoke');
 
   const httpTriggers = await getHttpTrigger(serviceName, functionName);
 
