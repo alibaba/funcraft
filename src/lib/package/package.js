@@ -93,7 +93,7 @@ async function processNasAutoToRosTemplate({ tpl, baseDir, tplPath,
         continue;
       }
       const prefix = path.relative(parseMountDirPrefix(nasConfig), remoteNasDir);
-      const objectName = await zipToOss(ossClient, srcPath, null, 'nas.zip', prefix, tplPath);
+      const objectName = await zipToOss(ossClient, srcPath, null, 'nas.zip', prefix, tplPath, { level: 1 });
 
       if (!objectName) {
         console.warn(`\n${srcPath} is empty directory, skiping.`);

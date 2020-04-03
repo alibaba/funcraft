@@ -445,10 +445,10 @@ async function uploadToOss({ ossClient, zipPath,
   return objectName;
 }
 
-async function zipCode(srcPath, ignore, zipName = 'code.zip', prefix) {
+async function zipCode(srcPath, ignore, zipName = 'code.zip', prefix, zlibOptions = {}) {
 
   const { randomDir, zipPath} = await generateRandomZipPath(zipName);
-  const { count, compressedSize } = await zip.packTo(srcPath, ignore, zipPath, prefix);
+  const { count, compressedSize } = await zip.packTo(srcPath, ignore, zipPath, prefix, zlibOptions);
 
   return {
     zipPath,
@@ -462,7 +462,8 @@ async function zipCodeToOss({ ossClient, codeUri, runtime, ignore, tplPath, nasC
   serviceName, functionName,
   zipName = 'code.zip',
   prefix = '',
-  useNas = false
+  useNas = false,
+  zlibOptions = {}
 }) {
 
   let objectName;
@@ -479,7 +480,7 @@ async function zipCodeToOss({ ossClient, codeUri, runtime, ignore, tplPath, nasC
     return { objectName };
   }
 
-  const { zipPath, randomDir, count, compressedSize } = await zipCode(codeUri, ignore, zipName, prefix);
+  const { zipPath, randomDir, count, compressedSize } = await zipCode(codeUri, ignore, zipName, prefix, zlibOptions);
 
   if (count === 0) { return { isEmpty: true, objectName }; }
 
@@ -519,10 +520,10 @@ async function uploadNasService(ossClient, tplPath) {
   return `oss://${ossClient.options.bucket}/${objectName}`;
 }
 
-async function zipToOss(ossClient, srcPath, ignore, zipName = 'code.zip', prefix = '', tplPath) {
+async function zipToOss(ossClient, srcPath, ignore, zipName = 'code.zip', prefix = '', tplPath, zlibOptions = {}) {
   const { randomDir, zipPath} = await generateRandomZipPath(zipName);
 
-  const { count, compressedSize } = await zip.packTo(srcPath, ignore, zipPath, prefix);
+  const { count, compressedSize } = await zip.packTo(srcPath, ignore, zipPath, prefix, zlibOptions);
   if (count === 0) { return null; }
 
   const objectName = await util.md5(zipPath);
@@ -576,6 +577,7 @@ async function uploadAndUpdateFunctionCode({ tpl, tplPath, useNas, baseDir, ossC
   let updatedTplContent = _.cloneDeep(tpl);
 
   let processed;
+  let zlibOptions = {};
   do {
     if (processed) {
       console.log(yellow(`\nFun will execute the ‘fun package’ again.`));
@@ -603,7 +605,8 @@ async function uploadAndUpdateFunctionCode({ tpl, tplPath, useNas, baseDir, ossC
 
       const rs = await zipCodeToOss({
         ossClient, codeUri: absCodeUri, runtime, ignore, tplPath, useNas,
-        serviceName, functionName, nasConfig: (serviceRes.Properties || {}).NasConfig
+        serviceName, functionName, nasConfig: (serviceRes.Properties || {}).NasConfig,
+        zlibOptions
       });
 
       if (!rs.objectName && rs.isEmpty) {
@@ -612,6 +615,7 @@ async function uploadAndUpdateFunctionCode({ tpl, tplPath, useNas, baseDir, ossC
       if (rs.stop) {
         processed = true;
         useNas = false;
+        zlibOptions.level = 1;
         updatedTplContent = await getTpl(tplPath);
         break;
       }
