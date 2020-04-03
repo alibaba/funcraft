@@ -30,7 +30,7 @@ parameter.`)
   `)
 
   .option('--no-reuse', `Do not reuse the container which was started by the 'fun local start {service}/{function}' command.`)
-  .option('--tmp-dir <tmpDir>', `The temp directory mounted to /fun_tmp , default to './.fun/tmp/invoke/{service}/{function}/'`)
+  .option('--tmp-dir <tmpDir>', `The temp directory mounted to /tmp , default to './.fun/tmp/invoke/{service}/{function}/'`)
   .option('--debug-args <debugArgs>', 'additional parameters that will be passed to the debugger')
   .option('--debugger-path <debuggerPath>', `the path of the debugger on the host
   `)

@@ -123,7 +123,7 @@ async function resolveTmpDirToMount(absTmpDir) {
   return {
     Type: 'bind',
     Source: absTmpDir,
-    Target: '/fun_tmp',
+    Target: '/tmp',
     ReadOnly: false
   };
 }
