@@ -123,7 +123,7 @@ async function resolveTmpDirToMount(absTmpDir) {
   return {
     Type: 'bind',
     Source: absTmpDir,
-    Target: '/tmp',
+    Target: '/fun_tmp',
     ReadOnly: false
   };
 }
@@ -463,8 +463,10 @@ async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionNa
     'FC_SERVICE_LOG_STORE': ((serviceProps || {}).LogConfig || {}).Logstore
   });
 
+
   return addEnv(envs, nasConfig);
 }
+
 
 async function pullImageIfNeed(imageName) {
   const exist = await imageExist(imageName);

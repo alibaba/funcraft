@@ -141,7 +141,7 @@ describe('test resolveTmpDirToMount', () => {
     expect(mount).to.eql({
       Type: 'bind',
       Source: '/tmp',
-      Target: '/tmp',
+      Target: '/fun_tmp',
       ReadOnly: false
     });
   });
