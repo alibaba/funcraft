@@ -6,7 +6,6 @@ const debug = require('debug')('fun:deploy');
 const promiseRetry = require('../retry');
 const getProfile = require('../profile').getProfile;
 
-const { sleep } = require('../time');
 const { green, red } = require('colors');
 const { processApiParameters } = require('./deploy-support-api');
 const { getCloudApiClient, getSlsClient, getMnsClient } = require('../client');
@@ -179,9 +178,7 @@ async function makeSlsProject(projectName, description) {
 }
 
 async function makeSlsAuto(projectName, description, logstoreName) {
-  const create = await makeSlsProject(projectName, description);
-  // to ensure that sls project exists when fun deploy
-  if (create) { await sleep(500); }
+  await makeSlsProject(projectName, description);
 
   await makeLogstore({
     projectName,

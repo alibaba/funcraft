@@ -1637,5 +1637,5 @@ module.exports = {
   detectLibrary, generateFunIngore, parseMountDirPrefix,
   FUN_GENERATED_SERVICE, invokeFcUtilsFunction, getFcUtilsFunctionCode, deleteFunction,
   processNasMappingsAndEnvs, processNasAutoConfiguration, nasAutoConfigurationIfNecessary,
-  makeFcUtilsFunctionNasDirChecker, generateDefaultLogConfig, makeFcUtilsFunctionTmpDomainToken
+  makeFcUtilsFunctionNasDirChecker, makeFcUtilsFunctionTmpDomainToken
 };
