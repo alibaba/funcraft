@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const fc = require('../../fc');
 const path = require('path');
 const debug = require('debug')('fun:local');
@@ -83,9 +84,18 @@ async function invoke(invokeName, options) {
   debug(`found serviceName: ${serviceName}, functionName: ${functionName}, functionRes: ${functionRes}`);
 
   // env 'DISABLE_BIND_MOUNT_TMP_DIR' to disable bind mount of tmp dir.
-  // libreoffice will failed if /tmp directory is bind mount by docker.
-  const absTmpDir = process.env.DISABLE_BIND_MOUNT_TMP_DIR ? 
-    undefined : await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
+  // libreoffice will be failed if /tmp directory is bind mount by docker.
+  // dotnetcore runtime local run will be failed if /tmp directory is bind mount by docker in win.
+  let absTmpDir;
+  if (isDotnetcoreRuntime(runtime)) {
+    if (isFalseValue(process.env.DISABLE_BIND_MOUNT_TMP_DIR)) {
+      absTmpDir = await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
+    }
+  } else if (!isFalseValue(process.env.DISABLE_BIND_MOUNT_TMP_DIR)) {
+    absTmpDir = await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
+  }
+
+  debug(`The temp directory mounted to /tmp is ${absTmpDir || 'null'}`);
 
   // Lazy loading to avoid stdin being taken over twice.
   const LocalInvoke = require('../../local/local-invoke');
@@ -99,6 +109,14 @@ async function invoke(invokeName, options) {
   );
 
   await localInvoke.invoke(event);
+}
+
+function isDotnetcoreRuntime(runtime) {
+  return runtime.indexOf('dotnetcore') > -1;
+}
+
+function isFalseValue(val) {
+  return val && (_.toLower(val) === 'false' || val === '0');
 }
 
 module.exports = { invoke };
