@@ -30,7 +30,7 @@ const tpl = {
 };
 
 const file = {
-  getEvent: sandbox.stub()
+  eventPriority: sandbox.stub()
 };
 
 describe('fun-invoke test', () => {
@@ -72,6 +72,7 @@ describe('fun-invoke test', () => {
 
   it('fun invoke ros template test', async () => {
 
+    file.eventPriority.returns('');
     const rosTemplatePath = path.join('.fun', 'tmp', 'rosTemplate.json');
 
     const absRosTemplatePath = path.resolve(rosTemplatePath);
@@ -99,6 +100,7 @@ describe('fun-invoke test', () => {
 
   it('fun invoke without invokeName, default first function in tpl', async () => {
 
+    file.eventPriority.returns('');
     tpl.getTpl.returns(mockData.tpl);
     service.getTriggerMetas.returns({});
     await invokeFuntion(undefined, {
@@ -117,6 +119,7 @@ describe('fun-invoke test', () => {
 
   it('serviceName/functionName and event is empty stirng and uppercase Sync', async () => {
 
+    file.eventPriority.returns('');
     service.getTriggerMetas.returns({});
     await invokeFuntion('serviceName/functionName', {
       event: '',
@@ -134,7 +137,7 @@ describe('fun-invoke test', () => {
 
   it('serviceName/functionName and event is eventStdin and uppercase Sync', async () => {
 
-    file.getEvent.returns('eventStdin');
+    file.eventPriority.returns('eventStdin');
     service.getTriggerMetas.returns({});
     await invokeFuntion('serviceName/functionName', {
       event: '',
@@ -152,6 +155,7 @@ describe('fun-invoke test', () => {
 
   it('serviceName/functionName and event is empty stirng and lowercase async', async () => {
 
+    file.eventPriority.returns('');
     service.getTriggerMetas.returns({});
     await invokeFuntion('serviceName/functionName', {
       event: '',
@@ -170,7 +174,7 @@ describe('fun-invoke test', () => {
 
   it('serviceName/functionName and event is eventFile and uppercase Sync', async () => {
 
-    file.getEvent.returns('eventFile');
+    file.eventPriority.returns('eventFile');
     service.getTriggerMetas.returns({});
 
     await invokeFuntion('serviceName/functionName', {
@@ -187,9 +191,9 @@ describe('fun-invoke test', () => {
     });
   });
 
-
   it('single functionName and event is empty stirng and uppercase Sync', async () => {
 
+    file.eventPriority.returns('');
     tpl.getTpl.returns(mockData.tpl);
     service.getTriggerMetas.returns({});
     await invokeFuntion('python3', {
@@ -208,6 +212,7 @@ describe('fun-invoke test', () => {
 
   it('duplicated functions and event is empty stirng and uppercase Sync', async () => {
 
+    file.eventPriority.returns('');
     tpl.getTpl.returns(mockData.tplWithDuplicatedFunction);
     service.getTriggerMetas.returns({});
     await invokeFuntion('python3', {
@@ -226,7 +231,7 @@ describe('fun-invoke test', () => {
 
 
   it('exit http trigger in function', async () => {
-
+    file.eventPriority.returns('');
     service.getTriggerMetas.returns([
       {
         'triggerName': 'http-test',
@@ -261,6 +266,7 @@ describe('fun-invoke test', () => {
 
 
   it('http trigger bind more than one qualifier', async () => {
+    file.eventPriority.returns('');
     service.getTriggerMetas.returns([
       {
         'triggerName': 'http-test',
