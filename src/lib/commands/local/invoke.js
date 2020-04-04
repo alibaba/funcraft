@@ -91,7 +91,9 @@ async function invoke(invokeName, options) {
     if (isFalseValue(process.env.DISABLE_BIND_MOUNT_TMP_DIR)) {
       absTmpDir = await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
     }
-  } else if (!isFalseValue(process.env.DISABLE_BIND_MOUNT_TMP_DIR)) {
+  } else if (!process.env.DISABLE_BIND_MOUNT_TMP_DIR
+    || isFalseValue(process.env.DISABLE_BIND_MOUNT_TMP_DIR)
+  ) {
     absTmpDir = await ensureTmpDir(options.tmpDir, tplPath, serviceName, functionName);
   }
 
