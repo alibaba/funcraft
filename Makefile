@@ -35,7 +35,7 @@ build:
 	tsc -p ./
 
 postbuild:
-	copyfiles -a -u 1 -e \"**/*.{js,ts}\" \"src/**/*\" ./
+	copyfiles -a -u 1 -e "**/*.{js,ts}" "src/**/*" ./
 	chmod +x bin/*.js
 
 binary: clean package-fun-nas-server

@@ -160,7 +160,7 @@
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
     "suppose": "^0.6.2",
-    "typescript": "^3.6.4"
+    "typescript": "3.4.5"
   },
   "repository": {
     "type": "git",
