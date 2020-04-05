@@ -36,7 +36,7 @@
     "upload": "make upload",
     "lint": "eslint --fix src/lib src/bin test",
     "validate-lint": "eslint src/lib src/bin test",
-    "prepack": "npm install && npm run build && chmod +x bin/* && make package-fun-nas-server",
+    "prepack": "export NODE_ENV=development && npm install && npm run build && make package-fun-nas-server",
     "build": "make build",
     "postbuild": "make postbuild"
   },
