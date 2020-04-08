@@ -9,13 +9,13 @@ const mainFileRegex = '\\.listen\\s*\\(';
 
 const addrProcessores = [
   { // .listen(8000, () => console.log('server started'));
-    regex: new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*,', 'm'),
+    regex: new RegExp('\\.listen\\s*\\(\\s*([-0-9a-zA-Z._]+)\\s*,', 'm'),
     replacer: (match, p1) => {
       return `.listen(process.env.PORT || ${p1},`;
     }
   },
   { // .listen(8000);
-    regex: new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*\\)', 'm'),
+    regex: new RegExp('\\.listen\\s*\\(\\s*([-0-9a-zA-Z._]+)\\s*\\)', 'm'),
     replacer: (match, p1) => {
       return `.listen(process.env.PORT || ${p1})`;
     }

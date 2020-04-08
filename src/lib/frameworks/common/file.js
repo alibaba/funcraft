@@ -1,6 +1,7 @@
 'use strcit';
 
 const debug = require('debug')('fun:deploy');
+const path = require('path');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const { yellow, red, green } = require('colors');
@@ -12,11 +13,11 @@ async function findMainFile(codeDir, fileSuffix, mainRegex) {
   const files = await fs.readdir(codeDir);
   for (const file of files) {
     if (!_.endsWith(file, fileSuffix)) { continue; }
-    const contents = await fs.readFile(file, 'utf8');
+    const contents = await fs.readFile(path.join(codeDir, file), 'utf8');
     if (regex.test(contents)) {
       debug('mainFile is ', file);
 
-      return file;
+      return path.join(codeDir, file);
     }
   }
 

@@ -48,7 +48,7 @@ Before using 'fun deploy', you must use '${yellow(buildCommand)}' to comile your
 
               if (await promptForConfirmContinue(yellow(`Let Fun exec this command for you?`))) {
                 needBuild = false;
-                await exec(buildCommand);
+                await exec(buildCommand, codeDir);
               }
 
               binName = await findBinName(codeDir);
@@ -70,7 +70,7 @@ export GIN_MODE=release
             console.log(`${yellow('Tips:')} 
 You must use '${yellow(buildCommand)}' to ${yellow('recompile')} your project every time before using fun deploy.`);
             if (needBuild && await promptForConfirmContinue(yellow(`Let Fun exec this command now for you?`))) {
-              await exec(buildCommand);
+              await exec(buildCommand, codeDir);
             }
           }
         }

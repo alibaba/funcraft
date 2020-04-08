@@ -277,6 +277,9 @@ async function execFrameworkActions(codeDir, framework) {
       for (const processor of processors) {
         await execProcessor(codeDir, processor);
       }
+
+      // only one matched action will be executed
+      break;
     }
   }
 }

@@ -2,10 +2,10 @@
 
 const process = require('child_process');
 
-function exec(cmd) {
+function exec(cmd, cwd) {
   return new Promise((resolve, reject) => {
     console.log(`Executing command '${cmd}'...`);
-    process.exec(cmd, (error, stdout, stderr) => {
+    process.exec(cmd, { cwd }, (error, stdout, stderr) => {
       console.log(stdout);
 
       if (error) {
