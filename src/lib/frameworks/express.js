@@ -121,7 +121,7 @@ npm run start`
 
             const bootstrap = `#!/usr/bin/env bash
 export PORT=9000
-node ${mainFile}`;
+node ${path.relative(codeDir, mainFile)}`;
 
             if (!mainFile) {
               throw new Error(red('Could not find any express main file. You must add \'start\' script to package.json manully'));
