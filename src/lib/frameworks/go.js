@@ -7,6 +7,7 @@ const { promptForConfirmContinue } = require('../init/prompt');
 const { findBinName } = require('./common/go');
 const { exec } = require('./common/exec');
 const { detectAndReplaceAddr } = require('./common/file');
+const { isFcConsoleApplication } = require('./common/console');
 
 const go = {
   'id': 'gomodules',
@@ -58,7 +59,7 @@ Before using 'fun deploy', you must use '${yellow(buildCommand)}' to comile your
             }
 
             const content = `#!/usr/bin/env bash
-export PORT=9000
+${isFcConsoleApplication() ? "" : "export PORT=9000"}
 export GIN_MODE=release
 ./${binName}`;
 

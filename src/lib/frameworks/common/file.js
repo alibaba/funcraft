@@ -6,6 +6,7 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const { yellow, red, green } = require('colors');
 const { promptForConfirmContinue } = require('../../init/prompt');
+const { isFcConsoleApplication, writePortFileForFcConsoleApplication } = require('./console');
 
 async function findMainFile(codeDir, fileSuffix, mainRegex) {
   const regex = new RegExp(mainRegex, 'm');
@@ -24,7 +25,7 @@ async function findMainFile(codeDir, fileSuffix, mainRegex) {
   return null;
 }
 
-async function detectAndReplaceMainFileAddr(mainFile, addrProcessores) {
+async function detectAndReplaceMainFileAddr(codeDir, mainFile, addrProcessores) {
   const mainFileContents = await fs.readFile(mainFile, 'utf8');
 
   for (const addrProcessor of addrProcessores) {
@@ -32,9 +33,15 @@ async function detectAndReplaceMainFileAddr(mainFile, addrProcessores) {
     const replacer = addrProcessor.replacer;
 
     if (addrRegex.test(mainFileContents)) {
+      if (isFcConsoleApplication()) {
+        await writePortFileForFcConsoleApplication(codeDir);
+        
+        return;
+      }
+      
       console.log(`${yellow('Fun detected')} your application doesn't listen on '${yellow('0.0.0.0:9000')}' in ${yellow(mainFile)}`);
       console.log(`Fun will replace your addr to '${yellow('0.0.0.0:9000')}', and also backup your origin file ${yellow(mainFile)} to ${yellow(mainFile + '.bak')}`);
-
+      
       if (!await promptForConfirmContinue(yellow(`Are your sure?`))) {
         console.warn(red(`Fun will not modify your application listen addr, but if you want deploy to fc, you must listen on '0.0.0.0:9000'`));
         return;
@@ -66,7 +73,7 @@ async function detectAndReplaceAddr({
     return { mainFile: null };
   }
 
-  await detectAndReplaceMainFileAddr(mainFile, addrProcessores);
+  await detectAndReplaceMainFileAddr(codeDir, mainFile, addrProcessores);
 
   return { mainFile };
 }

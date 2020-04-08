@@ -3,6 +3,7 @@
 const path = require('path');
 const { detectAndReplaceAddr, generateFile } = require('./common/file');
 const { red } = require('colors');
+const { isFcConsoleApplication } = require('./common/console');
 
 const mainFileSuffix = '.js';
 const mainFileRegex = '\\.listen\\s*\\(';
@@ -100,7 +101,7 @@ npm run start
           'path': 'bootstrap',
           'mode': parseInt('0755', 8),
           'content': `#!/usr/bin/env bash
-export PORT=9000
+${isFcConsoleApplication() ? "" : "export PORT=9000"}
 npm run start`
         }
       ]
@@ -120,7 +121,7 @@ npm run start`
             });
 
             const bootstrap = `#!/usr/bin/env bash
-export PORT=9000
+${isFcConsoleApplication() ? "" : "export PORT=9000"}
 node ${path.relative(codeDir, mainFile)}`;
 
             if (!mainFile) {
