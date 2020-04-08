@@ -292,7 +292,6 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: This is FC service
-      LogConfig: Auto
     ${folderName}: # function name
       Type: 'Aliyun::Serverless::Function'
       Properties:
