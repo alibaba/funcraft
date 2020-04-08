@@ -277,6 +277,9 @@ async function execFrameworkActions(codeDir, framework) {
       for (const processor of processors) {
         await execProcessor(codeDir, processor);
       }
+
+      // only one matched action will be executed
+      break;
     }
   }
 }
@@ -289,7 +292,6 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: This is FC service
-      LogConfig: Auto
     ${folderName}: # function name
       Type: 'Aliyun::Serverless::Function'
       Properties:

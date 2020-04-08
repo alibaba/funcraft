@@ -218,7 +218,7 @@ class HttpInvoke extends Invoke {
           // for next invoke
           this.runner = null;
           this.containerName = docker.generateRamdomContainerName();
-          if (error.indexOf('exited with code 137') > -1) { // receive signal SIGKILL http://tldp.org/LDP/abs/html/exitcodes.html
+          if (error.indexOf && error.indexOf('exited with code 137') > -1) { // receive signal SIGKILL http://tldp.org/LDP/abs/html/exitcodes.html
             debug(error);
           } else {
             console.error(error);

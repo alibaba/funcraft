@@ -9,13 +9,13 @@ const mainFileRegex = '\\.listen\\s*\\(';
 
 const addrProcessores = [
   { // .listen(8000, () => console.log('server started'));
-    regex: new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*,', 'm'),
+    regex: new RegExp('\\.listen\\s*\\(\\s*([-0-9a-zA-Z._]+)\\s*,', 'm'),
     replacer: (match, p1) => {
       return `.listen(process.env.PORT || ${p1},`;
     }
   },
   { // .listen(8000);
-    regex: new RegExp('\\.listen\\s*\\(\\s*(\\d+)\\s*\\)', 'm'),
+    regex: new RegExp('\\.listen\\s*\\(\\s*([-0-9a-zA-Z._]+)\\s*\\)', 'm'),
     replacer: (match, p1) => {
       return `.listen(process.env.PORT || ${p1})`;
     }
@@ -121,7 +121,7 @@ npm run start`
 
             const bootstrap = `#!/usr/bin/env bash
 export PORT=9000
-node ${mainFile}`;
+node ${path.relative(codeDir, mainFile)}`;
 
             if (!mainFile) {
               throw new Error(red('Could not find any express main file. You must add \'start\' script to package.json manully'));
