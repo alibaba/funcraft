@@ -7,6 +7,7 @@ const getVisitor = require('../lib/visitor').getVisitor;
 const handler = require('../lib/exception-handler');
 const notifier = require('../lib/update-notifier');
 
+const { red } = require('colors');
 const { autoExit } = require('../lib/unref-timeout');
 const { getSupportedRuntimesAsString } = require('../lib/common/model/runtime');
 const { install, installAll, init, env, sbox } = require('../lib/commands/install');
@@ -28,11 +29,17 @@ const convertEnvs = (env) => (env || []).map(e => _.split(e, '=', 2))
 program
   .usage('[-f|--function <[service/]function>] [-r|--runtime <runtime>] [-p|--package-type <type>] [--save] [-e|--env key=val ...] [packageNames...]')
   .option('-f, --function <[service/]function>', `Specify which function to execute installation task.`)
-  .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString()}`)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', (e, envs) => (envs.push(e), envs), [])
   .option('-d, --use-docker', 'Use docker container to install function dependencies')
-  .option('--save', 'add task to fun.yml file.')
+  .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString()}`)
   .option('-p, --package-type <type>', 'avaliable package type option: pip, apt, npm.')
+
+  .option('-i, --index-url <pip-url>', `Base URL of Python Package Index (default https://pypi.org/simple). This should point to a repository compliant with PEP 503 (the simple repository API) or a local
+                                     directory laid out in the same format.`)
+
+  .option('--save', 'add task to fun.yml file.')
+  .option('--registry <npm-url>', 'Configure npm to use any compatible registry, and even run your own registry.')
+
   .arguments('[packageNames...]')
   .description('install dependencies which are described in fun.yml file.')
   .action(async (packageNames, program) => {
@@ -186,11 +193,19 @@ notifier.notify();
 if (!program.args.length) {
 
   if (program.packageType) {
-    console.warn('Missing arguments [packageNames...], so the `--package-type` option is ignored.');
+    console.warn(red('Missing arguments [packageNames...], so the `--package-type` option is ignored.'));
   }
 
   if (program.save) {
-    console.warn('Missing arguments [packageNames...], so the `--save` option is ignored.');
+    console.warn(red('Missing arguments [packageNames...], so the `--save` option is ignored.'));
+  }
+
+  if (program.indexUrl) {
+    console.warn(red('Missing arguments [packageNames...], so the `--index-url` option is ignored.'));
+  }
+
+  if (program.registry) {
+    console.warn(red('Missing arguments [packageNames...], so the `--registry` option is ignored.'));
   }
 
   getVisitor().then(visitor => {
