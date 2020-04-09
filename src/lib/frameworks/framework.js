@@ -324,5 +324,6 @@ Resources:
 module.exports = {
   detectFramework,
   generateTemplateContent,
-  execFrameworkActions
+  execFrameworkActions,
+  checkRules
 };
