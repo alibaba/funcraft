@@ -112,22 +112,46 @@ async function save(runtime, codeUri, pkgType, packages, env) {
   console.log(`\nsave package install commnad to ${funfilePath}`);
 
   for (const pkg of packages) {
-    const cmd = await convertPackageToCmd(pkgType, pkg);
+    const cmd = await convertPackageToCmd(pkgType === 'apt' ? 'apt-get' : pkgType, pkg);
     cmds.push(`RUN${resolvedEnv} ${cmd}`);
   }
 
   await fs.appendFile(funfilePath, `\n${cmds.join('\n')}\n`);
 }
 
-function convertPackageToCmd(pkgType, pkg) {
-  if (pkgType === 'apt') {
-    return `fun-install apt-get install ${pkg}`;
-  } else if (pkgType === 'pip') {
-    return `fun-install pip install ${pkg}`;
-  } else if (pkgType === 'npm') {
-    return `fun-install npm install ${pkg}`;
+function convertPackageToCmd(pkgType, pkg, {
+  indexUrl, registry
+}) {
+
+  if (!_.includes(['pip', 'npm', 'apt'], pkgType)) {
+    throw new Error(`unknow package type %${pkgType}`);
   }
-  throw new Error(`unknow package type %${pkgType}`);
+
+  const defaultCmd = `fun-install ${pkgType} install ${pkg}`;
+
+  if (indexUrl) {
+    return `${defaultCmd} --index-url ${indexUrl}`;
+  }
+
+  if (registry) {
+    return `${defaultCmd} --registry ${registry}`;
+  }
+
+  return defaultCmd;
+}
+
+function validateRegistry(runtime, options) {
+  if (options.indexUrl && options.registry) {
+    throw new Error(`'--index-url' and '--registry' cannot be specified together.`);
+  }
+
+  if (options.indexUrl && !(runtime.indexOf('python') > -1)) {
+    throw new Error(`'--index-url' needs to be used with '--runtime' python2.7/python3.6, and you are currently using ${runtime}`);
+  }
+
+  if (options.registry && !(runtime.indexOf('node') > -1)) {
+    throw new Error(`'--registry' needs to be used with '--runtime' nodejs6/nodejs8/nodejs10, and you are currently using ${runtime}`);
+  }
 }
 
 async function install(packages, options) {
@@ -139,14 +163,15 @@ async function install(packages, options) {
 
   const runtime = getRuntime(codeUri, functionRes, options);
   debug(`runtime: ${runtime}`);
+
+  validateRegistry(runtime, options);
+
   const pkgType = options.packageType;
-
-  const env = options.env;
-
   debug(`packageType: ${pkgType}`);
 
+  const env = options.env;
   for (const pkg of packages) {
-    const cmd = convertPackageToCmd(pkgType, pkg);
+    const cmd = convertPackageToCmd(pkgType === 'apt' ? 'apt-get' : pkgType, pkg, options);
     await sbox({
       function: options.function,
       cmd,
