@@ -121,9 +121,9 @@ function detectElfBinary(binaryPath) {
       fs.read(fd, ident, 0, 16, null, function (err, bytesRead) {
         if (err) { return done(err); }
 
-        const magic = ident.readUInt32BE(0)
+        const magic = ident.readUInt32BE(0);
 
-        if (MAGIC != magic) { return done(null, false); }
+        if (MAGIC !== magic) { return done(null, false); }
         return done(null, true);
       });
     });
