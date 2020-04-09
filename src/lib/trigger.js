@@ -73,7 +73,6 @@ function getTriggerConfig(triggerType, triggerProperties) {
     const logConfig = triggerProperties.LogConfig;
     const jobConfig = triggerProperties.JobConfig;
     const sourceConfig = triggerProperties.SourceConfig;
-
     return {
       sourceConfig: {
         logstore: sourceConfig.Logstore
@@ -84,9 +83,9 @@ function getTriggerConfig(triggerType, triggerProperties) {
       },
       logConfig: {
         project: logConfig.Project,
-        logstore: logConfig.Logstore,
-        functionParameter: logConfig.FunctionParameter || {}
+        logstore: logConfig.Logstore
       },
+      functionParameter: triggerProperties.FunctionParameter || {},
       Enable: !(triggerProperties.Enable === false)
     };
   } else if (triggerType === 'RDS') {
