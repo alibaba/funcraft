@@ -101,7 +101,7 @@ npm run start
           'path': 'bootstrap',
           'mode': parseInt('0755', 8),
           'content': `#!/usr/bin/env bash
-${isFcConsoleApplication() ? "" : "export PORT=9000"}
+${isFcConsoleApplication() ? '' : 'export PORT=9000'}
 npm run start`
         }
       ]
@@ -121,7 +121,7 @@ npm run start`
             });
 
             const bootstrap = `#!/usr/bin/env bash
-${isFcConsoleApplication() ? "" : "export PORT=9000"}
+${isFcConsoleApplication() ? '' : 'export PORT=9000'}
 node ${path.relative(codeDir, mainFile)}`;
 
             if (!mainFile) {

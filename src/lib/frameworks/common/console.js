@@ -6,7 +6,7 @@ const path = require('path');
 function isFcConsoleApplication() {
   return process.env.FC_CONSOLE_ENV
     && process.env.FC_CONSOLE_ENV !== '0'
-    && process.env.FC_CONSOLE_ENV !== 'false'
+    && process.env.FC_CONSOLE_ENV !== 'false';
 }
 
 async function writePortFileForFcConsoleApplication(codeDir) {
@@ -16,4 +16,4 @@ async function writePortFileForFcConsoleApplication(codeDir) {
 module.exports = {
   writePortFileForFcConsoleApplication,
   isFcConsoleApplication
-}
+};

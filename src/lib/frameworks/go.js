@@ -59,7 +59,7 @@ Before using 'fun deploy', you must use '${yellow(buildCommand)}' to comile your
             }
 
             const content = `#!/usr/bin/env bash
-${isFcConsoleApplication() ? "" : "export PORT=9000"}
+${isFcConsoleApplication() ? '' : 'export PORT=9000'}
 export GIN_MODE=release
 ./${binName}`;
 
