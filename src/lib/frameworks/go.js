@@ -8,6 +8,7 @@ const { findBinName } = require('./common/go');
 const { exec } = require('./common/exec');
 const { detectAndReplaceAddr } = require('./common/file');
 const { isFcConsoleApplication } = require('./common/console');
+const { detectElfBinary } = require('./common/file');
 
 const go = {
   'id': 'gomodules',
@@ -43,6 +44,11 @@ const go = {
             let binName = await findBinName(codeDir);
             const buildCommand = 'GOARCH=amd64 GOOS=linux go build -ldflags "-s -w"';
             if (!binName) {
+              if (!isFcConsoleApplication()) {
+                throw new Error(`Could not find any bin files from current folder.\n
+Before using deploying, you must use '${yellow(buildCommand)}' to comile your project.`);
+              }
+
               const errorMessage = red(`Could not find any bin files from current folder.\n
 Before using 'fun deploy', you must use '${yellow(buildCommand)}' to comile your project.`);
               console.error(errorMessage);
@@ -68,10 +74,16 @@ export GIN_MODE=release
               mode: parseInt('0755', 8)
             });
 
-            console.log(`${yellow('Tips:')} 
+            if (isFcConsoleApplication()) {
+              if (!await detectElfBinary(path.join(codeDir, binName))) {
+                throw new Error(`Your bin file '${binName}' is not built for linux platform. You must use '${buildCommand}' to recompile your project every time before deploying.`);
+              }
+            } else {
+              console.log(`${yellow('Tips:')} 
 You must use '${yellow(buildCommand)}' to ${yellow('recompile')} your project every time before using fun deploy.`);
-            if (needBuild && await promptForConfirmContinue(yellow(`Let Fun exec this command now for you?`))) {
-              await exec(buildCommand, codeDir);
+              if (needBuild && await promptForConfirmContinue(yellow(`Let Fun exec this command now for you?`))) {
+                await exec(buildCommand, codeDir);
+              }
             }
           }
         }

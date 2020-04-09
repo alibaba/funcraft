@@ -35,13 +35,13 @@ async function detectAndReplaceMainFileAddr(codeDir, mainFile, addrProcessores) 
     if (addrRegex.test(mainFileContents)) {
       if (isFcConsoleApplication()) {
         await writePortFileForFcConsoleApplication(codeDir);
-        
+
         return;
       }
-      
+
       console.log(`${yellow('Fun detected')} your application doesn't listen on '${yellow('0.0.0.0:9000')}' in ${yellow(mainFile)}`);
       console.log(`Fun will replace your addr to '${yellow('0.0.0.0:9000')}', and also backup your origin file ${yellow(mainFile)} to ${yellow(mainFile + '.bak')}`);
-      
+
       if (!await promptForConfirmContinue(yellow(`Are your sure?`))) {
         console.warn(red(`Fun will not modify your application listen addr, but if you want deploy to fc, you must listen on '0.0.0.0:9000'`));
         return;
@@ -96,6 +96,40 @@ async function generateFile(p, backup, mode, content) {
   });
 }
 
+function detectElfBinary(binaryPath) {
+  const MAGIC = 0x7f454c46; // 0x7f'E''L''F'
+
+  return new Promise((resolve, reject) => {
+
+    fs.open(binaryPath, 'r', (err, fd) => {
+      if (err) { 
+        reject(err);
+        return;
+      }
+
+      function done(err, rs) {
+        fs.close(fd, function (cerr) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(rs);
+          }
+        });
+      }
+
+      const ident = Buffer.alloc(16);
+      fs.read(fd, ident, 0, 16, null, function (err, bytesRead) {
+        if (err) { return done(err); }
+
+        const magic = ident.readUInt32BE(0)
+
+        if (MAGIC != magic) { return done(null, false); }
+        return done(null, true);
+      });
+    });
+  });
+}
+
 module.exports = {
-  detectAndReplaceAddr, generateFile
+  detectAndReplaceAddr, generateFile, detectElfBinary
 };

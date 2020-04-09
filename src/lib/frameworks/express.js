@@ -128,7 +128,7 @@ node ${path.relative(codeDir, mainFile)}`;
               throw new Error(red('Could not find any express main file. You must add \'start\' script to package.json manully'));
             }
 
-            generateFile(path.join(codeDir, 'bootstrap'), true, parseInt('0755', 8), bootstrap);
+            await generateFile(path.join(codeDir, 'bootstrap'), true, parseInt('0755', 8), bootstrap);
           }
         }
       ]
