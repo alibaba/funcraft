@@ -44,7 +44,7 @@ const go = {
             let binName = await findBinName(codeDir);
             const buildCommand = 'GOARCH=amd64 GOOS=linux go build -ldflags "-s -w"';
             if (!binName) {
-              if (!isFcConsoleApplication()) {
+              if (isFcConsoleApplication()) {
                 throw new Error(`Could not find any bin files from current folder.\n
 Before using deploying, you must use '${yellow(buildCommand)}' to comile your project.`);
               }
