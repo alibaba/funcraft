@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const _ = require('lodash');
 const debug = require('debug')('fun:deploy');
-const { generateFile } = require('./common/file');
+const { generateFile, listDir } = require('./common/file');
 
 const frameworks = [
   // php
