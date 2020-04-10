@@ -698,13 +698,13 @@ export const rosSchema = {
                 },
                 "Logstore": {
                   "type": "string"
-                },
-                "FunctionParameter": {
-                  "type": "object"
                 }
               },
               "required": ["Project", "Logstore"],
               "additionalProperties": false
+            },
+            "FunctionParameter": {
+              "type": "object"
             },
             "Enable": {
               "type": "boolean"
