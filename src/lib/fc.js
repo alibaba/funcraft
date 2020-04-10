@@ -30,6 +30,7 @@ const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
+const { isSpringBootJar } = require('./frameworks/common/spring-boot');
 
 const _ = require('lodash');
 
@@ -506,17 +507,6 @@ async function processNasMappingsAndEnvs({ tpl, tplPath, runtime, codeUri, baseD
     updatedTpl: updatedEnvsTpl,
     serviceNasMappings: nasMappingsObj
   };
-}
-
-async function isSpringBootJar(jarfilePath) {
-  try {
-    const data = await zip.readZipFile(jarfilePath, 'META-INF/MANIFEST.MF');
-    const content = data.toString();
-
-    return _.includes(content, 'Spring-Boot-Version');
-  } catch (e) {
-    return false;
-  }
 }
 
 // 1. unzip spring boot jar to a tmp dir

@@ -96,6 +96,20 @@ async function generateFile(p, backup, mode, content) {
   });
 }
 
+async function listDir(codeDir, regex) {
+  const rs = [];
+
+  const files = await fs.readdir(codeDir);
+
+  for (const file of files) {
+    if (regex.test(file)) {
+      rs.push(path.join(codeDir, file));
+    }
+  }
+  
+  return rs;
+}
+
 function detectElfBinary(binaryPath) {
   const MAGIC = 0x7f454c46; // 0x7f'E''L''F'
 
@@ -131,5 +145,5 @@ function detectElfBinary(binaryPath) {
 }
 
 module.exports = {
-  detectAndReplaceAddr, generateFile, detectElfBinary
+  detectAndReplaceAddr, generateFile, detectElfBinary, listDir
 };

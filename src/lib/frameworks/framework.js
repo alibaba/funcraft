@@ -38,7 +38,7 @@ const runtimeCheckers = {
   },
   'java': {
     'type': 'file',
-    'path': 'pom.xml'
+    'paths': ['pom.xml', /\.jar$/]
   },
   'php': {
     'type': 'file',
@@ -56,13 +56,7 @@ async function parseRulePaths(codeDir, rule) {
   for (const relativePath of paths) {
     if (_.isRegExp(relativePath)) {
       const pathRegex = relativePath;
-      const files = await fs.readdir(codeDir);
-
-      for (const file of files) {
-        if (pathRegex.test(file)) {
-          rs.push(path.join(codeDir, file));
-        }
-      }
+      rs.push(...await listDir(codeDir, pathRegex));
     } else {
       rs.push(path.join(codeDir, resolvePath(relativePath)));
     }
