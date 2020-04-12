@@ -119,7 +119,9 @@ async function processFunfile(serviceName, serviceRes, codeUri, funfilePath, bas
 
   // process nas folder
   await copyNasArtifact(nasMappings, imageTag, baseDir, funcArtifactDir);
+
   await fs.remove(dockerfilePath);
+  await docker.cleanImage(imageTag);
 
   return imageTag;
 }

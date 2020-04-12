@@ -67,6 +67,7 @@ describe('test buildFunction', () => {
     sandbox.stub(parser, 'funfileToDockerfile').resolves('');
     sandbox.stub(parser, 'funymlToFunfile').resolves('');
     sandbox.stub(docker, 'buildImage').resolves('imageTag');
+    sandbox.stub(docker, 'cleanImage').resolves('');
     sandbox.stub(docker, 'copyFromImage').resolves('');
   });
 

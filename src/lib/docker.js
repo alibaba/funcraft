@@ -1021,6 +1021,13 @@ async function detectDockerVersion(serverVersion) {
   }
 }
 
+async function cleanImage(imageName) {
+  const image = await docker.getImage(imageName);
+  await image.remove({
+    force: true
+  });
+}
+
 module.exports = {
   imageExist, generateDockerCmd,
   pullImage,
@@ -1030,6 +1037,6 @@ module.exports = {
   startInstallationContainer, startContainer, isDockerToolBoxAndEnsureDockerVersion,
   conventInstallTargetsToMounts, startSboxContainer, buildImage, copyFromImage,
   resolveTmpDirToMount, showDebugIdeTipsForPycharm, resolveDebuggerPathToMount,
-  listContainers, getContainer, createAndRunContainer, execContainer,
+  listContainers, getContainer, createAndRunContainer, execContainer, cleanImage,
   renameContainer, detectDockerVersion, resolveNasYmlToMount, resolvePasswdMount
 };
