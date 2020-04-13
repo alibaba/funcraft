@@ -83,7 +83,7 @@ async function uploadFile(resolvedSrc, actualDstPath, nasHttpTriggerPath) {
 function unzipNasFileParallel(nasHttpTriggerPath, dstDir, nasZipFile, filesArrQueue, unzipFilesCount, noClobber) {
   return new Promise((resolve, reject) => {
     const bar = createProgressBar(`${green(':unzipping')} :bar :current/:total :rate files/s, :percent :elapsed s`, { total: unzipFilesCount });
-    let unzipQueue = async.queue(async (unzipFiles, callback) => {
+    let unzipQueue = async.queue(async (unzipFiles, next) => {
       try {
         await sendUnzipRequest(nasHttpTriggerPath, dstDir, nasZipFile, unzipFiles, noClobber);
         bar.tick(unzipFiles.length);
@@ -114,7 +114,7 @@ function unzipNasFileParallel(nasHttpTriggerPath, dstDir, nasZipFile, filesArrQu
           return;
         }
       }
-      callback();
+      next();
     }, constants.FUN_NAS_UPLOAD_PARALLEL_COUNT);
 
     unzipQueue.drain = () => {
