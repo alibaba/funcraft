@@ -96,7 +96,7 @@ async function sendUnzipRequest(nasHttpTriggerPath, dstDir, nasZipFile, unzipFil
   }
 
   for (let unzipFile of unzipFiles) {
-    cmd = cmd + ` "${unzipFile}"`;
+    cmd = cmd + ` '${unzipFile}'`;
   }
 
   return await sendCmdRequest(nasHttpTriggerPath, cmd);
