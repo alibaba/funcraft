@@ -45,6 +45,7 @@ describe('test buildFunction', () => {
   const runtime = functionRes.Properties.Runtime;
 
   const tplPath = path.join(baseDir, 'template.yml');
+  const packageJson = path.join(baseDir, 'package.json');
 
   let pathExistsStub;
 
@@ -54,6 +55,8 @@ describe('test buildFunction', () => {
 
     pathExistsStub.withArgs(path.resolve(baseDir)).resolves(true);
     pathExistsStub.withArgs(path.resolve(tplPath)).resolves(true);
+    pathExistsStub.withArgs(path.resolve(packageJson)).resolves(true);
+
     sandbox.stub(fs, 'lstat').resolves({
       'mtime': new Date('2019-12-16T09:30:55.325Z')
     });
