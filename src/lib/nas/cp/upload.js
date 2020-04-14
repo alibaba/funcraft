@@ -83,20 +83,18 @@ async function uploadFile(resolvedSrc, actualDstPath, nasHttpTriggerPath) {
 function unzipNasFileParallel(nasHttpTriggerPath, dstDir, nasZipFile, filesArrQueue, unzipFilesCount, noClobber) {
   return new Promise((resolve, reject) => {
     const bar = createProgressBar(`${green(':unzipping')} :bar :current/:total :rate files/s, :percent :elapsed s`, { total: unzipFilesCount });
-    let unzipQueue = async.queue(async (unzipFiles, callback) => {
+    let unzipQueue = async.queue(async (unzipFiles, next) => {
       try {
         await sendUnzipRequest(nasHttpTriggerPath, dstDir, nasZipFile, unzipFiles, noClobber);
         bar.tick(unzipFiles.length);
       } catch (error) {
-        // 出现这样的错误是因为待解压文件列表不在上传的 NAS 端压缩文件
-        // 这种情况是压缩包上传出错
-        if ((error.message).contains('filename not matched')) {
+        // zip 中存在特殊文件名，例如 $data.js
+        if (error.message && error.message.includes('filename not matched')) {
           console.log(red(error));
-          console.log(red('Uploaded NAS zip file error, please re-sync.'));
           return;
         }
-        if ((error.message.toLowerCase()).contains('permission denied')) {
-          //TO DO : 权限问题更加详细的提示
+        if (error.message && error.message.toLowerCase().includes('permission denied')) {
+          //TODO : 权限问题更加详细的提示
           console.log(red(error));
           return;
         }
@@ -116,7 +114,7 @@ function unzipNasFileParallel(nasHttpTriggerPath, dstDir, nasZipFile, filesArrQu
           return;
         }
       }
-      callback();
+      next();
     }, constants.FUN_NAS_UPLOAD_PARALLEL_COUNT);
 
     unzipQueue.drain = () => {

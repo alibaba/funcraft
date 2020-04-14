@@ -115,7 +115,7 @@ async function recordMtimes(filePaths, buildOps, recordedPath) {
 
   const fileMtimes = await filePaths.reduce(async (accPromise, cur) => {
     if (!await fs.pathExists(cur)) {
-      throw new Error(`${path} is not exsit`);
+      throw new Error(`${cur} is not exsit`);
     }
 
     const collection = await accPromise;
