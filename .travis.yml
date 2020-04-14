@@ -36,7 +36,8 @@ install:
       cd $TRAVIS_REPO_SLUG;
     fi
   - npm install
-  - npm run build
+  - tsc -p ./
+  - copyfiles -a -u 1 -e "**/*.{js,ts}" "src/**/*" ./
   - bash -c 'cd ./lib/utils/fun-nas-server/; npm install'
 
 before_script: 
