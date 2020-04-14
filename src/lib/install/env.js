@@ -8,18 +8,16 @@ const { resolveMountPoint } = require('../nas');
 
 const _ = require('lodash');
 
-const paths = ['/usr/local/bin', '/usr/local/sbin', '/usr/bin', '/usr/sbin', '/sbin', '/bin'];
-
 function addEnv(envVars, nasConfig) {
   const envs = Object.assign({}, envVars);
 
-  const prefix = '/code/.fun/root';
+  const prefix = '/code/.fun';
 
-  envs['LD_LIBRARY_PATH'] = generatePathToDynamicLibrary(envs, prefix);
-  envs['PATH'] = generatePathToExecutable(envs, prefix);
+  envs['LD_LIBRARY_PATH'] = generateLibPath(envs, prefix);
+  envs['PATH'] = generatePath(envs, prefix);
   envs['NODE_PATH'] = generateNodePaths(envs, '/code');
 
-  const defaultPythonPath = '/code/.fun/python';
+  const defaultPythonPath = `${prefix}/python`;
   if (!envs['PYTHONUSERBASE']) {
     envs['PYTHONUSERBASE'] = defaultPythonPath;
   }
@@ -31,28 +29,69 @@ function addEnv(envVars, nasConfig) {
   return envs;
 }
 
-function generatePathToDynamicLibrary(envs, prefix) {
-  const defaultLibPath = `${generateDefaultLibPath(prefix)}:/code:/code/lib:/usr/local/lib`;
+const sysLibs = [
+  '/usr/local/lib',
+  '/usr/lib',
+  '/usr/lib/x86_64-linux-gnu',
+  '/usr/lib64',
+  '/lib',
+  '/lib/x86_64-linux-gnu'
+];
 
-  let LD_LIBRARY_PATH;
-  if (envs['LD_LIBRARY_PATH']) {
-    LD_LIBRARY_PATH = `${envs['LD_LIBRARY_PATH']}:${defaultLibPath}`;
-  } else {
-    LD_LIBRARY_PATH = defaultLibPath;
-  }
-  return duplicateRemoval(LD_LIBRARY_PATH);
+
+function generateDefaultLibPath(prefix) {
+  return sysLibs.map(p => `${prefix}${p}`).join(':');
 }
 
-function generatePathToExecutable(envs, prefix) {
-  const defaultPath = paths.join(':');
-  const customPath = paths.map(p => `${prefix}${p}`).join(':') + ':/code/.fun/python/bin';
+const fcLibs = [
+  '/code',
+  '/code/lib',
+  '/usr/local/lib'
+];
 
-  let path;
+function generateLibPath(envs, prefix) {
+  let libPath = _.union(
+    sysLibs.map(p => `${prefix}/root${p}`),
+    fcLibs
+  ).join(':');
+
+  if (envs['LD_LIBRARY_PATH']) {
+    libPath = `${envs['LD_LIBRARY_PATH']}:${libPath}`;
+  } 
+  return duplicateRemoval(libPath);
+}
+
+const sysPaths = [
+  '/usr/local/bin', 
+  '/usr/local/sbin', 
+  '/usr/bin',
+  '/usr/sbin',
+  '/sbin',
+  '/bin'
+];
+
+const fcPaths = [
+  '/code',
+  '/code/node_modules/.bin'
+];
+
+const funPaths = [
+  '/python/bin',
+  '/node_modules/.bin'
+];
+
+function generatePath(envs, prefix) {
+  let path = _.union(
+    sysPaths.map(p => `${prefix}/root${p}`),
+    fcPaths,
+    funPaths.map(p => `${prefix}${p}`),
+    sysPaths
+  ).join(':');
+
   if (envs['PATH']) {
-    path = `${envs['PATH']}:${customPath}:${defaultPath}`;
-  } else {
-    path = `${customPath}:${defaultPath}`;
+    path = `${envs['PATH']}:${path}`;
   }
+
   return duplicateRemoval(path);
 }
 
@@ -74,10 +113,11 @@ function duplicateRemoval(str) {
   return _.union(spliceValue).join(':');
 }
 
+const pythonPaths = [
+  '/python/lib/python2.7/site-packages', 
+  '/python/lib/python3.6/site-packages'
+];
 
-function generateDefaultLibPath(prefix) {
-  return [`${prefix}/usr/lib`, `${prefix}/usr/lib/x86_64-linux-gnu`, `${prefix}/lib/x86_64-linux-gnu`, `${prefix}/usr/lib64`].join(':');
-}
 
 // This method is only used for fun install target attribue.
 //
@@ -100,8 +140,6 @@ function addInstallTargetEnv(envVars, targets) {
     const { containerPath } = target;
 
     const prefix = containerPath;
-
-    const pythonPaths = ['/python/lib/python2.7/site-packages', '/python/lib/python3.6/site-packages'];
 
     const targetPathonPath = pythonPaths.map(p => `${prefix}${p}`).join(':');
 
@@ -131,8 +169,8 @@ function appendNasEnvs(envs, nasConfig) {
 }
 function appendNasMountPointEnv(envs, mountDir) {
 
-  envs['LD_LIBRARY_PATH'] = generatePathToDynamicLibrary(envs, `${mountDir}/root`);
-  envs['PATH'] = generatePathToExecutable(envs, `${mountDir}/root`) + `:${mountDir}/node_modules/.bin`;
+  envs['LD_LIBRARY_PATH'] = generateLibPath(envs, mountDir);
+  envs['PATH'] = generatePath(envs, mountDir);
   envs['NODE_PATH'] = generateNodePaths(envs, mountDir);
 
   const nasPythonPaths = generatePythonPaths(mountDir);
@@ -148,7 +186,6 @@ function appendNasMountPointEnv(envs, mountDir) {
 }
 
 function generatePythonPaths(prefix) {
-  const pythonPaths = ['/python/lib/python2.7/site-packages', '/python/lib/python3.6/site-packages'];
   return pythonPaths.map(p => `${prefix}${p}`).join(':');
 }
 

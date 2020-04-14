@@ -12,15 +12,14 @@ const { setProcess } = require('../test-utils');
 describe('config prompt', () => {
 
   let restoreProcess;
-
   before(async () => {
 
     restoreProcess = setProcess({
       HOME: os.tmpdir()
     });
 
-    await fs.mkdirp(`${os.homedir()}/.fcli/`);
-    await fs.writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://123344234.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15',       
       access_key_id: '22222',
@@ -34,7 +33,7 @@ describe('config prompt', () => {
   });
 
   after(async () => {
-    rimraf.sync(`${os.homedir()}/.fcli/`);
+    rimraf.sync(`${process.env.HOME}/.fcli/`);
     restoreProcess();
   });
 
@@ -43,7 +42,7 @@ describe('config prompt', () => {
 
     await config();
 
-    const profContent = await fs.readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profContent = await fs.readFile(`${process.env.HOME}/.fcli/config.yaml`, 'utf8');
     const profYml = yaml.safeLoad(profContent);
 
     expect(profYml.endpoint).to.be('https://123344234.cn-hangzhou.fc.aliyuncs.com');
@@ -59,7 +58,7 @@ describe('config prompt', () => {
 
     await config();
 
-    const profContent = await fs.readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profContent = await fs.readFile(`${process.env.HOME}/.fcli/config.yaml`, 'utf8');
     const profYml = yaml.safeLoad(profContent);
 
     expect(profYml.endpoint).to.be('https://3333555543.cn-shanghai.fc.aliyuncs.com');
@@ -70,15 +69,14 @@ describe('config prompt', () => {
 describe('config api_version', () => {
 
   let restoreProcess;
-
   before(async () => {
 
     restoreProcess = setProcess({
       HOME: os.tmpdir()
     });
 
-    await fs.mkdirp(`${os.homedir()}/.fcli/`);
-    await fs.writeFile(`${os.homedir()}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://33232.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15T00:00:00.000Z',       
       access_key_id: '22222',
@@ -92,14 +90,14 @@ describe('config api_version', () => {
   });
 
   after(async () => {
-    rimraf.sync(`${os.homedir()}/.fcli/`);
+    rimraf.sync(`${process.env.HOME}/.fcli/`);
     restoreProcess();
   });
 
   it('config dateStr', async () => {  
     mocki({});
     await config();
-    const profContent = await fs.readFile(`${os.homedir()}/.fcli/config.yaml`, 'utf8');
+    const profContent = await fs.readFile(`${process.env.HOME}/.fcli/config.yaml`, 'utf8');
     const profYml = yaml.safeLoad(profContent, {
       schema: yaml.JSON_SCHEMA
     });

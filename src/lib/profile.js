@@ -43,7 +43,7 @@ function extractProtocol(endpoint) {
 
 
 async function getProfileFromFile() {
-  const profPath = path.join(os.homedir(), '.fcli/config.yaml');
+  const profPath = path.join(process.env.HOME || os.homedir(), '.fcli/config.yaml');
   const isExists = await fs.pathExists(profPath);
 
   var profile = {};
