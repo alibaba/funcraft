@@ -88,7 +88,7 @@ async function config() {
     newProf.accessKeySecret = profile.accessKeySecret;
   }
 
-  const configDir = path.join(os.homedir(), '.fcli');
+  const configDir = path.join(process.env.HOME || os.homedir(), '.fcli');
 
   const profPath = path.join(configDir, 'config.yaml');
   const isExists = await fs.exists(profPath);

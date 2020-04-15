@@ -47,15 +47,14 @@ describe('without local ~/.fcli/config.yaml', () => {
 
 describe('with local ~/.fcli/config.yaml for endpoint https', () => {
   let restoreProcess;
-
   beforeEach(async () => {
 
     restoreProcess = setProcess({
       HOME: os.tmpdir()
     });
 
-    await fs.mkdirp(`${os.homedir}/.fcli/`);
-    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://123344234.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15',       
       access_key_id: '22222',
@@ -70,7 +69,7 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
   });
 
   afterEach(async () => {
-    rimraf.sync(`${os.homedir}/.fcli/`);
+    rimraf.sync(`${process.env.HOME}/.fcli/`);
 
     restoreProcess();
   });
@@ -114,15 +113,14 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
 
 describe('with local ~/.fcli/config.yaml for endpoint http', () => {
   let restoreProcess;
-
   beforeEach(async () => {
 
     restoreProcess = setProcess({
       HOME: os.tmpdir()
     });
 
-    await fs.mkdirp(`${os.homedir}/.fcli/`);
-    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       endpoint: `http://123344234.cn-hangzhou.fc.aliyuncs.com`,
       api_version: '2016-08-15',       
       access_key_id: '22222',
@@ -137,7 +135,7 @@ describe('with local ~/.fcli/config.yaml for endpoint http', () => {
   });
 
   afterEach(async () => {
-    rimraf.sync(`${os.homedir}/.fcli/`);
+    rimraf.sync(`${process.env.HOME}/.fcli/`);
 
     restoreProcess();
   });

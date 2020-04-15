@@ -1,6 +1,6 @@
 'use strict';
 
-let getVisitor = require('../lib/visitor').getVisitor;
+// let getVisitor = require('../lib/visitor').getVisitor;
 const expect = require('expect.js');
 const { setProcess } = require('./test-utils');
 const os = require('os');
@@ -10,6 +10,7 @@ const yaml = require('js-yaml');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
+const decache = require('decache');
 
 describe('test getVisitor', () => {
   
@@ -21,13 +22,15 @@ describe('test getVisitor', () => {
   });
 
   afterEach(() => {
-    rimraf.sync(`${os.homedir}/.fcli/`);
+    rimraf.sync(`${process.env.HOME}/.fcli/`);
     restoreProcess();
     sandbox.restore();
   });
 
   it('test missing .fcli/config.yaml', async () => {
 
+    decache('../lib/visitor');
+    let getVisitor = require('../lib/visitor').getVisitor;
     const fake = await getVisitor();
   
     expect(fake.pageview().send()).to.eql('fakeMocha');
@@ -35,11 +38,13 @@ describe('test getVisitor', () => {
   });
 
   it('test use fake when missing report config', async () => {
-    await fs.mkdirp(`${os.homedir}/.fcli/`);
-    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       access_key_id: 'test'
     }));
 
+    decache('../lib/visitor');
+    let getVisitor = require('../lib/visitor').getVisitor;
     const fake = await getVisitor(true);
 
     expect(fake.pageview().send()).to.eql('fake');
@@ -47,19 +52,22 @@ describe('test getVisitor', () => {
   });
 
   it('test report config is false', async () => {
-    await fs.mkdirp(`${os.homedir}/.fcli/`);
-    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       report: false
     }));
 
+    decache('../lib/visitor');
+    let getVisitor = require('../lib/visitor').getVisitor;
     const fake = await getVisitor(true);
+
     expect(fake.pageview().send()).to.eql('fake');
     expect(fake.event().send()).to.eql('fake');
   });
 
   it('test report config is true', async () => {
-    await fs.mkdirp(`${os.homedir}/.fcli/`);
-    await fs.writeFile(`${os.homedir}/.fcli/config.yaml`, yaml.dump({
+    await fs.mkdirp(`${process.env.HOME}/.fcli/`);
+    await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       report: true
     }));
     
@@ -74,7 +82,8 @@ describe('test getVisitor', () => {
       };
     }
 
-    getVisitor = proxyquire('../lib/visitor', {
+    decache('../lib/visitor');
+    let getVisitor = proxyquire('../lib/visitor', {
       'universal-analytics': uaMock
     }).getVisitor;
 

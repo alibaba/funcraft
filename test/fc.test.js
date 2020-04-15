@@ -155,8 +155,8 @@ describe('Incorrect environmental variables', () => {
         environmentVariables: {
           StringTypeValue1: '123',
           StringTypeValue2: 'test',
-          LD_LIBRARY_PATH: '/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code:/code/lib:/usr/local/lib',
-          PATH: '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code/.fun/python/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+          LD_LIBRARY_PATH: '/code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+          PATH: '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code:/code/node_modules/.bin:/code/.fun/python/bin:/code/.fun/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
           NODE_PATH: '/code/node_modules:/usr/local/lib/node_modules',
           PYTHONUSERBASE: '/code/.fun/python'
         },
@@ -323,7 +323,7 @@ describe('test processNasAutoConfiguration', ()=> {
 
     const functionProp = tplWithNasAuto.Resources.localdemo.python3.Properties;
     functionProp.EnvironmentVariables = {
-      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64',
+      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/local/lib:/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64:/mnt/auto/root/lib:/mnt/auto/root/lib/x86_64-linux-gnu',
       'PYTHONUSERBASE': '/mnt/auto/python'
     };
 
@@ -356,7 +356,7 @@ describe('test processNasAutoConfiguration', ()=> {
     });
 
     const envs = {
-      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64',
+      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/local/lib:/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64:/mnt/auto/root/lib:/mnt/auto/root/lib/x86_64-linux-gnu',
       'NODE_PATH': '/mnt/auto/node_modules:/usr/local/lib/node_modules'
     };
 

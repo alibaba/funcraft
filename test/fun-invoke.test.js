@@ -134,7 +134,6 @@ describe('fun-invoke test', () => {
       invocationType: 'Sync'
     });
   });
-
   it('serviceName/functionName and event is eventStdin and uppercase Sync', async () => {
 
     file.eventPriority.returns('eventStdin');
