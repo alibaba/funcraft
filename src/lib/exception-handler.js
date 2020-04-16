@@ -14,8 +14,8 @@ const handler = function (err) {
     // print the stack of the error.
     if (debug.enabled('*') && err.stack) {
       console.error(err.stack);
-    } else if (err.message) {
-      console.error(red(err.message));
+    } else if (err) {
+      console.error(err);
     } else {
       console.error(err);
     }

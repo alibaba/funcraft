@@ -31,6 +31,8 @@ const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = req
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
 const { isSpringBootJar } = require('./frameworks/common/spring-boot');
+const { createProgressBar } = require('./import/utils');
+
 
 const _ = require('lodash');
 
@@ -1111,14 +1113,43 @@ async function makeFunction(baseDir, {
     environmentVariables: addEnv(castEnvironmentVariables(environmentVariables), nasConfig)
   };
 
+  var progress = require('progress-stream');
+
+  var stream = require('stream');
+  var rs = new stream.Readable();
+  const parmasStr = JSON.stringify(params);
+  rs.push(parmasStr);
+  rs.push(null); // no idea why this is needed, but it is
+
+  console.log(parmasStr.length);
+  var str = progress({
+    length: 1000000000,
+    time: 100
+  });
+
+  // const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate files/s, :percent :etas`, { total: 0 });
+
+  str.on('progress', (progress) => {
+    // console.log(JSON.stringify(progress, null, 4));
+    // bar.total = progress.total;
+    // bar.tick({
+    //   total: progress.processed
+    // });
+    console.log(progress.length);
+    console.log('remaining:', progress.remaining);
+    console.log(Math.round(progress.percentage)+'%');
+  });
+
+  const streamPipe = rs.pipe(str);
+
   try {
     if (!fn) {
       // create
       params['functionName'] = functionName;
-      await fc.createFunction(serviceName, params);
+      await fc.createFunction(serviceName, streamPipe);
     } else {
       // update
-      await fc.updateFunction(serviceName, functionName, params);
+      await fc.updateFunction(serviceName, functionName, streamPipe);
     }
   } catch (ex) {
     if (ex.message.indexOf('timeout') !== -1) {
