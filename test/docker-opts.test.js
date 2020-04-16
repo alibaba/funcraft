@@ -135,7 +135,8 @@ describe('test generateLocalInvokeOpts', () => {
         `${LD_LIBRARY_PATH}`,
         PATH,
         'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
-        'PYTHONUSERBASE=/code/.fun/python'
+        'PYTHONUSERBASE=/code/.fun/python',
+        'PYTHONPATH=/code/.fun/python/lib/python/site-packages'
       ],
       'AttachStderr': true,
       'AttachStdin': true,
@@ -192,7 +193,8 @@ describe('test generateLocalInvokeOpts', () => {
         `${LD_LIBRARY_PATH}`,
         PATH,
         'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
-        'PYTHONUSERBASE=/code/.fun/python'
+        'PYTHONUSERBASE=/code/.fun/python',
+        'PYTHONPATH=/code/.fun/python/lib/python/site-packages'
       ],
       'HostConfig': {
         'AutoRemove': true,
@@ -218,7 +220,8 @@ describe('test resolveDockerEnv', () => {
       `${LD_LIBRARY_PATH}`,
       PATH,
       'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
-      'PYTHONUSERBASE=/code/.fun/python'
+      'PYTHONUSERBASE=/code/.fun/python',
+      'PYTHONPATH=/code/.fun/python/lib/python/site-packages'
     ]);
   });
 
@@ -232,7 +235,8 @@ describe('test resolveDockerEnv', () => {
       `${LD_LIBRARY_PATH}`,
       PATH,
       'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
-      'PYTHONUSERBASE=/code/.fun/python'
+      'PYTHONUSERBASE=/code/.fun/python',
+      'PYTHONPATH=/code/.fun/python/lib/python/site-packages'
     ]);
   });
 
@@ -247,7 +251,8 @@ describe('test resolveDockerEnv', () => {
       `${LD_LIBRARY_PATH}`,
       PATH,
       'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
-      'PYTHONUSERBASE=/code/.fun/python'
+      'PYTHONUSERBASE=/code/.fun/python',
+      'PYTHONPATH=/code/.fun/python/lib/python/site-packages'
     ]);
   });
 });

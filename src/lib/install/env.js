@@ -18,8 +18,13 @@ function addEnv(envVars, nasConfig) {
   envs['NODE_PATH'] = generateNodePaths(envs, '/code');
 
   const defaultPythonPath = `${prefix}/python`;
+
   if (!envs['PYTHONUSERBASE']) {
     envs['PYTHONUSERBASE'] = defaultPythonPath;
+  }
+
+  if (!envs['PYTHONPATH']) {
+    envs['PYTHONPATH'] = `${defaultPythonPath}/lib/python/site-packages`;
   }
 
   if (nasConfig) {
@@ -57,13 +62,13 @@ function generateLibPath(envs, prefix) {
 
   if (envs['LD_LIBRARY_PATH']) {
     libPath = `${envs['LD_LIBRARY_PATH']}:${libPath}`;
-  } 
+  }
   return duplicateRemoval(libPath);
 }
 
 const sysPaths = [
-  '/usr/local/bin', 
-  '/usr/local/sbin', 
+  '/usr/local/bin',
+  '/usr/local/sbin',
   '/usr/bin',
   '/usr/sbin',
   '/sbin',
