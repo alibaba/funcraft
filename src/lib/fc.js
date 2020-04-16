@@ -1,5 +1,6 @@
 'use strict';
 
+const stream = require('stream');
 const util = require('./import/utils');
 const bytes = require('bytes');
 const funignore = require('./package/ignore');
@@ -19,6 +20,8 @@ const vpc = require('./vpc');
 const nas = require('./nas');
 const nasCp = require('./nas/cp');
 const getUuid = require('uuid-by-string');
+const progress = require('progress-stream');
+const cliProgress = require('cli-progress');
 
 const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
@@ -31,8 +34,6 @@ const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = req
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
 const { isSpringBootJar } = require('./frameworks/common/spring-boot');
-const { createProgressBar } = require('./import/utils');
-
 
 const _ = require('lodash');
 
@@ -1023,6 +1024,57 @@ async function generateFontsConfAndEnv(baseDir, codeUri, appendContet) {
   return DEFAULT_FONTS_CONFIG_ENV;
 }
 
+
+function readableStreamInstance(parmasStr) {
+  let current = 0;
+
+  const paramsBuffer = Buffer.from(parmasStr);
+
+  return new stream.Readable({
+    read(size) {
+      if (current + size >= paramsBuffer.length) size = paramsBuffer.length - current;
+
+      this.push(paramsBuffer.slice(current, current + size));
+
+      current += size;
+
+      if (current >= paramsBuffer.length) this.push(null);
+    }
+  });
+}
+
+function singleBarInstance() {
+  return new cliProgress.SingleBar({
+    format: green(':uploading ') + green('{bar}') + '  {percentage}%',
+    barCompleteChar: '\u2588',
+    barIncompleteChar: '\u2591',
+    clearOnComplete: true,
+    stopOnComplete: true,
+    hideCursor: true,
+    barsize: 20
+  }, cliProgress.Presets.shades_classic);
+}
+
+function uploadProgress(params) {
+
+  const parmasStr = JSON.stringify(params);
+  const readableStream = readableStreamInstance(parmasStr);
+
+  const str = progress({
+    length: parmasStr.length,
+    time: 100
+  });
+
+  const bar = singleBarInstance();
+  bar.start(100, 0);
+
+  str.on('progress', (progress) => {
+    bar.update(Math.round(progress.percentage));
+  });
+
+  return readableStream.pipe(str);
+}
+
 async function makeFunction(baseDir, {
   serviceName,
   functionName,
@@ -1113,39 +1165,15 @@ async function makeFunction(baseDir, {
     environmentVariables: addEnv(castEnvironmentVariables(environmentVariables), nasConfig)
   };
 
-  var progress = require('progress-stream');
+  if (!fn) {
+    params['functionName'] = functionName;
+  }
 
-  var stream = require('stream');
-  var rs = new stream.Readable();
-  const parmasStr = JSON.stringify(params);
-  rs.push(parmasStr);
-  rs.push(null); // no idea why this is needed, but it is
-
-  console.log(parmasStr.length);
-  var str = progress({
-    length: 1000000000,
-    time: 100
-  });
-
-  // const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate files/s, :percent :etas`, { total: 0 });
-
-  str.on('progress', (progress) => {
-    // console.log(JSON.stringify(progress, null, 4));
-    // bar.total = progress.total;
-    // bar.tick({
-    //   total: progress.processed
-    // });
-    console.log(progress.length);
-    console.log('remaining:', progress.remaining);
-    console.log(Math.round(progress.percentage)+'%');
-  });
-
-  const streamPipe = rs.pipe(str);
+  const streamPipe = uploadProgress(params);
 
   try {
     if (!fn) {
       // create
-      params['functionName'] = functionName;
       await fc.createFunction(serviceName, streamPipe);
     } else {
       // update

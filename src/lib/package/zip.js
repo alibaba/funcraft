@@ -267,25 +267,6 @@ async function packTo(file, funignore, targetPath, prefix = '', zlibOptions = {}
   });
 }
 
-function fileToBuffer(fileName) {
-  return new Promise((resolve, reject) => {
-    let chunks = [];
-    let readStream = fs.createReadStream(fileName);
-
-    readStream.on('error', err => {
-      reject(err);
-    });
-
-    readStream.on('data', chunk => {
-      chunks.push(chunk);
-    });
-
-    readStream.on('close', () => {
-      resolve(Buffer.concat(chunks));
-    });
-  });
-}
-
 async function pack(file, funignore) {
 
   const { randomDir, zipPath } = await generateRandomZipPath();
