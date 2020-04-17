@@ -872,7 +872,7 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
 
     if (definition.isNasAutoConfig(nasConfig)) {
       const nasAutoMsg = `You have already configured 'NasConfig: Auto’. We want to use this configuration to store your function dependencies.`;
-      if (assumeYes ||await promptForConfirmContinue(nasAutoMsg)) {
+      if (assumeYes || await promptForConfirmContinue(nasAutoMsg)) {
 
         if (assumeYes) { console.log(nasAutoMsg); }
         if (packageStage && !_.isEmpty(vpcConfig)) {
