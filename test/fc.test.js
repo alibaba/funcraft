@@ -122,7 +122,7 @@ describe('Incorrect environmental variables', () => {
     restoreProcess();
   });
 
-  it('should cast env value to String', async () => {
+  it.skip('should cast env value to String', async () => {
     await fc.makeFunction(path.join('examples', 'local'), {
       serviceName: 'localdemo',
       functionName: 'nodejs6',
