@@ -1059,7 +1059,7 @@ function uploadProgress(params) {
 
   const total = Math.round(paramsBuffer.length / 1024);
 
-  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate kb/s, :percent :etas`, { total });
+  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate KB/s, :percent :etas`, { total });
 
   str.on('progress', (progress) => {
     bar.tick(Math.round(progress.delta / 1024)); // Δ
