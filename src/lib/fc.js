@@ -1030,11 +1030,8 @@ async function generateFontsConfAndEnv(baseDir, codeUri, appendContet) {
 }
 
 
-function readableStreamInstance(parmasStr) {
+function readableStreamInstance(paramsBuffer) {
   let current = 0;
-
-  const paramsBuffer = Buffer.from(parmasStr);
-
   return new stream.Readable({
     read(size) {
       if (current + size >= paramsBuffer.length) { size = paramsBuffer.length - current; }
@@ -1051,18 +1048,21 @@ function readableStreamInstance(parmasStr) {
 function uploadProgress(params) {
 
   const parmasStr = JSON.stringify(params);
-  const readableStream = readableStreamInstance(parmasStr);
+  const paramsBuffer = Buffer.from(parmasStr);
+
+  const readableStream = readableStreamInstance(paramsBuffer);
 
   const str = progress({
-    length: parmasStr.length,
-    time: 100
+    time: 100,
+    length: parmasStr.length
   });
 
-  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate kb/s, :percent :etas`, { total: 0 });
+  const total = Math.round(paramsBuffer.length / 1024);
+
+  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate kb/s, :percent :etas`, { total });
 
   str.on('progress', (progress) => {
-    bar.total = progress.length;
-    bar.tick(progress.delta); // Δ
+    bar.tick(Math.round(progress.delta / 1024)); // Δ
   });
 
   return readableStream.pipe(str);

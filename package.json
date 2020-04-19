@@ -61,7 +61,7 @@
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
     "@alicloud/fc-builders": "^0.12.0",
-    "@alicloud/fc2": "git://github.com/coco-super/fc-nodejs-sdk.git#coco/support-body-stream",
+    "@alicloud/fc2": "git://github.com/aliyun/fc-nodejs-sdk.git#master",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
     "@alicloud/mns": "^1.0.0",
