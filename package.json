@@ -137,7 +137,9 @@
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0",
     "uuid-by-string": "^3.0.2",
-    "yaml-ast-parser": "0.0.43"
+    "yaml-ast-parser": "0.0.43",
+    "copyfiles": "^2.2.0",
+    "typescript": "3.4.5"
   },
   "files": [
     "lib",
@@ -150,7 +152,6 @@
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "chai-fs": "^2.0.0",
-    "copyfiles": "^2.2.0",
     "decache": "^4.5.1",
     "eslint": "^6.8.0",
     "expect.js": "^0.3.1",
@@ -161,8 +162,7 @@
     "pkg": "^4.4.0",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
-    "suppose": "^0.6.2",
-    "typescript": "3.4.5"
+    "suppose": "^0.6.2"
   },
   "repository": {
     "type": "git",
