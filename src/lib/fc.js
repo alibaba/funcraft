@@ -21,19 +21,19 @@ const nas = require('./nas');
 const nasCp = require('./nas/cp');
 const getUuid = require('uuid-by-string');
 const progress = require('progress-stream');
-const cliProgress = require('cli-progress');
 
 const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
 const { isNotEmptyDir } = require('./nas/cp/file');
+const { isSpringBootJar } = require('./frameworks/common/spring-boot');
 const { updateTimestamps } = require('./utils/file');
+const { createProgressBar } = require('./import/utils');
 const { green, red, yellow } = require('colors');
 const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
-const { isSpringBootJar } = require('./frameworks/common/spring-boot');
 
 const _ = require('lodash');
 
@@ -1048,18 +1048,6 @@ function readableStreamInstance(parmasStr) {
   });
 }
 
-function singleBarInstance() {
-  return new cliProgress.SingleBar({
-    format: green(':uploading ') + green('{bar}') + '  {percentage}%',
-    barCompleteChar: '\u2588',
-    barIncompleteChar: '\u2591',
-    clearOnComplete: true,
-    stopOnComplete: true,
-    hideCursor: true,
-    barsize: 20
-  }, cliProgress.Presets.shades_classic);
-}
-
 function uploadProgress(params) {
 
   const parmasStr = JSON.stringify(params);
@@ -1070,11 +1058,11 @@ function uploadProgress(params) {
     time: 100
   });
 
-  const bar = singleBarInstance();
-  bar.start(100, 0);
+  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate kb/s, :percent :etas`, { total: 0 });
 
   str.on('progress', (progress) => {
-    bar.update(Math.round(progress.percentage));
+    bar.total = progress.length;
+    bar.tick(progress.delta); // Δ
   });
 
   return readableStream.pipe(str);
