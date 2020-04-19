@@ -2,8 +2,11 @@
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
-const { green, white, red } = require('colors');
+const stream = require('stream');
 const ProgressBar = require('progress');
+const progress = require('progress-stream');
+
+const { green, white, red } = require('colors');
 const { CUSTOM_DOMAIN_TYPE, SERVICE_TYPE } = require('./constants');
 
 function getTemplateFile(fullOutputDir) {
@@ -102,6 +105,49 @@ function getTemplateHeader() {
   };
 }
 
+
+function readableStreamInstance(paramsBuffer) {
+  let current = 0;
+  return new stream.Readable({
+    read(size) {
+      if (current + size >= paramsBuffer.length) { size = paramsBuffer.length - current; }
+
+      this.push(paramsBuffer.slice(current, current + size));
+
+      current += size;
+
+      if (current >= paramsBuffer.length) { this.push(null); }
+    }
+  });
+}
+
+function uploadProgress(params) {
+
+  const parmasStr = JSON.stringify(params);
+  const paramsBuffer = Buffer.from(parmasStr);
+
+  const readableStream = readableStreamInstance(paramsBuffer);
+
+  if (!process.stdin.isTTY) {
+    return readableStream;
+  }
+
+  const str = progress({
+    time: 500,
+    length: parmasStr.length
+  });
+
+  const total = Math.round(paramsBuffer.length / 1024);
+
+  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate KB/s, :percent :etas`, { total });
+
+  str.on('progress', (progress) => {
+    bar.tick(Math.round(progress.delta / 1024)); // Δ
+  });
+
+  return readableStream.pipe(str);
+}
+
 module.exports = {
   getTemplateFile,
   getCodeUri,
@@ -109,5 +155,6 @@ module.exports = {
   checkResource,
   doProp,
   outputTemplateFile,
-  getTemplateHeader
+  getTemplateHeader,
+  uploadProgress
 };

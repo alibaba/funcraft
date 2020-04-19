@@ -1,6 +1,5 @@
 'use strict';
 
-const stream = require('stream');
 const util = require('./import/utils');
 const bytes = require('bytes');
 const funignore = require('./package/ignore');
@@ -20,15 +19,14 @@ const vpc = require('./vpc');
 const nas = require('./nas');
 const nasCp = require('./nas/cp');
 const getUuid = require('uuid-by-string');
-const progress = require('progress-stream');
 
 const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
 const { isNotEmptyDir } = require('./nas/cp/file');
+const barUtil = require('./import/utils');
 const { isSpringBootJar } = require('./frameworks/common/spring-boot');
 const { updateTimestamps } = require('./utils/file');
-const { createProgressBar } = require('./import/utils');
 const { green, red, yellow } = require('colors');
 const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
@@ -1029,45 +1027,6 @@ async function generateFontsConfAndEnv(baseDir, codeUri, appendContet) {
   return DEFAULT_FONTS_CONFIG_ENV;
 }
 
-
-function readableStreamInstance(paramsBuffer) {
-  let current = 0;
-  return new stream.Readable({
-    read(size) {
-      if (current + size >= paramsBuffer.length) { size = paramsBuffer.length - current; }
-
-      this.push(paramsBuffer.slice(current, current + size));
-
-      current += size;
-
-      if (current >= paramsBuffer.length) { this.push(null); }
-    }
-  });
-}
-
-function uploadProgress(params) {
-
-  const parmasStr = JSON.stringify(params);
-  const paramsBuffer = Buffer.from(parmasStr);
-
-  const readableStream = readableStreamInstance(paramsBuffer);
-
-  const str = progress({
-    time: 100,
-    length: parmasStr.length
-  });
-
-  const total = Math.round(paramsBuffer.length / 1024);
-
-  const bar = createProgressBar(`${green(':uploading')} :bar :current/:total :rate KB/s, :percent :etas`, { total });
-
-  str.on('progress', (progress) => {
-    bar.tick(Math.round(progress.delta / 1024)); // Δ
-  });
-
-  return readableStream.pipe(str);
-}
-
 async function makeFunction(baseDir, {
   serviceName,
   functionName,
@@ -1162,7 +1121,7 @@ async function makeFunction(baseDir, {
     params['functionName'] = functionName;
   }
 
-  const streamPipe = uploadProgress(params);
+  const streamPipe = barUtil.uploadProgress(params);
 
   try {
     if (!fn) {
