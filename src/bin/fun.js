@@ -6,6 +6,7 @@
 
 const program = require('commander');
 const debug = require('debug');
+require('../lib/check-version');
 
 program
   .version(require('../package.json').version, '--version')
