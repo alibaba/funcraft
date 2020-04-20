@@ -39,7 +39,8 @@
     "validate-lint": "eslint src/lib src/bin test",
     "prepack": "export NODE_ENV=development && npm install && npm run build && make package-fun-nas-server",
     "build": "make build",
-    "postbuild": "make postbuild"
+    "postbuild": "make postbuild",
+    "preinstall": "node -e 'try { require('./src/lib/check-version.js') } catch(e) { if (e.message && e.message.includes('Cannot find module')) { require('./lib/check-version') } else { throw e; }}'"
   },
   "author": "Jackson Tian",
   "maintainers": [

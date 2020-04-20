@@ -414,6 +414,11 @@ async function getTmpDomainExpiredTime(domainName) {
   };
 }
 
+function parseProtocol(protocol) {
+  if (protocol === 'HTTP') { return 'http://'; }
+  return 'https://';
+}
+
 async function getReuseTmpDomainName(tplRoutes) {
   const customDomains = await listCustomDomains();
 
@@ -426,6 +431,7 @@ async function getReuseTmpDomainName(tplRoutes) {
   for (const tmpDomain of tmpDomains) {
     const routes = tmpDomain.routeConfig.routes;
     const tmpDomainName = tmpDomain.domainName;
+    const protocol = tmpDomain.protocol;
 
     for (const route of routes) {
 
@@ -435,7 +441,7 @@ async function getReuseTmpDomainName(tplRoutes) {
           const { expiredTime, timesLimit, expiredTimeObj } = await getTmpDomainExpiredTime(tmpDomainName);
 
           if (expiredTime > Math.round(new Date().getTime() / 1000)) {
-            console.log(`Fun will reuse the temporary domain ${yellow(tmpDomainName)}, expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.\n`);
+            console.log(`Fun will reuse the temporary domain ${yellow(parseProtocol(protocol) + tmpDomainName)}, expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.\n`);
             return tmpDomainName;
           }
         }
