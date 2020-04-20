@@ -507,7 +507,6 @@ async function deployCustomDomain(domainName, domainDefinition, routes) {
   await makeCustomDomain({ domainName, certConfig, protocol, routeConfig: { routes } });
 }
 
-
 async function deployLogs(resourcesDefinition) {
   for (const [projectName, v] of Object.entries(resourcesDefinition)) {
     if ((v || {}).Type === 'Aliyun::Serverless::Log') {
