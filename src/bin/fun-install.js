@@ -33,12 +33,10 @@ program
   .option('-d, --use-docker', 'Use docker container to install function dependencies')
   .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString()}`)
   .option('-p, --package-type <type>', 'avaliable package type option: pip, apt, npm.')
-
-  .option('-i, --index-url <pip-url>', `Base URL of Python Package Index (default https://pypi.org/simple). This should point to a repository compliant with PEP 503 (the simple repository API) or a local
-                                     directory laid out in the same format.`)
-
   .option('--save', 'add task to fun.yml file.')
   .option('--registry <npm-url>', 'Configure npm to use any compatible registry, and even run your own registry.')
+  .option('--index-url <pip-url>', `Base URL of Python Package Index (default https://pypi.org/simple). This should point to a repository compliant with PEP 503 (the simple repository API) or a local
+                                     directory laid out in the same format.`)
 
   .arguments('[packageNames...]')
   .description('install dependencies which are described in fun.yml file.')

@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const util = require('../lib/import/utils');
 const yaml = require('js-yaml');
+const barUtil = require('../lib/import/utils');
 const expect = require('expect.js');
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
@@ -123,6 +124,28 @@ describe('Incorrect environmental variables', () => {
   });
 
   it('should cast env value to String', async () => {
+    sandbox.stub(barUtil, 'uploadProgress').withArgs({
+      description: 'Hello world with nodejs6!',
+      handler: 'index.handler',
+      initializer: null,
+      timeout: 3,
+      initializationTimeout: 3,
+      memorySize: 128,
+      runtime: 'nodejs6',
+      code: {
+        zipFile: undefined
+      },
+      environmentVariables: {
+        StringTypeValue1: '123',
+        StringTypeValue2: 'test',
+        LD_LIBRARY_PATH: '/code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
+        PATH: '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code:/code/node_modules/.bin:/code/.fun/python/bin:/code/.fun/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
+        NODE_PATH: '/code/node_modules:/usr/local/lib/node_modules',
+        PYTHONUSERBASE: '/code/.fun/python'
+      },
+      instanceConcurrency: undefined
+    }).returns({});
+
     await fc.makeFunction(path.join('examples', 'local'), {
       serviceName: 'localdemo',
       functionName: 'nodejs6',
@@ -141,27 +164,7 @@ describe('Incorrect environmental variables', () => {
       FC.prototype.updateFunction,
       'localdemo',
       'nodejs6',
-      {
-        description: 'Hello world with nodejs6!',
-        handler: 'index.handler',
-        initializer: null,
-        timeout: 3,
-        initializationTimeout: 3,
-        memorySize: 128,
-        runtime: 'nodejs6',
-        code: {
-          zipFile: undefined
-        },
-        environmentVariables: {
-          StringTypeValue1: '123',
-          StringTypeValue2: 'test',
-          LD_LIBRARY_PATH: '/code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib',
-          PATH: '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code:/code/node_modules/.bin:/code/.fun/python/bin:/code/.fun/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
-          NODE_PATH: '/code/node_modules:/usr/local/lib/node_modules',
-          PYTHONUSERBASE: '/code/.fun/python'
-        },
-        instanceConcurrency: undefined
-      });
+      {});
   });
 
   it('invoke function sync', async () => {

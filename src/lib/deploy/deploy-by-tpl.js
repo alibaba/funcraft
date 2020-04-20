@@ -100,7 +100,7 @@ async function deployTriggers(serviceName, functionName, events) {
   }
 }
 
-async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas,
+async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes,
   serviceName, functionName, functionRes,
   onlyConfig, tplPath, skipTrigger = false
 }) {
@@ -121,7 +121,7 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
     vpcConfig
-  }, onlyConfig, tplPath, useNas);
+  }, onlyConfig, tplPath, useNas, assumeYes);
 
   if (!skipTrigger) {
     await deployTriggers(serviceName, functionName, functionRes.Events);
@@ -142,7 +142,7 @@ async function reloadServiceRes(tplPath, name) {
   return {};
 }
 
-async function deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger, useNas }) {
+async function deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger, useNas, assumeYes }) {
   const serviceProps = serviceRes.Properties || {};
 
   let deployedFunctions = [];
@@ -164,7 +164,8 @@ async function deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, t
           functionName: k,
           functionRes: v,
           nasConfig: serviceProps.NasConfig,
-          vpcConfig: serviceProps.VpcConfig
+          vpcConfig: serviceProps.VpcConfig,
+          assumeYes
         });
         deployedFunctions.push(k);
         console.log(green(`\tfunction ${k} ${afterDeployLog}`));
@@ -286,7 +287,7 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
   return ((role || {}).Role || {}).Arn || roleArn || '';
 }
 
-async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger = false, useNas }) {
+async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger = false, useNas, assumeYes }) {
   const properties = (serviceRes.Properties || {});
 
   const internetAccess = 'InternetAccess' in properties ? properties.InternetAccess : null;
@@ -312,7 +313,7 @@ async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tpl
     nasConfig: nasConfig
   });
 
-  await deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger, useNas });
+  await deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger, useNas, assumeYes });
 }
 
 async function deployLogstoreDefaultIndex(projectName, logstoreName) {
@@ -720,13 +721,13 @@ async function partialDeployment(sourceName, tpl) {
   return {};
 }
 
-async function deployTplService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, useNas }) {
+async function deployTplService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, useNas, assumeYes }) {
 
   const beforeDeployLog = onlyConfig ? 'config to be updated' : 'to be deployed';
   const afterDeployLog = onlyConfig ? 'config update success' : 'deploy success';
 
   console.log(`Waiting for service ${serviceName} ${beforeDeployLog}...`);
-  await deployService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, useNas });
+  await deployService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, useNas, assumeYes });
   console.log(green(`service ${serviceName} ${afterDeployLog}\n`));
 }
 
@@ -847,7 +848,8 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
         serviceName: name,
         serviceRes: resource,
         useNas: context.useNas,
-        onlyConfig: context.onlyConfig
+        onlyConfig: context.onlyConfig,
+        assumeYes: context.assumeYes
       });
     } else if (resource.Type === 'Aliyun::Serverless::Api') {
       console.log(`Waiting for api gateway ${name} to be deployed...`);

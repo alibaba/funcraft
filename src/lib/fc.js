@@ -24,13 +24,14 @@ const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
 const { isNotEmptyDir } = require('./nas/cp/file');
+const barUtil = require('./import/utils');
+const { isSpringBootJar } = require('./frameworks/common/spring-boot');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
 const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
-const { isSpringBootJar } = require('./frameworks/common/spring-boot');
 
 const _ = require('lodash');
 
@@ -845,7 +846,7 @@ You can follow these steps:
   }
 }
 
-async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUri, nasConfig, vpcConfig, useNas = false,
+async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUri, nasConfig, vpcConfig, useNas = false, assumeYes,
   compressedSize = 0,
   nasFunctionName,
   nasServiceName
@@ -862,15 +863,16 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
 
   await ensureCodeUriForJava(codeUri, nasServiceName, nasFunctionName);
 
-  if (await promptForConfirmContinue(`Do you want to let fun to help you automate the configuration?`)) {
+  if (assumeYes || await promptForConfirmContinue(`Do you want to let fun to help you automate the configuration?`)) {
 
     const packageStage = (stage === 'package');
     const tpl = await getTpl(tplPath);
 
     if (definition.isNasAutoConfig(nasConfig)) {
-      const yes = await promptForConfirmContinue(`You have already configured 'NasConfig: Auto’. We want to use this configuration to store your function dependencies.`);
-      if (yes) {
+      const nasAutoMsg = `You have already configured 'NasConfig: Auto’. We want to use this configuration to store your function dependencies.`;
+      if (assumeYes || await promptForConfirmContinue(nasAutoMsg)) {
 
+        if (assumeYes) { console.log(nasAutoMsg); }
         if (packageStage && !_.isEmpty(vpcConfig)) {
           throw new Error(`When 'NasConfig: Auto' is specified, 'VpcConfig' is not supported.`);
         }
@@ -895,8 +897,12 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         throw new Error(`When 'NasConfig' is specified, 'VpcConfig' is not supported.`);
       }
       if (definition.onlyOneNASExists(nasConfig)) {
-        const yes = await promptForConfirmContinue(`We have detected that you already have a NAS configuration. Do you directly use this NAS storage function dependencies.`);
-        if (yes) {
+        const assumeYesMsg = `We have detected that you already have a NAS configuration. Fun will directly use this NAS storage function dependencies.`;
+        const confirmMsg = `We have detected that you already have a NAS configuration. Do you directly use this NAS storage function dependencies.`;
+
+        if (assumeYes || await promptForConfirmContinue(confirmMsg)) {
+          if (assumeYes) { console.log(assumeYesMsg); }
+
           await backupTemplateFile(tplPath);
 
           tplChanged = await processNasAutoConfiguration({
@@ -923,7 +929,7 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
       stop = true;
     } else if (_.isEmpty(vpcConfig) && _.isEmpty(nasConfig)) {
       const yes = await promptForConfirmContinue(`We recommend using the 'NasConfig: Auto' configuration to manage your function dependencies.`);
-      if (yes) {
+      if (assumeYes || yes) {
         await backupTemplateFile(tplPath);
         // write back to yml
         const updatedTpl = await updateNasAutoConfigure(tplPath, tpl, nasServiceName);
@@ -1036,7 +1042,7 @@ async function makeFunction(baseDir, {
   instanceConcurrency,
   nasConfig,
   vpcConfig
-}, onlyConfig, tplPath, useNas = false) {
+}, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
 
   var fn;
@@ -1080,7 +1086,7 @@ async function makeFunction(baseDir, {
         nasFunctionName: functionName,
         nasServiceName: serviceName,
         codeUri: path.resolve(baseDir, codeUri),
-        compressedSize, tplPath, runtime, nasConfig, vpcConfig, useNas
+        compressedSize, tplPath, runtime, nasConfig, vpcConfig, useNas, assumeYes
       });
 
       if (rs.stop) { return { tplChanged: rs.tplChanged }; }
@@ -1111,14 +1117,19 @@ async function makeFunction(baseDir, {
     environmentVariables: addEnv(castEnvironmentVariables(environmentVariables), nasConfig)
   };
 
+  if (!fn) {
+    params['functionName'] = functionName;
+  }
+
+  const streamPipe = barUtil.uploadProgress(params);
+
   try {
     if (!fn) {
       // create
-      params['functionName'] = functionName;
-      await fc.createFunction(serviceName, params);
+      await fc.createFunction(serviceName, streamPipe);
     } else {
       // update
-      await fc.updateFunction(serviceName, functionName, params);
+      await fc.updateFunction(serviceName, functionName, streamPipe);
     }
   } catch (ex) {
     if (ex.message.indexOf('timeout') !== -1) {
