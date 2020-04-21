@@ -9,6 +9,7 @@ const { generateFile, listDir } = require('./common/file');
 const frameworks = [
   // php
   require('./thinkphp'),
+  require('./laravel'),
 
   // java
   require('./spring-boot'),
@@ -278,7 +279,15 @@ async function execFrameworkActions(codeDir, framework) {
   }
 }
 
-async function generateTemplateContent(folderName) {
+async function generateTemplateContent(folderName, framework) {
+
+  let environmentVariables = '';
+  if (framework && framework.id === require('./laravel').id) {
+    environmentVariables = `
+        EnvironmentVariables:
+          BOOTSTRAP_FILE: laravel_bootstrap`;
+  }
+
   const templateYmlContent = `ROSTemplateFormatVersion: '2015-09-01'
 Transform: 'Aliyun::Serverless-2018-04-03'
 Resources:
@@ -295,6 +304,7 @@ Resources:
         MemorySize: 1024
         InstanceConcurrency: 5
         Timeout: 120
+        ${environmentVariables}
       Events:
         httpTrigger:
           Type: HTTP

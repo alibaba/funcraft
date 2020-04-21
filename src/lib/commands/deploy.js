@@ -40,7 +40,7 @@ async function deploy(context) {
       tplPath = path.join(codeDir, 'template.yml');
 
       console.log(green('Generating template.yml...'));
-      const templateYmlContent = await generateTemplateContent(name);
+      const templateYmlContent = await generateTemplateContent(name, framework);
       await fs.writeFile(tplPath, templateYmlContent);
 
       console.log(green('Generate Fun project successfully!'));
