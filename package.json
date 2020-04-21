@@ -34,7 +34,7 @@
   "scripts": {
     "test": "make test",
     "binary": "make binary",
-    "postinstall": "node -e \"try { require('./src/lib/check-version'); } catch(e) { if (e.message && e.message.includes('Cannot find module')) { require('./lib/check-version'); } else { throw e; }}\"",
+    "postinstall": "node -e \"require('./src/lib/check-version');\"",
     "upload": "make upload",
     "lint": "eslint --fix src/lib src/bin test",
     "validate-lint": "eslint src/lib src/bin test",
