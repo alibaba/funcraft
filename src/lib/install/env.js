@@ -101,7 +101,7 @@ function generateNodePaths(envs, prefix) {
 
   let path;
   if (envs['NODE_PATH']) {
-    path = `${envs['PATH']}:${customPath}:${defaultPath}`;
+    path = `${envs['NODE_PATH']}:${customPath}:${defaultPath}`;
   } else {
     path = `${customPath}:${defaultPath}`;
   }
@@ -114,7 +114,7 @@ function duplicateRemoval(str) {
 }
 
 const pythonPaths = [
-  '/python/lib/python2.7/site-packages', 
+  '/python/lib/python2.7/site-packages',
   '/python/lib/python3.6/site-packages'
 ];
 

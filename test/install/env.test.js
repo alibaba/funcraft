@@ -19,6 +19,7 @@ describe('install_env', ()=>{
     expect(envs).to.have.property('PATH', '/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code:/code/node_modules/.bin:/code/.fun/python/bin:/code/.fun/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin');
     expect(envs).to.have.property('PYTHONUSERBASE', '/code/.fun/python');
     expect(envs).to.have.property('LD_LIBRARY_PATH', '/code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib');
+    expect(envs).to.have.property('NODE_PATH', '/code/node_modules:/usr/local/lib/node_modules');
   });
 
   it('with_LD_LIBRARY_PATH', () => {
@@ -59,6 +60,13 @@ describe('install_env', ()=>{
     });
 
     expect(envs).to.have.property('LD_LIBRARY_PATH', '/usr/lib:/code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code:/code/lib:/usr/local/lib');
+  });
+
+  it('with NODE_PATH', () => {
+    const envs = addEnv({
+      'NODE_PATH': '/a/b'
+    });
+    expect(envs).to.have.property('NODE_PATH', '/a/b:/code/node_modules:/usr/local/lib/node_modules');
   });
 
 });
