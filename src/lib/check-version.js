@@ -2,9 +2,6 @@
 
 const tryRequire = require('try-require');
 const pkg = tryRequire('../../package') || tryRequire('../package');
-console.log(process.cwd());
-console.log('pkg:', pkg)
-
 const semver = require('semver');
 
 const version = pkg.engines.node;
