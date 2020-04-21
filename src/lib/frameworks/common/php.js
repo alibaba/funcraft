@@ -133,7 +133,7 @@ endscript
 `
 };
 
-const LOGROTATE_D_PHP_7_2_FPM =         { 
+const LOGROTATE_D_PHP_7_2_FPM = { 
   'type': 'generateFile',
   'path': ['.fun', 'root', 'etc', 'logrotate.d', 'php7.2-fpm'],
   'mode': '0755',
@@ -152,7 +152,7 @@ const LOGROTATE_D_PHP_7_2_FPM =         {
 `
 };
 
-const PHP_INI_PRODUCTION =         {
+const PHP_INI_PRODUCTION = {
   'type': 'generateFile',
   'path': ['.fun', 'root', 'usr', 'lib', 'php', '7.2', 'php.ini-production'],
   'mode': '0755',
@@ -342,5 +342,5 @@ module.exports = {
   downloadNginxAndPhp, 
   PHP_FPM_CONF, WWW_CONF, NGINX_CONF, 
   LOGROTATE_D_NGINX, LOGROTATE_D_PHP_7_2_FPM,
-  PHP_INI_PRODUCTION,
-}
+  PHP_INI_PRODUCTION
+};

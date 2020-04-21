@@ -847,10 +847,10 @@ You can follow these steps:
 }
 
 async function checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri) {
-  if (runtime !== 'custom') return false;
+  if (runtime !== 'custom') { return false; }
   const bootstrapPath = path.join(codeUri, 'bootstrap');
 
-  if (!await fs.pathExists(bootstrapPath)) return false;
+  if (!await fs.pathExists(bootstrapPath)) { return false; }
 
   const stat = await fs.stat(bootstrapPath);
   if (stat.size < 102400) { // 10 KB
