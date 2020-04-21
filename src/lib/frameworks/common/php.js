@@ -67,7 +67,6 @@ const NGINX_CONF = {
   'path': ['.fun', 'root', 'etc', 'nginx', 'nginx.conf'],
   'mode': '0755',
   'backup': false,
-  // todo: 
   'content': `error_log /tmp/log/nginx/error.log error; 
 worker_processes auto;
 pid /tmp/nginx.pid;
