@@ -846,6 +846,21 @@ You can follow these steps:
   }
 }
 
+async function checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri) {
+  if (runtime !== 'custom') return false;
+  const bootstrapPath = path.join(codeUri, 'bootstrap');
+
+  if (!await fs.pathExists(bootstrapPath)) return false;
+
+  const stat = await fs.stat(bootstrapPath);
+  if (stat.size < 102400) { // 10 KB
+    const content = await fs.readFile(bootstrapPath, 'utf8');
+    return _.includes(content, 'org.springframework.boot.loader.PropertiesLauncher');
+  }
+
+  return false;
+}
+
 async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUri, nasConfig, vpcConfig, useNas = false, assumeYes,
   compressedSize = 0,
   nasFunctionName,
@@ -861,17 +876,17 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
     console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M. It is recommended that using the nas service to manage your function dependencies.`));
   }
 
+  const alreadyConfirmed = await checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri);
+
   await ensureCodeUriForJava(codeUri, nasServiceName, nasFunctionName);
 
-  if (assumeYes || await promptForConfirmContinue(`Do you want to let fun to help you automate the configuration?`)) {
-
+  if (assumeYes || alreadyConfirmed || await promptForConfirmContinue(`Do you want to let fun to help you automate the configuration?`)) {
     const packageStage = (stage === 'package');
     const tpl = await getTpl(tplPath);
 
     if (definition.isNasAutoConfig(nasConfig)) {
       const nasAutoMsg = `You have already configured 'NasConfig: Auto’. We want to use this configuration to store your function dependencies.`;
-      if (assumeYes || await promptForConfirmContinue(nasAutoMsg)) {
-
+      if (assumeYes || alreadyConfirmed || await promptForConfirmContinue(nasAutoMsg)) {
         if (assumeYes) { console.log(nasAutoMsg); }
         if (packageStage && !_.isEmpty(vpcConfig)) {
           throw new Error(`When 'NasConfig: Auto' is specified, 'VpcConfig' is not supported.`);
@@ -900,7 +915,7 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
         const assumeYesMsg = `We have detected that you already have a NAS configuration. Fun will directly use this NAS storage function dependencies.`;
         const confirmMsg = `We have detected that you already have a NAS configuration. Do you directly use this NAS storage function dependencies.`;
 
-        if (assumeYes || await promptForConfirmContinue(confirmMsg)) {
+        if (assumeYes || alreadyConfirmed || await promptForConfirmContinue(confirmMsg)) {
           if (assumeYes) { console.log(assumeYesMsg); }
 
           await backupTemplateFile(tplPath);
@@ -1194,9 +1209,16 @@ async function transformLogConfig(logConfig) {
   };
 }
 
+function isSlsNotExistException(e) {
+  return e.code === 'InvalidArgument'
+    && _.includes(e.message, 'not exist')
+    && (_.includes(e.message, 'logstore') || _.includes(e.message, 'project'));
+}
+
 // make sure sls project and logstore is created
 async function retryUntilSlsCreated(serviceName, options, create, fcClient) {
   let slsRetry = 0;
+  let retryTimes = 12;
   let service;
   do {
     try {
@@ -1209,15 +1231,17 @@ async function retryUntilSlsCreated(serviceName, options, create, fcClient) {
       }
       return service;
     } catch (e) {
-      if (e.code === 'InvalidArgument'
-        && _.includes(e.message, 'not exist')
-        && (_.includes(e.message, 'logstore') || _.includes(e.message, 'project'))) {
+      if (isSlsNotExistException(e)) {
         slsRetry++;
+
+        if (slsRetry >= retryTimes) {
+          throw e;
+        }
+
         await sleep(3000);
       } else { throw e; }
     }
-
-  } while (slsRetry <= 12);
+  } while (slsRetry < retryTimes);
 }
 
 async function makeService({
@@ -1303,7 +1327,7 @@ async function makeService({
     try {
       service = await retryUntilSlsCreated(serviceName, options, !service, fc);
     } catch (ex) {
-      if (ex.code === 'AccessDenied') {
+      if (ex.code === 'AccessDenied' || isSlsNotExistException(ex)) {
         throw ex;
       }
       debug('error when createService or updateService, serviceName is %s, options is %j, error is: \n%O', serviceName, options, ex);
