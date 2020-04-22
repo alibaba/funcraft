@@ -4,20 +4,16 @@ const path = require('path');
 const fs = require('fs-extra');
 const php = require('./common/php');
 
-const thinkphp = {
-  'id': 'thinkphp',
+const laravel = {
+  'id': 'laravel',
   'runtime': 'php',
-  'website': 'http://www.thinkphp.cn/',
+  'website': 'http://www.laravel.cn/',
   'detectors': {
-    'or': [
+    'and': [
       {
         'type': 'regex',
         'path': 'composer.json',
-        'content': '"topthink/framework":\\s*".+?"'
-      },
-      {
-        'type': 'dir',
-        'paths': ['thinkphp', 'ThinkPHP']
+        'content': '"laravel/framework":\\s*".+?"'
       }
     ]
   },
@@ -42,40 +38,57 @@ const thinkphp = {
         php.PHP_INI_PRODUCTION,
         {
           'type': 'generateFile',
-          'path': ['.fun', 'root', 'etc', 'nginx', 'sites-enabled', 'thinkphp.conf'],
+          'path': ['.fun', 'root', 'etc', 'nginx', 'sites-enabled', 'laravel.conf'],
           'mode': '0755',
           'backup': false,
-          'content': `server {
+          'content': `
+server {
   listen 9000;
+  server_name localhost;
   root /code/public;
-  index  index.php index.html index.htm;
-  server_name  localhost;
 
-  client_max_body_size 100M;
+  add_header X-Frame-Options "SAMEORIGIN";
+  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Content-Type-Options "nosniff";
+
+  index index.html index.htm index.php;
+
+  charset utf-8;
 
   location / {
-      # same as .htaccess used for apache in thinkphp public folder 
-      # http://www.thinkphp.cn/topic/40391.html
-      if ( -f $request_filename) {
-          break;
-      }
-      if ( !-e $request_filename) {
-          rewrite ^(.*)$ /index.php/$1 last;
-          break;
-      }  
+      try_files $uri $uri/ /index.php?$query_string;
   }
 
-  location ~ .+\\.php($|/) {
-      include snippets/fastcgi-php.conf;
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location = /robots.txt  { access_log off; log_not_found off; }
+
+  error_page 404 /index.php;
+
+  location ~ \\.php$ {
       fastcgi_pass             127.0.0.1:9527;
-      fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      fastcgi_index index.php;
+      fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+      include fastcgi_params;
+      proxy_read_timeout 180;
   }
-}     
+
+  location ~ /\.(?!well-known).* {
+      deny all;
+  }
+}
 `
         },
         {
           'type': 'generateFile',
-          'path': 'bootstrap',
+          'path': '.funignore',
+          'mode': '0755',
+          'content': `
+!.env
+`
+        },
+        {
+          'type': 'generateFile',
+          'path': 'laravel_bootstrap',
           'mode': '0755',
           'content': `#!/usr/bin/env bash
 set +e
@@ -83,6 +96,10 @@ set +e
 mkdir -p /tmp/log/nginx/
 mkdir -p /tmp/var/nginx/
 mkdir -p /tmp/var/sessions/
+mkdir -p /tmp/storage/framework/views
+mkdir -p /tmp/storage/framework/sessions
+
+export STORAGE_PATH=/tmp/storage
 
 echo "start php-fpm"
 php-fpm7.2 -c /code/.fun/root/usr/lib/php/7.2/php.ini-production -y /code/.fun/root/etc/php/7.2/fpm/php-fpm.conf
@@ -114,4 +131,4 @@ done
   ]
 };
 
-module.exports = thinkphp;
+module.exports = laravel;
