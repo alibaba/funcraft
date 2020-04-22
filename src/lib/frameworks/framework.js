@@ -20,6 +20,7 @@ const frameworks = [
   require('./express'),
   require('./next'),
   require('./hexo'),
+  require('./koa'),
 
   // go
   require('./go')
