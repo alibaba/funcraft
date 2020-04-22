@@ -296,7 +296,7 @@ function resolveDockerUser({nasConfig, stage = 'run'}) {
   let { userId, groupId } = definition.getUserIdAndGroupId(nasConfig);
 
   if (process.platform === 'linux') {
-    console.log(red('Warning: for linux platform, Fun will use host userId and groupId to build or run your functions'));  
+    debug('For linux platform, Fun will use host userId and groupId to build or run your functions');
     userId = process.getuid();
     groupId = process.getgid();
   } else {
