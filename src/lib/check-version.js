@@ -2,6 +2,10 @@
 
 const path = require('path');
 const tryRequire = require('try-require');
+
+console.log(path.join(__dirname, '../package'));
+console.log(path.join(__dirname, '../../package'));
+
 const pkg = tryRequire(path.join(__dirname, '../package')) || tryRequire(path.join(__dirname, '../../package'));
 console.log(pkg);
 const semver = require('semver');
