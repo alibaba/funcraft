@@ -34,7 +34,7 @@
   "scripts": {
     "test": "make test",
     "binary": "make binary",
-    "postinstall": "node -e \"console.log(process.cwd()); require('./src/lib/check-version'); \"",
+    "postinstall": "node -e \" require('./lib/check-version'); \"",
     "upload": "make upload",
     "lint": "eslint --fix src/lib src/bin test",
     "validate-lint": "eslint src/lib src/bin test",
