@@ -37,7 +37,9 @@
     "postinstall": "node -e \"console.log(process.cwd()); require('./src/lib/check-version'); \"",
     "upload": "make upload",
     "lint": "eslint --fix src/lib src/bin test",
-    "validate-lint": "eslint src/lib src/bin test"
+    "validate-lint": "eslint src/lib src/bin test",
+    "build": "make build",
+    "postbuild": "make postbuild"
   },
   "author": "Jackson Tian",
   "maintainers": [
