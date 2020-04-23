@@ -1,7 +1,8 @@
 'use strict';
 
+const path = require('path');
 const tryRequire = require('try-require');
-const pkg = tryRequire('./package') || tryRequire('../package');
+const pkg = tryRequire(path.join(__dirname, './package')) || tryRequire(path.join(__dirname, '../package'));
 console.log(pkg);
 const semver = require('semver');
 const version = pkg.engines.node;
