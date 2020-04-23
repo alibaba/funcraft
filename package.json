@@ -37,10 +37,7 @@
     "postinstall": "node -e \"console.log(process.cwd()); require('./src/lib/check-version'); \"",
     "upload": "make upload",
     "lint": "eslint --fix src/lib src/bin test",
-    "validate-lint": "eslint src/lib src/bin test",
-    "prepack": "export NODE_ENV=development && npm install && npm run build && make package-fun-nas-server",
-    "build": "make build",
-    "postbuild": "make postbuild"
+    "validate-lint": "eslint src/lib src/bin test"
   },
   "author": "Jackson Tian",
   "maintainers": [
