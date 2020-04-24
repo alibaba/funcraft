@@ -123,7 +123,7 @@ function convertPackageToCmd(pkgType, pkg, {
   indexUrl, registry
 }) {
 
-  if (!_.includes(['pip', 'npm', 'apt'], pkgType)) {
+  if (!_.includes(['pip', 'npm', 'apt-get'], pkgType)) {
     throw new Error(`unknow package type %${pkgType}`);
   }
 

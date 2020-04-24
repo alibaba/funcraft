@@ -148,30 +148,31 @@ async function describeVpcZones(vpcClient, region) {
   return zones.Zones.Zone;
 }
 
-async function convertToFcAllowedZoneMap(vpcClient, region, vswitchIds) {
+async function convertToFcAllowedZones(vpcClient, region, vswitchIds) {
   const fcAllowedZones = await getFcAllowedZones();
-  const zoneMap = new Map();
 
+  const zoneObj = [];
   for (const vswitchId of vswitchIds) {
     const zoneId = await getVSwitchZoneId(vpcClient, region, vswitchId);
     if (_.includes(fcAllowedZones, zoneId)) {
-      zoneMap.set(zoneId, vswitchId);
+      zoneObj.push({ zoneId, vswitchId });
     }
   }
-  if (_.isEmpty(zoneMap)) {
+  if (_.isEmpty(zoneObj)) {
     throw new Error(`
 Only zoneId ${fcAllowedZones} of vswitch is allowed by VpcConfig.
 Check your vswitch zoneId please.`);
   }
 
-  return zoneMap;
+  return zoneObj;
 }
 
-function convertZones(zones, zoneMap, storageType = 'Performance') {
-  const zoneId = zones.ZoneId;
+function convertZones(nasZones, zones, storageType = 'Performance') {
+  const zoneId = nasZones.ZoneId;
+  const vswitchId = zones.filter(f => { return f.zoneId === zoneId; });
   return {
     zoneId,
-    vswitchId: zoneMap.get(zoneId),
+    vswitchId,
     storageType
   };
 }
@@ -204,37 +205,32 @@ function processDifferentZones(nasZones, FcAllowVswitchId) {
 
 async function getAvailableVSwitchId(vpcClient, region, vswitchIds, nasZones) {
 
-  const zoneMap = await convertToFcAllowedZoneMap(vpcClient, region, vswitchIds);
+  const fcZones = await convertToFcAllowedZones(vpcClient, region, vswitchIds);
 
-  const FcAllowVswitchId = _.head([...zoneMap.values()]);
+  const availableZones = fcZones.filter(fcZone => { return _.includes(nasZones.map(m => { return m.ZoneId; }), fcZone.zoneId); });
 
-  for (const zoneId of zoneMap.keys()) {
-    if (!_.includes(nasZones.map(m => { return m.ZoneId; }), zoneId)) {
-      zoneMap.delete(zoneId);
-    }
-  }
   const performances = [];
   const capacities = [];
 
   _.forEach(nasZones, nasZone => {
-    if (_.includes([...zoneMap.keys()], nasZone.ZoneId)) {
+    if (_.includes(availableZones.map(z => z.zoneId), nasZone.ZoneId)) {
       if (!_.isEmpty(nasZone.Performance.Protocol)) { performances.push(nasZone); }
       if (!_.isEmpty(nasZone.Capacity.Protocol)) { capacities.push(nasZone); }
     }
   });
 
   if (!_.isEmpty(performances)) {
-    return convertZones(_.head(performances), zoneMap);
+    return convertZones(_.head(performances), availableZones);
   }
 
   if (!_.isEmpty(capacities)) {
     const msg = `Region ${region} only supports capacity NAS. Do you want to create it automatically?`;
     const yes = await promptForConfirmContinue(msg);
-    if (yes) { return convertZones(_.head(capacities), zoneMap, 'Capacity'); }
+    if (yes) { return convertZones(_.head(capacities), availableZones, 'Capacity'); }
     throw new Error(`No NAS service available under region ${region}.`);
   }
 
-  return processDifferentZones(nasZones, FcAllowVswitchId);
+  return processDifferentZones(nasZones, _.head(fcZones).vswitchId);
 }
 
 module.exports = {
