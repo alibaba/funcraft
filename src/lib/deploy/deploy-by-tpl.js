@@ -366,7 +366,7 @@ function convertRoutesConfigToRoutes(routeConfig) {
   return routes;
 }
 
-async function processTemporaryDomain(resources, { serviceName, functionName }) {
+async function processTemporaryDomain(resources, { serviceName, functionName }, protocol) {
   const profile = await getProfile();
   const region = profile.defaultRegion;
   const accountId = profile.accountId;
@@ -392,9 +392,9 @@ async function processTemporaryDomain(resources, { serviceName, functionName }) 
   const currentTimestamp = Math.round(new Date().getTime() / 1000);
 
   if (expiredTime > currentTimestamp) {
-    console.log(`The assigned temporary domain is ${yellow(domainName)}，expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.`);
+    console.log(`The assigned temporary domain is ${yellow(parseProtocol(protocol, domainName))}，expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.`);
   } else {
-    console.log(`The temporary domain ${yellow(domainName)} of previous depoyment is expried.`);
+    console.log(`The temporary domain ${yellow(parseProtocol(protocol, domainName))} of previous depoyment is expried.`);
   }
 
   return domainName;
@@ -414,6 +414,11 @@ async function getTmpDomainExpiredTime(domainName) {
   };
 }
 
+function parseProtocol(protocol, domainName) {
+  const resolveProtocol = protocol === 'HTTP' ? 'http://' : 'https://';
+  return resolveProtocol + domainName;
+}
+
 async function getReuseTmpDomainName(tplRoutes) {
   const customDomains = await listCustomDomains();
 
@@ -426,6 +431,7 @@ async function getReuseTmpDomainName(tplRoutes) {
   for (const tmpDomain of tmpDomains) {
     const routes = tmpDomain.routeConfig.routes;
     const tmpDomainName = tmpDomain.domainName;
+    const protocol = tmpDomain.protocol;
 
     for (const route of routes) {
 
@@ -435,7 +441,7 @@ async function getReuseTmpDomainName(tplRoutes) {
           const { expiredTime, timesLimit, expiredTimeObj } = await getTmpDomainExpiredTime(tmpDomainName);
 
           if (expiredTime > Math.round(new Date().getTime() / 1000)) {
-            console.log(`Fun will reuse the temporary domain ${yellow(tmpDomainName)}, expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.\n`);
+            console.log(`Fun will reuse the temporary domain ${yellow(parseProtocol(protocol, tmpDomainName))}, expired at ${yellow(date.format(expiredTimeObj, 'YYYY-MM-DD HH:mm:ss'))}, limited by ${yellow(timesLimit)} per day.\n`);
             return tmpDomainName;
           }
         }
@@ -448,6 +454,7 @@ async function getReuseTmpDomainName(tplRoutes) {
 async function processTemporaryDomainIfNecessary(domainLogicId, domainDefinition, resources) {
   const properties = (domainDefinition.Properties || {});
 
+  const protocol = properties.Protocol;
   const realDomainName = properties.DomainName;
   const routesConfig = properties.RouteConfig.Routes || properties.RouteConfig.routes;
 
@@ -476,7 +483,7 @@ async function processTemporaryDomainIfNecessary(domainLogicId, domainDefinition
     };
   }
   console.log(`Request a new temporary domain ...`);
-  const domainName = await processTemporaryDomain(resources, _.head(_.values(routes)));
+  const domainName = await processTemporaryDomain(resources, _.head(_.values(routes)), protocol);
 
   return {
     routes,
@@ -492,14 +499,12 @@ async function deployCustomDomain(domainName, domainDefinition, routes) {
   if (_.isEmpty(certConfig) && protocol === 'HTTP,HTTPS') {
     throw new Error(red(`\nMust config "CertConfig" for CustomDomain "${domainName}" when using "HTTP,HTTPS" protocol.\nYou can refer to https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlesscustomdomain\nor https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md/#aliyunserverlesscustomdomain for help.`));
   }
-
   if (!_.isEmpty(certConfig) && protocol === 'HTTP') {
     throw new Error(red(`\nPlease don't use "CertConfig" config of CustomDomain "${domainName}" when using "HTTP" protocol.\nYou can refer to https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlesscustomdomain\nor https://github.com/aliyun/fun/blob/master/docs/specs/2018-04-03.md/#aliyunserverlesscustomdomain for help.`));
   }
 
   await makeCustomDomain({ domainName, certConfig, protocol, routeConfig: { routes } });
 }
-
 
 async function deployLogs(resourcesDefinition) {
   for (const [projectName, v] of Object.entries(resourcesDefinition)) {

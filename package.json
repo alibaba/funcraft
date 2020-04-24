@@ -34,6 +34,7 @@
   "scripts": {
     "test": "make test",
     "binary": "make binary",
+    "postinstall": "node -e \"try { require('./src/lib/check-version'); } catch(e) { if (e.message && e.message.includes('Cannot find module')) { require('./lib/check-version'); } else { throw e; }}\"",
     "upload": "make upload",
     "lint": "eslint --fix src/lib src/bin test",
     "validate-lint": "eslint src/lib src/bin test",
@@ -133,6 +134,7 @@
     "tablestore": "^5.0.1",
     "tar-fs": "^2.0.0",
     "temp-dir": "^1.0.0",
+    "try-require": "^1.2.1",
     "universal-analytics": "^0.4.20",
     "unzipper": "0.10.4",
     "update-notifier": "^3.0.0",
