@@ -176,6 +176,9 @@ function generateRosTemplateForPathConfig(serviceName, functionName) {
     }
   };
 }
+function needToTransForm(serviceName, functionName) {
+  return (typeof serviceName === 'string' && typeof functionName === 'string');
+}
 
 function transformRoutesToRosTemplate(routes) {
   const transFormRoutes = Object.assign({}, routes);
@@ -184,7 +187,10 @@ function transformRoutesToRosTemplate(routes) {
   for (const route of Object.entries(transFormRoutes)) {
     const serviceName = route[1].ServiceName || route[1].serviceName;
     const functionName = route[1].FunctionName || route[1].functionName;
-    result[route[0]] = generateRosTemplateForPathConfig(serviceName, functionName);
+    if (!needToTransForm(serviceName, functionName)) { result[route[0]] = route[1]; }
+    else {
+      result[route[0]] = generateRosTemplateForPathConfig(serviceName, functionName);
+    }
   }
 
   return result;
