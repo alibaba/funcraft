@@ -206,6 +206,8 @@ async function getAvailableVSwitchId(vpcClient, region, vswitchIds, nasZones) {
 
   const zoneMap = await convertToFcAllowedZoneMap(vpcClient, region, vswitchIds);
 
+  const FcAllowVswitchId = _.head([...zoneMap.values()]);
+
   for (const zoneId of zoneMap.keys()) {
     if (!_.includes(nasZones.map(m => { return m.ZoneId; }), zoneId)) {
       zoneMap.delete(zoneId);
@@ -232,7 +234,7 @@ async function getAvailableVSwitchId(vpcClient, region, vswitchIds, nasZones) {
     throw new Error(`No NAS service available under region ${region}.`);
   }
 
-  return processDifferentZones(nasZones, _.head([...zoneMap.values()]));
+  return processDifferentZones(nasZones, FcAllowVswitchId);
 }
 
 module.exports = {
