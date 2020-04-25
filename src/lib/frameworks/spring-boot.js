@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const file = require('./common/file');
-const { isSpringBootJar } = require('./common/spring-boot');
+const { isSpringBootJar } = require('./common/java');
 
 const springboot = {
   'id': 'springboot',

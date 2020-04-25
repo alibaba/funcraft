@@ -12,6 +12,7 @@ const frameworks = [
   require('./laravel'),
 
   // java
+  require('./war'),
   require('./spring-boot'),
 
   // node

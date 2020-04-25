@@ -19,7 +19,7 @@ if ! [ -x "$(command -v ossutil)" ]; then
     esac
 fi
 
-OSS_CFG_FILE=../../../../.oss_cfg
+OSS_CFG_FILE=../../../../../.oss_cfg
 ENDPOINT=cn-hangzhou.oss.aliyun-inc.com
 
 echo "Try to load OSS config from $OSS_CFG_FILE"

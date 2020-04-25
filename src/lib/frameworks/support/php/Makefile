@@ -1,14 +1,7 @@
-TEST_FOLDER ?= ./test/
-TEST_FILES ?= *.test.js
-REPORTER = spec
-TIMEOUT = 20000
-PATH := ./node_modules/.bin:$(PATH)
 SHELL := /bin/bash
-FUN = ../../../../bin/fun.js
+FUN = ../../../../../bin/fun.js
 
 ZIP_PREFIX := fun-support-custom-php-
-
-test: lint unit-test
 
 install: clean
 	$(FUN) install
@@ -32,5 +25,3 @@ package: update-version
 	
 upload:
 	./upload.sh
-
-.PHONY: version
