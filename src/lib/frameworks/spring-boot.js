@@ -5,6 +5,31 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const file = require('./common/file');
 const { isSpringBootJar } = require('./common/java');
+const { updateIgnore } = require('../package/ignore');
+
+const updateFunIgnoreProcessor = {
+  'type': 'function',
+  'function': async (codeDir, baseDir) => {
+    updateIgnore(baseDir, [
+      'target/*',
+      '!target/*.jar',
+      'src',
+      '.gradle',
+      '.settings/',
+      '.classpath',
+      '.project',
+      '.settings',
+      '.springBeans',
+      'bin/',
+      '.idea/',
+      '.idea',
+      '*.iws',
+      '*.iml',
+      '*.ipr',
+      '.DS_Store'
+    ]);
+  }
+};
 
 const springboot = {
   'id': 'springboot',
@@ -58,7 +83,8 @@ java -jar -Dserver.port=$PORT ${path.relative(codeDir, jar)}
               mode: '0755'
             });
           }
-        }
+        },
+        updateFunIgnoreProcessor
       ]
     },
     {
@@ -104,7 +130,8 @@ java -jar -Dserver.port=$PORT ${jarFiles[0]}
               mode: '0755'
             });
           }
-        }
+        },
+        updateFunIgnoreProcessor
       ]
     }
   ]

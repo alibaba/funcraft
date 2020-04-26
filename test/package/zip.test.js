@@ -7,7 +7,7 @@ const fs = require('fs');
 const expect = require('expect.js');
 
 const zip = require('../../lib/package/zip');
-const funignore = require('../../lib/package/ignore');
+const funignore = require('../../lib/package/ignore').isIgnored;
 
 describe('zip', () => {
   it.skip('should ok', async function () {

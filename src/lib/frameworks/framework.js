@@ -199,12 +199,12 @@ async function checkRules(codeDir, rules) {
   return false;
 }
 
-async function execProcessor(codeDir, processor) {
+async function execProcessor(codeDir, baseDir, processor) {
   debug('exec processor', processor);
   switch (processor.type) {
   case 'function': {
     const func = processor.function;
-    await func(codeDir);
+    await func(codeDir, baseDir);
     return;
   }
   case 'generateFile': {
@@ -252,7 +252,7 @@ async function detectFramework(codeDir) {
   return null;
 }
 
-async function execFrameworkActions(codeDir, framework) {
+async function execFrameworkActions(codeDir, baseDir, framework) {
   const actions = framework.actions;
 
   if (actions) {
@@ -272,7 +272,7 @@ async function execFrameworkActions(codeDir, framework) {
 
       const processors = action.processors;
       for (const processor of processors) {
-        await execProcessor(codeDir, processor);
+        await execProcessor(codeDir, baseDir, processor);
       }
 
       // only one matched action will be executed

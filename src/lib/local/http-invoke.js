@@ -5,7 +5,7 @@ var lock = new AsyncLock();
 var watch = require('node-watch');
 
 const rimraf = require('rimraf');
-const ignore = require('../../lib/package/ignore');
+const ignore = require('../../lib/package/ignore').isIgnored;
 const Invoke = require('./invoke');
 const debug = require('debug')('fun:local');
 const streams = require('memory-streams');

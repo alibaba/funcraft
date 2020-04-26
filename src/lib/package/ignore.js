@@ -3,7 +3,8 @@
 const parser = require('git-ignore-parser'),
   ignore = require('ignore'),
   fs = require('fs-extra'),
-  path = require('path');
+  path = require('path'),
+  _ = require('lodash');
 
 const { generateIgnoreFileFromNasYml } = require('../nas/support');
 
@@ -28,15 +29,20 @@ function selectIgnored(runtime) {
   }
 }
 
-module.exports = async function (baseDir, runtime) {
+async function getIgnoreContent(ignoreFilePath) {
+  let fileContent = '';
+
+  if (fs.existsSync(ignoreFilePath)) {
+    fileContent = await fs.readFile(ignoreFilePath, 'utf8');
+  }
+  return fileContent;
+}
+
+async function isIgnored(baseDir, runtime) {
 
   const ignoreFilePath = `${baseDir}/.funignore`;
 
-  var fileContent = '';
-
-  if (fs.existsSync(ignoreFilePath)) {
-    fileContent = fs.readFileSync(ignoreFilePath, 'utf8');
-  }
+  const fileContent = await getIgnoreContent(ignoreFilePath);
 
   const ignoreDependencies = selectIgnored(runtime);
 
@@ -51,4 +57,26 @@ module.exports = async function (baseDir, runtime) {
     if (relativePath === '') { return false; }
     return ig.ignores(relativePath);
   };
+};
+
+async function updateIgnore(baseDir, patterns) {
+  const ignoreFilePath = `${baseDir}/.funignore`;
+
+  const fileContent = await getIgnoreContent(ignoreFilePath);
+
+  let lines = fileContent.split(/\r?\n/);
+
+  for (let i = 0; i < patterns.length;i++) {
+    if (!_.includes(lines, patterns[i])) {
+      lines.push(patterns[i]);
+    }
+  }
+
+  await fs.writeFile(ignoreFilePath, lines.join('\n'));
+
+}
+
+module.exports = {
+  isIgnored,
+  updateIgnore
 };

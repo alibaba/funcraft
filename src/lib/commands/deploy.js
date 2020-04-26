@@ -23,7 +23,8 @@ async function deploy(context) {
       && !await promptForConfirmContinue('Let Fun create one for you'))
     { return; }
 
-    const codeDir = process.cwd();
+    const baseDir = process.cwd();
+    const codeDir = baseDir;
 
     const framework = await detectFramework(codeDir);
 
@@ -35,7 +36,7 @@ async function deploy(context) {
         name = (await promptForInputContinue(`What’s your service and function name?`, name)).input;
       }
 
-      await execFrameworkActions(codeDir, framework);
+      await execFrameworkActions(codeDir, baseDir, framework);
 
       tplPath = path.join(codeDir, 'template.yml');
 

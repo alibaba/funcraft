@@ -2,7 +2,7 @@
 
 const util = require('./import/utils');
 const bytes = require('bytes');
-const funignore = require('./package/ignore');
+const funignore = require('./package/ignore').isIgnored;
 const definition = require('./definition');
 const promiseRetry = require('./retry');
 const getProfile = require('./profile').getProfile;
@@ -561,7 +561,7 @@ async function detectJarfilePathFromBootstrap(bootstrapContent) {
 async function detectWarfilePathfromBootstrap(bootstrapContent) {
   // java -jar $JETTY_RUNNER --port $PORT --path / ${path.relative(codeDir, war)}
   const matched = bootstrapContent.match(new RegExp('(java .*?)-jar (.*?) ([0-9a-zA-Z./_-]+\\.war)', 'm'));
-  if(matched){
+  if (matched) {
     return matched[3];
   }
   return undefined;
@@ -577,7 +577,7 @@ async function readBootstrapContent(bootstrapPath) {
     throw new Error('could not found bootstrap file');
   }
 
-  if(isBinary(bootstrapPath)){
+  if (isBinary(bootstrapPath)) {
     throw new Error('bootstrap file is a binary, not the expected text file.');
   }
 
@@ -611,12 +611,6 @@ ${p1}${p2} org.springframework.boot.loader.PropertiesLauncher`;
       await generateRepackagedBootstrap(bootstrapPath, replacedContent);
     }
 
-    updateFunignore(baseDir, [
-      'target/*',
-      '!target/*.jar',
-      'src'
-    ])
-
     return;
   }
 
@@ -625,47 +619,35 @@ ${p1}${p2} org.springframework.boot.loader.PropertiesLauncher`;
   if (warfilePath) {
     await processWar(absCodeUri, warfilePath);
 
-    if(bootstrapContent.indexOf('/mnt/auto/') === -1) {
-      const newBootstrapConent = `#!/usr/bin/env bash
+    if (bootstrapContent.indexOf('/mnt/auto/') === -1) {
+      const ctxDescriptorPath = await generateJettyContextDescriptor(warfilePath);
+      const newBootstrapContent = `#!/usr/bin/env bash
 export JETTY_RUNNER=/mnt/auto/root/usr/local/java/jetty-runner.jar
 export PORT=9000
-java -jar $JETTY_RUNNER --port $PORT --lib /mnt/auto/java --path / ${warfilePath}
+java -jar $JETTY_RUNNER --port $PORT ${ctxDescriptorPath}
 `;
-          
-      await generateRepackagedBootstrap(bootstrapPath, newBootstrapConent);
+      await generateRepackagedBootstrap(bootstrapPath, newBootstrapContent);
     }
-
-    updateFunignore(baseDir, [
-      'target/*',
-      '!target/*.war',
-      'src'
-    ])
   }
 
 }
 
-async function updateFunignore(baseDir, patterns){
-  const ignoreFilePath = `${baseDir}/.funignore`;
-
-  let fileContent = '';
-
-  if (fs.existsSync(ignoreFilePath)) {
-    fileContent = await fs.readFile(ignoreFilePath, 'utf8');
-  }
-
-  let lines = fileContent.split(/\r?\n/);
-
-  for(let i=0; i < patterns.length;i++){
-    if(!_.includes(lines, patterns[i])){
-      lines.push(patterns[i]);
-    }
-  }
-
-  await fs.writeFile(ignoreFilePath, lines.join("\n"));
-
+async function generateJettyContextDescriptor(warfilePath) {
+  const xmlContent = `<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" 
+  "http://www.eclipse.org/jetty/configure.dtd">
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Set name="contextPath">/</Set>
+    <Set name="war">${path.resolve('/code', warfilePath)}</Set>
+    <Set name="extraClasspath">/mnt/auto/java/*</Set>
+</Configure>  
+`;
+  const descriptorPath = path.join(path.dirname(warfilePath), 'context.xml');
+  await fs.writeFile(descriptorPath, xmlContent);
+  return path.resolve('/code', descriptorPath);
 }
 
-async function processSpringBootJar(absCodeUri, jarfilePath){
+async function processSpringBootJar(absCodeUri, jarfilePath) {
   const absJarfilePath = path.join(absCodeUri, jarfilePath);
 
   if (!await fs.pathExists(absJarfilePath)) {
@@ -693,7 +675,7 @@ async function processSpringBootJar(absCodeUri, jarfilePath){
   const targetAbsPath = absJarfilePath.substring(0, idx + 'target/'.length);
 
   if (await fs.pathExists(targetAbsPath)) {
-    console.log('repackage spring boot jarfile ', absJarfilePath);
+    console.log('repackage spring boot jar file ', absJarfilePath);
     await repackPackage(tmpCodeDir,
       path.join('BOOT-INF', 'lib'),
       absJarfilePath, targetAbsPath);
@@ -724,7 +706,7 @@ async function processWar(absCodeUri, warfilePath) {
   const targetAbsPath = absWarfilePath.substring(0, idx + 'target/'.length);
 
   if (await fs.pathExists(targetAbsPath)) {
-    console.log('repackage spring boot jarfile ', absWarfilePath);
+    console.log('repackage war file ', absWarfilePath);
     await repackPackage(tmpCodeDir, 
       path.join('WEB-INF', 'lib'),
       absWarfilePath, targetAbsPath);

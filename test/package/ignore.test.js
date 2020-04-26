@@ -2,7 +2,7 @@
 
 const path = require('path'),
   expect = require('expect.js'),
-  ignore = require('../../lib/package/ignore');
+  ignore = require('../../lib/package/ignore').isIgnored;
 
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();

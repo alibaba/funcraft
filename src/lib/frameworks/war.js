@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const file = require('./common/file');
 const { downloadJetty } = require('./common/java');
+const { updateIgnore } = require('../package/ignore');
 
 const downloadJettyProcessor = {
   'type': 'function',
@@ -13,16 +14,41 @@ const downloadJettyProcessor = {
     await fs.ensureDir(dotFunPath);
     await downloadJetty(codeDir);
   }
-}
+};
 
-async function generateBootstrap(warPath){
+const updateFunIgnoreProcessor = {
+  'type': 'function',
+  'function': async (codeDir, baseDir) => {
+    updateIgnore(baseDir, [
+      'target/*',
+      '!target/*.war',
+      '!target/context.xml',
+      'src',
+      '.gradle',
+      '.settings/',
+      '.classpath',
+      '.project',
+      '.settings',
+      '.springBeans',
+      'bin/',
+      '.idea/',
+      '.idea',
+      '*.iws',
+      '*.iml',
+      '*.ipr',
+      '.DS_Store'
+    ]);
+  }
+};
+
+async function generateBootstrap(codeDir, warPath) {
   const bootstrap = `#!/usr/bin/env bash
 export JETTY_RUNNER=/code/.fun/root/usr/local/java/jetty-runner.jar
 export PORT=9000
 java -jar $JETTY_RUNNER --port $PORT --path / ${warPath}
 `;
   
-  await fs.writeFile('bootstrap', bootstrap, {
+  await fs.writeFile(path.join(codeDir, 'bootstrap'), bootstrap, {
     mode: '0755'
   });
 }
@@ -65,9 +91,10 @@ const war = {
               throw new Error('We detected you have more than 1 war in current folder.');
             }
 
-            await generateBootstrap(path.relative(codeDir, wars[0]));
+            await generateBootstrap(codeDir, path.relative(codeDir, wars[0]));
           }
-        }
+        },
+        updateFunIgnoreProcessor
       ]
     },
     {
@@ -81,7 +108,7 @@ const war = {
             const targetPath = path.join(codeDir, 'target');
 
             if (!await fs.pathExists(targetPath)) {
-              throw new Error(`please packaging your maven project before deploying.
+              throw new Error(`Please packaging your maven project before deploying.
 You could use 'mvn package' to package a WAR.`);
             }
             const targetContents = await fs.readdir(targetPath);
@@ -105,9 +132,10 @@ You can use 'mvn package' to package a WAR.`);
               throw new Error(`Found more than one jar files from 'target' folder`);
             }
 
-            await generateBootstrap(warFiles[0]);
+            await generateBootstrap(codeDir, warFiles[0]);
           }
-        }
+        },
+        updateFunIgnoreProcessor
       ]
     }
 
