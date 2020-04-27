@@ -1,0 +1,7 @@
+RUNTIME custom
+
+ENV JETTY_VERSION=9.4.28.v20200408
+
+RUN mkdir -p /code/.fun/root/usr/local/java && \
+    cd /code/.fun/root/usr/local/java && \
+    curl https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-runner/${JETTY_VERSION}/jetty-runner-${JETTY_VERSION}.jar -o jetty-runner.jar

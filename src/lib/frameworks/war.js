@@ -4,15 +4,25 @@ const path = require('path');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const file = require('./common/file');
-const { isSpringBootJar } = require('./common/java');
+const { downloadJetty } = require('./common/java');
 const { updateIgnore } = require('../package/ignore');
+
+const downloadJettyProcessor = {
+  'type': 'function',
+  'function': async (codeDir) => {
+    const dotFunPath = path.join(codeDir, '.fun');
+    await fs.ensureDir(dotFunPath);
+    await downloadJetty(codeDir);
+  }
+};
 
 const updateFunIgnoreProcessor = {
   'type': 'function',
   'function': async (codeDir, baseDir) => {
     updateIgnore(baseDir, [
       'target/*',
-      '!target/*.jar',
+      '!target/*.war',
+      '!target/context.xml',
       'src',
       '.gradle',
       '.settings/',
@@ -31,20 +41,32 @@ const updateFunIgnoreProcessor = {
   }
 };
 
-const springboot = {
-  'id': 'springboot',
+async function generateBootstrap(codeDir, warPath) {
+  const bootstrap = `#!/usr/bin/env bash
+export JETTY_RUNNER=/code/.fun/root/usr/local/java/jetty-runner.jar
+export PORT=9000
+java -jar $JETTY_RUNNER --port $PORT --path / ${warPath}
+`;
+  
+  await fs.writeFile(path.join(codeDir, 'bootstrap'), bootstrap, {
+    mode: '0755'
+  });
+}
+
+const war = {
+  'id': 'war',
   'runtime': 'java',
-  'website': 'https://spring.io/projects/spring-boot/',
+  'website': 'https://en.wikipedia.org/wiki/WAR_(file_format)',
   'detectors': {
     'or': [
       {
         'type': 'regex',
         'path': 'pom.xml',
-        'content': '<artifactId>\\s*spring-boot-starter-parent\\s*</artifactId>'
+        'content': '<packaging>\\s*war\\s*</packaging>'
       },
       {
         'type': 'file',
-        'path': /\.jar$/
+        'path': /\.war$/
       }
     ]
   },
@@ -54,34 +76,22 @@ const springboot = {
         'and': [
           {
             'type': 'file',
-            'path': /\.jar$/
+            'path': /\.war$/
           }
         ]
       },
       'processors': [
+        downloadJettyProcessor,
         {
           'type': 'function',
           'function': async (codeDir) => {
-            const jars = await file.listDir(codeDir, /\.jar$/);
+            const wars = await file.listDir(codeDir, /\.war$/);
 
-            if (jars.length > 1) {
-              throw new Error('We detected you have more than 1 jar in current folder.');
-            }
-            
-            const jar = jars[0];
-            
-            if (!await isSpringBootJar(jar)) {
-              throw new Error('Only Spring Boot jar is supported');
+            if (wars.length > 1) {
+              throw new Error('We detected you have more than 1 war in current folder.');
             }
 
-            const bootstrap = `#!/usr/bin/env bash
-export PORT=9000
-java -jar -Dserver.port=$PORT ${path.relative(codeDir, jar)}
-`;
-            
-            await fs.writeFile('bootstrap', bootstrap, {
-              mode: '0755'
-            });
+            await generateBootstrap(codeDir, path.relative(codeDir, wars[0]));
           }
         },
         updateFunIgnoreProcessor
@@ -89,52 +99,47 @@ java -jar -Dserver.port=$PORT ${path.relative(codeDir, jar)}
     },
     {
       'condition': true,
-      'description': 'find jar under target/ and generate bootstrap',
+      'description': 'find war under target/ and generate bootstrap',
       'processors': [
+        downloadJettyProcessor,
         {
           'type': 'function',
           'function': async (codeDir) => {
             const targetPath = path.join(codeDir, 'target');
 
             if (!await fs.pathExists(targetPath)) {
-              throw new Error(`You must package your SpringBoot project before deploying.
-You can use 'mvn package' to package SpringBoot to a jar.`);
+              throw new Error(`Please packaging your maven project before deploying.
+You could use 'mvn package' to package a WAR.`);
             }
             const targetContents = await fs.readdir(targetPath);
 
-            let jarFiles = [];
+            let warFiles = [];
 
             for (const file of targetContents) {
-              if (_.endsWith(file, '.jar')) {
+              if (_.endsWith(file, '.war')) {
                 const absFile = path.join(targetPath, file);
                 const relative = path.relative(codeDir, absFile);
-                jarFiles.push(relative);
+                warFiles.push(relative);
               }
             }
 
-            if (jarFiles.length === 0) {
-              throw new Error(`Could not find any jar from 'target' folder.
-You can use 'mvn package' to package SpringBoot to a jar.`);
+            if (warFiles.length === 0) {
+              throw new Error(`Could not find any WAR from 'target' folder.
+You can use 'mvn package' to package a WAR.`);
             }
 
-            if (jarFiles.length > 1) {
+            if (warFiles.length > 1) {
               throw new Error(`Found more than one jar files from 'target' folder`);
             }
 
-            const bootstrap = `#!/usr/bin/env bash
-export PORT=9000
-java -jar -Dserver.port=$PORT ${jarFiles[0]}
-`;
-
-            await fs.writeFile('bootstrap', bootstrap, {
-              mode: '0755'
-            });
+            await generateBootstrap(codeDir, warFiles[0]);
           }
         },
         updateFunIgnoreProcessor
       ]
     }
+
   ]
 };
 
-module.exports = springboot;
+module.exports = war;

@@ -2,7 +2,7 @@
 
 const util = require('./import/utils');
 const bytes = require('bytes');
-const funignore = require('./package/ignore');
+const funignore = require('./package/ignore').isIgnored;
 const definition = require('./definition');
 const promiseRetry = require('./retry');
 const getProfile = require('./profile').getProfile;
@@ -25,13 +25,14 @@ const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
 const { isNotEmptyDir } = require('./nas/cp/file');
 const barUtil = require('./import/utils');
-const { isSpringBootJar } = require('./frameworks/common/spring-boot');
+const { isSpringBootJar } = require('./frameworks/common/java');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
 const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
+const { isBinary } = require('istextorbinary');
 
 const _ = require('lodash');
 
@@ -513,8 +514,8 @@ async function processNasMappingsAndEnvs({ tpl, tplPath, runtime, codeUri, baseD
 // 1. unzip spring boot jar to a tmp dir
 // 2. copy BOOT-INF/lib from tmp dir to nas folder
 // 3. zip tmp dir again and replace origin spring boot jar
-async function repackSpringBootJar(unzippedPath, absJarfilePath, targetAbsPath) {
-  const libTmpAbsPath = path.join(unzippedPath, 'BOOT-INF', 'lib');
+async function repackPackage(unzippedPath, libRelativePath, absJarfilePath, targetAbsPath) {
+  const libTmpAbsPath = path.join(unzippedPath, libRelativePath);
   const targetLibAbsPath = path.join(targetAbsPath, 'lib');
 
   await fs.ensureDir(targetLibAbsPath);
@@ -557,28 +558,40 @@ async function detectJarfilePathFromBootstrap(bootstrapContent) {
   return { jarfilePath, repackaged };
 }
 
-async function generateRepackagedBootstrap(bootstrapPath, bootstrapContent) {
-  const replacedContent = bootstrapContent.replace(BOOTSTRAP_SPRING_BOOT_JAR_REGEX, (match, p1, p2, p3) => {
-    return `export CLASSPATH="$CLASSPATH:./${p3}"
-${p1}${p2} org.springframework.boot.loader.PropertiesLauncher`;
-  });
-
-  await fs.copy(bootstrapPath, bootstrapPath + '.bak');
-  await fs.writeFile(bootstrapPath, replacedContent);
+async function detectWarfilePathfromBootstrap(bootstrapContent) {
+  // java -jar $JETTY_RUNNER --port $PORT --path / ${path.relative(codeDir, war)}
+  const matched = bootstrapContent.match(new RegExp('(java .*?)-jar (.*?) ([0-9a-zA-Z./_-]+\\.war)', 'm'));
+  if (matched) {
+    return matched[3];
+  }
+  return undefined;
 }
 
-async function processCustomRuntimeSpringBootIfNecessary({ tpl, runtime, codeUri, baseDir }) {
-  if (runtime !== 'custom') { return tpl; }
+async function generateRepackagedBootstrap(bootstrapPath, bootstrapContent) {
+  await fs.copy(bootstrapPath, bootstrapPath + '.bak');
+  await fs.writeFile(bootstrapPath, bootstrapContent);
+}
+
+async function readBootstrapContent(bootstrapPath) {
+  if (!await fs.pathExists(bootstrapPath)) {
+    throw new Error('could not found bootstrap file');
+  }
+
+  if (isBinary(bootstrapPath)) {
+    throw new Error('bootstrap file is a binary, not the expected text file.');
+  }
+
+  return await fs.readFile(bootstrapPath, 'utf8');
+}
+
+async function processCustomRuntimeIfNecessary(runtime, codeUri, baseDir) {
+  if (runtime !== 'custom') { return; }
 
   debug('java project oversized, try to repack spring boot jar');
 
   const absCodeUri = path.resolve(baseDir, codeUri);
   const bootstrapPath = path.join(absCodeUri, 'bootstrap');
-  if (!await fs.pathExists(bootstrapPath)) {
-    throw new Error('could not found bootstrap file');
-  }
-
-  const bootstrapContent = await fs.readFile(bootstrapPath, 'utf8');
+  const bootstrapContent = await readBootstrapContent(bootstrapPath);
 
   // 1. nas 的 CLASSPATH 依赖会在 yml 中声明
   // 2. bootstrap 中声明 spring boot 的 jar 的依赖
@@ -587,8 +600,54 @@ async function processCustomRuntimeSpringBootIfNecessary({ tpl, runtime, codeUri
   //   3.2 将 java -jar -Dserver.port=$PORT target/java-getting-started-1.0.jar 修改为 java org.springframework.boot.loader.PropertiesLauncher
   const { jarfilePath, repackaged } = await detectJarfilePathFromBootstrap(bootstrapContent);
 
-  if (!jarfilePath) { return tpl; }
+  if (jarfilePath) {
+    await processSpringBootJar(absCodeUri, jarfilePath);
 
+    if (!repackaged) {
+      const replacedContent = bootstrapContent.replace(BOOTSTRAP_SPRING_BOOT_JAR_REGEX, (match, p1, p2, p3) => {
+        return `export CLASSPATH="$CLASSPATH:./${p3}"
+${p1}${p2} org.springframework.boot.loader.PropertiesLauncher`;
+      });
+      await generateRepackagedBootstrap(bootstrapPath, replacedContent);
+    }
+
+    return;
+  }
+
+  const warfilePath = await detectWarfilePathfromBootstrap(bootstrapContent);
+
+  if (warfilePath) {
+    await processWar(absCodeUri, warfilePath);
+
+    if (bootstrapContent.indexOf('/mnt/auto/') === -1) {
+      const ctxDescriptorPath = await generateJettyContextDescriptor(warfilePath);
+      const newBootstrapContent = `#!/usr/bin/env bash
+export JETTY_RUNNER=/mnt/auto/root/usr/local/java/jetty-runner.jar
+export PORT=9000
+java -jar $JETTY_RUNNER --port $PORT ${ctxDescriptorPath}
+`;
+      await generateRepackagedBootstrap(bootstrapPath, newBootstrapContent);
+    }
+  }
+
+}
+
+async function generateJettyContextDescriptor(warfilePath) {
+  const xmlContent = `<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" 
+  "http://www.eclipse.org/jetty/configure.dtd">
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Set name="contextPath">/</Set>
+    <Set name="war">${path.resolve('/code', warfilePath)}</Set>
+    <Set name="extraClasspath">/mnt/auto/java/*</Set>
+</Configure>  
+`;
+  const descriptorPath = path.join(path.dirname(warfilePath), 'context.xml');
+  await fs.writeFile(descriptorPath, xmlContent);
+  return path.resolve('/code', descriptorPath);
+}
+
+async function processSpringBootJar(absCodeUri, jarfilePath) {
   const absJarfilePath = path.join(absCodeUri, jarfilePath);
 
   if (!await fs.pathExists(absJarfilePath)) {
@@ -616,17 +675,44 @@ async function processCustomRuntimeSpringBootIfNecessary({ tpl, runtime, codeUri
   const targetAbsPath = absJarfilePath.substring(0, idx + 'target/'.length);
 
   if (await fs.pathExists(targetAbsPath)) {
-    console.log('repackage spring boot jarfile ', absJarfilePath);
-    await repackSpringBootJar(tmpCodeDir, absJarfilePath, targetAbsPath);
+    console.log('repackage spring boot jar file ', absJarfilePath);
+    await repackPackage(tmpCodeDir,
+      path.join('BOOT-INF', 'lib'),
+      absJarfilePath, targetAbsPath);
   } else {
     throw new Error('target path not exist ' + targetAbsPath);
   }
+}
 
-  if (!repackaged) {
-    await generateRepackagedBootstrap(bootstrapPath, bootstrapContent);
+async function processWar(absCodeUri, warfilePath) {
+
+  const absWarfilePath = path.join(absCodeUri, warfilePath);
+
+  if (!await fs.pathExists(absWarfilePath)) {
+    throw new Error('jarfile not exist ' + absWarfilePath);
   }
 
-  return tpl;
+  const tmpCodeDir = path.join(tmpDir, uuid.v4());
+  await fs.ensureDir(tmpCodeDir);
+  await zip.extractZipTo(absWarfilePath, tmpCodeDir);
+
+  // must have target path in codeUri
+  const idx = absWarfilePath.indexOf('target/');
+
+  if (idx < 0) {
+    throw new Error('could not found target directory');
+  }
+
+  const targetAbsPath = absWarfilePath.substring(0, idx + 'target/'.length);
+
+  if (await fs.pathExists(targetAbsPath)) {
+    console.log('repackage war file ', absWarfilePath);
+    await repackPackage(tmpCodeDir, 
+      path.join('WEB-INF', 'lib'),
+      absWarfilePath, targetAbsPath);
+  } else {
+    throw new Error('target path not exist ' + targetAbsPath);
+  }
 }
 
 async function processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, convertedNasConfig, stage,
@@ -636,14 +722,10 @@ async function processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, con
 
   const baseDir = getBaseDir(tplPath);
 
-  const updatedTplContent = await processCustomRuntimeSpringBootIfNecessary({
-    runtime, baseDir,
-    codeUri,
-    tpl
-  });
+  await processCustomRuntimeIfNecessary(runtime, codeUri, baseDir);
 
   const rs = await processNasMappingsAndEnvs({
-    tpl: updatedTplContent,
+    tpl,
     tplPath, runtime, codeUri, baseDir,
     serviceName,
     functionName,
@@ -666,7 +748,7 @@ async function processNasAutoConfiguration({ tpl, tplPath, runtime, codeUri, con
   console.log(yellow(`\nFun has automatically uploaded your code dependency to NAS, then fun will use 'fun deploy ${serviceName}/${functionName}' to redeploy.`));
 
   console.log(`Waiting for service ${serviceName} to be deployed...`);
-  const partialDeploy = await require('./deploy/deploy-by-tpl').partialDeployment(`${serviceName}/${functionName}`, updatedTplContent);
+  const partialDeploy = await require('./deploy/deploy-by-tpl').partialDeployment(`${serviceName}/${functionName}`, tpl);
 
   if (partialDeploy.resourceName) {
     // can not use baseDir, should use tpl dirname

@@ -1,7 +1,10 @@
 SHELL := /bin/bash
 FUN = ../../../../../bin/fun.js
 
-ZIP_PREFIX := fun-support-custom-php-
+ZIP_PREFIX := fun-support-custom-war-
+
+clean:
+	rm -rf .fun dist
 
 install: clean
 	$(FUN) install
@@ -11,17 +14,13 @@ update-version:
 		&& echo $$VERSION \
 		&& ZIP_NAME=$(ZIP_PREFIX)$${VERSION}.zip \
 		&& echo $$ZIP_NAME > ZIPNAME
-		
-clean:
-	rm -rf .fun dist
 
 package: update-version 
 	@ZIP_NAME=$$(cat ZIPNAME) \
 		&& rm -rf dist \
 		&& mkdir -p dist/ \
 		&& cd .fun \
-		&& zip -q -r $$ZIP_NAME root/ -x ".fun/root/usr/share/*" -x ".fun/root/lib/systemd/*" \
-		&& mv $$ZIP_NAME ../dist
-	
+		&& zip -q -r ../dist/$$ZIP_NAME root/ 
+
 upload:
 	./upload.sh
