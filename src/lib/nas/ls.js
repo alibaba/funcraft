@@ -12,7 +12,7 @@ async function ls(serviceName, nasPath, isAllOpt, isLongOpt) {
   const lsCmd = generateLsCmd(nasPath, isAllOpt, isLongOpt);
 
   const lsResponse = await sendCmdRequest(nasHttpTriggerPath, lsCmd);
-  
+
   console.log(lsResponse.data.stdout);
   console.log(lsResponse.data.stderr);
 }

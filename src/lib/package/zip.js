@@ -98,7 +98,8 @@ async function zipFolder(zipArchiver, folder, folders, funignore, codeUri, prefi
   if (!_.isEmpty(relative)) {
     zipArchiver.append(null, {
       name: relative,
-      type: 'directory'
+      type: 'directory',
+      prefix
     });
   }
 
@@ -137,6 +138,7 @@ async function zipFolder(zipArchiver, folder, folders, funignore, codeUri, prefi
     }
 
     if (s.isFile() || s.isSymbolicLink()) {
+      console.log('fPath:', fPath);
       zipArchiver.file(fPath, {
         name: relative,
         prefix,

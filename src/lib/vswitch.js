@@ -172,7 +172,7 @@ function convertZones(nasZones, zones, storageType = 'Performance') {
   const vswitchId = zones.filter(f => { return f.zoneId === zoneId; });
   return {
     zoneId,
-    vswitchId,
+    vswitchId: _.head(vswitchId).vswitchId,
     storageType
   };
 }
