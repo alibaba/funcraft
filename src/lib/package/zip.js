@@ -138,7 +138,6 @@ async function zipFolder(zipArchiver, folder, folders, funignore, codeUri, prefi
     }
 
     if (s.isFile() || s.isSymbolicLink()) {
-      console.log('fPath:', fPath);
       zipArchiver.file(fPath, {
         name: relative,
         prefix,
