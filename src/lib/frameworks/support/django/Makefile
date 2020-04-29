@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 FUN = ../../../../../bin/fun.js
 
-ZIP_PREFIX := fun-support-custom-war-
+ZIP_PREFIX := fun-support-custom-django-
 
 clean:
 	rm -rf .fun dist
@@ -20,7 +20,7 @@ package: update-version
 		&& rm -rf dist \
 		&& mkdir -p dist/ \
 		&& cd .fun \
-		&& zip -q -r ../dist/$$ZIP_NAME root/ 
+		&& zip -q -r ../dist/$$ZIP_NAME python/ 
 
 upload:
 	../upload.sh
