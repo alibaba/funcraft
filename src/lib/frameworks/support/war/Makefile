@@ -23,4 +23,4 @@ package: update-version
 		&& zip -q -r ../dist/$$ZIP_NAME root/ 
 
 upload:
-	./upload.sh
+	../upload.sh

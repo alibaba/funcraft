@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 FUN = ../../../../../bin/fun.js
 
-ZIP_PREFIX := fun-support-custom-python-
+ZIP_PREFIX := fun-support-custom-django-
 
 clean:
 	rm -rf .fun dist

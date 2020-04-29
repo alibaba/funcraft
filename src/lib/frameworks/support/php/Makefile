@@ -3,6 +3,10 @@ FUN = ../../../../../bin/fun.js
 
 ZIP_PREFIX := fun-support-custom-php-
 
+
+clean:
+	rm -rf .fun dist
+
 install: clean
 	$(FUN) install
 
@@ -12,9 +16,6 @@ update-version:
 		&& ZIP_NAME=$(ZIP_PREFIX)$${VERSION}.zip \
 		&& echo $$ZIP_NAME > ZIPNAME
 		
-clean:
-	rm -rf .fun dist
-
 package: update-version 
 	@ZIP_NAME=$$(cat ZIPNAME) \
 		&& rm -rf dist \
@@ -24,4 +25,4 @@ package: update-version
 		&& mv $$ZIP_NAME ../dist
 	
 upload:
-	./upload.sh
+	../upload.sh
