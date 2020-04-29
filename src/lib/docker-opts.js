@@ -230,6 +230,8 @@ async function generateLocalInvokeOpts(runtime, containerName, mounts, cmd, debu
 
   const imageName = await resolveRuntimeToDockerImage(runtime);
 
+  supportCustomBootstrapFile(runtime, envs);
+
   const opts = nestedObjectAssign(
     {
       Env: resolveDockerEnv(envs),
@@ -252,6 +254,17 @@ function resolveMockScript(runtime) {
   return `/var/fc/runtime/${runtime}/mock`;
 }
 
+/**
+ * 支持通过 BOOTSTRAP_FILE 环境变量改变 bootstrap 文件名。
+**/
+function supportCustomBootstrapFile(runtime, envs) {
+  if (runtime === 'custom') {
+    if (envs['BOOTSTRAP_FILE']) {
+      envs['AGENT_SCRIPT'] = envs['BOOTSTRAP_FILE'];
+    }
+  }
+}
+
 async function generateLocalStartOpts(runtime, name, mounts, cmd, debugPort, envs, dockerUser, debugIde) {
 
   const hostOpts = {
@@ -268,6 +281,8 @@ async function generateLocalStartOpts(runtime, name, mounts, cmd, debugPort, env
   }
 
   const imageName = await resolveRuntimeToDockerImage(runtime);
+
+  supportCustomBootstrapFile(runtime, envs);
 
   const opts = nestedObjectAssign(
     {
