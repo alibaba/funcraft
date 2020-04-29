@@ -1,0 +1,3 @@
+RUNTIME custom
+
+RUN fun-install pip install uvicorn
