@@ -27,7 +27,7 @@ const frameworks = [
   require('./go'),
 
   // python
-  require('./django'),
+  require('./django')
 ];
 
 function resolvePath(p) {
