@@ -1,3 +1,4 @@
 RUNTIME custom
 
 RUN fun-install pip install uvicorn
+RUN fun-install pip install django
