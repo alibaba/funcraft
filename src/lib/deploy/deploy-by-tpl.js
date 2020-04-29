@@ -883,6 +883,7 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
     } else if (resource.Type === 'Aliyun::Serverless::Flow') {
       console.log(`Waiting for flow ${name} to be deployed...`);
       await deployFlow(name, resource, tpl, context.parameterOverride, baseDir);
+      console.log(green(`flow ${name} deploy success\n`));
     } else {
       console.log('unknown resource %s', name);
     }
