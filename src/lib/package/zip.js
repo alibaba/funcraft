@@ -98,7 +98,8 @@ async function zipFolder(zipArchiver, folder, folders, funignore, codeUri, prefi
   if (!_.isEmpty(relative)) {
     zipArchiver.append(null, {
       name: relative,
-      type: 'directory'
+      type: 'directory',
+      prefix
     });
   }
 
