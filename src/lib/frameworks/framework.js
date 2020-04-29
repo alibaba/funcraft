@@ -24,7 +24,10 @@ const frameworks = [
   require('./koa'),
 
   // go
-  require('./go')
+  require('./go'),
+
+  // python
+  require('./django')
 ];
 
 function resolvePath(p) {
@@ -50,6 +53,10 @@ const runtimeCheckers = {
   'go': {
     'type': 'file',
     'paths': ['go.mod', 'Gopkg.toml', ['vendor', 'vendor.json'], ['Godeps', 'Godeps.json'], /\.go$/]
+  },
+  'python': {
+    'type': 'file',
+    'paths': ['manage.py']
   }
 };
 
