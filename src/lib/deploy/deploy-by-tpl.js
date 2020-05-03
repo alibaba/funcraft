@@ -82,7 +82,7 @@ async function deployTrigger(serviceName, functionName, triggerName, triggerDefi
   }
 }
 
-async function deployTriggers(serviceName, functionName, events) {
+async function deployTriggers(serviceName, functionName, events, tplPath) {
   if (_.isEmpty(events)) { return; }
 
   let localTriggerNames = Object.keys(events);
@@ -95,7 +95,8 @@ async function deployTriggers(serviceName, functionName, events) {
   for (const [triggerName, triggerDefinition] of Object.entries(events)) {
     console.log(`\t\tWaiting for ${yellow(triggerDefinition.Type)} trigger ${triggerName} to be deployed...`);
     await deployTrigger(serviceName, functionName, triggerName, triggerDefinition);
-    await displayTriggerInfo(serviceName, functionName, triggerName, triggerDefinition.Type, triggerDefinition.Properties, '\t\t');
+    const tpl = await getTpl(tplPath);
+    await displayTriggerInfo(serviceName, functionName, triggerName, triggerDefinition.Type, triggerDefinition.Properties, '\t\t', tpl);
     console.log(green(`\t\ttrigger ${triggerName} deploy success`));
   }
 }
@@ -124,7 +125,7 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
   }, onlyConfig, tplPath, useNas, assumeYes);
 
   if (!skipTrigger) {
-    await deployTriggers(serviceName, functionName, functionRes.Events);
+    await deployTriggers(serviceName, functionName, functionRes.Events, tplPath);
   }
 
   return rs;

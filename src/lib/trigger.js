@@ -1,12 +1,15 @@
 'use strict';
 
-const getProfile = require('./profile').getProfile;
-const { getFcClient } = require('./client');
-const debug = require('debug')('fun:trigger');
 const _ = require('lodash');
+
 const ram = require('./ram');
 const util = require('util');
+const debug = require('debug')('fun:trigger');
+const getProfile = require('./profile').getProfile;
+
 const { red, yellow } = require('colors');
+const { getFcClient } = require('./client');
+const { iterateResources } = require('./definition');
 
 const triggerTypeMapping = {
   'Datahub': 'datahub',
@@ -421,7 +424,36 @@ async function makeTrigger({
   return trigger;
 }
 
-async function displayTriggerInfo(serviceName, functionName, triggerName, triggerType, triggerProperties, wrap) {
+function findFunctionsInCustomDomain(tpl) {
+  const functions = [];
+
+  iterateResources(tpl.Resources, 'Aliyun::Serverless::CustomDomain', (domainLogicId, domainDefinition) => {
+    const properties = (domainDefinition.Properties || {});
+    const routeConfig = properties.RouteConfig || {};
+    const routes = routeConfig.Routes || routeConfig.routes;
+
+    if (_.isEmpty(routes)) { return; }
+
+    for (const route of Object.entries(routes)) {
+      const serviceName = route[1].ServiceName || route[1].serviceName;
+      const functionName = route[1].FunctionName || route[1].functionName;
+      functions.push({
+        serviceName,
+        functionName
+      });
+    }
+  });
+
+  return functions;
+}
+
+function functionBindCustomDomain(serviceName, functionName, tpl) {
+  const functions = findFunctionsInCustomDomain(tpl);
+  const bindFunction = _.find(functions, { serviceName, functionName });
+  return !_.isEmpty(bindFunction);
+}
+
+async function displayTriggerInfo(serviceName, functionName, triggerName, triggerType, triggerProperties, wrap, tpl) {
   if (triggerType === 'HTTP' || triggerType === 'http') {
 
     const profile = await getProfile();
@@ -434,9 +466,13 @@ async function displayTriggerInfo(serviceName, functionName, triggerName, trigge
     if (triggerName) {
       console.log(`${resolveWrap}triggerName: ${yellow(triggerName)}`);
     }
+
     console.log(`${resolveWrap}methods: ${yellow(triggerProperties.Methods || triggerProperties.methods)}`);
-    console.log(`${resolveWrap}url: ` + yellow(`https://${accountId}.${region}.fc.aliyuncs.com/2016-08-15/proxy/${serviceName}/${functionName}/`));
-    console.log(red(`${resolveWrap}Http Trigger will forcefully add a 'Content-Disposition: attachment' field to the response header, which cannot be overwritten \n${resolveWrap}and will cause the response to be downloaded as an attachment in the browser. This issue can be avoided by using CustomDomain.\n`));
+
+    if (!functionBindCustomDomain(serviceName, functionName, tpl)) {
+      console.log(`${resolveWrap}url: ` + yellow(`https://${accountId}.${region}.fc.aliyuncs.com/2016-08-15/proxy/${serviceName}/${functionName}/`));
+      console.log(red(`${resolveWrap}Http Trigger will forcefully add a 'Content-Disposition: attachment' field to the response header, which cannot be overwritten \n${resolveWrap}and will cause the response to be downloaded as an attachment in the browser. This issue can be avoided by using CustomDomain.\n`));
+    }
   }
 }
 
