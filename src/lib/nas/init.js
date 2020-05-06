@@ -13,7 +13,6 @@ const { checkWritePerm, isNasServerStale, extractNasMappingsFromNasYml } = requi
 
 const _ = require('lodash');
 
-
 function generateNasServiceRes(serviceName, vpcConfig, nasConfig, zipCodePath) {
   return {
     'Type': 'Aliyun::Serverless::Service',
