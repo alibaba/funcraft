@@ -164,7 +164,7 @@ describe('Incorrect environmental variables', () => {
       FC.prototype.updateFunction,
       'localdemo',
       'nodejs6',
-      {});
+      undefined);
   });
 
   it('invoke function sync', async () => {
