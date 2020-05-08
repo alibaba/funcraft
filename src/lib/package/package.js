@@ -241,26 +241,12 @@ async function bucketExist(ossClient, bucketName) {
   return bucketExist;
 }
 
-async function generateOssBucket(defalutBucket, bucketName, useDefaultIfNotExsit = false) {
-  if (!defalutBucket) {
-    const profile = await getProfile();
-    defalutBucket = `fun-gen-${profile.defaultRegion}-${profile.accountId}`;
-  }
-
-  if (!bucketName) {
-    bucketName = defalutBucket;
-  }
-
+async function generateOssBucket(bucketName) {
   const ossClient = await getOssClient();
 
   if (await bucketExist(ossClient, bucketName)) {
     console.log(yellow(`using oss-bucket: ${bucketName}`));
     return bucketName;
-  }
-
-  if (useDefaultIfNotExsit) {
-    debug(`oss bucket %s is not exist.`, bucketName);
-    return generateOssBucket(defalutBucket, null, false);
   }
 
   console.log(yellow(`using oss-bucket: ${bucketName}`));
@@ -273,12 +259,13 @@ async function generateOssBucket(defalutBucket, bucketName, useDefaultIfNotExsit
 
   return bucketName;
 }
-
 async function processOSSBucket(bucket) {
   if (!bucket) {
-    return await generateOssBucket(null, null, false);
+    const profile = await getProfile();
+    const defalutBucket = `fun-gen-${profile.defaultRegion}-${profile.accountId}`;
+    return await generateOssBucket(defalutBucket);
   }
-  return await generateOssBucket(null, bucket, true);
+  return await generateOssBucket(bucket);
 }
 
 async function pack(tplPath, bucket, outputTemplateFile, useNas) {
