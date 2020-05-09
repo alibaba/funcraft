@@ -35,7 +35,9 @@ const sysLibs = [
   '/usr/lib/x86_64-linux-gnu',
   '/usr/lib64',
   '/lib',
-  '/lib/x86_64-linux-gnu'
+  '/lib/x86_64-linux-gnu',
+  '/python/lib/python2.7/site-packages',
+  '/python/lib/python3.6/site-packages'
 ];
 
 
@@ -57,13 +59,13 @@ function generateLibPath(envs, prefix) {
 
   if (envs['LD_LIBRARY_PATH']) {
     libPath = `${envs['LD_LIBRARY_PATH']}:${libPath}`;
-  } 
+  }
   return duplicateRemoval(libPath);
 }
 
 const sysPaths = [
-  '/usr/local/bin', 
-  '/usr/local/sbin', 
+  '/usr/local/bin',
+  '/usr/local/sbin',
   '/usr/bin',
   '/usr/sbin',
   '/sbin',

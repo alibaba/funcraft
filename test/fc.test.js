@@ -164,7 +164,7 @@ describe('Incorrect environmental variables', () => {
       FC.prototype.updateFunction,
       'localdemo',
       'nodejs6',
-      {});
+      undefined);
   });
 
   it('invoke function sync', async () => {
@@ -326,7 +326,7 @@ describe('test processNasAutoConfiguration', ()=> {
 
     const functionProp = tplWithNasAuto.Resources.localdemo.python3.Properties;
     functionProp.EnvironmentVariables = {
-      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/local/lib:/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64:/mnt/auto/root/lib:/mnt/auto/root/lib/x86_64-linux-gnu',
+      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/local/lib:/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64:/mnt/auto/root/lib:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/python/lib/python2.7/site-packages:/mnt/auto/root/python/lib/python3.6/site-packages',
       'PYTHONUSERBASE': '/mnt/auto/python'
     };
 
@@ -359,7 +359,7 @@ describe('test processNasAutoConfiguration', ()=> {
     });
 
     const envs = {
-      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/local/lib:/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64:/mnt/auto/root/lib:/mnt/auto/root/lib/x86_64-linux-gnu',
+      'LD_LIBRARY_PATH': '/mnt/auto/root/usr/local/lib:/mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64:/mnt/auto/root/lib:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/python/lib/python2.7/site-packages:/mnt/auto/root/python/lib/python3.6/site-packages',
       'NODE_PATH': '/mnt/auto/node_modules:/usr/local/lib/node_modules'
     };
 

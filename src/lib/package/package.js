@@ -252,7 +252,7 @@ async function generateOssBucket(bucketName) {
   console.log(yellow(`using oss-bucket: ${bucketName}`));
 
   if (process.stdin.isTTY && !await promptForConfirmContinue('Auto generate OSS bucket for you?')) {
-    return (await promptForInputContinue('Input OSS bucket name:')).input;
+    bucketName = (await promptForInputContinue('Input OSS bucket name:')).input;
   }
 
   await ossClient.putBucket(bucketName);
