@@ -105,7 +105,7 @@ async function processNasAutoToRosTemplate({ tpl, baseDir, tplPath,
     }
 
     if (_.isEmpty(objectNames)) {
-      debug(`\nwarning: There is no local NAS directory available under service: ${serviceName}.`);
+      debug(`warning: There is no local NAS directory available under service: ${serviceName}.`);
       continue;
     }
 
@@ -133,31 +133,6 @@ async function processNasAutoToRosTemplate({ tpl, baseDir, tplPath,
   Object.assign(cloneTpl.Resources, generateRosTemplateForWaitCondition(count));
 
   return _.merge(cloneTpl, generateRosTemplateForDefaultOutputs());
-}
-
-async function generateDefaultOSSBucket() {
-  const profile = await getProfile();
-  const bucketName = `fun-gen-${profile.defaultRegion}-${profile.accountId}`;
-  console.log(yellow(`using oss-bucket: ${bucketName}`));
-
-  const ossClient = await getOssClient();
-  let bucketExist = false;
-  try {
-    await ossClient.getBucketLocation(bucketName);
-    bucketExist = true;
-  } catch (ex) {
-    if (!ex.code || ex.code !== 'NoSuchBucket') {
-      throw ex;
-    }
-  }
-  if (bucketExist) {
-    return bucketName;
-  }
-  if (!await promptForConfirmContinue('Auto generate OSS bucket for you:')) {
-    return (await promptForInputContinue('Input OSS bucket name:')).input;
-  }
-  await ossClient.putBucket(bucketName);
-  return bucketName;
 }
 
 function generateRosTemplateForPathConfig(serviceName, functionName) {
@@ -251,28 +226,65 @@ async function transformSlsAuto(tpl) {
   return cloneTpl;
 }
 
+async function bucketExist(ossClient, bucketName) {
+  let bucketExist = false;
+
+  try {
+    await ossClient.getBucketLocation(bucketName);
+    bucketExist = true;
+  } catch (ex) {
+
+    if (!ex.code || !_.includes(['AccessDenied', 'NoSuchBucket'], ex.code)) {
+      throw ex;
+    }
+  }
+  return bucketExist;
+}
+
+async function generateOssBucket(bucketName) {
+  const ossClient = await getOssClient();
+
+  if (await bucketExist(ossClient, bucketName)) {
+    console.log(yellow(`using oss-bucket: ${bucketName}`));
+    return bucketName;
+  }
+
+  console.log(yellow(`using oss-bucket: ${bucketName}`));
+
+  if (process.stdin.isTTY && !await promptForConfirmContinue('Auto generate OSS bucket for you?')) {
+    return (await promptForInputContinue('Input OSS bucket name:')).input;
+  }
+
+  await ossClient.putBucket(bucketName);
+
+  return bucketName;
+}
+async function processOSSBucket(bucket) {
+  if (!bucket) {
+    const profile = await getProfile();
+    const defalutBucket = `fun-gen-${profile.defaultRegion}-${profile.accountId}`;
+    return await generateOssBucket(defalutBucket);
+  }
+  return await generateOssBucket(bucket);
+}
+
 async function pack(tplPath, bucket, outputTemplateFile, useNas) {
   const tpl = await getTpl(tplPath);
   validateNasAndVpcConfig(tpl.Resources);
 
   const baseDir = path.dirname(tplPath);
 
-  if (!bucket) {
-    bucket = await generateDefaultOSSBucket();
-  }
-  if (!bucket) {
-    throw new Error('Missing OSS bucket');
-  }
+  const bucketName = await processOSSBucket(bucket);
 
   await ensureFilesModified(tplPath);
 
-  const ossClient = await getOssClient(bucket);
+  const ossClient = await getOssClient(bucketName);
 
   const updatedEnvTpl = await processNasPythonPaths(tpl, tplPath);
   const updatedCodeTpl = await uploadAndUpdateFunctionCode({ tpl: updatedEnvTpl, tplPath, baseDir, ossClient, useNas });
   const updatedSlsTpl = await transformSlsAuto(updatedCodeTpl);
   const updatedFlowTpl = await transformFlowDefinition(baseDir, transformCustomDomain(updatedSlsTpl));
-  const updatedTpl = await processNasAutoToRosTemplate({ ossClient, baseDir, tplPath, tpl: updatedFlowTpl, bucketName: bucket });
+  const updatedTpl = await processNasAutoToRosTemplate({ ossClient, baseDir, tplPath, tpl: updatedFlowTpl, bucketName });
 
   let packedYmlPath;
 
