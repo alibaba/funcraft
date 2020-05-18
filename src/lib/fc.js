@@ -959,11 +959,13 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
   
   const track = await getTracker();
 
-  track({
-    'size': compressedSize,
-    'type': 'funCodeSize',
-    'stage': stage
-  });
+  if (compressedSize !== 0) {
+    track({
+      'size': compressedSize,
+      'type': 'funCodeSize',
+      'stage': stage
+    });
+  }
 
   if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < 52428800)) { return { stop, tplChanged }; }
 

@@ -57,7 +57,7 @@ var fakeMocha = {
   }
 };
 
-var real = ua('UA-139704598-1', conf.get('cid'));
+var real = ua('UA-139874201-1', conf.get('cid'));
 
 real.set('cd1', os);
 real.set('cd2', nodeVersion);
@@ -109,6 +109,9 @@ async function getTracker() {
   const profile = await getProfile();
 
   return async function (data) {
+    if (!profile.report || detectMocha()) {
+      return ;
+    }
 
     if (!_.isObject(data)) {
       throw new Error('track data must be json');
