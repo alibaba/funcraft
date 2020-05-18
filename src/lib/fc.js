@@ -33,6 +33,7 @@ const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = req
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
 const { isBinary } = require('istextorbinary');
+const { getTracker } = require('./visitor');
 
 const _ = require('lodash');
 
@@ -955,11 +956,20 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
 
   let stop = false;
   let tplChanged = false;
+  
+  const track = await getTracker();
+
+  track({
+    'size': compressedSize,
+    'type': 'funCodeSize',
+    'stage': stage
+  });
 
   if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < 52428800)) { return { stop, tplChanged }; }
 
   if (compressedSize > 52428800) {
     console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M. It is recommended that using the nas service to manage your function dependencies.`));
+    
   }
 
   const alreadyConfirmed = await checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri);
