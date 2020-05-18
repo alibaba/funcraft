@@ -7,6 +7,7 @@ const sandbox = sinon.createSandbox();
 const assert = sandbox.assert;
 const zip = require('../../lib/package/zip');
 const util = require('../../lib/package/util');
+const { setProcess } = require('../test-utils');
 const path = require('path');
 const tempDir = require('temp-dir');
 const uuid = require('uuid');
@@ -142,6 +143,7 @@ describe('test uploadAndUpdateFunctionCode', () => {
   };
 
   let ossClient;
+  let restoreProcess;
 
   beforeEach(() => {
     sandbox.stub(fs, 'ensureDir').resolves(true);
@@ -160,10 +162,18 @@ describe('test uploadAndUpdateFunctionCode', () => {
     };
 
     ossClient.head.rejects({ name: 'NoSuchKeyError' });
+
+    restoreProcess = setProcess({
+      ACCOUNT_ID: 'testAccountId',
+      ACCESS_KEY_ID: 'testKeyId',
+      ACCESS_KEY_SECRET: 'testKeySecret',
+      DEFAULT_REGION: 'defaultRegion'
+    });
   });
 
   afterEach(() => {
     sandbox.restore();
+    restoreProcess();
   });
 
   it('test uploadAndUpdateFunctionCode with local code', async () => {
