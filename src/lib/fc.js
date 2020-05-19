@@ -9,6 +9,7 @@ const getProfile = require('./profile').getProfile;
 const securityGroup = require('./security-group');
 const uuid = require('uuid');
 const tmpDir = require('temp-dir');
+const barUtil = require('./import/utils');
 
 const fs = require('fs-extra');
 const path = require('path');
@@ -24,7 +25,6 @@ const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
 const { isNotEmptyDir } = require('./nas/cp/file');
-const barUtil = require('./import/utils');
 const { isSpringBootJar } = require('./frameworks/common/java');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
