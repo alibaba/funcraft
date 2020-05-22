@@ -96,6 +96,7 @@ function getRuntime(codeUri, functionRes, options) {
 }
 
 async function save(runtime, codeUri, pkgType, packages, env) {
+
   let funfilePath = await getOrConvertFunfile(codeUri);
   let cmds = [];
 
@@ -121,7 +122,7 @@ async function save(runtime, codeUri, pkgType, packages, env) {
 
 function convertPackageToCmd(pkgType, pkg, {
   indexUrl, registry
-}) {
+} = {}) {
 
   if (!_.includes(['pip', 'npm', 'apt-get'], pkgType)) {
     throw new Error(`unknow package type %${pkgType}`);
