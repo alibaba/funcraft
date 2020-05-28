@@ -196,7 +196,7 @@ describe('Incorrect environmental variables', () => {
       'X-Fc-Invocation-Type': 'Sync'
     });
 
-    assert.callCount(console.log, 5);
+    assert.callCount(console.log, 6);
 
     expect(rs).to.eql({
       'headers': {

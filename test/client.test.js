@@ -16,7 +16,8 @@ describe('without local ~/.fcli/config.yaml', () => {
       ACCESS_KEY_ID: 'testKeyId',
       ACCESS_KEY_SECRET: 'testKeySecret',
       FC_ENDPOINT: 'test fc endpoint',
-      REGION: 'cn-beijing'
+      REGION: 'cn-beijing',
+      ENABLE_CUSTOM_ENDPOINT: false
     });
   });
 

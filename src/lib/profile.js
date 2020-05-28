@@ -73,8 +73,13 @@ async function getProfileFromFile() {
     profile.report = profYml.report;
   }
 
+  if (profYml.enable_custom_endpoint !== undefined) {
+    profile.enableCustomEndpoint = profYml.enable_custom_endpoint;
+  }
+
   profile.timeout = profYml.timeout || 10;
   profile.retries = profYml.retries || 3;
+  profile.endpoint = profYml.endpoint;
 
   return profile;
 }
@@ -120,6 +125,11 @@ async function getProfileFromEnv() {
   if (process.env.FC_ENDPOINT) {
     debug('try to get ENDPOINT from environment variable');
     profile.fcEndpoint = process.env.FC_ENDPOINT;
+  }
+
+  if (process.env.ENABLE_CUSTOM_ENDPOINT) {
+    debug('try to get ENABLE_CUSTOM_ENDPOINT from environment variable');
+    profile.enableCustomEndpoint = process.env.ENABLE_CUSTOM_ENDPOINT;
   }
 
   return profile;
@@ -182,6 +192,11 @@ async function getProfileFromDotEnv() {
 
 async function getProfile() {
   const profile = await getProfileFromDotEnv();
+
+  if (profile.enableCustomEndpoint === 'true' || profile.enableCustomEndpoint === true) {
+    return profile;
+  }
+
   const notExistParams = filterNotExistParameters(profile);
 
   if (!_.isEmpty(notExistParams)) {

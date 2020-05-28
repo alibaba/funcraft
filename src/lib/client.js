@@ -52,7 +52,6 @@ const getOssClient = async (bucket) => {
     timeout: profile.timeout * 1000
   });
 
-  
   return client;
 };
 
@@ -67,11 +66,16 @@ const getFcClient = async (opts = {}) => {
     return this.get('/account-settings', options, headers);
   };
 
-  const fc = new FC(profile.accountId, {
-    accessKeyID: profile.accessKeyId,
-    accessKeySecret: profile.accessKeySecret,
-    endpoint: profile.fcEndpoint,
-    region: profile.defaultRegion,
+  const accountId = profile.accountId ? profile.accountId : 'accountId';
+  const accessKeyID = profile.accessKeyId ? profile.accessKeyId : 'accessKeyID';
+  const accessKeySecret = profile.accessKeySecret ? profile.accessKeySecret : 'accessKeySecret';
+  const region = profile.defaultRegion ? profile.defaultRegion : 'cn-hangzhou';
+
+  const enable = profile.enableCustomEndpoint === true || profile.enableCustomEndpoint === 'true';
+  const endpoint = profile.fcEndpoint ? profile.fcEndpoint : enable ? profile.endpoint : undefined;
+
+  const fc = new FC(accountId, {
+    accessKeyID, accessKeySecret, region, endpoint,
     timeout: opts.timeout || profile.timeout * 1000,
     secure: profile.protocol !== 'http',
     headers: {
