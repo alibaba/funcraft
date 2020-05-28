@@ -103,8 +103,6 @@ describe('Incorrect environmental variables', () => {
     sandbox.stub(FC.prototype, 'updateFunction').resolves({});
     sandbox.stub(zip, 'pack').resolves({});
 
-    sandbox.stub(console, 'log');
-
     fc = await proxyquire('../lib/fc', {
       './package/zip': zip,
       '@alicloud/fc2': FC
@@ -195,8 +193,6 @@ describe('Incorrect environmental variables', () => {
       'X-Fc-Log-Type': 'Tail',
       'X-Fc-Invocation-Type': 'Sync'
     });
-
-    assert.callCount(console.log, 6);
 
     expect(rs).to.eql({
       'headers': {
