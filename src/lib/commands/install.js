@@ -151,7 +151,7 @@ function validateRegistry(runtime, options) {
   }
 
   if (options.registry && !(runtime.indexOf('node') > -1)) {
-    throw new Error(`'--registry' needs to be used with '--runtime' nodejs6/nodejs8/nodejs10, and you are currently using ${runtime}`);
+    throw new Error(`'--registry' needs to be used with '--runtime' nodejs6/nodejs8/nodejs10/nodejs12, and you are currently using ${runtime}`);
   }
 }
 
