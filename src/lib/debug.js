@@ -75,6 +75,7 @@ async function generateVscodeDebugConfig(serviceName, functionName, runtime, cod
         }
       ]
     };
+  case 'nodejs12':
   case 'nodejs10':
   case 'nodejs8':
     return {
@@ -192,6 +193,7 @@ function generateDebugEnv(runtime, debugPort, debugIde) {
   const remoteIp = ip.address();
 
   switch (runtime) {
+  case 'nodejs12':
   case 'nodejs10':
   case 'nodejs8':
     return { 'DEBUG_OPTIONS': `--inspect-brk=0.0.0.0:${debugPort}` };
@@ -201,9 +203,9 @@ function generateDebugEnv(runtime, debugPort, debugIde) {
   case 'python3':
     if (debugIde === IDE_PYCHARM) {
       return {};
-    } 
+    }
     return { 'DEBUG_OPTIONS': `-m ptvsd --host 0.0.0.0 --port ${debugPort} --wait` };
-    
+
   case 'java8':
     return { 'DEBUG_OPTIONS': `-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,quiet=y,address=${debugPort}` };
   case 'php7.2':
