@@ -27,7 +27,7 @@ describe('test resolveRuntimeToDockerImage', () => {
   });
 
   it('test find not python image', async () => {
-    for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2', 'nodejs10']) {
+    for (let runtime of ['nodejs6', 'nodejs8', 'python2.7', 'java8', 'php7.2', 'nodejs10', 'nodejs12']) {
       const imageName = await dockerOpts.resolveRuntimeToDockerImage(runtime);
       expect(imageName).to.contain(`aliyunfc/runtime-${runtime}:`);
     }
