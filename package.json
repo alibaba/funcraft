@@ -124,7 +124,6 @@
     "promise-retry": "^1.1.1",
     "promise.prototype.finally": "^3.1.1",
     "raw-body": "^2.3.3",
-    "readdirp": "^3.1.2",
     "request-promise": "^4.2.5",
     "require-from-string": "^2.0.2",
     "rimraf": "^2.6.2",
@@ -141,6 +140,7 @@
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0",
     "uuid-by-string": "^3.0.2",
+    "walkdir": "^0.4.1",
     "yaml-ast-parser": "0.0.43"
   },
   "files": [

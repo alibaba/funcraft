@@ -8,9 +8,9 @@ const sinon = require('sinon');
 const path = require('path');
 const sandbox = sinon.createSandbox();
 
-const { 
+const {
   parseNasUri,
-  resolveLocalPath, 
+  resolveLocalPath,
   readDirRecursive } = require('../../lib/nas/path');
 
 describe('parseNasUri test', () => {
@@ -45,7 +45,6 @@ describe('parseNasUri test', () => {
       }
     });
   });
-  
 });
 
 describe('resolveLocalPath test', () => {
@@ -68,10 +67,10 @@ describe('resolveLocalPath test', () => {
 
 describe('readDirRecursive test', () => {
   const parentDir = path.join(os.tmpdir(), '.readDirRecursiveDir');
-  const localDir = path.join(parentDir, 'tmp'); 
+  const localDir = path.join(parentDir, 'tmp');
   const localEmptyDir = path.join(parentDir, 'empty-dir');
   const filePath = path.join(localDir, 'test.txt');
-  
+
   beforeEach(async () => {
     await fs.mkdirp(localDir);
     await fs.mkdirp(localEmptyDir);
@@ -85,6 +84,6 @@ describe('readDirRecursive test', () => {
 
   it('normal path test', async() => {
     const res = await readDirRecursive(parentDir);
-    expect(res).to.eql(['tmp/test.txt', 'empty-dir/']);
+    expect(res).to.eql(['empty-dir/', 'tmp/test.txt']);
   });
 });
