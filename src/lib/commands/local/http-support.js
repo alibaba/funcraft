@@ -42,7 +42,7 @@ async function registerSingleHttpTrigger(app, router, serverPort, httpTrigger, d
   const httpTriggerPrefix = `/2016-08-15/proxy/${serviceName}/${functionName}`;
   const customDomainPrefix = path;
 
-  const endpointForRoute = isCustomDomain ? customDomainPrefix : `${httpTriggerPrefix}*`;
+  const endpointForRoute = isCustomDomain ? customDomainPrefix : `${httpTriggerPrefix}/*`;
 
   let endpointForDisplay = endpointForRoute;
   if (_.endsWith(endpointForDisplay, '*')) {

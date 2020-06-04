@@ -13,7 +13,7 @@ $ ./mvnw package && fun local start
 
 ...
 
-using template: .fun/build/artifacts/template.yml
+using template: template.yml
 http trigger httpTrigger of springboot/helloworld was registered
         url: http://localhost:8000/2016-08-15/proxy/springboot/helloworld/
         methods: GET,POST,PUT
@@ -34,7 +34,7 @@ using template: template.yml
             using accountId: ***********4733
             using accessKeyId: ***********EUz3
             using timeout: 60
-            
+
             Waiting for service springboot to be deployed...
                     Waiting for function helloworld to be deployed...
                             Waiting for packaging function helloworld code...

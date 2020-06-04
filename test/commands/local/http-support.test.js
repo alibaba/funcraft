@@ -65,9 +65,9 @@ describe('test registerHttpTriggers', () => {
       httpTriggerFunctionRes.Properties.Runtime,
       path.dirname(tplPath));
 
-    assert.calledWith(router['get'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
-    assert.calledWith(router['post'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
-    assert.calledWith(router['put'], `/2016-08-15/proxy/${serviceName}/${functionName}*`, sinon.match.func);
+    assert.calledWith(router['get'], `/2016-08-15/proxy/${serviceName}/${functionName}/*`, sinon.match.func);
+    assert.calledWith(router['post'], `/2016-08-15/proxy/${serviceName}/${functionName}/*`, sinon.match.func);
+    assert.calledWith(router['put'], `/2016-08-15/proxy/${serviceName}/${functionName}/*`, sinon.match.func);
   });
 });
 
