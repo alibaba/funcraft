@@ -72,7 +72,7 @@ const getFcClient = async (opts = {}) => {
   const region = profile.defaultRegion ? profile.defaultRegion : 'cn-hangzhou';
 
   const enable = profile.enableCustomEndpoint === true || profile.enableCustomEndpoint === 'true';
-  const endpoint = profile.fcEndpoint ? profile.fcEndpoint : enable ? profile.endpoint : undefined;
+  const endpoint = profile.fcEndpoint ? profile.fcEndpoint : (enable ? profile.endpoint : undefined);
 
   const fc = new FC(accountId, {
     accessKeyID, accessKeySecret, region, endpoint,

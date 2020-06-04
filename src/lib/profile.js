@@ -190,12 +190,14 @@ async function getProfileFromDotEnv() {
   return profile;
 }
 
+function isTrue(value) {
+  return value === 'true' || value === true;
+}
+
 async function getProfile() {
   const profile = await getProfileFromDotEnv();
 
-  if (profile.enableCustomEndpoint === 'true' || profile.enableCustomEndpoint === true) {
-    return profile;
-  }
+  if (isTrue(profile.enableCustomEndpoint)) { return profile; }
 
   const notExistParams = filterNotExistParameters(profile);
 
