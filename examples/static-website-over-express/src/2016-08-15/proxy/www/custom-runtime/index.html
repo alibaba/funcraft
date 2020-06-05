@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stub page for local start</title>
+    <script>
+        let delay = 5;
+        let handler = function () {
+            if (delay > 0) {
+                document.getElementById('tip').innerHTML = `You will be navigate back to /index.html in ${delay} second`;
+                delay -= 1;
+                setTimeout(handler, 1000);
+            } else {
+                window.location.href = `/index.html`;
+            }
+        };
+        setTimeout(handler, 0);
+    </script>
+</head>
+<body>
+<div style="text-align: center;">
+    <p id="tip" style="margin-top: 64px"></p>
+</div>
+</body>
+</html>
