@@ -1,0 +1,28 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  www: # service name
+    Type: 'Aliyun::Serverless::Service'
+    custom-runtime: # function name
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: ignored::handler
+        Runtime: custom
+        CodeUri: './'
+        InstanceConcurrency: 100
+        Timeout: 60
+      Events:
+        http: # trigger name
+          Type: HTTP # http trigger
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET','POST','PUT','DELETE','HEAD','PATCH']
+  localhost: # custom domain
+    Type: 'Aliyun::Serverless::CustomDomain'
+    Properties:
+      Protocol: HTTP
+      RouteConfig:
+        Routes:
+          '/*':
+            ServiceName: www
+            FunctionName: custom-runtime

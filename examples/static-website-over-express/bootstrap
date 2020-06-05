@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# bootstrap the express server
+node ./express-bootstrap.js
