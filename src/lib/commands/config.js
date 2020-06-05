@@ -10,19 +10,17 @@ const { mark } = require('../profile');
 const { isShortDateStr } = require('../profile');
 const getProfileFromFile = require('../profile').getProfileFromFile;
 
-async function config() {
-
-  const profile = await getProfileFromFile();
-
-  const markedAccessKeyId = mark(profile.accessKeyId);
-  const markedAccessKeySecret = mark(profile.accessKeySecret);
-
-  const questions = [
+function generateQuestions({
+  accountId, defaultRegion,
+  timeout, retries, enableCustomEndpoint,
+  markedAccessKeyId, markedAccessKeySecret
+}) {
+  return [
     {
       type: 'input',
       name: 'accountId',
       message: 'Aliyun Account ID',
-      default: profile.accountId
+      default: accountId
     },
     {
       type: 'input',
@@ -45,17 +43,16 @@ async function config() {
         'cn-hongkong', 'ap-southeast-1', 'ap-southeast-2',
         'ap-northeast-1', 'us-west-1', 'us-east-1',
         'eu-central-1', 'ap-south-1'],
-      default: profile.defaultRegion
+      default: defaultRegion
     },
     {
       type: 'input',
       name: 'timeout',
       message: 'The timeout in seconds for each SDK client invoking',
-      default: profile.timeout || 10,
+      default: timeout || 10,
       filter(value) {
         if (typeof value !== 'number') { value = parseInt(value); }
-
-        if ( ! Number.isNaN(value) ) { return value; }
+        if (!Number.isNaN(value)) { return value; }
         throw Error('timeout must be number');
       }
     },
@@ -63,23 +60,43 @@ async function config() {
       type: 'input',
       name: 'retries',
       message: 'The maximum number of retries for each SDK client',
-      default: profile.retries || 3,
+      default: retries || 3,
       filter(value) {
         if (typeof value !== 'number') { value = parseInt(value); }
-
-        if ( ! Number.isNaN(value) ) { return value; }
+        if (!Number.isNaN(value)) { return value; }
         throw Error('retries must be number');
       }
     },
     {
       type: 'confirm',
       name: 'report',
-      default: profile.report === undefined ? true : profile.report,
       message: 'Allow to anonymously report usage statistics to improve the tool over time?'
+    },
+    {
+      type: 'list',
+      name: 'enableCustomEndpoint',
+      default: enableCustomEndpoint === true ? 'Yes' : 'No',
+      message: 'Use custom endpoint?',
+      choices: ['No', 'Yes']
     }
   ];
+}
 
-  let newProf = await inquirer.prompt(questions);
+async function config() {
+
+  const profile = await getProfileFromFile();
+
+  const markedAccessKeyId = mark(profile.accessKeyId);
+  const markedAccessKeySecret = mark(profile.accessKeySecret);
+
+  let newProf = await inquirer.prompt(generateQuestions({
+    markedAccessKeyId, markedAccessKeySecret,
+    timeout: profile.timeout,
+    retries: profile.retries,
+    accountId: profile.accountId,
+    defaultRegion: profile.defaultRegion,
+    enableCustomEndpoint: profile.enableCustomEndpoint
+  }));
 
   if (newProf.accessKeyId === markedAccessKeyId ) {
     newProf.accessKeyId = profile.accessKeyId;
@@ -93,7 +110,7 @@ async function config() {
   const profPath = path.join(configDir, 'config.yaml');
   const isExists = await fs.exists(profPath);
 
-  var profYml;
+  let profYml;
 
   if (isExists) {
     const profContent = await fs.readFile(profPath, 'utf8');
@@ -107,6 +124,7 @@ async function config() {
     profYml.timeout = newProf.timeout;
     profYml.retries = newProf.retries;
     profYml.report = newProf.report;
+    profYml.enable_custom_endpoint = newProf.enableCustomEndpoint === 'Yes';
 
     if (!isShortDateStr(profYml.api_version)) {
       // 1. fcli 默认配置的格式为 api_version: 2016-08-15
@@ -132,7 +150,8 @@ async function config() {
       timeout: newProf.timeout,
       retries: newProf.retries,
       sls_endpoint: `${newProf.defaultRegion}.log.aliyuncs.com`,
-      report: newProf.report
+      report: newProf.report,
+      enable_custom_endpoint: newProf.enableCustomEndpoint === 'Yes'
     };
     await fs.mkdirp(configDir);
   }
