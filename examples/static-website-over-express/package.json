@@ -1,0 +1,16 @@
+{
+  "name": "static-website-over-express",
+  "version": "1.0.0",
+  "description": "This is an example shows how to deploy your static content into Fc",
+  "private": true,
+  "author": {
+    "name": "邓超",
+    "url": "https://github.com/XieEDeHeiShou"
+  },
+  "scripts": {
+    "start": "node ./express-bootstrap.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
