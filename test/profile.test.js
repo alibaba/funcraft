@@ -11,7 +11,7 @@ const { setProcess } = require('./test-utils');
 const { isShortDateStr } = require('../lib/profile');
 
 describe('without local ~/.fcli/config.yaml', () => {
-  
+
   let restoreProcess;
   beforeEach(() => {
     restoreProcess = setProcess({
@@ -23,13 +23,14 @@ describe('without local ~/.fcli/config.yaml', () => {
   });
 
 
-  it('with env', async () => {    
+  it('with env', async () => {
     process.env.ACCOUNT_ID = '111111';
     process.env.ACCESS_KEY_ID = '121111';
     process.env.ACCESS_KEY_SECRET = '111311';
     process.env.DEFAULT_REGION = '141111';
     process.env.TIMEOUT = 10;
     process.env.RETRIES = 2;
+    process.env.ENABLE_CUSTOM_ENDPOINT = true;
 
     const profile = await getProfile();
     expect(profile.accountId).to.be(process.env.ACCOUNT_ID);
@@ -38,6 +39,7 @@ describe('without local ~/.fcli/config.yaml', () => {
     expect(profile.defaultRegion).to.be(process.env.DEFAULT_REGION);
     expect(profile.timeout).to.be(process.env.TIMEOUT);
     expect(profile.retries).to.be(process.env.RETRIES);
+    expect(profile.enableCustomEndpoint).to.be(process.env.ENABLE_CUSTOM_ENDPOINT);
   });
 
   it('without env', (done) => {
@@ -56,7 +58,7 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
     await fs.mkdirp(`${process.env.HOME}/.fcli/`);
     await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       endpoint: `https://123344234.cn-hangzhou.fc.aliyuncs.com`,
-      api_version: '2016-08-15',       
+      api_version: '2016-08-15',
       access_key_id: '22222',
       access_key_secret: '3333333',
       security_token: '',
@@ -64,7 +66,8 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
       debug: false,
       timeout: 60,
       sls_endpoint: `cn-hangzhou.log.aliyuncs.com`,
-      retries: 10
+      retries: 10,
+      enable_custom_endpoint: false
     }));
   });
 
@@ -74,7 +77,7 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
     restoreProcess();
   });
 
-  it('with env', async () => {    
+  it('with env', async () => {
     process.env.ACCOUNT_ID = '111111';
     process.env.ACCESS_KEY_ID = '121111';
     process.env.ACCESS_KEY_SECRET = '111311';
@@ -90,6 +93,7 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
     expect(profile.timeout).to.be(process.env.TIMEOUT);
     expect(profile.retries).to.be(process.env.RETRIES);
     expect(profile.protocol).to.be('https');
+    expect(profile.enableCustomEndpoint).to.be(false);
   });
 
   it('without env', async () => {
@@ -101,6 +105,7 @@ describe('with local ~/.fcli/config.yaml for endpoint https', () => {
     expect(profile.timeout).to.be(60);
     expect(profile.retries).to.be(10);
     expect(profile.protocol).to.be('https');
+    expect(profile.enableCustomEndpoint).to.be(false);
   });
 
   it('pattern', ()=>{
@@ -122,7 +127,7 @@ describe('with local ~/.fcli/config.yaml for endpoint http', () => {
     await fs.mkdirp(`${process.env.HOME}/.fcli/`);
     await fs.writeFile(`${process.env.HOME}/.fcli/config.yaml`, yaml.dump({
       endpoint: `http://123344234.cn-hangzhou.fc.aliyuncs.com`,
-      api_version: '2016-08-15',       
+      api_version: '2016-08-15',
       access_key_id: '22222',
       access_key_secret: '3333333',
       security_token: '',
@@ -130,23 +135,24 @@ describe('with local ~/.fcli/config.yaml for endpoint http', () => {
       debug: false,
       timeout: 60,
       sls_endpoint: `cn-hangzhou.log.aliyuncs.com`,
-      retries: 10
+      retries: 10,
+      enable_custom_endpoint: false
     }));
   });
 
   afterEach(async () => {
     rimraf.sync(`${process.env.HOME}/.fcli/`);
-
     restoreProcess();
   });
 
-  it('with env', async () => {    
+  it('with env', async () => {
     process.env.ACCOUNT_ID = '111111';
     process.env.ACCESS_KEY_ID = '121111';
     process.env.ACCESS_KEY_SECRET = '111311';
     process.env.DEFAULT_REGION = '141111';
     process.env.TIMEOUT = 10;
     process.env.RETRIES = 2;
+    process.env.ENABLE_CUSTOM_ENDPOINT = true;
 
     const profile = await getProfile();
     expect(profile.accountId).to.be(process.env.ACCOUNT_ID);
@@ -156,6 +162,7 @@ describe('with local ~/.fcli/config.yaml for endpoint http', () => {
     expect(profile.timeout).to.be(process.env.TIMEOUT);
     expect(profile.retries).to.be(process.env.RETRIES);
     expect(profile.protocol).to.be('http');
+    expect(profile.enableCustomEndpoint).to.be(true);
   });
 
   it('without env', async () => {
@@ -167,5 +174,6 @@ describe('with local ~/.fcli/config.yaml for endpoint http', () => {
     expect(profile.timeout).to.be(60);
     expect(profile.retries).to.be(10);
     expect(profile.protocol).to.be('http');
+    expect(profile.enableCustomEndpoint).to.be(false);
   });
 });
