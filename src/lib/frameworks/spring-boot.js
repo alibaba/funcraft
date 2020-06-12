@@ -108,7 +108,7 @@ You can use 'mvn package' to package SpringBoot to a jar.`);
               if (_.endsWith(file, '.jar')) {
                 const absFile = path.join(targetPath, file);
                 const relative = path.relative(codeDir, absFile);
-                jarFiles.push(relative);
+                jarFiles.push(relative.split(path.sep).join('/'));
               }
             }
 
