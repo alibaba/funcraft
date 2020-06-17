@@ -52,7 +52,7 @@ class HttpInvoke extends Invoke {
       oldRunner = this.runner;
 
       this.runner = null;
-      this.containerName = docker.generateRamdomContainerName();
+      this.containerName = docker.generateRandomContainerName();
       this._invokeInitializer = true;
 
       setTimeout(() => {
@@ -159,7 +159,7 @@ class HttpInvoke extends Invoke {
         // don't reuse container
         const cmd = docker.generateDockerCmd(this.functionProps, true);
 
-        this.containerName = docker.generateRamdomContainerName();
+        this.containerName = docker.generateRandomContainerName();
 
         const opts = await dockerOpts.generateLocalInvokeOpts(
           this.runtime,
@@ -217,7 +217,7 @@ class HttpInvoke extends Invoke {
 
           // for next invoke
           this.runner = null;
-          this.containerName = docker.generateRamdomContainerName();
+          this.containerName = docker.generateRandomContainerName();
           if (error.indexOf && error.indexOf('exited with code 137') > -1) { // receive signal SIGKILL http://tldp.org/LDP/abs/html/exitcodes.html
             debug(error);
           } else {

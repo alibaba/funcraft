@@ -34,7 +34,7 @@ describe('test generateBuildContainerBuildOpts', () => {
 
   it('test with generateBuildContainerBuildOpts', async function () {
 
-    sandbox.stub(docker, 'generateRamdomContainerName').returns('containerName');
+    sandbox.stub(docker, 'generateRandomContainerName').returns('containerName');
 
     const opts = await generateBuildContainerBuildOpts(serviceName, serviceRes, functionName, functionRes, '/', './', '/funcArtifactDir', false);
 

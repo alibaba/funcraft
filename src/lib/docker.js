@@ -409,7 +409,7 @@ function generateFunctionEnvs(functionProps) {
   return Object.assign({}, environmentVariables);
 }
 
-function generateRamdomContainerName() {
+function generateRandomContainerName() {
   return `fun_local_${new Date().getTime()}_${Math.random().toString(36).substr(2, 7)}`;
 }
 
@@ -1024,7 +1024,7 @@ async function detectDockerVersion(serverVersion) {
 module.exports = {
   imageExist, generateDockerCmd,
   pullImage,
-  resolveCodeUriToMount, generateFunctionEnvs, run, generateRamdomContainerName,
+  resolveCodeUriToMount, generateFunctionEnvs, run, generateRandomContainerName,
   generateDockerEnvs, pullImageIfNeed,
   showDebugIdeTipsForVscode, resolveNasConfigToMounts,
   startInstallationContainer, startContainer, isDockerToolBoxAndEnsureDockerVersion,

@@ -228,9 +228,9 @@ describe('test generateFunctionEnvs', () => {
   });
 });
 
-describe('test generateRamdomContainerName', () => {
+describe('test generateRandomContainerName', () => {
   it('test generate', () => {
-    const containerName = docker.generateRamdomContainerName();
+    const containerName = docker.generateRandomContainerName();
     expect(containerName).to.contain('fun_local_');
   });
 });

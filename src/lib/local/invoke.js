@@ -101,7 +101,7 @@ class Invoke {
 
     debug(`docker mounts: %s`, JSON.stringify(this.mounts, null, 4));
 
-    this.containerName = docker.generateRamdomContainerName();
+    this.containerName = docker.generateRandomContainerName();
 
     this.imageName = await dockerOpts.resolveRuntimeToDockerImage(this.runtime);
 
