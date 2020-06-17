@@ -11,7 +11,7 @@ async function generateBuildContainerBuildOpts(serviceName, serviceRes, function
   const functionProps = functionRes.Properties;
   const runtime = functionProps.Runtime;
 
-  const containerName = docker.generateRamdomContainerName();
+  const containerName = docker.generateRandomContainerName();
 
   const envs = await docker.generateDockerEnvs(baseDir, serviceName, serviceRes.Properties, functionName, functionProps, null, null);
 

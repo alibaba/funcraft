@@ -24,7 +24,7 @@ class ApiInvoke extends Invoke {
 
   async doInvoke(req, res) {
 
-    const containerName = docker.generateRamdomContainerName();
+    const containerName = docker.generateRandomContainerName();
 
     const opts = await dockerOpts.generateLocalInvokeOpts(this.runtime,
       containerName,
