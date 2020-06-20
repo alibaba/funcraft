@@ -165,7 +165,7 @@ You can use 'mvn package' to package SpringBoot to a jar.`);
         {
           'type': 'function',
           'function': async (codeDir) => {
-            const targetPath = path.join(codeDir, 'build/libs');
+            const targetPath = path.join(codeDir, 'build', 'libs');
 
             if (!await fs.pathExists(targetPath)) {
               throw new Error(`You must package your SpringBoot project before deploying.
