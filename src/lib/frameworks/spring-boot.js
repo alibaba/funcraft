@@ -88,7 +88,15 @@ java -jar -Dserver.port=$PORT ${path.relative(codeDir, jar)}
       ]
     },
     {
-      'condition': true,
+      'condition': {
+        'and':[
+          {
+            'type': 'regex',
+            'path': 'pom.xml',
+            'content': '<artifactId>\\s*spring-boot-starter-parent\\s*</artifactId>'
+          }
+        ]
+      },
       'description': 'find jar under target/ and generate bootstrap',
       'processors': [
         {
