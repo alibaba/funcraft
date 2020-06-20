@@ -189,7 +189,7 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
     await assertCodeUriExist(absCodeUri);
 
     if (runtime === 'java8' && (absCodeUri.endsWith('.zip') || absCodeUri.endsWith('.jar') || absCodeUri.endsWith('.war'))) {
-      console.warn(red(`\nDetectionWarning: your codeuri is '${codeUri}', and 'fun build' will not compile your functions. It is recommended that you modify ${serviceName}/${functionName}'s 'CodeUri' property to the directory where 'pom.xml' is located.`));
+      console.warn(red(`\nDetectionWarning: your codeuri is '${codeUri}', and 'fun build' will not compile your functions. It is recommended that you modify ${serviceName}/${functionName}'s 'CodeUri' property to the directory where 'pom.xml' or 'build.gradle' is located.`));
     }
 
     let funcArtifactDir;
