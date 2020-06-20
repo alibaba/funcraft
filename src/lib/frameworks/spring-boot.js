@@ -4,8 +4,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const file = require('./common/file');
-const { isSpringBootJar } = require('./common/java');
-const { updateIgnore } = require('../package/ignore');
+const {isSpringBootJar} = require('./common/java');
+const {updateIgnore} = require('../package/ignore');
 
 const updateFunIgnoreProcessor = {
   'type': 'function',
@@ -81,15 +81,15 @@ const springboot = {
             if (jars.length > 1) {
               throw new Error('We detected you have more than 1 jar in current folder.');
             }
-            
+
             const jar = jars[0];
-            
+
             if (!await isSpringBootJar(jar)) {
               throw new Error('Only Spring Boot jar is supported');
             }
 
             const bootstrap = generateBootstrap(path.relative(codeDir, jar));
-            
+
             await fs.writeFile('bootstrap', bootstrap, {
               mode: '0755'
             });
@@ -100,7 +100,7 @@ const springboot = {
     },
     {
       'condition': {
-        'and':[
+        'and': [
           {
             'type': 'regex',
             'path': 'pom.xml',
@@ -152,7 +152,7 @@ You can use 'mvn package' to package SpringBoot to a jar.`);
     },
     {
       'condition': {
-        'and':[
+        'and': [
           {
             'type': 'regex',
             'path': 'build.gradle',
