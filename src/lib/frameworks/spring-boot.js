@@ -43,6 +43,11 @@ const springboot = {
         'content': '<artifactId>\\s*spring-boot-starter-parent\\s*</artifactId>'
       },
       {
+        'type': 'regex',
+        'path': 'build.gradle',
+        'content': '\\s*id\\s*\'org.springframework.boot\'\\.*'
+      },
+      {
         'type': 'file',
         'path': /\.jar$/
       }
