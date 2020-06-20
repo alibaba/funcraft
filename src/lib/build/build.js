@@ -201,6 +201,7 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
     }
 
     const Builder = fcBuilders.Builder;
+    // FIXME: GradleTaskFlow for java8 runtime is not implemented yet
     const taskFlows = await Builder.detectTaskFlow(runtime, absCodeUri);
 
     const funfilePath = await getOrConvertFunfile(absCodeUri);
