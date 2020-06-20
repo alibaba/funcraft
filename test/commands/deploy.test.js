@@ -5,21 +5,21 @@ const exec = util.promisify(require('child_process').exec);
 
 const expect = require('expect.js');
 
-const { setProcess } = require('../test-utils');
+const {setProcess} = require('../test-utils');
 
 const deploy = require('../../lib/commands/deploy');
 
 describe.skip('deploy template', () => {
 
   let restoreProcess;
-  
+
   beforeEach(() => {
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',
       ACCESS_KEY_ID: 'testKeyId',
       ACCESS_KEY_SECRET: 'testKeySecret'
     });
-   
+
   });
   afterEach(() => {
     restoreProcess();
@@ -73,5 +73,9 @@ describe.skip('deploy template', () => {
     expect(await deploy()).to.be(undefined);
   });
 
+  it('could deploy spring boot gradle example without providing a template.yaml', async () => {
+    process.chdir('./examples/spring-boot-example/');
+    expect(await deploy()).to.be(undefined);
+  });
 
 });
