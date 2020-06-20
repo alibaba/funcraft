@@ -44,7 +44,7 @@ const runtimeCheckers = {
   },
   'java': {
     'type': 'file',
-    'paths': ['pom.xml', /\.jar$/, /\.war$/]
+    'paths': ['pom.xml', 'build.gradle', /\.jar$/, /\.war$/]
   },
   'php': {
     'type': 'file',
