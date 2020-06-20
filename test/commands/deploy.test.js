@@ -74,7 +74,7 @@ describe.skip('deploy template', () => {
   });
 
   it('could deploy spring boot gradle example without providing a template.yaml', async () => {
-    process.chdir('./examples/spring-boot-example/');
+    process.chdir('./examples/spring-boot-gradle-demo/');
     expect(await deploy()).to.be(undefined);
   });
 
