@@ -77,5 +77,4 @@ describe.skip('deploy template', () => {
     process.chdir('./examples/spring-boot-gradle-demo/');
     expect(await deploy()).to.be(undefined);
   });
-
 });
