@@ -49,7 +49,7 @@ const FUN_GENERATED_SERVICE = 'fun-generated-default-service';
 
 const SYSTEM_DEPENDENCY_PATH = path.join('.fun', 'root');
 
-const SUPPORT_RUNTIMES = ['nodejs6', 'nodejs8', 'nodejs10', 'python2.7', 'python3', 'java8', 'custom'];
+const SUPPORT_RUNTIMES = ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'custom'];
 
 const defaultVpcConfig = {
   securityGroupId: '',
@@ -85,6 +85,7 @@ const runtimeTypeMapping = {
   'nodejs6': ['node_modules', '.fun/root'],
   'nodejs8': ['node_modules', '.fun/root'],
   'nodejs10': ['node_modules', '.fun/root'],
+  'nodejs12': ['node_modules', '.fun/root'],
   'python2.7': ['.fun/python', '.fun/root'],
   'python3': ['.fun/python', '.fun/root'],
   'php7.2': ['extension', 'vendor', '.fun/root']
@@ -184,6 +185,7 @@ const runtimeDependencyMappings = {
   'nodejs6': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
   'nodejs8': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
   'nodejs10': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
+  'nodejs12': [NODE_RUNTIME_MAPPING, FONTS_MAPPING],
   'python2.7': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
   'python3': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
   'java8': [JAVA_RUNTIME_MAPPING, FONTS_MAPPING],
@@ -707,7 +709,7 @@ async function processWar(absCodeUri, warfilePath) {
 
   if (await fs.pathExists(targetAbsPath)) {
     console.log('repackage war file ', absWarfilePath);
-    await repackPackage(tmpCodeDir, 
+    await repackPackage(tmpCodeDir,
       path.join('WEB-INF', 'lib'),
       absWarfilePath, targetAbsPath);
   } else {
@@ -938,7 +940,7 @@ async function checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri) {
   if (stat.size < 102400) { // 10 KB
     const content = await fs.readFile(bootstrapPath, 'utf8');
     // 对于 custom runtime 的 spring boot，如果检测到超过 50M，会提示使用 NAS 向导
-    // 如果用户输入了 yes 确认，则会将 spring boot 打包的 jar 进行 repackage 
+    // 如果用户输入了 yes 确认，则会将 spring boot 打包的 jar 进行 repackage
     // 以及修改 bootstrap 的内容，即将 java -jar -Dserver.port=$PORT target/java-getting-started-1.0.jar 修改为 java org.springframework.boot.loader.PropertiesLauncher
     // 这里通过检测 java org.springframework.boot.loader.PropertiesLauncher 判断用户是否输入 yes 确认过，避免多次确认
     return _.includes(content, 'org.springframework.boot.loader.PropertiesLauncher');

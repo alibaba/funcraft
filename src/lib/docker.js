@@ -567,7 +567,7 @@ async function run(opts, event, outputStream, errorStream, context = {}) {
 
   await container.start();
 
-  // dockerode bugs on windows. attach could not receive output and error 
+  // dockerode bugs on windows. attach could not receive output and error
   if (isWin) {
     const logStream = await container.logs({
       stdout: true,
@@ -801,6 +801,7 @@ function displaySboxTips(runtime) {
   case 'nodejs6':
   case 'nodejs8':
   case 'nodejs10':
+  case 'nodejs12':
     console.log(yellow(`You can install node modules like this:`));
     console.log(yellow(`fun-install npm install puppeteer\n`));
     break;

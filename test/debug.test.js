@@ -125,6 +125,28 @@ describe('test generateVscodeDebugConfig', () => {
     });
   });
 
+  it('test nodejs12', async function () {
+
+    const debugConfig = await generateVscodeDebugConfig(serviceName, functionName, 'nodejs12', '.', 9000);
+
+    expect(debugConfig).to.eql({
+      'version': '0.2.0',
+      'configurations': [
+        {
+          'name': 'fc/testService/testFunction',
+          'type': 'node',
+          'request': 'attach',
+          'address': 'localhost',
+          'port': 9000,
+          'localRoot': '.',
+          'remoteRoot': '/code',
+          'protocol': 'inspector',
+          'stopOnEntry': false
+        }
+      ]
+    });
+  });
+
 
   it('test java8', async function () {
 
@@ -195,6 +217,11 @@ describe('test generateDebugEnv', () => {
     expect(env).to.eql({ 'DEBUG_OPTIONS': '--inspect-brk=0.0.0.0:9000' });
   });
 
+  it('test nodejs12', async function () {
+    const env = await generateDebugEnv('nodejs12', 9000);
+    expect(env).to.eql({ 'DEBUG_OPTIONS': '--inspect-brk=0.0.0.0:9000' });
+  });
+
   it('test php7.2', async function () {
     const env = await generateDebugEnv('php7.2', 9000);
     expect(env.XDEBUG_CONFIG).to.contain('remote_enable=1 remote_autostart=1 remote_port=9000 remote_host=');
@@ -219,7 +246,7 @@ describe('test generateDebugEnv', () => {
 describe('test generateDockerDebugOpts', () => {
   it('test not php7.2', async function () {
     for (let runtime of ['python2.7', 'python3', 'java8', 'nodejs6', 'nodejs8']) {
-      const debugOpts = await generateDockerDebugOpts(runtime, 9000); 
+      const debugOpts = await generateDockerDebugOpts(runtime, 9000);
 
       expect(debugOpts).to.eql({
         'ExposedPorts': {

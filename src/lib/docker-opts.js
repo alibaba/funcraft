@@ -27,11 +27,12 @@ let DOCKER_REGISTRY_CACHE;
 const runtimeImageMap = {
   'nodejs6': 'nodejs6',
   'nodejs8': 'nodejs8',
+  'nodejs10': 'nodejs10',
+  'nodejs12': 'nodejs12',
   'python2.7': 'python2.7',
   'python3': 'python3.6',
   'java8': 'java8',
   'php7.2': 'php7.2',
-  'nodejs10': 'nodejs10',
   'dotnetcore2.1': 'dotnetcore2.1',
   'custom': 'custom'
 };
@@ -45,7 +46,7 @@ async function doImageRegisterEventTag(el) {
   visitor.event({
     ec: 'imageRegistry',
     ea: 'resolve',
-    el 
+    el
   }).send();
 }
 
@@ -153,7 +154,7 @@ function transformMountsForToolbox(mounts) {
 
       return transformSourcePathOfMount(m);
     });
-  } 
+  }
   return transformSourcePathOfMount(mounts);
 }
 
@@ -214,7 +215,7 @@ async function generateLocalInvokeOpts(runtime, containerName, mounts, cmd, debu
   };
 
   let debugOpts = {};
-  
+
   if (debugPort) {
     debugOpts = generateDockerDebugOpts(runtime, debugPort, debugIde);
   }
@@ -301,7 +302,7 @@ async function generateLocalStartOpts(runtime, name, mounts, cmd, debugPort, env
   return opts;
 }
 
-// Not Run stage: 
+// Not Run stage:
 //  for linux platform, it will always use process.uid and process.gid
 //  for mac and windows platform, it will always use 0
 // Run stage:
@@ -332,7 +333,7 @@ function resolveDockerUser({nasConfig, stage = 'run'}) {
 }
 
 module.exports = {
-  generateLocalInvokeOpts, resolveRuntimeToDockerImage, 
+  generateLocalInvokeOpts, resolveRuntimeToDockerImage,
   generateInstallOpts, generateSboxOpts,
   generateLocalStartOpts,
   resolveMockScript, resolveDockerEnv, transformPathForVirtualBox,

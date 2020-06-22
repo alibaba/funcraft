@@ -1,4 +1,5 @@
 {
+    "event-nodejs12":  "{{ templatePath }}/event-nodejs12",
     "event-nodejs10":  "{{ templatePath }}/event-nodejs10",
     "event-nodejs8":  "{{ templatePath }}/event-nodejs8",
     "event-nodejs6":  "{{ templatePath }}/event-nodejs6",
@@ -7,6 +8,7 @@
     "event-java8":  "{{ templatePath }}/event-java8",
     "event-php7.2":  "{{ templatePath }}/event-php7.2",
     "event-dotnetcore2.1":  "{{ templatePath }}/event-dotnetcore2.1",
+    "http-trigger-nodejs12":  "{{ templatePath }}/http-trigger-nodejs12",
     "http-trigger-nodejs10":  "{{ templatePath }}/http-trigger-nodejs10",
     "http-trigger-nodejs8":  "{{ templatePath }}/http-trigger-nodejs8",
     "http-trigger-nodejs6":  "{{ templatePath }}/http-trigger-nodejs6",
