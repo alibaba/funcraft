@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.6.13",
+  "version": "3.6.14",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
@@ -24,7 +24,7 @@
     ]
   },
   "fc-docker": {
-    "version": "1.9.5",
+    "version": "1.9.6",
     "registry_default": "registry.cn-beijing.aliyuncs.com",
     "registry_mirrors": [
       "registry.cn-beijing.aliyuncs.com",
@@ -61,7 +61,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.13.0",
+    "@alicloud/fc-builders": "^0.14.0",
     "@alicloud/fc2": "^2.2.1",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
@@ -141,7 +141,9 @@
     "update-notifier": "^3.0.0",
     "urlencode": "^1.1.0",
     "uuid-by-string": "^3.0.2",
-    "yaml-ast-parser": "0.0.43"
+    "yaml-ast-parser": "0.0.43",
+    "typescript": "3.4.5",
+    "copyfiles": "^2.2.0"
   },
   "files": [
     "lib",
@@ -154,7 +156,6 @@
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "chai-fs": "^2.0.0",
-    "copyfiles": "^2.2.0",
     "decache": "^4.5.1",
     "eslint": "^6.8.0",
     "expect.js": "^0.3.1",
@@ -165,8 +166,7 @@
     "pkg": "^4.4.0",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
-    "suppose": "^0.6.2",
-    "typescript": "3.4.5"
+    "suppose": "^0.6.2"
   },
   "repository": {
     "type": "git",
