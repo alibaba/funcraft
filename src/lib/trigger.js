@@ -424,7 +424,7 @@ async function makeTrigger({
   return trigger;
 }
 
-function findFunctionsInCustomDomain(tpl) {
+function findFunctionsInCustomDomain(tpl = {}) {
   const functions = [];
 
   iterateResources(tpl.Resources, 'Aliyun::Serverless::CustomDomain', (domainLogicId, domainDefinition) => {
