@@ -345,6 +345,18 @@ function generateRosTemplateForRegionMap() {
         'cn-hongkong': {
           'ZoneId': 'cn-hongkong-c'
         },
+        'cn-chengdu': {
+          'ZoneId': 'cn-chengdu-a'
+        },
+        'ap-southeast-3': {
+          'ZoneId': 'ap-southeast-3a'
+        },
+        'eu-west-1': {
+          'ZoneId': 'eu-west-1a'
+        },
+        'eu-central-1': {
+          'ZoneId': 'eu-central-a'
+        },
         'ap-southeast-1': {
           'ZoneId': 'ap-southeast-1a'
         },
