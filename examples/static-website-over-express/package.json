@@ -5,7 +5,7 @@
   "private": true,
   "author": {
     "name": "邓超",
-    "url": "https://github.com/XieEDeHeiShou"
+    "url": "https://github.com/DevDengChao"
   },
   "scripts": {
     "start": "node ./express-bootstrap.js"
