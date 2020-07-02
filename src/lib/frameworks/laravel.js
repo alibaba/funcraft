@@ -72,7 +72,7 @@ server {
       proxy_read_timeout 180;
   }
 
-  location ~ /\.(?!well-known).* {
+  location ~ /\\.(?!well-known).* {
       deny all;
   }
 }
