@@ -226,19 +226,15 @@ async function transformSlsAuto(tpl) {
   return cloneTpl;
 }
 
-async function checkBucketRegion(region) {
-  const { defaultRegion } = await getProfile();
-  if (region !== `oss-${defaultRegion}`) {
-    throw new Error(`\nThe current oss-bucket region is ${region}, which is different from the configured region ${defaultRegion}.\n`);
-  }
-}
-
 async function bucketExist(ossClient, bucketName) {
   let bucketExist = false;
 
   try {
     const { location } = await ossClient.getBucketLocation(bucketName);
-    await checkBucketRegion(location);
+    const { defaultRegion } = await getProfile();
+    if (location !== `oss-${defaultRegion}`) {
+      throw new Error(`\nThe current oss-bucket region is ${location}, which is different from the configured region ${defaultRegion}.\n`);
+    }
     bucketExist = true;
   } catch (ex) {
 
