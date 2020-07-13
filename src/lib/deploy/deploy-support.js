@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs-extra');
+const path = require('path');
 const ram = require('../ram');
 const debug = require('debug')('fun:deploy');
 const promiseRetry = require('../retry');
@@ -254,12 +255,50 @@ async function makeCustomDomain({
     let privateKey = certConfig.PrivateKey;
     let certificate = certConfig.Certificate;
 
-    if (privateKey && privateKey.endsWith('.pem')) {
-      certConfig.PrivateKey = await fs.readFile(privateKey, 'utf-8');
-    }
-    if (certificate && certificate.endsWith('.pem')) {
-      certConfig.Certificate = await fs.readFile(certificate, 'utf-8');
-    }
+    if (privateKey) {
+      //region resolve RSA private key content
+      let p = path.resolve(__dirname, privateKey);
+      // private key is provided by local file
+      if (fs.pathExistsSync(p)) {
+        certConfig.PrivateKey = fs.readFileSync(p, 'utf-8');
+      } // or it is hardcoded
+      //endregion
+
+      //region validate RSA private key content
+      let expectedPrefix = '-----BEGIN RSA PRIVATE KEY-----', expectedSuffix = '-----END RSA PRIVATE KEY-----';
+      if (!certConfig.PrivateKey.startsWith(expectedPrefix) || !certConfig.PrivateKey.endsWith(expectedSuffix)) {
+        throw new Error(red(`
+        Please provide a valid PEM encoded RSA private key for ${domainName}.
+        It's content MUST start with "${expectedPrefix}" AND end with "${expectedSuffix}".
+        
+        See:
+        http://fileformats.archiveteam.org/wiki/PEM_encoded_RSA_private_key`));
+      }
+      //endregion
+    } // private key is not provided
+
+    if (certificate) {
+      //region resolve certificate content
+      let p = path.resolve(__dirname, certificate);
+      // certificate is provided by local file
+      if (fs.pathExistsSync(p)) {
+        certConfig.Certificate = fs.readFileSync(p, 'utf-8');
+      } // or it is hardcoded
+      //endregion
+
+      //region validate certificate content
+      let expectedPrefix = '-----BEGIN CERTIFICATE-----', expectedSuffix = '-----END CERTIFICATE-----';
+      if (!certConfig.Certificate.startsWith(expectedPrefix) || !certConfig.Certificate.endsWith(expectedSuffix)) {
+        throw new Error(red(`
+        Please provide a valid PEM encoded certificate for ${domainName}.
+        It's content MUST start with "${expectedPrefix}" AND end with "${expectedSuffix}".
+        
+        See:
+        http://fileformats.archiveteam.org/wiki/PEM_encoded_certificate`));
+      }
+      //endregion
+    } // certificate is not provided
+
     Object.assign(options, {
       certConfig
     });
