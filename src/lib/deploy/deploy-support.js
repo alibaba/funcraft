@@ -7,9 +7,9 @@ const debug = require('debug')('fun:deploy');
 const promiseRetry = require('../retry');
 const getProfile = require('../profile').getProfile;
 
-const {green, red} = require('colors');
-const {processApiParameters} = require('./deploy-support-api');
-const {getCloudApiClient, getSlsClient, getMnsClient} = require('../client');
+const { green, red } = require('colors');
+const { processApiParameters } = require('./deploy-support-api');
+const { getCloudApiClient, getSlsClient, getMnsClient } = require('../client');
 
 const EXPECTED_RSA_PRIVATE_KEY_PREFIX = '-----BEGIN RSA PRIVATE KEY-----';
 const EXPECTED_RSA_PRIVATE_KEY_SUFFIX = '-----END RSA PRIVATE KEY-----';
@@ -81,9 +81,7 @@ async function makeLogstore({
         console.log(red(`\t\tretry ${times} times`));
 
         retry(ex);
-      } else {
-        exists = false;
-      }
+      } else { exists = false; }
     }
   });
 
@@ -161,9 +159,7 @@ async function slsProjectExist(slsClient, projectName) {
 
         console.log(red(`\tretry ${times} times`));
         retry(ex);
-      } else {
-        projectExist = false;
-      }
+      } else { projectExist = false; }
     }
   });
   return projectExist;
@@ -419,11 +415,9 @@ async function makeApi(group, {
         'requestPath': requestPath
       }, requestConfig);
 
-      const {
-        apiRequestParameters,
+      const { apiRequestParameters,
         apiServiceParameters,
-        apiServiceParametersMap
-      } = processApiParameters(requestParameters, serviceParameters, serviceParametersMap);
+        apiServiceParametersMap } = processApiParameters(requestParameters, serviceParameters, serviceParametersMap);
 
       const profile = await getProfile();
 
