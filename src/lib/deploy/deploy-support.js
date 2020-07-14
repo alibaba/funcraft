@@ -260,7 +260,7 @@ async function makeCustomDomain({
       let p = path.resolve(__dirname, privateKey);
       // private key is provided by local file
       if (fs.pathExistsSync(p)) {
-        certConfig.PrivateKey = fs.readFileSync(p, 'utf-8');
+        certConfig.PrivateKey = await fs.readFile(p, 'utf-8');
       } // or it is hardcoded
       //endregion
 
@@ -282,7 +282,7 @@ async function makeCustomDomain({
       let p = path.resolve(__dirname, certificate);
       // certificate is provided by local file
       if (fs.pathExistsSync(p)) {
-        certConfig.Certificate = fs.readFileSync(p, 'utf-8');
+        certConfig.Certificate = await fs.readFile(p, 'utf-8');
       } // or it is hardcoded
       //endregion
 
