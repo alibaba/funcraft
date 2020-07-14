@@ -11,6 +11,11 @@ const {green, red} = require('colors');
 const {processApiParameters} = require('./deploy-support-api');
 const {getCloudApiClient, getSlsClient, getMnsClient} = require('../client');
 
+const EXPECTED_RSA_PRIVATE_KEY_PREFIX = '-----BEGIN RSA PRIVATE KEY-----';
+const EXPECTED_RSA_PRIVATE_KEY_SUFFIX = '-----END RSA PRIVATE KEY-----';
+const EXPECTED_CERTIFICATE_PREFIX = '-----BEGIN CERTIFICATE-----';
+const EXPECTED_CERTIFICATE_SUFFIX = '-----END CERTIFICATE-----';
+
 const {
   getOtsClient,
   getOtsPopClient,
@@ -265,11 +270,10 @@ async function makeCustomDomain({
       //endregion
 
       //region validate RSA private key content
-      let expectedPrefix = '-----BEGIN RSA PRIVATE KEY-----', expectedSuffix = '-----END RSA PRIVATE KEY-----';
-      if (!certConfig.PrivateKey.startsWith(expectedPrefix) || !certConfig.PrivateKey.endsWith(expectedSuffix)) {
+      if (!certConfig.PrivateKey.startsWith(EXPECTED_RSA_PRIVATE_KEY_PREFIX) || !certConfig.PrivateKey.endsWith(EXPECTED_RSA_PRIVATE_KEY_SUFFIX)) {
         throw new Error(red(`
         Please provide a valid PEM encoded RSA private key for ${domainName}.
-        It's content MUST start with "${expectedPrefix}" AND end with "${expectedSuffix}".
+        It's content MUST start with "${EXPECTED_RSA_PRIVATE_KEY_PREFIX}" AND end with "${EXPECTED_RSA_PRIVATE_KEY_SUFFIX}".
         
         See:
         http://fileformats.archiveteam.org/wiki/PEM_encoded_RSA_private_key`));
@@ -287,11 +291,10 @@ async function makeCustomDomain({
       //endregion
 
       //region validate certificate content
-      let expectedPrefix = '-----BEGIN CERTIFICATE-----', expectedSuffix = '-----END CERTIFICATE-----';
-      if (!certConfig.Certificate.startsWith(expectedPrefix) || !certConfig.Certificate.endsWith(expectedSuffix)) {
+      if (!certConfig.Certificate.startsWith(EXPECTED_CERTIFICATE_PREFIX) || !certConfig.Certificate.endsWith(EXPECTED_CERTIFICATE_SUFFIX)) {
         throw new Error(red(`
         Please provide a valid PEM encoded certificate for ${domainName}.
-        It's content MUST start with "${expectedPrefix}" AND end with "${expectedSuffix}".
+        It's content MUST start with "${EXPECTED_CERTIFICATE_PREFIX}" AND end with "${EXPECTED_CERTIFICATE_SUFFIX}".
         
         See:
         http://fileformats.archiveteam.org/wiki/PEM_encoded_certificate`));
