@@ -89,7 +89,7 @@ async function processNasAutoToRosTemplate({ tpl, baseDir, tplPath,
         console.warn(`\n${srcPath} is not exist, skiping.`);
         continue;
       }
-      if (await isEmptyDir(srcPath)) {
+      if (isEmptyDir(srcPath)) {
         console.warn(`\n${srcPath} is empty directory, skiping.`);
         continue;
       }

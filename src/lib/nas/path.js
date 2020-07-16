@@ -1,9 +1,13 @@
 'use strict';
 
+const fs = require('fs-extra');
 const path = require('path');
-const readdirp = require('readdirp');
+const walkdir = require('walkdir');
+
 const { red } = require('colors');
 const { isEmptyDir } = require('./cp/file');
+
+const _ = require('lodash');
 
 // Windows 下 process.env.HOME、process.env.USERPROFILE 均返回用户 home 目录
 // macOS 下 process.env.HOME 返回用户 home 目录，process.env.USERPROFILE 和 process.env.HOMEPATH均返回 undefined
@@ -50,28 +54,35 @@ function endWithSlash(inputPath) {
   return inputPath.charAt(inputPath.length - 1) === '/';
 }
 
-async function readDirRecursive(dirPath) {
-  const files = await readdirp.promise(dirPath, { type: 'files' });
-  const dirs = await readdirp.promise(dirPath, { type: 'directories' });
+function readDirRecursive(rootPath) {
+  return new Promise((resolve, reject) => {
 
-  const relativePaths = [];
-  // windows 下需要将压缩文件路径住转换为 POXIS 路径
-  if (process.platform === 'win32') {
-    files.map(file => relativePaths.push((file.path).split(path.sep).join('/')));
-    for (let dir of dirs) {
-      if (await isEmptyDir(dir.fullPath)) {
-        relativePaths.push(`${(dir.path).split(path.sep).join('/')}/`);
-      }
-    }
-  } else {
-    files.map(file => relativePaths.push(file.path));
-    for (let dir of dirs) {
-      if (await isEmptyDir(dir.fullPath)) {
-        relativePaths.push(`${dir.path}/`);
-      }
-    }
-  }
-  return relativePaths;
+    const relativePaths = [];
+
+    if (isEmptyDir(rootPath)) { return resolve(relativePaths); }
+
+    walkdir(rootPath, {
+      'track_inodes': true
+    })
+      .on('path', (fullPath, stat) => {
+
+        let relativePath = path.relative(rootPath, fullPath);
+
+        if (process.platform === 'win32') {
+          relativePath = relativePath.split(path.sep).join('/');
+        }
+
+        if (stat.isDirectory()) {
+          if (!_.isEmpty(fs.readdirSync(fullPath))) { return; }
+        
+          relativePath = `${relativePath}/`;
+        
+        }
+
+        relativePaths.push(relativePath);
+      })
+      .on('end', (path, stat) => resolve(relativePaths));
+  });
 }
 
 module.exports = {

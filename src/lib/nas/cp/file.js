@@ -43,10 +43,10 @@ async function getFileHash(filePath) {
   throw new Error('get file hash error, target is not a file, target path is: ' + filePath);
 }
 
-async function isEmptyDir(path) {
-  const lstat = await fs.lstat(path);
+function isEmptyDir(path) {
+  const lstat = fs.lstatSync(path);
   if (lstat.isDirectory()) {
-    const dirs = await fs.readdir(path);
+    const dirs = fs.readdirSync(path);
     if (_.isEmpty(dirs)) {
       return true;
     }
