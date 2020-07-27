@@ -10,44 +10,106 @@ const functionSchema = {
       'const': 'Aliyun::Serverless::Function'
     },
     'Properties': {
-      'type': 'object',
-      'properties': {
-        'Handler': {
-          'type': 'string'
-        },
-        'Initializer': {
-          'type': 'string'
-        },
-        'Runtime': {
-          'type': 'string',
-          'enum': ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'php7.2', 'dotnetcore2.1', 'custom']
-        },
-        'CodeUri': {
-          'type': 'string'
-        },
-        'Description': {
-          'type': 'string'
-        },
-        'Timeout': {
-          'type': 'integer'
-        },
-        'InitializationTimeout': {
-          'type': 'integer'
-        },
-        'EnvironmentVariables': {
-          'type': 'object'
-        },
-        'MemorySize': {
-          'type': 'integer'
-        },
-        'InstanceConcurrency': {
-          'type': 'integer',
-          'minimum': 1,
-          'maximum': 100
+      'oneOf': [
+        {
+          'type': 'object',
+          'properties': {
+            'Handler': {
+              'type': 'string'
+            },
+            'Initializer': {
+              'type': 'string'
+            },
+            'Runtime': {
+              'type': 'string',
+              'enum': ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'php7.2', 'dotnetcore2.1', 'custom']
+            },
+            'CodeUri': {
+              'type': 'string'
+            },
+            'Description': {
+              'type': 'string'
+            },
+            'Timeout': {
+              'type': 'integer'
+            },
+            'InitializationTimeout': {
+              'type': 'integer'
+            },
+            'EnvironmentVariables': {
+              'type': 'object'
+            },
+            'MemorySize': {
+              'type': 'integer'
+            },
+            'CAPort': {
+              'type': 'integer'
+            },
+            'InstanceConcurrency': {
+              'type': 'integer',
+              'minimum': 1,
+              'maximum': 100
+            }
+          },
+          'required': ['Handler', 'Runtime', 'CodeUri'],
+          'additionalProperties': false
+        }, {
+          'type': 'object',
+          'properties': {
+            'Handler': {
+              'type': 'string'
+            },
+            'Initializer': {
+              'type': 'string'
+            },
+            'Runtime': {
+              'type': 'string',
+              'enum': ['custom-container']
+            },
+            'Description': {
+              'type': 'string'
+            },
+            'Timeout': {
+              'type': 'integer'
+            },
+            'InitializationTimeout': {
+              'type': 'integer'
+            },
+            'EnvironmentVariables': {
+              'type': 'object'
+            },
+            'MemorySize': {
+              'type': 'integer'
+            },
+            'CustomContainerConfig': {
+              'type': 'object',
+              'properties': {
+                'Args': {
+                  'type': 'string'
+                },
+                'Command': {
+                  'type': 'string'
+                },
+                'Image': {
+                  'type': 'string'
+                }
+              },
+              'required': ['Image']
+            },
+            'CAPort': {
+              'type': 'integer'
+            },
+            'InstanceConcurrency': {
+              'type': 'integer',
+              'minimum': 1,
+              'maximum': 100
+            }
+          },
+          'required': ['Runtime', 'CustomContainerConfig', 'CAPort'],
+          'additionalProperties': false
         }
-      },
-      'required': ['Handler', 'Runtime', 'CodeUri'],
-      'additionalProperties': false
+      ]
+      
     },
     'Events': {
       'type': 'object',

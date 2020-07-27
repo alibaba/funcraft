@@ -10,6 +10,7 @@ const debug = require('debug')('fun:deploy');
 const definition = require('../definition');
 const date = require('date-and-time');
 
+const { execSync } = require('child_process');
 const { deployByRos } = require('./deploy-support-ros');
 const { importService } = require('../import/service');
 const { getProfile, mark } = require('../profile');
@@ -118,6 +119,8 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     memorySize: properties.MemorySize,
     runtime: properties.Runtime,
     codeUri: properties.CodeUri,
+    customContainerConfig: properties.CustomContainerConfig,
+    cAPort: properties.CAPort,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
@@ -891,6 +894,45 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
   }
 }
 
+async function dockerBuildAndPush(useDocker, images) {
+  if (images.length === 0) {
+    return;
+  }
+  let dockerfile = useDocker;
+
+  if (typeof useDocker === 'boolean') {
+    dockerfile = 'Dockerfile';
+  }
+
+  const dir = process.cwd();
+
+  for (const endRegistry of images) {
+    await execSync(`docker build -t ${endRegistry} -f ${dockerfile} .`, {
+      cwd: dir,
+      stdio: 'inherit'
+    });
+  
+    await execSync(`docker push ${endRegistry}`, {
+      cwd: dir,
+      stdio: 'inherit'
+    });
+  }
+}
+
+function getFunctionImage(data, images) {
+  for (const k in data) {
+    const v = data[k];
+    if (_.isObject(v)) {
+      if (v.Type === 'Aliyun::Serverless::Function') {
+        const { CustomContainerConfig = {} } = v.Properties || {};
+        images.push(CustomContainerConfig.Image)
+      } else {
+        getFunctionImage(v, images)
+      }
+    }
+  }
+}
+
 async function deploy(tplPath, context) {
   if (!context.useRos) {
     await validate(tplPath);
@@ -899,13 +941,20 @@ async function deploy(tplPath, context) {
     // https://api.aliyun.com/#/?product=ROS&api=ValidateTemplate&tab=DEMO&lang=NODEJS
   }
 
+  const tpl = await getTpl(tplPath);
+
+  // 如果是通过镜像部署函数并配置了 useDocker， 则先使用 docker build && docker push
+  if (context.useDocker) {
+    const images = [];
+    getFunctionImage(tpl, images);
+    await dockerBuildAndPush(context.useDocker, images);
+  }
+
   const profile = await getProfile();
   console.log(`using region: ${profile.defaultRegion}`);
   console.log(`using accountId: ${mark(profile.accountId)}`);
   console.log(`using accessKeyId: ${mark(profile.accessKeyId)}`);
   console.log(`using timeout: ${profile.timeout}\n`);
-
-  const tpl = await getTpl(tplPath);
 
   const baseDir = path.resolve(tplPath, '..');
   const dirName = path.basename(baseDir);

@@ -36,6 +36,7 @@ program
   .option('--use-ros', 'Deploy resources using ROS')
   .option('--use-nas', 'Automatically upload local resources to NAS.')
   .option('--stack-name <stackName>', 'The name of the ROS stack')
+  .option('--use-docker [dockerFile]', 'Execute docker build and docker push.')
   .parse(process.argv);
 
 if (program.args.length > 1) {
@@ -52,6 +53,7 @@ const context = {
   useNas: program.useNas,
   stackName: program.stackName,
   assumeYes: program.assumeYes || false,
+  useDocker: program.useDocker,
   parameterOverride: program.parameterOverride
 };
 

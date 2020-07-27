@@ -1141,13 +1141,16 @@ async function makeFunction(baseDir, {
   memorySize = 128,
   runtime = 'nodejs6',
   codeUri,
+  cAPort,
+  customContainerConfig,
   environmentVariables = {},
   instanceConcurrency,
   nasConfig,
   vpcConfig
 }, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
-
+  
+  const isNotCustomContainer = runtime !== 'custom-container';
   var fn;
   try {
     fn = await fc.getFunction(serviceName, functionName);
@@ -1167,7 +1170,7 @@ async function makeFunction(baseDir, {
 
     if (codeUri && codeUri.startsWith('oss://')) { // oss://my-bucket/function.zip
       code = extractOssCodeUri(codeUri);
-    } else {
+    } else if (isNotCustomContainer) { // custom-container 镜像依赖，不需要设置代码
 
       const fontsConfEnv = await generateFontsConfAndEnv(baseDir, codeUri);
       if (!_.isEmpty(fontsConfEnv)) {
@@ -1210,15 +1213,20 @@ async function makeFunction(baseDir, {
     }
   }
 
-  const confEnv = await resolveLibPathsFromLdConf(baseDir, codeUri);
-
-  Object.assign(environmentVariables, confEnv);
-
   const params = {
-    description, handler, initializer, code,
-    timeout, initializationTimeout, memorySize, runtime, instanceConcurrency,
-    environmentVariables: addEnv(castEnvironmentVariables(environmentVariables), nasConfig)
+    description, handler, initializer,
+    timeout, initializationTimeout, memorySize,
+    runtime, instanceConcurrency
   };
+  if (isNotCustomContainer) {
+    params.code = code;
+    const confEnv = await resolveLibPathsFromLdConf(baseDir, codeUri);
+    Object.assign(environmentVariables, confEnv);
+  } else {
+    params.CAPort = cAPort;
+    params.CustomContainerConfig = customContainerConfig;
+  }
+  params.environmentVariables = addEnv(castEnvironmentVariables(environmentVariables), nasConfig);
 
   if (!fn) {
     params['functionName'] = functionName;

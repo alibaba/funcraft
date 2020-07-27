@@ -144,55 +144,128 @@ export const rosSchema = {
           ]
         },
         "Properties": {
-          "type": "object",
-          "properties": {
-            "Handler": {
-              "type": "string"
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "Handler": {
+                  "type": "string"
+                },
+                "Initializer": {
+                  "type": "string"
+                },
+                "Runtime": {
+                  "type": "string",
+                  "enum": ["custom-container"]
+                },
+                "CAPort": {
+                  "type": "integer"
+                },
+                'CustomContainerConfig': {
+                  'type': 'object',
+                  'properties': {
+                    'Args': {
+                      'type': 'string'
+                    },
+                    'Command': {
+                      'type': 'string'
+                    },
+                    'Image': {
+                      'type': 'string'
+                    }
+                  },
+                  'required': ['Image']
+                },
+                "Description": {
+                  "type": "string"
+                },
+                "Timeout": {
+                  "type": "integer"
+                },
+                "InitializationTimeout": {
+                  "type": "integer"
+                },
+                "EnvironmentVariables": {
+                  "type": "object"
+                },
+                "MemorySize": {
+                  "type": "integer",
+                  "enum": [
+                    128, 192, 256, 320, 384, 448, 512, 576, 640, 704,
+                    768, 832, 896, 960, 1024, 1088, 1152, 1216, 1280,
+                    1344, 1408, 1472, 1536, 1600, 1664, 1728, 1792,
+                    1856, 1920, 1984, 2048, 2112, 2176, 2240, 2304,
+                    2368, 2432, 2496, 2560, 2624, 2688, 2752, 2816,
+                    2880, 2944, 3008, 3072
+                  ]
+                },
+                "InstanceConcurrency": {
+                  "type": "integer"
+                }
+              },
+              "required": ["Runtime", "CAPort", "CustomContainerConfig"],
+              "additionalProperties": false,
+              "document": {
+                "default": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03.md#aliyunserverlessfunction",
+                "zh-CN": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessfunction",
+                "zh-TW": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessfunction"
+              }
             },
-            "Initializer": {
-              "type": "string"
-            },
-            "Runtime": {
-              "type": "string",
-              "enum": ["nodejs6", "nodejs8", "nodejs10", "nodejs12", "python2.7", "python3", "java8", "php7.2", "dotnetcore2.1", "custom"]
-            },
-            "CodeUri": {
-              "type": "string"
-            },
-            "Description": {
-              "type": "string"
-            },
-            "Timeout": {
-              "type": "integer"
-            },
-            "InitializationTimeout": {
-              "type": "integer"
-            },
-            "EnvironmentVariables": {
-              "type": "object"
-            },
-            "MemorySize": {
-              "type": "integer",
-              "enum": [
-                128, 192, 256, 320, 384, 448, 512, 576, 640, 704,
-                768, 832, 896, 960, 1024, 1088, 1152, 1216, 1280,
-                1344, 1408, 1472, 1536, 1600, 1664, 1728, 1792,
-                1856, 1920, 1984, 2048, 2112, 2176, 2240, 2304,
-                2368, 2432, 2496, 2560, 2624, 2688, 2752, 2816,
-                2880, 2944, 3008, 3072
-              ]
-            },
-            "InstanceConcurrency": {
-              "type": "integer"
+            {
+              "type": "object",
+              "properties": {
+                "Handler": {
+                  "type": "string"
+                },
+                "Initializer": {
+                  "type": "string"
+                },
+                "Runtime": {
+                  "type": "string",
+                  "enum": ["nodejs6", "nodejs8", "nodejs10", "nodejs12", "python2.7", "python3", "java8", "php7.2", "dotnetcore2.1", "custom"]
+                },
+                "CodeUri": {
+                  "type": "string"
+                },
+                "CAPort": {
+                  "type": "integer"
+                },
+                "Description": {
+                  "type": "string"
+                },
+                "Timeout": {
+                  "type": "integer"
+                },
+                "InitializationTimeout": {
+                  "type": "integer"
+                },
+                "EnvironmentVariables": {
+                  "type": "object"
+                },
+                "MemorySize": {
+                  "type": "integer",
+                  "enum": [
+                    128, 192, 256, 320, 384, 448, 512, 576, 640, 704,
+                    768, 832, 896, 960, 1024, 1088, 1152, 1216, 1280,
+                    1344, 1408, 1472, 1536, 1600, 1664, 1728, 1792,
+                    1856, 1920, 1984, 2048, 2112, 2176, 2240, 2304,
+                    2368, 2432, 2496, 2560, 2624, 2688, 2752, 2816,
+                    2880, 2944, 3008, 3072
+                  ]
+                },
+                "InstanceConcurrency": {
+                  "type": "integer"
+                }
+              },
+              "required": ["Handler", "Runtime", "CodeUri"],
+              "additionalProperties": false,
+              "document": {
+                "default": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03.md#aliyunserverlessfunction",
+                "zh-CN": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessfunction",
+                "zh-TW": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessfunction"
+              }
             }
-          },
-          "required": ["Handler", "Runtime", "CodeUri"],
-          "additionalProperties": false,
-          "document": {
-            "default": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03.md#aliyunserverlessfunction",
-            "zh-CN": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessfunction",
-            "zh-TW": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03-zh-cn.md#aliyunserverlessfunction"
-          }
+          ]
         },
         "Events": {
           "type": "object",
