@@ -919,15 +919,20 @@ async function dockerBuildAndPush(useDocker, images) {
   }
 }
 
-function getFunctionImage(data, images) {
-  for (const k in data) {
-    const v = data[k];
+function getFunctionImage({ tpl, images }) {
+  for (const k in tpl) {
+    const v = tpl[k];
     if (_.isObject(v)) {
       if (v.Type === 'Aliyun::Serverless::Function') {
         const { CustomContainerConfig = {} } = v.Properties || {};
-        images.push(CustomContainerConfig.Image)
+        if (CustomContainerConfig.Image && CustomContainerConfig.Image.startsWith('registry-vpc')) {
+          CustomContainerConfig.Image = CustomContainerConfig.Image.replace(/registry-vpc/, 'registry');
+        }
+        if (images) {
+          images.push(CustomContainerConfig.Image);
+        }
       } else {
-        getFunctionImage(v, images)
+        getFunctionImage({ tpl: v, images });
       }
     }
   }
@@ -943,10 +948,10 @@ async function deploy(tplPath, context) {
 
   const tpl = await getTpl(tplPath);
 
+  const images = [];
+  getFunctionImage({ tpl, images });
   // 如果是通过镜像部署函数并配置了 useDocker， 则先使用 docker build && docker push
   if (context.useDocker) {
-    const images = [];
-    getFunctionImage(tpl, images);
     await dockerBuildAndPush(context.useDocker, images);
   }
 
