@@ -5,7 +5,7 @@
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "lib": ["es6"],
+    "lib": ["dom", "es6"],
     "module": "commonjs",
     "target": "es6",
     "baseUrl": ".",
