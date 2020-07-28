@@ -135,7 +135,7 @@ function getTriggerConfig(triggerType, triggerProperties) {
   console.error(`trigger type is ${triggerType} not supported.`);
 }
 
-async function makeInvocationRole(serviceName, functionName, triggerType) {
+async function makeInvocationRole(serviceName, functionName, triggerType, qualifier) {
   if (triggerType === 'Log') {
 
     const invocationRoleName = ram.normalizeRoleOrPoliceName(`AliyunFcGeneratedInvocationRole-${serviceName}-${functionName}`);
@@ -302,7 +302,7 @@ async function makeInvocationRole(serviceName, functionName, triggerType) {
         'Action': [
           'fc:InvokeFunction'
         ],
-        'Resource': `acs:fc:*:*:services/${serviceName}/functions/*`,
+        'Resource': qualifier ? `acs:fc:*:*:services/${serviceName}.*/functions/*` : `acs:fc:*:*:services/${serviceName}/functions/*`,
         'Effect': 'Allow'
       }]
     });
@@ -380,7 +380,7 @@ async function makeTrigger({
   let invocationRoleArn = triggerProperties.InvocationRole;
 
   if (!invocationRoleArn) {
-    const invocationRole = await makeInvocationRole(serviceName, functionName, triggerType);
+    const invocationRole = await makeInvocationRole(serviceName, functionName, triggerType, triggerProperties.Qualifier);
 
     if (invocationRole) {
       invocationRoleArn = invocationRole.Arn;
