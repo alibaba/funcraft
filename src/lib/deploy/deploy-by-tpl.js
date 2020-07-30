@@ -813,38 +813,7 @@ async function fetchRemoteYml(baseDir, tpl) {
   return await getTpl(importYmlPath);
 }
 
-async function deployByApi(baseDir, tpl, tplPath, context) {
-
-  const remoteYml = await fetchRemoteYml(baseDir, tpl);
-
-  const { resourceName, resourceRes } = await partialDeployment(context.resourceName, tpl);
-
-  if (resourceName) {
-    const { Type: resourceType = '' } = resourceRes;
-    if (resourceType === definition.SERVICE_RESOURCE) {
-
-      await showResourcesChanges({ Resources: { [resourceName]: resourceRes } }, remoteYml);
-
-      if (!context.assumeYes && !await promptForConfirmContinue('Please confirm to continue.')) { return; }
-
-      await deployTplService({ baseDir, tplPath,
-        serviceName: resourceName,
-        serviceRes: resourceRes,
-        useNas: context.useNas,
-        onlyConfig: context.onlyConfig
-      });
-    } else if (resourceType === definition.FLOW_RESOURCE) {
-      await deployFlow(resourceName, resourceRes, tpl, context.parameterOverride, baseDir);
-    } else {
-      throw new Error(`${resourceName} can not be partial deploy`);
-    }
-    return;
-  }
-
-  await showResourcesChanges(tpl, remoteYml);
-
-  if (!context.assumeYes && !await promptForConfirmContinue('Please confirm to continue.')) { return; }
-
+async function deployResources(tpl, tplPath, baseDir, context) {
   await deployLogs(tpl.Resources);
 
   for (const [name, resource] of Object.entries(tpl.Resources)) {
@@ -891,6 +860,44 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
   }
 }
 
+async function deployByApi(baseDir, tpl, tplPath, context) {
+
+  const remoteYml = await fetchRemoteYml(baseDir, tpl);
+
+  const { resourceName, resourceRes } = await partialDeployment(context.resourceName, tpl);
+
+  if (resourceName) {
+    const { Type: resourceType = '' } = resourceRes;
+    if (resourceType === definition.SERVICE_RESOURCE) {
+
+      await showResourcesChanges({ Resources: { [resourceName]: resourceRes } }, remoteYml);
+
+      if (!context.assumeYes && !await promptForConfirmContinue('Please confirm to continue.')) { return; }
+
+      await deployTplService({ baseDir, tplPath,
+        serviceName: resourceName,
+        serviceRes: resourceRes,
+        useNas: context.useNas,
+        onlyConfig: context.onlyConfig
+      });
+    } else if (resourceType === definition.FLOW_RESOURCE) {
+      await deployFlow(resourceName, resourceRes, tpl, context.parameterOverride, baseDir);
+    } else {
+      throw new Error(`${resourceName} can not be partial deploy`);
+    }
+    return;
+  }
+
+  await showResourcesChanges(tpl, remoteYml);
+
+  if (!context.assumeYes && !await promptForConfirmContinue('Please confirm to continue.')) { return; }
+
+  await deployResources(tpl, tplPath, baseDir, context);
+
+  const serviceNasMappings = await getNasMappingsFromNasYml(getNasYmlPath(tplPath));
+  showTipsForNasYml(getRootBaseDir(baseDir), serviceNasMappings);
+}
+
 async function deploy(tplPath, context) {
   if (!context.useRos) {
     await validate(tplPath);
@@ -922,8 +929,6 @@ async function deploy(tplPath, context) {
   } else {
 
     await deployByApi(baseDir, tpl, tplPath, context);
-    const serviceNasMappings = await getNasMappingsFromNasYml(getNasYmlPath(tplPath));
-    showTipsForNasYml(getRootBaseDir(baseDir), serviceNasMappings);
   }
 }
 

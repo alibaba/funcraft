@@ -44,7 +44,8 @@ describe('test generateBuildContainerBuildOpts', () => {
         'LD_LIBRARY_PATH=/code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code/.fun/root/python/lib/python2.7/site-packages:/code/.fun/root/python/lib/python3.6/site-packages:/code:/code/lib:/usr/local/lib',
         'PATH=/code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code:/code/node_modules/.bin:/code/.fun/python/bin:/code/.fun/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin',
         'NODE_PATH=/code/node_modules:/usr/local/lib/node_modules',
-        'PYTHONUSERBASE=/code/.fun/python'
+        'PYTHONUSERBASE=/code/.fun/python',
+        'PYTHONPATH=/code/.fun/python/lib/python/site-packages'
       ],
       'Image': `aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}`,
       'name': 'containerName',

@@ -18,8 +18,13 @@ function addEnv(envVars, nasConfig) {
   envs['NODE_PATH'] = generateNodePaths(envs, '/code');
 
   const defaultPythonPath = `${prefix}/python`;
+
   if (!envs['PYTHONUSERBASE']) {
     envs['PYTHONUSERBASE'] = defaultPythonPath;
+  }
+
+  if (!envs['PYTHONPATH']) {
+    envs['PYTHONPATH'] = `${defaultPythonPath}/lib/python/site-packages`;
   }
 
   if (nasConfig) {
