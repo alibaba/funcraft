@@ -2,9 +2,10 @@
 
 const functionSchema = require('../../validate/schema/function');
 
-const supportedRuntimes = functionSchema.properties.
-  Properties.properties.
-  Runtime.enum;
+const propertiesOneOf = functionSchema.properties.Properties.oneOf;
+const supportedRuntime0 = propertiesOneOf[0].properties.Runtime.enum;
+const supportedRuntime1 = propertiesOneOf[1].properties.Runtime.enum;
+const supportedRuntimes = supportedRuntime0.concat(supportedRuntime1);
 
 function isSupportedRuntime(runtime) {
   return supportedRuntimes.includes(runtime);

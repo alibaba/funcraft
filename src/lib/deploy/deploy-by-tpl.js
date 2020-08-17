@@ -900,7 +900,7 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
 */ 
 
 function getFunctionImage({ tpl, pushRegistry, region }) {
-  for (const k in tpl) {
+  for (const k of Object.keys(tpl)) {
     const v = tpl[k];
     if (_.isObject(v)) {
       if (v.Type === 'Aliyun::Serverless::Function') {

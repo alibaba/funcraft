@@ -6,7 +6,7 @@ const fs = require('fs');
 
 async function dockerBuildAndPush(dockerfileUri, image, baseDir, functionName, serviceName) {
   if (!image) {
-    console.log(yellow(`The mirror under '${serviceName/functionName}' is empty.`));
+    console.log(yellow(`The mirror under '${serviceName}/${functionName}' is empty.`));
     return;
   }
 
@@ -33,4 +33,4 @@ async function dockerBuildAndPush(dockerfileUri, image, baseDir, functionName, s
 
 module.exports = {
   dockerBuildAndPush
-}
+};
