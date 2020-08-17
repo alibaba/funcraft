@@ -10,6 +10,7 @@ const debug = require('debug')('fun:deploy');
 const definition = require('../definition');
 const date = require('date-and-time');
 
+const { execSync } = require('child_process');
 const { deployByRos } = require('./deploy-support-ros');
 const { importService } = require('../import/service');
 const { getProfile, mark } = require('../profile');
@@ -118,6 +119,8 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     memorySize: properties.MemorySize,
     runtime: properties.Runtime,
     codeUri: properties.CodeUri,
+    customContainerConfig: properties.CustomContainerConfig,
+    cAPort: properties.CAPort,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
@@ -891,6 +894,49 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
   }
 }
 
+// 
+/*
+
+*/ 
+
+function getFunctionImage({ tpl, pushRegistry, region }) {
+  for (const k in tpl) {
+    const v = tpl[k];
+    if (_.isObject(v)) {
+      if (v.Type === 'Aliyun::Serverless::Function') {
+        const { CustomContainerConfig = {} } = v.Properties || {};
+        let image = CustomContainerConfig.Image;
+        if (image) {
+          // 如果是 acr-internet, 则 push地址为  registry.{region}.aliyuncs.com/*/*:tag
+          // 如果是 acr-vpc，则 push地址为 registry-vpc.{region}.aliyuncs.com/*/*:tag
+          // 如果为其他， 则push地址为 输入/*/*:tag
+          const iamgeArr = image.split('/');
+          if (pushRegistry === 'acr-internet') {
+            iamgeArr[0] = `registry.${region}.aliyuncs.com`;
+            image = iamgeArr.join('/');
+          } else if (pushRegistry === 'acr-vpc') {
+            iamgeArr[0] = `registry-vpc.${region}.aliyuncs.com`;
+            image = iamgeArr.join('/');
+          } else if (pushRegistry) {
+            iamgeArr[0] = pushRegistry;
+            image = iamgeArr.join('/');
+          }
+          console.log(`docker tag ${CustomContainerConfig.Image}· ${image}`);
+          execSync(`docker tag ${CustomContainerConfig.Image} ${image}`, {
+            stdio: 'inherit'
+          });
+          console.log(`docker push ${image}`);
+          execSync(`docker push ${image}`, {
+            stdio: 'inherit'
+          });
+        }
+      } else {
+        getFunctionImage({ tpl: v, pushRegistry, region });
+      }
+    }
+  }
+}
+
 async function deploy(tplPath, context) {
   if (!context.useRos) {
     await validate(tplPath);
@@ -899,13 +945,17 @@ async function deploy(tplPath, context) {
     // https://api.aliyun.com/#/?product=ROS&api=ValidateTemplate&tab=DEMO&lang=NODEJS
   }
 
+  const tpl = await getTpl(tplPath);
   const profile = await getProfile();
+
+  if (context.pushRegistry) {
+    getFunctionImage({ tpl, region: profile.defaultRegion, pushRegistry: context.pushRegistry });
+  }
+
   console.log(`using region: ${profile.defaultRegion}`);
   console.log(`using accountId: ${mark(profile.accountId)}`);
   console.log(`using accessKeyId: ${mark(profile.accessKeyId)}`);
   console.log(`using timeout: ${profile.timeout}\n`);
-
-  const tpl = await getTpl(tplPath);
 
   const baseDir = path.resolve(tplPath, '..');
   const dirName = path.basename(baseDir);
