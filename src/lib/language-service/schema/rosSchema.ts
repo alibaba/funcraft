@@ -182,6 +182,10 @@ export const rosSchema = {
                 "Description": {
                   "type": "string"
                 },
+                "InstanceType": {
+                  "type": "string",
+                  "enum": ["ElasticInstance", "EnhancedInstance"],
+                },
                 "Timeout": {
                   "type": "integer"
                 },
@@ -199,7 +203,8 @@ export const rosSchema = {
                     1344, 1408, 1472, 1536, 1600, 1664, 1728, 1792,
                     1856, 1920, 1984, 2048, 2112, 2176, 2240, 2304,
                     2368, 2432, 2496, 2560, 2624, 2688, 2752, 2816,
-                    2880, 2944, 3008, 3072
+                    2880, 2944, 3008, 3072,
+                    4096, 8192, 16384, 32768, // 大规格示例
                   ]
                 },
                 "InstanceConcurrency": {
@@ -253,8 +258,13 @@ export const rosSchema = {
                     1344, 1408, 1472, 1536, 1600, 1664, 1728, 1792,
                     1856, 1920, 1984, 2048, 2112, 2176, 2240, 2304,
                     2368, 2432, 2496, 2560, 2624, 2688, 2752, 2816,
-                    2880, 2944, 3008, 3072
+                    2880, 2944, 3008, 3072,
+                    4096, 8192, 16384, 32768, // 大规格示例
                   ]
+                },
+                "InstanceType": {
+                  "type": "string",
+                  "enum": ["ElasticInstance", "EnhancedInstance"],
                 },
                 "InstanceConcurrency": {
                   "type": "integer"

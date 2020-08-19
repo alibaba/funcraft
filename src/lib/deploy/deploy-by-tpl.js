@@ -121,6 +121,7 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     codeUri: properties.CodeUri,
     customContainerConfig: properties.CustomContainerConfig,
     cAPort: properties.CAPort,
+    instanceType: properties.InstanceType,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
@@ -893,11 +894,6 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
     }
   }
 }
-
-// 
-/*
-
-*/ 
 
 function getFunctionImage({ tpl, pushRegistry, region }) {
   for (const k of Object.keys(tpl)) {
