@@ -25,6 +25,7 @@ const { getTriggerNameList, makeTrigger } = require('../trigger');
 const { getTpl, getRootBaseDir, getNasYmlPath } = require('../tpl');
 const { transformFunctionInDefinition, transformFlowDefinition } = require('../fnf');
 const { makeService, makeFunction, deleteFunction, makeFcUtilsFunctionTmpDomainToken } = require('../fc');
+const { FUNCTION_TYPE } = require('../import/constants');
 
 const _ = require('lodash');
 
@@ -156,7 +157,7 @@ async function deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, t
     tplChanged = false;
 
     for (const [k, v] of Object.entries(serviceRes)) {
-      if ((v || {}).Type === 'Aliyun::Serverless::Function') {
+      if ((v || {}).Type === FUNCTION_TYPE) {
         if (_.includes(deployedFunctions, k)) { continue; }
 
         const beforeDeployLog = onlyConfig ? 'config to be updated' : 'to be deployed';
@@ -894,44 +895,40 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
   }
 }
 
-// 
-/*
+async function getpushRegistry(image, pushRegistry, region, configImage) {
+  const imageArr = image.split('/');
+  if (pushRegistry === 'acr-internet') {
+    imageArr[0] = `registry.${region}.aliyuncs.com`;
+    image = imageArr.join('/');
+  } else if (pushRegistry === 'acr-vpc') {
+    imageArr[0] = `registry-vpc.${region}.aliyuncs.com`;
+    image = imageArr.join('/');
+  } else if (pushRegistry) {
+    imageArr[0] = pushRegistry;
+    image = imageArr.join('/');
+  }
+  console.log(`docker tag ${configImage} ${image}`);
+  execSync(`docker tag ${configImage} ${image}`, {
+    stdio: 'inherit'
+  });
+  console.log(`docker push ${image}`);
+  execSync(`docker push ${image}`, {
+    stdio: 'inherit'
+  });
+}
 
-*/ 
-
-function getFunctionImage({ tpl, pushRegistry, region }) {
-  for (const k in tpl) {
+async function getFunctionImage({ tpl, pushRegistry, region }) {
+  for (const k of _.keys(tpl)) {
     const v = tpl[k];
     if (_.isObject(v)) {
       if (v.Type === 'Aliyun::Serverless::Function') {
         const { CustomContainerConfig = {} } = v.Properties || {};
         let image = CustomContainerConfig.Image;
         if (image) {
-          // 如果是 acr-internet, 则 push地址为  registry.{region}.aliyuncs.com/*/*:tag
-          // 如果是 acr-vpc，则 push地址为 registry-vpc.{region}.aliyuncs.com/*/*:tag
-          // 如果为其他， 则push地址为 输入/*/*:tag
-          const iamgeArr = image.split('/');
-          if (pushRegistry === 'acr-internet') {
-            iamgeArr[0] = `registry.${region}.aliyuncs.com`;
-            image = iamgeArr.join('/');
-          } else if (pushRegistry === 'acr-vpc') {
-            iamgeArr[0] = `registry-vpc.${region}.aliyuncs.com`;
-            image = iamgeArr.join('/');
-          } else if (pushRegistry) {
-            iamgeArr[0] = pushRegistry;
-            image = iamgeArr.join('/');
-          }
-          console.log(`docker tag ${CustomContainerConfig.Image}· ${image}`);
-          execSync(`docker tag ${CustomContainerConfig.Image} ${image}`, {
-            stdio: 'inherit'
-          });
-          console.log(`docker push ${image}`);
-          execSync(`docker push ${image}`, {
-            stdio: 'inherit'
-          });
+          await getpushRegistry(image, pushRegistry, region, CustomContainerConfig.Image);
         }
       } else {
-        getFunctionImage({ tpl: v, pushRegistry, region });
+        await getFunctionImage({ tpl: v, pushRegistry, region });
       }
     }
   }

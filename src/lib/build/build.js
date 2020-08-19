@@ -186,6 +186,9 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
     const runtime = functionRes.Properties.Runtime;
     const codeUri = functionRes.Properties.CodeUri;
     if (runtime === 'custom-container') {
+      if (!buildStage) {
+        continue;
+      }
       if (!useDocker) {
         throw new Error(`Runtime custom-container must use --use-docker`);
       }

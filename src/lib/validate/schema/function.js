@@ -99,8 +99,8 @@ const functionSchema = {
             'CAPort': {
               'type': 'integer'
             },
-            "CodeUri": {
-              "type": "string"
+            'CodeUri': {
+              'type': 'string'
             },
             'InstanceConcurrency': {
               'type': 'integer',

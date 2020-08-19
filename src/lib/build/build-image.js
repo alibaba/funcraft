@@ -1,36 +1,36 @@
 const { execSync } = require('child_process');
 const { yellow } = require('colors');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 
 async function dockerBuildAndPush(dockerfileUri, image, baseDir, functionName, serviceName) {
   if (!image) {
-    console.log(yellow(`The mirror under '${serviceName/functionName}' is empty.`));
+    console.log(yellow(`The mirror under '${serviceName}/${functionName}' is empty.`));
     return;
   }
 
   let dockerfile = path.join(baseDir, dockerfileUri || '');
-  if (!fs.existsSync(dockerfile)) {
+  if (!await fs.exists(dockerfile)) {
     throw new Error(`File ${dockerfile} not found.`);
   }
-  const stat = fs.statSync(dockerfile);
+  const stat = await fs.stat(dockerfile);
   if (stat.isDirectory()) {
-    dockerfile = path.join(baseDir, dockerfileUri || '', 'Dockerfile');
-    if (!fs.existsSync(dockerfile)) {
+    dockerfile = path.join(dockerfile, 'Dockerfile');
+    if (!await fs.exists(dockerfile)) {
       throw new Error(`File ${dockerfile} not found.`);
     }
   }
 
-  if (!fs.existsSync(dockerfile)) {
+  if (!await fs.exists(dockerfile)) {
     throw new Error(`File ${dockerfile} not found.`);
   }
-  
-  await execSync(`docker build -t ${image} -f ${dockerfile} .`, {
+
+  execSync(`docker build -t ${image} -f ${dockerfile} .`, {
     stdio: 'inherit'
   });
 }
 
 module.exports = {
   dockerBuildAndPush
-}
+};

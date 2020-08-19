@@ -1170,7 +1170,7 @@ async function makeFunction(baseDir, {
 
     if (codeUri && codeUri.startsWith('oss://')) { // oss://my-bucket/function.zip
       code = extractOssCodeUri(codeUri);
-    } else if (isNotCustomContainer) { // custom-container 镜像依赖，不需要设置代码
+    } else if (isNotCustomContainer) {
 
       const fontsConfEnv = await generateFontsConfAndEnv(baseDir, codeUri);
       if (!_.isEmpty(fontsConfEnv)) {
