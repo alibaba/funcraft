@@ -654,11 +654,13 @@ async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride
   let { stackId, stackStatus } = await findRosStack(rosClient, region, stackName);
 
   let changeSetId;
+  let createStack = false;
   if (!stackId) { // create
     const changeSet = await createChangeSet(rosClient, region, stackName, tpl, parseRosParameters(tpl.Parameters, parameterOverride));
 
     changeSetId = changeSet.changeSetId;
     stackId = changeSet.stackId;
+    createStack = true;
   } else { // update
 
     if (_.includes(DELETE_LAST_DEPLOYMENT_FAILED_STATUS, stackStatus)) {
@@ -687,7 +689,7 @@ async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride
     if (!await promptForConfirmContinue('Please confirm to continue.')) {
       if (canDelete) { await deleteChangeSet(rosClient, changeSetId, region); }
       // 当删除类型为 CREATE 的更改集时，需要自行删除其关联的资源栈。
-      if (status === 'CREATE_COMPLETE') { await deleteStack(rosClient, stackId, region); }
+      if (status === 'CREATE_COMPLETE' && createStack) { await deleteStack(rosClient, stackId, region); }
       return;
     }
   }
