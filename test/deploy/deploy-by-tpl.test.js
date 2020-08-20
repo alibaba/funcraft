@@ -178,6 +178,8 @@ describe('deploy', () => {
       path.join(process.cwd(), 'examples', 'local_http'), {
         codeUri: 'nodejs8/',
         description: 'http trigger demo with nodejs8!',
+        cAPort: undefined,
+        customContainerConfig: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
         functionName: 'nodejs8',
@@ -223,6 +225,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         serviceName: 'MyService',
         timeout: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
@@ -253,6 +257,8 @@ describe('deploy', () => {
         runtime: 'nodejs8',
         serviceName: 'fc',
         timeout: 60,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
@@ -286,6 +292,8 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
@@ -330,6 +338,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: { ROOT_DIR: '/mnt/test' },
         instanceConcurrency: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         nasConfig: {
           GroupId: -1,
           UserId: -1,
@@ -359,6 +369,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: { ROOT_DIR: '/mnt/test' },
         instanceConcurrency: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         nasConfig: {
           GroupId: -1,
           UserId: -1,
@@ -399,6 +411,8 @@ describe('deploy', () => {
         runtime: 'nodejs8',
         serviceName: 'fc',
         timeout: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
@@ -470,6 +484,8 @@ describe('deploy', () => {
         serviceName: 'test-tableStore-service',
         timeout: undefined,
         initializationTimeout: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
@@ -512,6 +528,8 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
@@ -556,6 +574,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('rds-trigger'));
@@ -599,6 +619,8 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
@@ -645,6 +667,8 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         instanceConcurrency: 10,
         nasConfig: undefined,
         vpcConfig: undefined
@@ -698,6 +722,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('mnsTopic-trigger'));
@@ -740,6 +766,8 @@ describe('deploy', () => {
         timeout: undefined,
         initializationTimeout: undefined,
         environmentVariables: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
@@ -815,6 +843,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('segment'));
@@ -872,6 +902,8 @@ describe('deploy', () => {
         serviceName: 'MyService',
         timeout: undefined,
         initializationTimeout: undefined,
+        cAPort: undefined,
+        customContainerConfig: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
@@ -916,6 +948,8 @@ describe('deploy', () => {
         environmentVariables: undefined,
         instanceConcurrency: undefined,
         nasConfig: undefined,
+        customContainerConfig: undefined,
+        cAPort: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('wechat'));
     assert.alwaysCalledWith(deploySupport.makeGroup, {
@@ -968,6 +1002,8 @@ describe('deploy', () => {
         initializationTimeout: undefined,
         environmentVariables: undefined,
         instanceConcurrency: undefined,
+        customContainerConfig: undefined,
+        cAPort: undefined,
         nasConfig: undefined,
         vpcConfig: undefined
       }, undefined, getTplPath('wechat'));
@@ -1048,6 +1084,8 @@ describe('deploy', () => {
         handler: 'main.my_handler',
         initializationTimeout: undefined,
         initializer: 'main.my_initializer',
+        cAPort: undefined,
+        customContainerConfig: undefined,
         memorySize: undefined,
         runtime: 'python2.7',
         serviceName: 'initializerdemo',
@@ -1114,6 +1152,8 @@ describe('deploy', () => {
         initializer: undefined,
         memorySize: undefined,
         runtime: 'nodejs6',
+        cAPort: undefined,
+        customContainerConfig: undefined,
         initializationTimeout: undefined,
         serviceName: 'localdemo',
         timeout: undefined,
@@ -1149,6 +1189,8 @@ describe('deploy', () => {
         initializer: undefined,
         memorySize: undefined,
         runtime: 'nodejs8',
+        cAPort: undefined,
+        customContainerConfig: undefined,
         initializationTimeout: undefined,
         serviceName: 'sls-auto-service',
         timeout: undefined,

@@ -22,6 +22,7 @@ const { green, red } = require('colors');
 const { recordMtimes } = require('../utils/file');
 const { findFunctionsInTpl } = require('../definition');
 const { DEFAULT_NAS_PATH_SUFFIX } = require('../tpl');
+const { dockerBuildAndPush } = require('./build-image');
 
 const _ = require('lodash');
 
@@ -184,6 +185,16 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
 
     const runtime = functionRes.Properties.Runtime;
     const codeUri = functionRes.Properties.CodeUri;
+    if (runtime === 'custom-container') {
+      if (!buildStage) {
+        continue;
+      }
+      if (!useDocker) {
+        throw new Error(`Runtime custom-container must use --use-docker`);
+      }
+      await dockerBuildAndPush(codeUri, functionRes.Properties.CustomContainerConfig.Image, baseDir, functionName, serviceName);
+      continue;
+    }
     const absCodeUri = path.resolve(baseDir, functionRes.Properties.CodeUri);
 
     await assertCodeUriExist(absCodeUri);

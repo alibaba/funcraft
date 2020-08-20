@@ -10,6 +10,7 @@ const debug = require('debug')('fun:deploy');
 const definition = require('../definition');
 const date = require('date-and-time');
 
+const { execSync } = require('child_process');
 const { deployByRos } = require('./deploy-support-ros');
 const { importService } = require('../import/service');
 const { getProfile, mark } = require('../profile');
@@ -24,6 +25,7 @@ const { getTriggerNameList, makeTrigger } = require('../trigger');
 const { getTpl, getRootBaseDir, getNasYmlPath } = require('../tpl');
 const { transformFunctionInDefinition, transformFlowDefinition } = require('../fnf');
 const { makeService, makeFunction, deleteFunction, makeFcUtilsFunctionTmpDomainToken } = require('../fc');
+const { FUNCTION_TYPE } = require('../import/constants');
 
 const _ = require('lodash');
 
@@ -118,6 +120,8 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     memorySize: properties.MemorySize,
     runtime: properties.Runtime,
     codeUri: properties.CodeUri,
+    customContainerConfig: properties.CustomContainerConfig,
+    cAPort: properties.CAPort,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
@@ -153,7 +157,7 @@ async function deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, t
     tplChanged = false;
 
     for (const [k, v] of Object.entries(serviceRes)) {
-      if ((v || {}).Type === 'Aliyun::Serverless::Function') {
+      if ((v || {}).Type === FUNCTION_TYPE) {
         if (_.includes(deployedFunctions, k)) { continue; }
 
         const beforeDeployLog = onlyConfig ? 'config to be updated' : 'to be deployed';
@@ -891,6 +895,45 @@ async function deployByApi(baseDir, tpl, tplPath, context) {
   }
 }
 
+async function getpushRegistry(image, pushRegistry, region, configImage) {
+  const imageArr = image.split('/');
+  if (pushRegistry === 'acr-internet') {
+    imageArr[0] = `registry.${region}.aliyuncs.com`;
+    image = imageArr.join('/');
+  } else if (pushRegistry === 'acr-vpc') {
+    imageArr[0] = `registry-vpc.${region}.aliyuncs.com`;
+    image = imageArr.join('/');
+  } else if (pushRegistry) {
+    imageArr[0] = pushRegistry;
+    image = imageArr.join('/');
+  }
+  console.log(`docker tag ${configImage} ${image}`);
+  execSync(`docker tag ${configImage} ${image}`, {
+    stdio: 'inherit'
+  });
+  console.log(`docker push ${image}`);
+  execSync(`docker push ${image}`, {
+    stdio: 'inherit'
+  });
+}
+
+async function getFunctionImage({ tpl, pushRegistry, region }) {
+  for (const k of _.keys(tpl)) {
+    const v = tpl[k];
+    if (_.isObject(v)) {
+      if (v.Type === 'Aliyun::Serverless::Function') {
+        const { CustomContainerConfig = {} } = v.Properties || {};
+        let image = CustomContainerConfig.Image;
+        if (image) {
+          await getpushRegistry(image, pushRegistry, region, CustomContainerConfig.Image);
+        }
+      } else {
+        await getFunctionImage({ tpl: v, pushRegistry, region });
+      }
+    }
+  }
+}
+
 async function deploy(tplPath, context) {
   if (!context.useRos) {
     await validate(tplPath);
@@ -899,13 +942,17 @@ async function deploy(tplPath, context) {
     // https://api.aliyun.com/#/?product=ROS&api=ValidateTemplate&tab=DEMO&lang=NODEJS
   }
 
+  const tpl = await getTpl(tplPath);
   const profile = await getProfile();
+
+  if (context.pushRegistry) {
+    getFunctionImage({ tpl, region: profile.defaultRegion, pushRegistry: context.pushRegistry });
+  }
+
   console.log(`using region: ${profile.defaultRegion}`);
   console.log(`using accountId: ${mark(profile.accountId)}`);
   console.log(`using accessKeyId: ${mark(profile.accessKeyId)}`);
   console.log(`using timeout: ${profile.timeout}\n`);
-
-  const tpl = await getTpl(tplPath);
 
   const baseDir = path.resolve(tplPath, '..');
   const dirName = path.basename(baseDir);
