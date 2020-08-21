@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.6.14",
+  "version": "3.6.15",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
@@ -161,7 +161,7 @@
     "memorystream": "^0.3.1",
     "mocha": "^7.1.1",
     "nock": "^10.0.6",
-    "node-pty": "^0.8.1",
+    "node-pty": "^0.9.0",
     "pkg": "^4.4.0",
     "proxyquire": "^2.0.1",
     "sinon": "^5.0.7",
