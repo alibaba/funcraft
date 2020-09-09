@@ -39,6 +39,10 @@ const functionSchema = {
             'EnvironmentVariables': {
               'type': 'object'
             },
+            'InstanceType': {
+              'type': 'string',
+              'enum': ['e1', 'c1']
+            },
             'MemorySize': {
               'type': 'integer'
             },
@@ -77,6 +81,10 @@ const functionSchema = {
             },
             'EnvironmentVariables': {
               'type': 'object'
+            },
+            'InstanceType': {
+              'type': 'string',
+              'enum': ['e1', 'c1']
             },
             'MemorySize': {
               'type': 'integer'

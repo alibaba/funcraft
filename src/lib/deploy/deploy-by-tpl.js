@@ -122,6 +122,7 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     codeUri: properties.CodeUri,
     customContainerConfig: properties.CustomContainerConfig,
     cAPort: properties.CAPort,
+    instanceType: properties.InstanceType,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,

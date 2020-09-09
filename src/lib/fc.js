@@ -1142,6 +1142,7 @@ async function makeFunction(baseDir, {
   runtime = 'nodejs6',
   codeUri,
   cAPort,
+  instanceType,
   customContainerConfig,
   environmentVariables = {},
   instanceConcurrency,
@@ -1216,7 +1217,7 @@ async function makeFunction(baseDir, {
   const params = {
     description, handler, initializer,
     timeout, initializationTimeout, memorySize,
-    runtime, instanceConcurrency
+    runtime, instanceConcurrency, instanceType
   };
   if (isNotCustomContainer) {
     params.code = code;
