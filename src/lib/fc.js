@@ -29,6 +29,7 @@ const { isSpringBootJar } = require('./frameworks/common/java');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
 const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
+const { makeDestination } = require('./function-async-config');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
@@ -1143,6 +1144,7 @@ async function makeFunction(baseDir, {
   codeUri,
   cAPort,
   instanceType,
+  asyncConfiguration,
   customContainerConfig,
   environmentVariables = {},
   instanceConcurrency,
@@ -1248,6 +1250,10 @@ async function makeFunction(baseDir, {
       throw new Error(`\nError message: ${ex.message}.\n\n` + red(`This error may be caused by network latency. You can set the client timeout to a larger value through 'fun config' and try again.`));
     }
     throw ex;
+  }
+
+  if (asyncConfiguration) {
+    await makeDestination(serviceName, functionName, asyncConfiguration);
   }
   return {
     tplChanged: false

@@ -25,6 +25,7 @@ const { getTriggerNameList, makeTrigger } = require('../trigger');
 const { getTpl, getRootBaseDir, getNasYmlPath } = require('../tpl');
 const { transformFunctionInDefinition, transformFlowDefinition } = require('../fnf');
 const { makeService, makeFunction, deleteFunction, makeFcUtilsFunctionTmpDomainToken } = require('../fc');
+const { hasAsyncConfiguration } = require('../function-async-config');
 const { FUNCTION_TYPE } = require('../import/constants');
 
 const _ = require('lodash');
@@ -123,6 +124,7 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     customContainerConfig: properties.CustomContainerConfig,
     cAPort: properties.CAPort,
     instanceType: properties.InstanceType,
+    asyncConfiguration: properties.AsyncConfiguration,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
@@ -222,7 +224,7 @@ function generateRoleNameSuffix(serviceName) {
 }
 
 async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
-  logConfig, roleArn, policies
+  logConfig, roleArn, policies, hasFunctionAsyncConfig
 }) {
 
   const profile = await getProfile();
@@ -247,7 +249,7 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
   // However, in some cases, users do not want to configure ram permissions for ram users.
   // https://github.com/aliyun/fun/issues/182
   // https://github.com/aliyun/fun/pull/223
-  if (!roleArn && (policies || !_.isEmpty(vpcConfig) || !_.isEmpty(logConfig) || !_.isEmpty(nasConfig))) {
+  if (!roleArn && (policies || !_.isEmpty(vpcConfig) || !_.isEmpty(logConfig) || !_.isEmpty(nasConfig) || hasFunctionAsyncConfig)) {
     // create role
     console.log(`\tmake sure role '${roleName}' is exist`);
     role = await makeRole(roleName, createRoleIfNotExist);
@@ -258,6 +260,25 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
     console.log('\tattaching policies ' + JSON.stringify(policies) + ' to role: ' + roleName);
     await deployPolicies(serviceName, roleName, policies);
     console.log(green('\tattached policies ' + JSON.stringify(policies) + ' to role: ' + roleName));
+  }
+
+  if (!roleArn && hasFunctionAsyncConfig) {
+    console.log('\tattaching police \'AliyunFCInvocationAccess\' to role: ' + roleName);
+    await attachPolicyToRole('AliyunFCInvocationAccess', roleName);
+    console.log(green('\tattached police \'AliyunFCInvocationAccess\' to role: ' + roleName));
+
+    const mnsPolicyName = normalizeRoleOrPoliceName(`AliyunFcGeneratedMNSPolicy-${defaultRegion}-${serviceName}`);
+    await makeAndAttachPolicy(mnsPolicyName, {
+      'Version': '1',
+      'Statement': [{
+        'Action': [
+          'mns:SendMessage',
+          'mns:PublishMessage'
+        ],
+        'Resource': '*',
+        'Effect': 'Allow'
+      }]
+    }, roleName);
   }
 
   if (!roleArn && (!_.isEmpty(vpcConfig) || !_.isEmpty(nasConfig))) {
@@ -302,11 +323,13 @@ async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tpl
   const vpcConfig = properties.VpcConfig;
   const nasConfig = properties.NasConfig;
   const logConfig = properties.LogConfig || {};
+  const hasFunctionAsyncConfig = !!hasAsyncConfiguration(serviceRes);
 
   const role = await generateServiceRole({
     serviceName, vpcConfig, nasConfig, logConfig,
     roleArn: properties.Role,
-    policies: properties.Policies
+    policies: properties.Policies,
+    hasFunctionAsyncConfig
   });
 
   await makeService({

@@ -43,6 +43,28 @@ const functionSchema = {
               'type': 'string',
               'enum': ['e1', 'c1']
             },
+            'AsyncConfiguration': {
+              'type': 'object',
+              'properties': {
+                'Destination': {
+                  'type': 'object',
+                  'properties': {
+                    'OnSuccess': {
+                      'type': 'string'
+                    },
+                    'OnFailure': {
+                      'type': 'string'
+                    }
+                  }
+                },
+                'MaxAsyncEventAgeInSeconds': {
+                  'type': 'integer'
+                },
+                'MaxAsyncRetryAttempts': {
+                  'type': 'integer'
+                }
+              }
+            },
             'MemorySize': {
               'type': 'integer'
             },
@@ -85,6 +107,28 @@ const functionSchema = {
             'InstanceType': {
               'type': 'string',
               'enum': ['e1', 'c1']
+            },
+            'AsyncConfiguration': {
+              'type': 'object',
+              'properties': {
+                'Destination': {
+                  'type': 'object',
+                  'properties': {
+                    'OnSuccess': {
+                      'type': 'string'
+                    },
+                    'OnFailure': {
+                      'type': 'string'
+                    }
+                  }
+                },
+                'MaxAsyncEventAgeInSeconds': {
+                  'type': 'integer'
+                },
+                'MaxAsyncRetryAttempts': {
+                  'type': 'integer'
+                }
+              }
             },
             'MemorySize': {
               'type': 'integer'
