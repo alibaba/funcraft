@@ -1242,6 +1242,48 @@ describe('deploy', () => {
         vpcConfig: undefined
       }, undefined, getTplPath('sls_auto'));
   });
+
+  it('deploy function-async-config', async () => {
+    await deploy('function-async-config');
+
+    assert.calledWith(fc.makeService, {
+      description: 'fc test',
+      internetAccess: null,
+      logConfig: {},
+      role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
+      serviceName: 'fc',
+      vpcConfig: undefined,
+      nasConfig: undefined
+    });
+
+    assert.calledWith(fc.makeFunction,
+      path.join(process.cwd(), 'examples', 'function-async-config'), {
+        codeUri: './',
+        description: undefined,
+        functionName: 'function-async-config',
+        handler: 'index.handler',
+        initializer: undefined,
+        memorySize: undefined,
+        instanceType: 'e1',
+        asyncConfiguration: {
+          Destination: {
+            OnSuccess: 'acs:fc:::services/fc.1/functions/test1'
+          },
+          MaxAsyncEventAgeInSeconds: 20,
+          MaxAsyncRetryAttempts: 3
+        },
+        runtime: 'nodejs8',
+        serviceName: 'fc',
+        timeout: 60,
+        cAPort: undefined,
+        customContainerConfig: undefined,
+        initializationTimeout: undefined,
+        environmentVariables: undefined,
+        instanceConcurrency: undefined,
+        nasConfig: undefined,
+        vpcConfig: undefined
+      }, undefined, getTplPath('function-async-config'));
+  });
 });
 
 describe('custom domain', () => {

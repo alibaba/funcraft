@@ -24,19 +24,19 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
   if (OnSuccess) {
     destinationConfig.onSuccess = {
       destination: OnSuccess.replace(':::', `:${defaultRegion}:${accountId}:`)
-    }
+    };
   }
   if (OnFailure) {
     destinationConfig.onFailure = {
       destination: OnFailure.replace(':::', `:${defaultRegion}:${accountId}:`)
-    }
+    };
   }
 
   const asyncConfig = {
     maxAsyncRetryAttempts: asyncConfiguration.MaxAsyncRetryAttempts,
     maxAsyncEventAgeInSeconds: asyncConfiguration.MaxAsyncEventAgeInSeconds,
     destinationConfig
-  }
+  };
 
   let hasAsyncConfig = false;
   const fcClient = await getFcClient();
@@ -46,12 +46,12 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
       destinationConfig: data.destinationConfig,
       maxAsyncEventAgeInSeconds: data.maxAsyncEventAgeInSeconds,
       maxAsyncRetryAttempts: data.maxAsyncRetryAttempts
-    }
+    };
     if (_.isEqual(asyncConfig, asyncConfigCache)) {
       return;
     }
     hasAsyncConfig = true;
-  } catch(ex) {
+  } catch (ex) {
     if (ex.code !== 'AsyncConfigNotExists') {
       throw ex;
     }
@@ -60,13 +60,13 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
   if (hasAsyncConfig) {
     try {
       await fcClient.deleteFunctionAsyncConfig(serviceName, functionName, qualifier);
-    } catch(ex) {
+    } catch (ex) {
       throw ex;
     }
   }
 
   try {
-    await fcClient.putFunctionAsyncConfig(serviceName, functionName, qualifier, asyncConfig)
+    await fcClient.putFunctionAsyncConfig(serviceName, functionName, qualifier, asyncConfig);
   } catch (ex) {
     throw ex;
   }
@@ -75,4 +75,4 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
 module.exports = {
   hasAsyncConfiguration,
   makeDestination
-}
+};
