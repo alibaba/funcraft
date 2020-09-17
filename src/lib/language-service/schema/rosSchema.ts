@@ -176,9 +176,6 @@ export const rosSchema = {
                   },
                   'required': ['Image']
                 },
-                "CodeUri": {
-                  "type": "string"
-                },
                 "Description": {
                   "type": "string"
                 },

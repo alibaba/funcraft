@@ -3,18 +3,6 @@ const { getProfile } = require('./profile');
 const { getFcClient } = require('./client');
 const _ = require('lodash');
 
-function hasAsyncConfiguration(tpl) {
-  return _.findKey(tpl, item => {
-    if (!_.isObject(item)) {
-      return false;
-    }
-    if (Object.keys(item).includes('AsyncConfiguration')) {
-      return true;
-    }
-    return hasAsyncConfiguration(item);
-  });
-}
-
 
 async function makeDestination(serviceName, functionName, asyncConfiguration, qualifier = 'LATEST') {
   const { accountId, defaultRegion } = await getProfile();
@@ -73,6 +61,5 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
 }
 
 module.exports = {
-  hasAsyncConfiguration,
   makeDestination
 };

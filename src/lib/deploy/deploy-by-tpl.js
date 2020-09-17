@@ -25,7 +25,6 @@ const { getTriggerNameList, makeTrigger } = require('../trigger');
 const { getTpl, getRootBaseDir, getNasYmlPath } = require('../tpl');
 const { transformFunctionInDefinition, transformFlowDefinition } = require('../fnf');
 const { makeService, makeFunction, deleteFunction, makeFcUtilsFunctionTmpDomainToken } = require('../fc');
-const { hasAsyncConfiguration } = require('../function-async-config');
 const { FUNCTION_TYPE } = require('../import/constants');
 
 const _ = require('lodash');
@@ -224,7 +223,8 @@ function generateRoleNameSuffix(serviceName) {
 }
 
 async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
-  logConfig, roleArn, policies, hasFunctionAsyncConfig
+  logConfig, roleArn, policies, hasFunctionAsyncConfig,
+  hasCustomContainerConfig
 }) {
 
   const profile = await getProfile();
@@ -249,7 +249,7 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
   // However, in some cases, users do not want to configure ram permissions for ram users.
   // https://github.com/aliyun/fun/issues/182
   // https://github.com/aliyun/fun/pull/223
-  if (!roleArn && (policies || !_.isEmpty(vpcConfig) || !_.isEmpty(logConfig) || !_.isEmpty(nasConfig) || hasFunctionAsyncConfig)) {
+  if (!roleArn && (policies || !_.isEmpty(vpcConfig) || !_.isEmpty(logConfig) || !_.isEmpty(nasConfig) || hasFunctionAsyncConfig || hasCustomContainerConfig)) {
     // create role
     console.log(`\tmake sure role '${roleName}' is exist`);
     role = await makeRole(roleName, createRoleIfNotExist);
@@ -287,6 +287,12 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
     console.log(green('\tattached police \'AliyunECSNetworkInterfaceManagementAccess\' to role: ' + roleName));
   }
 
+  if (!roleArn && hasCustomContainerConfig) {
+    console.log('\tattaching police \'AliyunContainerRegistryReadOnlyAccess\' to role: ' + roleName);
+    await attachPolicyToRole('AliyunContainerRegistryReadOnlyAccess', roleName);
+    console.log(green('\tattached police \'AliyunContainerRegistryReadOnlyAccess\' to role: ' + roleName));
+  }
+
   if (logConfig.Logstore && logConfig.Project) {
     if (!roleArn) {
       const logPolicyName = normalizeRoleOrPoliceName(`AliyunFcGeneratedLogPolicy-${defaultRegion}-${serviceName}`);
@@ -314,6 +320,18 @@ async function generateServiceRole({ serviceName, vpcConfig, nasConfig,
   return ((role || {}).Role || {}).Arn || roleArn || '';
 }
 
+function hasConfiguration(tpl, configKey) {
+  return _.findKey(tpl, item => {
+    if (!_.isObject(item)) {
+      return false;
+    }
+    if (Object.keys(item).includes(configKey)) {
+      return true;
+    }
+    return hasConfiguration(item, configKey);
+  });
+}
+
 async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger = false, useNas, assumeYes }) {
   const properties = (serviceRes.Properties || {});
 
@@ -323,13 +341,15 @@ async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tpl
   const vpcConfig = properties.VpcConfig;
   const nasConfig = properties.NasConfig;
   const logConfig = properties.LogConfig || {};
-  const hasFunctionAsyncConfig = !!hasAsyncConfiguration(serviceRes);
+  const hasFunctionAsyncConfig = !!hasConfiguration(serviceRes, 'AsyncConfiguration');
+  const hasCustomContainerConfig = !!hasConfiguration(serviceRes, 'CustomContainerConfig');
 
   const role = await generateServiceRole({
     serviceName, vpcConfig, nasConfig, logConfig,
     roleArn: properties.Role,
     policies: properties.Policies,
-    hasFunctionAsyncConfig
+    hasFunctionAsyncConfig,
+    hasCustomContainerConfig
   });
 
   await makeService({
