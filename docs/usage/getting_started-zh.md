@@ -100,6 +100,8 @@ ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
 TIMEOUT=10
 RETRIES=3
+FC_ENDPOINT=xxxxxxxxxx
+ENABLE_CUSTOM_ENDPOINT=false/true
 ```
 
 建议将 .env 放到 .gitignore 中，避免泄漏重要的账户信息。
