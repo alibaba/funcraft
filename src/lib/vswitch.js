@@ -91,11 +91,24 @@ async function createVSwitch(vpcClient, {
   return createRs.VSwitchId;
 }
 
-async function selectVSwitchZoneId(fcAllowedZones, vpcZones, nasZones) {
+function takeIntersection(vpcZones, fcAllowedZones, nasZones) {
 
-  const allowedZones = _.filter(vpcZones, z => {
+  const threeIntersection = _.filter(vpcZones, z => {
     return _.includes(fcAllowedZones, z.ZoneId) && _.includes(nasZones.map(zone => { return zone.ZoneId; }), z.ZoneId);
   });
+
+  if (!_.isEmpty(threeIntersection)) {
+    return threeIntersection;
+  }
+
+  return _.filter(vpcZones, z => {
+    return _.includes(fcAllowedZones, z.ZoneId);
+  });
+}
+
+async function selectVSwitchZoneId(fcAllowedZones, vpcZones, nasZones) {
+
+  const allowedZones = takeIntersection(vpcZones, fcAllowedZones, nasZones);
 
   const sortedZones = _.sortBy(allowedZones, ['ZoneId']);
 
