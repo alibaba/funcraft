@@ -102,6 +102,8 @@ ACCESS_KEY_ID=xxxxxxxxxxxx
 ACCESS_KEY_SECRET=xxxxxxxxxx
 TIMEOUT=10
 RETRIES=3
+FC_ENDPOINT=xxxxxxxxxx
+ENABLE_CUSTOM_ENDPOINT=false/true
 ```
 
 It is recommended to add the `.env` into `.gitignore` file to prevent your account credentials from being checked into code repository.
