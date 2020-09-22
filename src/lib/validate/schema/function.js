@@ -39,6 +39,32 @@ const functionSchema = {
             'EnvironmentVariables': {
               'type': 'object'
             },
+            'InstanceType': {
+              'type': 'string',
+              'enum': ['e1', 'c1']
+            },
+            'AsyncConfiguration': {
+              'type': 'object',
+              'properties': {
+                'Destination': {
+                  'type': 'object',
+                  'properties': {
+                    'OnSuccess': {
+                      'type': 'string'
+                    },
+                    'OnFailure': {
+                      'type': 'string'
+                    }
+                  }
+                },
+                'MaxAsyncEventAgeInSeconds': {
+                  'type': 'integer'
+                },
+                'MaxAsyncRetryAttempts': {
+                  'type': 'integer'
+                }
+              }
+            },
             'MemorySize': {
               'type': 'integer'
             },
@@ -78,6 +104,32 @@ const functionSchema = {
             'EnvironmentVariables': {
               'type': 'object'
             },
+            'InstanceType': {
+              'type': 'string',
+              'enum': ['e1', 'c1']
+            },
+            'AsyncConfiguration': {
+              'type': 'object',
+              'properties': {
+                'Destination': {
+                  'type': 'object',
+                  'properties': {
+                    'OnSuccess': {
+                      'type': 'string'
+                    },
+                    'OnFailure': {
+                      'type': 'string'
+                    }
+                  }
+                },
+                'MaxAsyncEventAgeInSeconds': {
+                  'type': 'integer'
+                },
+                'MaxAsyncRetryAttempts': {
+                  'type': 'integer'
+                }
+              }
+            },
             'MemorySize': {
               'type': 'integer'
             },
@@ -98,9 +150,6 @@ const functionSchema = {
             },
             'CAPort': {
               'type': 'integer'
-            },
-            'CodeUri': {
-              'type': 'string'
             },
             'InstanceConcurrency': {
               'type': 'integer',

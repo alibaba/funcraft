@@ -1,0 +1,23 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  fc:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'fc test'
+      Role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc'
+    function-async-config:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: nodejs8
+        CodeUri: './'
+        InstanceType: e1
+        Timeout: 60
+        AsyncConfiguration:
+          Destination:
+            OnSuccess: acs:fc:::services/fc.1/functions/test1
+            # OnFailure: acs:fc:::services/fc.1/functions/test1
+          MaxAsyncEventAgeInSeconds: 20
+          MaxAsyncRetryAttempts: 3
+                        
