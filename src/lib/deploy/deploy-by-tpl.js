@@ -990,7 +990,7 @@ async function deploy(tplPath, context) {
   const profile = await getProfile();
 
   if (context.pushRegistry) {
-    getFunctionImage({ tpl, region: profile.defaultRegion, pushRegistry: context.pushRegistry });
+    await getFunctionImage({ tpl, region: profile.defaultRegion, pushRegistry: context.pushRegistry });
   }
 
   console.log(`using region: ${profile.defaultRegion}`);
