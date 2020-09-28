@@ -124,6 +124,7 @@
     "progress-stream": "^2.0.0",
     "promise-retry": "^1.1.1",
     "promise.prototype.finally": "^3.1.1",
+    "query-string": "^6.12.1",
     "raw-body": "^2.3.3",
     "request-promise": "^4.2.5",
     "require-from-string": "^2.0.2",

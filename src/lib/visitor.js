@@ -3,13 +3,14 @@
 const pkg = require('../package.json');
 
 const uuid = require('uuid');
-
+const httpx = require('httpx');
 const ua = require('universal-analytics');
 const _ = require('lodash');
 const ci = require('ci-info');
 const Conf = require('conf');
 const osName = require('os-name');
-const getProfileFromFile = require('../lib/profile').getProfileFromFile;
+const { getProfileFromFile, getProfile } = require('../lib/profile');
+const querystring = require('query-string');
 
 const detectMocha = require('detect-mocha');
 
@@ -57,7 +58,7 @@ var fakeMocha = {
 };
 
 var real = ua('UA-139874201-1', conf.get('cid'));
-  
+
 real.set('cd1', os);
 real.set('cd2', nodeVersion);
 real.set('cd3', appVersion);
@@ -103,4 +104,31 @@ async function getVisitor(returnFakeIfMissingConfig = false) {
   return visitor;
 }
 
-module.exports = { getVisitor };
+async function getTracker() {
+
+  const profile = await getProfile();
+
+  return async function (data) {
+    if (!profile.report || detectMocha()) {
+      return ;
+    }
+
+    if (!_.isObject(data)) {
+      throw new Error('track data must be json');
+    }
+    
+    data.accountID = profile.accountId;
+    data.regionId = profile.defaultRegion;
+    data.raw = true;
+
+    const queries = querystring.stringify(data);
+    const url = `https://1813774388953700.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/fc-console.prod/log/?${queries}`;
+
+    await httpx.request(url, {
+      method: 'GET',
+      timeout: 2000
+    });
+  };
+}
+
+module.exports = { getVisitor, getTracker };

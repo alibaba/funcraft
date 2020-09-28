@@ -9,6 +9,7 @@ const getProfile = require('./profile').getProfile;
 const securityGroup = require('./security-group');
 const uuid = require('uuid');
 const tmpDir = require('temp-dir');
+const barUtil = require('./import/utils');
 
 const fs = require('fs-extra');
 const path = require('path');
@@ -24,7 +25,6 @@ const { sleep } = require('./time');
 const { makeTrigger } = require('./trigger');
 const { makeSlsAuto } = require('./deploy/deploy-support');
 const { isNotEmptyDir } = require('./nas/cp/file');
-const barUtil = require('./import/utils');
 const { isSpringBootJar } = require('./frameworks/common/java');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
@@ -34,6 +34,7 @@ const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = req
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
 const { isBinary } = require('istextorbinary');
+const { getTracker } = require('./visitor');
 
 const _ = require('lodash');
 
@@ -958,11 +959,22 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
 
   let stop = false;
   let tplChanged = false;
+  
+  const track = await getTracker();
+
+  if (compressedSize !== 0) {
+    track({
+      'size': compressedSize,
+      'type': 'funCodeSize',
+      'stage': stage
+    });
+  }
 
   if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < 52428800)) { return { stop, tplChanged }; }
 
   if (compressedSize > 52428800) {
     console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M. It is recommended that using the nas service to manage your function dependencies.`));
+    
   }
 
   const alreadyConfirmed = await checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri);
