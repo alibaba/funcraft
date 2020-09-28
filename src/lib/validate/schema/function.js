@@ -151,6 +151,9 @@ const functionSchema = {
             'CAPort': {
               'type': 'integer'
             },
+            'CodeUri': {
+              'type': 'string'
+            },
             'InstanceConcurrency': {
               'type': 'integer',
               'minimum': 1,

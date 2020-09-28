@@ -8,6 +8,7 @@ async function pack(options) {
   const bucket = options.ossBucket;
   const useNas = options.useNas;
   const outputTemplateFile = options.outputTemplateFile;
+  const pushRegistry = options.pushRegistry;
 
   if (!tplPath) {
     tplPath = await detectTplPath();
@@ -19,7 +20,7 @@ async function pack(options) {
 
   validateTplName(tplPath);
 
-  await require('../package/package').pack(tplPath, bucket, outputTemplateFile, useNas);
+  await require('../package/package').pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry);
 }
 
 module.exports = pack;

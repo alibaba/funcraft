@@ -18,6 +18,7 @@ const { showPackageNextTips } = require('../build/tips');
 const { ensureFilesModified } = require('../utils/file');
 const { parseMountDirPrefix } = require('../fc');
 const { getTpl, detectNasBaseDir, getNasYmlPath } = require('../tpl');
+const { getFunctionImage } = require('./pushImage');
 const { promptForConfirmContinue, promptForInputContinue } = require('../init/prompt');
 const { validateNasAndVpcConfig, SERVICE_RESOURCE, iterateResources, isNasAutoConfig, isVpcAutoConfig, getUserIdAndGroupId } = require('../definition');
 
@@ -268,7 +269,7 @@ async function processOSSBucket(bucket) {
   return await generateOssBucket(bucket);
 }
 
-async function pack(tplPath, bucket, outputTemplateFile, useNas) {
+async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
   const tpl = await getTpl(tplPath);
   validateNasAndVpcConfig(tpl.Resources);
 
@@ -281,6 +282,10 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas) {
   const ossClient = await getOssClient(bucketName);
 
   const updatedEnvTpl = await processNasPythonPaths(tpl, tplPath);
+  if (pushRegistry) {
+    const profile = await getProfile();
+    await getFunctionImage({ tpl, region: profile.defaultRegion, pushRegistry });
+  }
   const updatedCodeTpl = await uploadAndUpdateFunctionCode({ tpl: updatedEnvTpl, tplPath, baseDir, ossClient, useNas });
   const updatedSlsTpl = await transformSlsAuto(updatedCodeTpl);
   const updatedFlowTpl = await transformFlowDefinition(baseDir, transformCustomDomain(updatedSlsTpl));

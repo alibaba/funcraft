@@ -37,14 +37,21 @@ function updateTemplateResources(originTplContent, buildFuncs, skippedBuildFuncs
       const absCodeDir = path.resolve(baseDir, functionRes.Properties.CodeUri);
       const relativeCodeUri = path.relative(absRootArtifactsDir, absCodeDir);
 
-      functionRes.Properties.CodeUri = relativeCodeUri;
-
+      if (functionRes.Properties.Runtime === 'custom-container') {
+        delete functionRes.Properties.CodeUri;
+      } else {
+        functionRes.Properties.CodeUri = relativeCodeUri;
+      }
     } else { // refer to artifact dir
       const funcArtifactDir = path.join(rootArtifactsDir, serviceName, functionName);
       const absFuncArtifactDir = path.resolve(baseDir, funcArtifactDir);
       const relativeCodeUri = path.relative(absRootArtifactsDir, absFuncArtifactDir);
 
-      functionRes.Properties.CodeUri = relativeCodeUri;
+      if (functionRes.Properties.Runtime === 'custom-container') {
+        delete functionRes.Properties.CodeUri;
+      } else {
+        functionRes.Properties.CodeUri = relativeCodeUri;
+      }
     }
   });
 
