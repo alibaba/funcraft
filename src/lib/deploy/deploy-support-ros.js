@@ -495,7 +495,7 @@ async function detectRosHttpTrigger(rosResources) {
         continue;
       }
 
-      await trigger.displayTriggerInfo(serviceName, functionName, triggerName, triggerProp.TriggerType, triggerProperties);
+      await trigger.displayTriggerInfo(serviceName, functionName, triggerName, triggerProp.TriggerType, triggerProperties, '', rosResources);
     }
   }
 }

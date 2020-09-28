@@ -621,6 +621,10 @@ async function uploadAndUpdateFunctionCode({ tpl, tplPath, useNas, baseDir, ossC
       const runtime = (functionRes.Properties || {}).Runtime;
       const codeUri = (functionRes.Properties || {}).CodeUri;
       const absCodeUri = path.resolve(baseDir, codeUri);
+      if (runtime === 'custom-container') {
+        delete functionRes.Properties.CodeUri;
+        continue;
+      }
 
       if (!await fs.pathExists(absCodeUri)) {
         throw new Error(`codeUri ${absCodeUri} is not exist`);
