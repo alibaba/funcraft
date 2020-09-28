@@ -616,15 +616,16 @@ async function uploadAndUpdateFunctionCode({ tpl, tplPath, useNas, baseDir, ossC
     const codeUriCache = new Map();
 
     for (const {serviceName, serviceRes, functionName, functionRes} of definition.findFunctionsInTpl(updatedTplContent)) {
-      if (isOssUrl((functionRes.Properties || {}).CodeUri)) { continue; }
-
       const runtime = (functionRes.Properties || {}).Runtime;
-      const codeUri = (functionRes.Properties || {}).CodeUri;
-      const absCodeUri = path.resolve(baseDir, codeUri);
       if (runtime === 'custom-container') {
-        delete functionRes.Properties.CodeUri;
+        delete (functionRes.Properties || {}).CodeUri;
         continue;
       }
+
+      if (isOssUrl((functionRes.Properties || {}).CodeUri)) { continue; }
+
+      const codeUri = (functionRes.Properties || {}).CodeUri;
+      const absCodeUri = path.resolve(baseDir, codeUri);
 
       if (!await fs.pathExists(absCodeUri)) {
         throw new Error(`codeUri ${absCodeUri} is not exist`);
