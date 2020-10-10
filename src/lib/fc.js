@@ -958,11 +958,13 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
 
   let stop = false;
   let tplChanged = false;
+  const packageStage = (stage === 'package');
+  const maxCodeSize = packageStage ? 104857600 : 52428800;
 
-  if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < 52428800)) { return { stop, tplChanged }; }
+  if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < maxCodeSize)) { return { stop, tplChanged }; }
 
-  if (compressedSize > 52428800) {
-    console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M. It is recommended that using the nas service to manage your function dependencies.`));
+  if (compressedSize > maxCodeSize) {
+    console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed ${packageStage ? 100 : 50}M. It is recommended that using the nas service to manage your function dependencies.`));
   }
 
   const alreadyConfirmed = await checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri);
@@ -970,7 +972,6 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
   await ensureCodeUriForJava(codeUri, nasServiceName, nasFunctionName);
 
   if (assumeYes || alreadyConfirmed || await promptForConfirmContinue(`Do you want to let fun to help you automate the configuration?`)) {
-    const packageStage = (stage === 'package');
     const tpl = await getTpl(tplPath);
 
     if (definition.isNasAutoConfig(nasConfig)) {
