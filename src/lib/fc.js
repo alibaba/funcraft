@@ -964,7 +964,17 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
   if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < maxCodeSize)) { return { stop, tplChanged }; }
 
   if (compressedSize > maxCodeSize) {
-    console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed ${packageStage ? 100 : 50}M. It is recommended that using the nas service to manage your function dependencies.`));
+    if (packageStage) {
+      console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 100M. It is recommended that using the nas service to manage your function dependencies.`));
+    } else {
+      console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M.`));
+      if (compressedSize < 104857600) {
+        if (await promptForConfirmContinue(`Upload using OSS has been opened up to 100M. You can exit this execution and then deploy your code package directly using fun package && fun deploy. Do you exit?`)) {
+          process.exit(-1); // eslint-disable-line
+        }
+      }
+      console.log(red(`It is recommended that using the nas service to manage your function dependencies.`));
+    }
   }
 
   const alreadyConfirmed = await checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri);
