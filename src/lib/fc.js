@@ -959,17 +959,19 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
   let stop = false;
   let tplChanged = false;
   const packageStage = (stage === 'package');
-  const maxCodeSize = packageStage ? 104857600 : 52428800;
+  const ossUploadCodeSize = process.env['FUN_OSS_UPLOAD_CODE_SIZE'] || 104857600;
+  const tipOssUploadCodeSize = Math.floor(ossUploadCodeSize / 1024 / 1024);
+  const maxCodeSize = packageStage ? ossUploadCodeSize : 52428800;
 
   if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < maxCodeSize)) { return { stop, tplChanged }; }
 
   if (compressedSize > maxCodeSize) {
     if (packageStage) {
-      console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 100M. It is recommended that using the nas service to manage your function dependencies.`));
+      console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed ${tipOssUploadCodeSize}M. It is recommended that using the nas service to manage your function dependencies.`));
     } else {
       console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M.`));
-      if (compressedSize < 104857600) {
-        if (await promptForConfirmContinue(`Upload using OSS has been opened up to 100M. You can exit this execution and then deploy your code package directly using fun package && fun deploy. Do you exit?`)) {
+      if (compressedSize < ossUploadCodeSize) {
+        if (await promptForConfirmContinue(`Upload using OSS has been opened up to ${tipOssUploadCodeSize}M. You can exit this execution and then deploy your code package directly using fun package && fun deploy. Do you exit?`)) {
           process.exit(-1); // eslint-disable-line
         }
       }
