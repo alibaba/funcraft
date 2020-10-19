@@ -971,11 +971,16 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
     } else {
       console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M.`));
       if (compressedSize < ossUploadCodeSize) {
-        if (await promptForConfirmContinue(`Upload using OSS has been opened up to ${tipOssUploadCodeSize}M. You can exit this execution and then deploy your code package directly using fun package && fun deploy. Do you exit?`)) {
-          process.exit(-1); // eslint-disable-line
+        const tipSDKMessage = `Use OSS bucket/object  as a function code, the codeSizeLimit can be expanded to ${tipOssUploadCodeSize}M.You can deploy function with command "fun package && fun deploy"`;
+        if (await promptForConfirmContinue(tipSDKMessage)) {
+          const { execSync } = require('child_process');
+          console.log(`Executing command 'fun package && fun deploy'...`);
+          await execSync('fun package && fun deploy', { stdio: 'inherit' });
         }
+        process.exit(-1); // eslint-disable-line
+      } else {
+        console.log(red(`It is recommended that using the nas service to manage your function dependencies.`));
       }
-      console.log(red(`It is recommended that using the nas service to manage your function dependencies.`));
     }
   }
 
