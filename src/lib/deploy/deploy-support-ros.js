@@ -645,9 +645,28 @@ async function waitStackDeleted(rosClient, stackId, region, stackName) {
   } while (exist);
 }
 
+function transformAsyncConfiguration (resources = {}, region, accountId) {
+  _.forEach(resources, function(value) {
+    if (value.Type === 'ALIYUN::FC::Function' && value.Properties) {
+      if (value.Properties.AsyncConfiguration && value.Properties.AsyncConfiguration.Destination) {
+        const { OnSuccess, OnFailure } = value.Properties.AsyncConfiguration.Destination;
+        if (OnSuccess) {
+          value.Properties.AsyncConfiguration.Destination.OnSuccess = OnSuccess.replace(':::', `:${region}:${accountId}:`);
+        }
+        if (OnFailure) {
+          value.Properties.AsyncConfiguration.Destination.OnFailure = OnFailure.replace(':::', `:${region}:${accountId}:`);
+        }
+      }
+    }
+  });
+}
+
 async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride = {}) {
   const profile = await getProfile();
   const region = profile.defaultRegion;
+  const { accountId } = profile;
+
+  transformAsyncConfiguration(tpl.Resources, region, accountId);
 
   const rosClient = await client.getRosClient();
 
