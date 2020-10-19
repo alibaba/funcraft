@@ -958,11 +958,30 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
 
   let stop = false;
   let tplChanged = false;
+  const packageStage = (stage === 'package');
+  const ossUploadCodeSize = process.env['FUN_OSS_UPLOAD_CODE_SIZE'] || 104857600;
+  const tipOssUploadCodeSize = Math.floor(ossUploadCodeSize / 1024 / 1024);
+  const maxCodeSize = packageStage ? ossUploadCodeSize : 52428800;
 
-  if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < 52428800)) { return { stop, tplChanged }; }
+  if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < maxCodeSize)) { return { stop, tplChanged }; }
 
-  if (compressedSize > 52428800) {
-    console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M. It is recommended that using the nas service to manage your function dependencies.`));
+  if (compressedSize > maxCodeSize) {
+    if (packageStage) {
+      console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed ${tipOssUploadCodeSize}M. It is recommended that using the nas service to manage your function dependencies.`));
+    } else {
+      console.log(red(`\nFun detected that your function ${nasServiceName}/${nasFunctionName} sizes exceed 50M.`));
+      if (compressedSize < ossUploadCodeSize) {
+        const tipSDKMessage = `Use OSS bucket/object  as a function code, the codeSizeLimit can be expanded to ${tipOssUploadCodeSize}M.You can deploy function with command "fun package && fun deploy"`;
+        if (await promptForConfirmContinue(tipSDKMessage)) {
+          const { execSync } = require('child_process');
+          console.log(`Executing command 'fun package && fun deploy'...`);
+          await execSync('fun package && fun deploy', { stdio: 'inherit' });
+        }
+        process.exit(-1); // eslint-disable-line
+      } else {
+        console.log(red(`It is recommended that using the nas service to manage your function dependencies.`));
+      }
+    }
   }
 
   const alreadyConfirmed = await checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri);
@@ -970,7 +989,6 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
   await ensureCodeUriForJava(codeUri, nasServiceName, nasFunctionName);
 
   if (assumeYes || alreadyConfirmed || await promptForConfirmContinue(`Do you want to let fun to help you automate the configuration?`)) {
-    const packageStage = (stage === 'package');
     const tpl = await getTpl(tplPath);
 
     if (definition.isNasAutoConfig(nasConfig)) {
