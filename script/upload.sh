@@ -20,7 +20,7 @@ if ! [ -x "$(command -v ossutil)" ]; then
 fi
 
 OSS_CFG_FILE=./.oss_cfg
-ENDPOINT=cn-hangzhou.oss.aliyun-inc.com
+ENDPOINT=oss-accelerate.aliyuncs.com
 
 echo "Try to load OSS config from $OSS_CFG_FILE"
 if [ -f $OSS_CFG_FILE ]; then
@@ -43,7 +43,7 @@ OSS_ACCESS_KEY_SECRET=$OSS_ACCESS_KEY_SECRET
 EOL
 
 VERSION=`node -p "require('./package').version"`
-CHECK_FILE=oss://oss-attachment/fun/fun-v${VERSION}-linux-x64.zip
+CHECK_FILE=oss://funcruft-release/fun/fun-v${VERSION}-linux-x64.zip
 
 if ossutil ls $CHECK_FILE --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET  | grep "Object Number is: 1" > /dev/null ; then
     echo "Version $VERSION is already uploaded!"
@@ -57,7 +57,7 @@ files=()
 for p in *.zip
 do
     echo $p
-    ossutil cp $p oss://oss-attachment/fun/$p --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET
+    ossutil cp $p oss://funcruft-release/fun/$p --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET
     files+=($p)
 done
 
