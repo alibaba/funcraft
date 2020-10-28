@@ -32,6 +32,7 @@ const runtimeImageMap = {
   'python2.7': 'python2.7',
   'python3': 'python3.6',
   'java8': 'java8',
+  'java11': 'java11',
   'php7.2': 'php7.2',
   'dotnetcore2.1': 'dotnetcore2.1',
   'custom': 'custom'
@@ -65,7 +66,7 @@ async function resolveDockerRegistry() {
   return DOCKER_REGISTRY_CACHE;
 }
 
-const IMAGE_VERSION = pkg['fc-docker'].version || '1.9.2';
+const IMAGE_VERSION = process.env.FC_DOCKER_VERSION || pkg['fc-docker'].version || '1.9.9';
 
 async function resolveRuntimeToDockerImage(runtime, isBuild) {
   if (runtimeImageMap[runtime]) {

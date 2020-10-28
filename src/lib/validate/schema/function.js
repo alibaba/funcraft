@@ -22,7 +22,7 @@ const functionSchema = {
             },
             'Runtime': {
               'type': 'string',
-              'enum': ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'php7.2', 'dotnetcore2.1', 'custom']
+              'enum': ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'java11', 'php7.2', 'dotnetcore2.1', 'custom']
             },
             'CodeUri': {
               'type': 'string'
