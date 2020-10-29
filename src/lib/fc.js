@@ -50,7 +50,7 @@ const FUN_GENERATED_SERVICE = 'fun-generated-default-service';
 
 const SYSTEM_DEPENDENCY_PATH = path.join('.fun', 'root');
 
-const SUPPORT_RUNTIMES = ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'custom'];
+const SUPPORT_RUNTIMES = ['nodejs6', 'nodejs8', 'nodejs10', 'nodejs12', 'python2.7', 'python3', 'java8', 'custom', 'java11', 'dotnetcore2.1'];
 
 const defaultVpcConfig = {
   securityGroupId: '',
@@ -190,6 +190,7 @@ const runtimeDependencyMappings = {
   'python2.7': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
   'python3': [PYTHON_RUNTIME_MAPPING, FONTS_MAPPING],
   'java8': [JAVA_RUNTIME_MAPPING, FONTS_MAPPING],
+  'java11': [JAVA_RUNTIME_MAPPING, FONTS_MAPPING],
   'custom': [NODE_RUNTIME_MAPPING, PYTHON_RUNTIME_MAPPING, CUSTOM_RUNTIME_JAVA_MAPPING, FONTS_MAPPING]
 };
 
@@ -392,7 +393,7 @@ function generateNasEnv(defaultEnvValue, remoteNasDir, envKey) {
 
 function resolveLocalNasDir(runtime, baseDir, codeUri, localDirInNasMappings, serviceName, functionName) {
   let localDir;
-  if (runtime === 'java8') {
+  if (runtime === 'java8' || runtime === 'java11') {
     localDir = path.relative(baseDir, path.join(localDirInNasMappings, serviceName, functionName, 'lib'));
   } else {
     localDir = path.relative(baseDir, path.join(codeUri, localDirInNasMappings));

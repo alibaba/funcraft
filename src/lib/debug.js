@@ -115,6 +115,7 @@ async function generateVscodeDebugConfig(serviceName, functionName, runtime, cod
       ]
     };
   case 'java8':
+  case 'java11':
     return {
       'version': '0.2.0',
       'configurations': [
@@ -207,6 +208,7 @@ function generateDebugEnv(runtime, debugPort, debugIde) {
     return { 'DEBUG_OPTIONS': `-m ptvsd --host 0.0.0.0 --port ${debugPort} --wait` };
 
   case 'java8':
+  case 'java11':
     return { 'DEBUG_OPTIONS': `-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,quiet=y,address=${debugPort}` };
   case 'php7.2':
     console.log(`using remote_ip ${remoteIp}`);

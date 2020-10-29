@@ -438,7 +438,7 @@ async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionNa
     });
   }
 
-  if (ishttpTrigger && runtime === 'java8') {
+  if (ishttpTrigger && (runtime === 'java8' || runtime === 'java11')) {
     envs['fc_enable_new_java_ca'] = 'true';
   }
 
@@ -457,7 +457,7 @@ async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionNa
     'FC_MEMORY_SIZE': functionProps.MemorySize || 128,
     'FC_TIMEOUT': functionProps.Timeout || 3,
     'FC_INITIALIZER': functionProps.Initializer,
-    'FC_INITIALIZATIONIMEOUT': functionProps.InitializationTimeout || 3,
+    'FC_INITIALIZATIONTIMEOUT': functionProps.InitializationTimeout || 3,
     'FC_SERVICE_NAME': serviceName,
     'FC_SERVICE_LOG_PROJECT': ((serviceProps || {}).LogConfig || {}).Project,
     'FC_SERVICE_LOG_STORE': ((serviceProps || {}).LogConfig || {}).Logstore

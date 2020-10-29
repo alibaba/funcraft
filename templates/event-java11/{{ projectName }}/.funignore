@@ -1,0 +1,8 @@
+src/
+.idea/
+target/
+.DS_Store
+*.iml
+pom.xml
+template.yml
+fun.yml
