@@ -233,7 +233,7 @@ export const rosSchema = {
                   "type": "integer"
                 }
               },
-              "required": ["Runtime", "CAPort", "CustomContainerConfig"],
+              "required": ["Runtime", "CustomContainerConfig"],
               "additionalProperties": false,
               "document": {
                 "default": "https://github.com/alibaba/funcraft/blob/master/docs/specs/2018-04-03.md#aliyunserverlessfunction",

@@ -160,7 +160,7 @@ const functionSchema = {
               'maximum': 100
             }
           },
-          'required': ['Runtime', 'CustomContainerConfig', 'CAPort'],
+          'required': ['Runtime', 'CustomContainerConfig'],
           'additionalProperties': false
         }
       ]
