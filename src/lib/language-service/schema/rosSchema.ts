@@ -101,6 +101,10 @@ export const rosSchema = {
                   "additionalProperties": false
                 }
               ]
+            },
+            "TracingConfig": {
+              "type": "string",
+              "enum": ["Enable", "Disable"]
             }
           },
           "additionalProperties": false,
@@ -184,7 +188,7 @@ export const rosSchema = {
                 },
                 "InstanceType": {
                   "type": "string",
-                  "enum": ["e1", "c1"],
+                  "enum": ["e1", "c1"]
                 },
                 "AsyncConfiguration": {
                   "type": "object",
@@ -193,10 +197,10 @@ export const rosSchema = {
                       "type": "object",
                       "properties": {
                         "OnSuccess": {
-                          "type": "string",
+                          "type": "string"
                         },
                         "OnFailure": {
-                          "type": "string",
+                          "type": "string"
                         }
                       }
                     },
@@ -265,7 +269,7 @@ export const rosSchema = {
                 },
                 "InstanceType": {
                   "type": "string",
-                  "enum": ["e1", "c1"],
+                  "enum": ["e1", "c1"]
                 },
                 "AsyncConfiguration": {
                   "type": "object",
@@ -274,10 +278,10 @@ export const rosSchema = {
                       "type": "object",
                       "properties": {
                         "OnSuccess": {
-                          "type": "string",
+                          "type": "string"
                         },
                         "OnFailure": {
-                          "type": "string",
+                          "type": "string"
                         }
                       }
                     },

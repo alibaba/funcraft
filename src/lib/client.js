@@ -152,6 +152,12 @@ const getNasPopClient = async () => {
   return await getPopClient(`http://nas.${profile.defaultRegion}.aliyuncs.com`, '2017-06-26');
 };
 
+const getXtraceClient = async () => {
+  const { defaultRegion } = await getProfile();
+
+  return await getPopClient(`https://xtrace.${defaultRegion}.aliyuncs.com`, '2019-08-08');
+};
+
 const getOtsClient = async (instanceName) => {
   const profile = await getProfile();
 
@@ -214,6 +220,7 @@ const getSlsClient = async () => {
 };
 
 module.exports = {
+  getXtraceClient,
   getFcClient,
   getOtsClient,
   getOtsPopClient,

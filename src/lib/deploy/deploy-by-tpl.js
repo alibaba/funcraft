@@ -341,6 +341,7 @@ async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tpl
   const vpcConfig = properties.VpcConfig;
   const nasConfig = properties.NasConfig;
   const logConfig = properties.LogConfig || {};
+  const tracingConfig = properties.TracingConfig;
   const hasFunctionAsyncConfig = !!hasConfiguration(serviceRes, 'AsyncConfiguration');
   const hasCustomContainerConfig = !!hasConfiguration(serviceRes, 'CustomContainerConfig');
 
@@ -358,8 +359,9 @@ async function deployService({ baseDir, serviceName, serviceRes, onlyConfig, tpl
     internetAccess,
     description,
     logConfig,
-    vpcConfig: vpcConfig,
-    nasConfig: nasConfig
+    vpcConfig,
+    nasConfig,
+    tracingConfig
   });
 
   await deployFunctions({ baseDir, serviceName, serviceRes, onlyConfig, tplPath, skipTrigger, useNas, assumeYes });
