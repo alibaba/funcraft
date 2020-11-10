@@ -171,6 +171,7 @@ describe('deploy', () => {
       nasConfig: undefined,
       role: '',
       serviceName: 'local-http-demo',
+      tracingConfig: undefined,
       vpcConfig: undefined
     });
 
@@ -212,6 +213,7 @@ describe('deploy', () => {
       role: '',
       serviceName: 'MyService',
       vpcConfig: undefined,
+      tracingConfig: undefined,
       nasConfig: undefined
     });
 
@@ -247,6 +249,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'fc',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -282,6 +285,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'java',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -317,6 +321,7 @@ describe('deploy', () => {
       logConfig: {},
       role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
       serviceName: 'nasDemo',
+      tracingConfig: undefined,
       vpcConfig: {
         SecurityGroupId: 'sg-bp1243pi65bw4cjj4bks',
         VSwitchIds: ['vsw-bp1gitru7oicyyb4uiylj'],
@@ -408,6 +413,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'fc',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -483,6 +489,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'test-tableStore-service',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -528,6 +535,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'log-compute',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -575,6 +583,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'rds-service',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -623,6 +632,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'oss-test-service',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -673,6 +683,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'cdn-test-service',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -729,6 +740,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'mnsTopic-service',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -776,6 +788,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'pythondemo',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -853,6 +866,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'maas',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -917,6 +931,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'MyService',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -962,6 +977,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'wechat',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -1107,6 +1123,7 @@ describe('deploy', () => {
       logConfig: {},
       role: '',
       serviceName: 'initializerdemo',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
@@ -1178,6 +1195,7 @@ describe('deploy', () => {
       role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
       serviceName: 'localdemo',
       vpcConfig: undefined,
+      tracingConfig: undefined,
       nasConfig: undefined
     });
 
@@ -1207,6 +1225,21 @@ describe('deploy', () => {
     assert.notCalled(console.warn);
   });
 
+  it('deploy service tracing config', async () => {
+    await deploy('service_tracing_config');
+
+    assert.calledWith(fc.makeService, {
+      description: 'fc test',
+      internetAccess: null,
+      logConfig: {},
+      role: '',
+      serviceName: 'fc',
+      vpcConfig: undefined,
+      tracingConfig: 'Enable',
+      nasConfig: undefined
+    });
+  });
+
   it('deploy sls auto', async () => {
     await deploy('sls_auto');
 
@@ -1216,6 +1249,7 @@ describe('deploy', () => {
       internetAccess: null,
       description: 'sls auto',
       logConfig: 'Auto',
+      tracingConfig: undefined,
       nasConfig: undefined,
       vpcConfig: undefined
     });
@@ -1252,6 +1286,7 @@ describe('deploy', () => {
       logConfig: {},
       role: 'acs:ram::123:role/aliyunfcgeneratedrole-fc',
       serviceName: 'fc',
+      tracingConfig: undefined,
       vpcConfig: undefined,
       nasConfig: undefined
     });
