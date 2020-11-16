@@ -94,6 +94,10 @@ const serviceResourceSchema = {
             }
           ]
 
+        },
+        'TracingConfig': {
+          'type': 'string',
+          'enum': ['Enable', 'Disable']
         }
       },
       'additionalProperties': false

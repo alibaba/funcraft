@@ -28,7 +28,7 @@ const barUtil = require('./import/utils');
 const { isSpringBootJar } = require('./frameworks/common/java');
 const { updateTimestamps } = require('./utils/file');
 const { green, red, yellow } = require('colors');
-const { getFcClient, getEcsPopClient, getNasPopClient } = require('./client');
+const { getFcClient, getEcsPopClient, getNasPopClient, getXtraceClient } = require('./client');
 const { makeDestination } = require('./function-async-config');
 const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = require('./tpl');
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
@@ -1366,6 +1366,24 @@ async function retryUntilSlsCreated(serviceName, options, create, fcClient) {
   } while (slsRetry < retryTimes);
 }
 
+async function transformTracingConfig(tracingConfig) {
+  if (tracingConfig === 'Enable') {
+    const xtraceClient = await getXtraceClient();
+    try {
+      const { Token: token } = await xtraceClient.request('GetToken', {}, {});
+      return {
+        type: 'Jaeger',
+        params: {
+          endpoint: `${token.InternalDomain}/adapt_${token.LicenseKey}_${token.Pid}/api/traces`
+        }
+      };
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+  return {};
+}
+
 async function makeService({
   serviceName,
   role,
@@ -1373,7 +1391,8 @@ async function makeService({
   internetAccess = true,
   logConfig = {},
   vpcConfig,
-  nasConfig
+  nasConfig,
+  tracingConfig
 }) {
   const fc = await getFcClient();
 
@@ -1400,9 +1419,12 @@ async function makeService({
 
   const resolvedLogConfig = await transformLogConfig(logConfig);
 
+  const resolvedTracingConfig = await transformTracingConfig(tracingConfig);
+
   const options = {
     description,
     role,
+    tracingConfig: resolvedTracingConfig,
     logConfig: resolvedLogConfig
   };
 
