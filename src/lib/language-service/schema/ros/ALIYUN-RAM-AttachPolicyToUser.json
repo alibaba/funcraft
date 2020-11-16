@@ -1,0 +1,43 @@
+{
+  "$id": "ALIYUN::RAM::AttachPolicyToUser",
+  "type": "object",
+  "properties": {
+    "Type": {
+      "type": "string",
+      "enum": [
+        "ALIYUN::RAM::AttachPolicyToUser"
+      ]
+    },
+    "Properties": {
+      "type": "object",
+      "properties": {
+        "PolicyType": {
+          "type": "string"
+        },
+        "UserName": {
+          "type": "string"
+        },
+        "PolicyName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PolicyType",
+        "UserName",
+        "PolicyName"
+      ],
+      "additionalProperties": false,
+      "document": {
+        "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::AttachPolicyToUser"
+      }
+    }
+  },
+  "required": [
+    "Type",
+    "Properties"
+  ],
+  "document": {
+    "default": "https://rosnext.console.aliyun.com/resourceType/ALIYUN::RAM::AttachPolicyToUser"
+  },
+  "insertText": "${1:AttachPolicyToUser}:\n  Type: ALIYUN::RAM::AttachPolicyToUser\n  Properties:\n    "
+}
