@@ -13,13 +13,14 @@ const _ = require('lodash');
 const { getProfile } = require('../profile');
 const { isEmptyDir } = require('../nas/cp/file');
 const { getOssClient } = require('../client');
-const { green, yellow } = require('colors');
+const { green } = require('colors');
 const { showPackageNextTips } = require('../build/tips');
 const { ensureFilesModified } = require('../utils/file');
 const { parseMountDirPrefix } = require('../fc');
+const { transformRosYmlCodeUri } = require('./template');
 const { getTpl, detectNasBaseDir, getNasYmlPath } = require('../tpl');
 const { getFunctionImage } = require('./pushImage');
-const { promptForConfirmContinue, promptForInputContinue } = require('../init/prompt');
+const { processOSSBucket } = require('../oss');
 const { validateNasAndVpcConfig, SERVICE_RESOURCE, iterateResources, isNasAutoConfig, isVpcAutoConfig, getUserIdAndGroupId } = require('../definition');
 
 const {
@@ -40,6 +41,7 @@ const {
   generateRosTemplateForDefaultOutputs,
   generateRosTemplateForDefaultResources
 } = require('./template');
+const utils = require('../import/utils');
 
 async function processNasAutoToRosTemplate({ tpl, baseDir, tplPath,
   ossClient,
@@ -227,51 +229,11 @@ async function transformSlsAuto(tpl) {
   return cloneTpl;
 }
 
-async function bucketExist(ossClient, bucketName) {
-  let bucketExist = false;
-
-  try {
-    await ossClient.getBucketLocation(bucketName);
-    bucketExist = true;
-  } catch (ex) {
-
-    if (!ex.code || !_.includes(['AccessDenied', 'NoSuchBucket'], ex.code)) {
-      throw ex;
-    }
-  }
-  return bucketExist;
-}
-
-async function generateOssBucket(bucketName) {
-  const ossClient = await getOssClient();
-
-  if (await bucketExist(ossClient, bucketName)) {
-    console.log(yellow(`using oss-bucket: ${bucketName}`));
-    return bucketName;
-  }
-
-  console.log(yellow(`using oss-bucket: ${bucketName}`));
-
-  if (process.stdin.isTTY && !await promptForConfirmContinue('Auto generate OSS bucket for you?')) {
-    bucketName = (await promptForInputContinue('Input OSS bucket name:')).input;
-  }
-
-  await ossClient.putBucket(bucketName);
-
-  return bucketName;
-}
-async function processOSSBucket(bucket) {
-  if (!bucket) {
-    const profile = await getProfile();
-    const defalutBucket = `fun-gen-${profile.defaultRegion}-${profile.accountId}`;
-    return await generateOssBucket(defalutBucket);
-  }
-  return await generateOssBucket(bucket);
-}
-
 async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
   const tpl = await getTpl(tplPath);
-  validateNasAndVpcConfig(tpl.Resources);
+  if (tpl.Transform) {
+    validateNasAndVpcConfig(tpl.Resources);
+  }
 
   const baseDir = path.dirname(tplPath);
 
@@ -280,6 +242,23 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
   await ensureFilesModified(tplPath);
 
   const ossClient = await getOssClient(bucketName);
+
+  let packedYmlPath;
+
+  if (outputTemplateFile) {
+    packedYmlPath = path.resolve(process.cwd(), outputTemplateFile);
+  } else {
+    packedYmlPath = path.join(process.cwd(), 'template.packaged.yml');
+  }
+
+  if (!tpl.Transform) {
+    await transformRosYmlCodeUri({ baseDir, tpl, tplPath, bucketName, ossClient });
+    path.join(process.cwd(), 'template.packaged.yml');
+    utils.outputTemplateFile(packedYmlPath, tpl);
+    console.log(green('\nPackage success'));
+    showPackageNextTips(packedYmlPath);
+    return;
+  }
 
   const updatedEnvTpl = await processNasPythonPaths(tpl, tplPath);
   if (pushRegistry) {
@@ -291,14 +270,6 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
   const updatedFlowTpl = await transformFlowDefinition(baseDir, transformCustomDomain(updatedSlsTpl));
   const updatedTpl = await processNasAutoToRosTemplate({ ossClient, baseDir, tplPath, tpl: updatedFlowTpl, bucketName });
 
-  let packedYmlPath;
-
-  if (outputTemplateFile) {
-    packedYmlPath = path.resolve(process.cwd(), outputTemplateFile);
-  } else {
-    packedYmlPath = path.join(process.cwd(), 'template.packaged.yml');
-  }
-
   util.outputTemplateFile(packedYmlPath, updatedTpl);
 
   console.log(green('\nPackage success'));
@@ -306,6 +277,5 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
 }
 
 module.exports = {
-  processOSSBucket,
   pack
 };
