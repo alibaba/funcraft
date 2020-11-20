@@ -12,6 +12,10 @@ const promiseRetry = require('../retry');
 const { getProfile } = require('../profile');
 const { green, red, yellow } = require('colors');
 const { promptForConfirmContinue } = require('../init/prompt');
+const { zipCodeToOss } = require('../package/template');
+const { processOSSBucket } = require('../package/package');
+const { outputTemplateFile } = require('../import/utils');
+const fc = require('../fc');
 
 const log = require('single-line-log').stdout;
 const Table = require('cli-table3');
@@ -661,13 +665,49 @@ function transformAsyncConfiguration (resources = {}, region, accountId) {
   });
 }
 
-async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride = {}) {
+async function transformRosYml (baseDir, tpl, tplPath) {
+  for (const key of Object.keys(tpl.Resources)) {
+    const { Type, Properties: properties } = tpl.Resources[key];
+    if (Type === 'ALIYUN::FC::Function' && properties.Runtime !== 'custom-container' && !properties.Code) {
+      if (!properties.CodeUri) {
+        throw new Error(`ALIYUN::FC::Function Code is empty.`);
+      }
+      const bucketName = await processOSSBucket();
+      const ossClient = await client.getOssClient(bucketName);
+
+      const ignore = await fc.generateFunIngore(baseDir, properties.CodeUri);
+      const oss = await zipCodeToOss({
+        tplPath,
+        ignore,
+        ossClient,
+        codeUri: properties.CodeUri,
+        runtime: properties.Runtime,
+        isRosCodeUri: true
+      });
+
+      if (!oss.objectName) {
+        throw new Error(`Codeuri ${properties.CodeUri} upload to oss error.`);
+      }
+      tpl.Resources[key].Properties.Code = {
+        OssBucketName: bucketName,
+        OssObjectName: oss.objectName
+      };
+      delete tpl.Resources[key].Properties.CodeUri;
+    }
+  }
+  const packedYmlPath = path.join(process.cwd(), 'template.packaged.yml');
+  outputTemplateFile(packedYmlPath, tpl);
+}
+
+async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride = {}, tplPath) {
   const profile = await getProfile();
   const region = profile.defaultRegion;
   const { accountId } = profile;
 
   transformAsyncConfiguration(tpl.Resources, region, accountId);
-
+  if (!tpl.Transform) {
+    await transformRosYml(baseDir, tpl, tplPath);
+  }
   const rosClient = await client.getRosClient();
 
   let { stackId, stackStatus } = await findRosStack(rosClient, region, stackName);

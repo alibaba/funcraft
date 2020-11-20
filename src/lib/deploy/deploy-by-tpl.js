@@ -971,7 +971,7 @@ async function deploy(tplPath, context) {
       console.log(yellow(`missing --stack-name parameter, using default stackName '${dirName}'`));
     }
     const stackName = context.stackName || DEFAULT_STACK_NAME;
-    await deployByRos(baseDir, stackName, tpl, context.assumeYes, context.parameterOverride);
+    await deployByRos(baseDir, stackName, tpl, context.assumeYes, context.parameterOverride, tplPath);
   } else {
 
     await deployByApi(baseDir, tpl, tplPath, context);

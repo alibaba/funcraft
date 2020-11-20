@@ -504,6 +504,7 @@ async function zipCodeToOss({ ossClient, codeUri, runtime, ignore, tplPath, nasC
   zipName = 'code.zip',
   prefix = '',
   useNas = false,
+  isRosCodeUri = false,
   zlibOptions = {}
 }) {
 
@@ -527,6 +528,7 @@ async function zipCodeToOss({ ossClient, codeUri, runtime, ignore, tplPath, nasC
 
   const rs = await fc.nasAutoConfigurationIfNecessary({ stage: 'package', tplPath, compressedSize, useNas,
     nasConfig, runtime, codeUri,
+    isRosCodeUri,
     nasServiceName: serviceName,
     nasFunctionName: functionName
   });
@@ -729,6 +731,7 @@ async function transformFlowDefinition(baseDir, tpl) {
 
 module.exports = {
   zipToOss,
+  zipCodeToOss,
   uploadNasService,
   processNasPythonPaths,
   transformFlowDefinition,

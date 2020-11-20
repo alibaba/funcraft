@@ -954,6 +954,7 @@ async function checkAlreadyConfirmedForCustomSpringBoot(runtime, codeUri) {
 async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUri, nasConfig, vpcConfig, useNas = false, assumeYes,
   compressedSize = 0,
   nasFunctionName,
+  isRosCodeUri,
   nasServiceName
 }) {
 
@@ -964,7 +965,7 @@ async function nasAutoConfigurationIfNecessary({ stage, tplPath, runtime, codeUr
   const tipOssUploadCodeSize = Math.floor(ossUploadCodeSize / 1024 / 1024);
   const maxCodeSize = packageStage ? ossUploadCodeSize : 52428800;
 
-  if (!_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < maxCodeSize)) { return { stop, tplChanged }; }
+  if (isRosCodeUri || !_.includes(SUPPORT_RUNTIMES, runtime) || (!useNas && compressedSize < maxCodeSize)) { return { stop, tplChanged }; }
 
   if (compressedSize > maxCodeSize) {
     if (packageStage) {

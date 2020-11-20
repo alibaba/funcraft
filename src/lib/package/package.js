@@ -306,5 +306,6 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
 }
 
 module.exports = {
+  processOSSBucket,
   pack
 };
