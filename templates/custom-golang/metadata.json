@@ -1,0 +1,7 @@
+{
+    "name": "custom-golang",
+    "description": "Golang template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
