@@ -24,5 +24,6 @@
     "http-trigger-node-puppeteer": "{{ templatePath }}/http-trigger-node-puppeteer",
     "custom-golang": "{{ templatePath }}/custom-golang",
     "custom-fsharp": "{{ templatePath }}/custom-fsharp",
-    "custom-dart": "{{ templatePath }}/custom-dart"
+    "custom-dart": "{{ templatePath }}/custom-dart",
+    "custom-lua": "{{ templatePath }}/custom-lua"
 }
