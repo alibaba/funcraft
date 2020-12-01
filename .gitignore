@@ -108,3 +108,15 @@ src/lib/utils/fun-nas-server/.fun/root/usr/*
 !src/lib/utils/fun-nas-server/.fun/root/usr/bin
 
 .fun
+
+# templates data
+*/FSharpDemo/obj
+*/FSharpDemo/bin
+custom-golang/*/code/bootstrap
+custom-typescript/*/server.js
+custom-fsharp/*/.vs
+custom-fsharp/*/NuGetScratch
+custom-fsharp/*/.NETCoreApp,Version=v3.1.AssemblyAttributes.fs
+custom-fsharp/*/.dotnet
+custom-cpp/*/bin
+custom-cpp/*/sample/release

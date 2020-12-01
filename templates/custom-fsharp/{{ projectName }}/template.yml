@@ -1,0 +1,30 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  {{ service }}:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: 'helloworld'
+    fc_fsharp:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: Program.main
+        Runtime: custom
+        MemorySize: 1024
+        CodeUri: './FSharpDemo/bin/Release/netcoreapp3.1/linux-x64/publish'
+      Events:
+        http_t:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['GET', 'POST', 'PUT', 'DELETE']
+  my_domain:
+    Type: 'Aliyun::Serverless::CustomDomain'
+    Properties:
+      DomainName: Auto
+      Protocol: HTTP
+      RouteConfig:
+        Routes: 
+          '/*':
+            ServiceName: {{ service }}
+            FunctionName: fc_fsharp
