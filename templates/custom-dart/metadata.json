@@ -1,0 +1,8 @@
+{
+    "name": "custom-dart",
+    "description": "dart template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    },
+    "copyOnlyPaths": [ "bootstrap" ]
+}
