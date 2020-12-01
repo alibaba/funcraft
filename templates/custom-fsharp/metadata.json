@@ -1,0 +1,7 @@
+{
+    "name": "custom-fsharp",
+    "description": "FSharp template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
