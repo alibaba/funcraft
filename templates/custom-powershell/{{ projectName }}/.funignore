@@ -3,3 +3,5 @@ template.yml
 .funignore
 Funfile
 .nas.yml
+.fun/package
+.fun/tmp
