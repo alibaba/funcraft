@@ -26,5 +26,6 @@
     "custom-fsharp": "{{ templatePath }}/custom-fsharp",
     "custom-dart": "{{ templatePath }}/custom-dart",
     "custom-lua": "{{ templatePath }}/custom-lua",
-    "custom-powershell": "{{ templatePath }}/custom-powershell"
+    "custom-powershell": "{{ templatePath }}/custom-powershell",
+    "custom-ruby": "{{ templatePath }}/custom-ruby"
 }
