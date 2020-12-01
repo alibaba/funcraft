@@ -1,0 +1,8 @@
+{
+    "name": "custom-lua",
+    "description": "lua template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    },
+    "copyOnlyPaths": [ "nginx", "libluajit-5.1.so.2" ]
+}
