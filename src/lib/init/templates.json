@@ -25,5 +25,6 @@
     "custom-golang": "{{ templatePath }}/custom-golang",
     "custom-fsharp": "{{ templatePath }}/custom-fsharp",
     "custom-dart": "{{ templatePath }}/custom-dart",
-    "custom-lua": "{{ templatePath }}/custom-lua"
+    "custom-lua": "{{ templatePath }}/custom-lua",
+    "custom-powershell": "{{ templatePath }}/custom-powershell"
 }

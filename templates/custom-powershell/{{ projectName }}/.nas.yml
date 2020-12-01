@@ -1,0 +1,4 @@
+nasMappings:
+  powershell-demo:
+    - localNasDir: .fun/root
+      remoteNasDir: /mnt/auto/root

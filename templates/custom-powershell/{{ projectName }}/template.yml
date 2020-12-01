@@ -1,0 +1,19 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  {{ service }}:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: helloworld
+      NasConfig: Auto
+    fc-powershell:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        Runtime: custom
+        MemorySize: 512
+        CodeUri: ./
+        EnvironmentVariables:
+          PATH: $PATH:/mnt/auto/root/opt/microsoft/powershell/7
+          LD_LIBRARY_PATH: >-
+            /mnt/auto/root/usr/lib:/mnt/auto/root/usr/lib/x86_64-linux-gnu:/mnt/auto/root/lib/x86_64-linux-gnu:/mnt/auto/root/usr/lib64
