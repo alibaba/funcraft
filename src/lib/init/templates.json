@@ -27,5 +27,6 @@
     "custom-dart": "{{ templatePath }}/custom-dart",
     "custom-lua": "{{ templatePath }}/custom-lua",
     "custom-powershell": "{{ templatePath }}/custom-powershell",
-    "custom-ruby": "{{ templatePath }}/custom-ruby"
+    "custom-ruby": "{{ templatePath }}/custom-ruby",
+    "custom-rust": "{{ templatePath }}/custom-rust"
 }
