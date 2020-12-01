@@ -23,5 +23,6 @@
     "custom-springboot": "{{ templatePath }}/custom-springboot",
     "http-trigger-node-puppeteer": "{{ templatePath }}/http-trigger-node-puppeteer",
     "custom-golang": "{{ templatePath }}/custom-golang",
-    "custom-fsharp": "{{ templatePath }}/custom-fsharp"
+    "custom-fsharp": "{{ templatePath }}/custom-fsharp",
+    "custom-dart": "{{ templatePath }}/custom-dart"
 }
