@@ -1,0 +1,7 @@
+{
+    "name": "custom-ruby",
+    "description": "ruby template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
