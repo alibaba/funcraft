@@ -1,4 +1,4 @@
-## Golang template for Custom Runtime
+## FSharp template for Custom Runtime
 
 ### Deploy
 

@@ -29,5 +29,6 @@
     "custom-powershell": "{{ templatePath }}/custom-powershell",
     "custom-ruby": "{{ templatePath }}/custom-ruby",
     "custom-rust": "{{ templatePath }}/custom-rust",
-    "custom-typescript": "{{ templatePath }}/custom-typescript"
+    "custom-typescript": "{{ templatePath }}/custom-typescript",
+    "custom-cpp": "{{ templatePath }}/custom-cpp"
 }
