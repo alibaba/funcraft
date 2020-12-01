@@ -1,0 +1,9 @@
+[package]
+name = "bootstrap"
+version = "0.1.0"
+edition = "2018"
+
+
+[dependencies]
+tokio = { version = "0.2", features = ["full"] }
+warp = "0.2"

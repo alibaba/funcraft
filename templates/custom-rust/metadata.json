@@ -1,0 +1,7 @@
+{
+    "name": "custom-rust",
+    "description": "rust template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
