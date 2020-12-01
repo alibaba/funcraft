@@ -1,0 +1,7 @@
+{
+    "name": "custom-typescript",
+    "description": "typescript template for Custom Runtime",
+    "vars": {
+        "service": "{{ projectName }}"
+    }
+}
