@@ -5,7 +5,7 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: 'helloworld'
-    fc-ts:
+    {{ projectName }}:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler

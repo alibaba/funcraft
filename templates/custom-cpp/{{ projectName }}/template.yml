@@ -5,14 +5,14 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: 'helloworld'
-    fc_cpp_event:
+    {{ projectName }}_event:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: event.handler
         Runtime: custom
         MemorySize: 512
         CodeUri: './bin'
-    fc_cpp_http:
+    {{ projectName }}_http:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: http.handler
@@ -34,4 +34,4 @@ Resources:
         Routes: 
           '/*':
             ServiceName: {{ service }}
-            FunctionName: fc_cpp_http
+            FunctionName: {{ projectName }}_http

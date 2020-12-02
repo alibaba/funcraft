@@ -5,7 +5,7 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: 'helloworld'
-    fc_fsharp:
+    {{ projectName }}:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: Program.main
@@ -27,4 +27,4 @@ Resources:
         Routes: 
           '/*':
             ServiceName: {{ service }}
-            FunctionName: fc_fsharp
+            FunctionName: {{ projectName }}
