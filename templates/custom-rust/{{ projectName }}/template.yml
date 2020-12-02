@@ -5,7 +5,7 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       Description: 'A demo service of how to use Rust in FC.'
-    fc-rust:
+    {{ projectName }}:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Runtime: custom

@@ -5,7 +5,7 @@ Resources:
     Type: 'Aliyun::Serverless::Service'
     Properties:
       InternetAccess: true
-    dart-func:
+    {{ projectName }}:
       Type: 'Aliyun::Serverless::Function'
       Properties:
         Handler: index.handler
