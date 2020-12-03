@@ -47,9 +47,14 @@ describe('test package', () => {
     sandbox.stub(util, 'outputTemplateFile').returns();
     sandbox.stub(profile, 'getProfile').resolves(getProfileRes);
 
+    const oss = proxyquire('../../lib/oss', {
+      './client': client
+    });
+
     pack = proxyquire('../../lib/package/package', {
       '../tpl': tpl,
       '../client': client,
+      '../oss': oss,
       'path': path
     });
   });
