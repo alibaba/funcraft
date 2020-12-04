@@ -46,14 +46,16 @@
         },
         "Code": {
           "type": "object"
+        },
+        "CodeUri": {
+          "type": "string"
         }
       },
       "required": [
         "FunctionName",
         "Runtime",
         "ServiceName",
-        "Handler",
-        "Code"
+        "Handler"
       ],
       "additionalProperties": false,
       "document": {

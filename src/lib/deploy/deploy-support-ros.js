@@ -12,6 +12,8 @@ const promiseRetry = require('../retry');
 const { getProfile } = require('../profile');
 const { green, red, yellow } = require('colors');
 const { promptForConfirmContinue } = require('../init/prompt');
+const { transformRosYmlCodeUri } = require('../package/template');
+const { outputTemplateFile } = require('../import/utils');
 
 const log = require('single-line-log').stdout;
 const Table = require('cli-table3');
@@ -661,13 +663,16 @@ function transformAsyncConfiguration (resources = {}, region, accountId) {
   });
 }
 
-async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride = {}) {
+async function deployByRos(baseDir, stackName, tpl, assumeYes, parameterOverride = {}, tplPath) {
   const profile = await getProfile();
   const region = profile.defaultRegion;
   const { accountId } = profile;
 
   transformAsyncConfiguration(tpl.Resources, region, accountId);
-
+  if (!tpl.Transform) {
+    await transformRosYmlCodeUri({ baseDir, tpl, tplPath });
+    outputTemplateFile(path.join(process.cwd(), 'template.packaged.yml'), tpl);
+  }
   const rosClient = await client.getRosClient();
 
   let { stackId, stackStatus } = await findRosStack(rosClient, region, stackName);

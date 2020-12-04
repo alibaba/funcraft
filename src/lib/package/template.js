@@ -13,6 +13,8 @@ const { getTpl } = require('../tpl');
 const { green, yellow } = require('colors');
 const { generateRandomZipPath } = require('../utils/path');
 const { generateNasPythonPaths, mergeEnvs } = require('../../lib/install/env');
+const { processOSSBucket } = require('../oss');
+const { getOssClient } = require('../client');
 
 const _ = require('lodash');
 
@@ -504,6 +506,7 @@ async function zipCodeToOss({ ossClient, codeUri, runtime, ignore, tplPath, nasC
   zipName = 'code.zip',
   prefix = '',
   useNas = false,
+  isRosCodeUri = false,
   zlibOptions = {}
 }) {
 
@@ -527,6 +530,7 @@ async function zipCodeToOss({ ossClient, codeUri, runtime, ignore, tplPath, nasC
 
   const rs = await fc.nasAutoConfigurationIfNecessary({ stage: 'package', tplPath, compressedSize, useNas,
     nasConfig, runtime, codeUri,
+    isRosCodeUri,
     nasServiceName: serviceName,
     nasFunctionName: functionName
   });
@@ -727,8 +731,46 @@ async function transformFlowDefinition(baseDir, tpl) {
   return updatedTplContent;
 }
 
+async function transformRosYmlCodeUri ({ baseDir, tpl, tplPath, bucketName, ossClient }) {
+  if (!ossClient) {
+    bucketName = await processOSSBucket();
+    ossClient = await getOssClient(bucketName);
+  }
+
+  for (const key of Object.keys(tpl.Resources)) {
+    const { Type, Properties: properties } = tpl.Resources[key];
+    if (Type === 'ALIYUN::FC::Function' && properties.Runtime !== 'custom-container' && !properties.Code) {
+      if (!properties.CodeUri) {
+        throw new Error(`ALIYUN::FC::Function Code is empty.`);
+      }
+
+      const ignore = await fc.generateFunIngore(baseDir, properties.CodeUri);
+      const oss = await zipCodeToOss({
+        tplPath,
+        ignore,
+        ossClient,
+        codeUri: properties.CodeUri,
+        runtime: properties.Runtime,
+        isRosCodeUri: true
+      });
+
+      if (!oss.objectName) {
+        throw new Error(`Codeuri ${properties.CodeUri} upload to oss error.`);
+      }
+      tpl.Resources[key].Properties.Code = {
+        OssBucketName: bucketName,
+        OssObjectName: oss.objectName
+      };
+      delete tpl.Resources[key].Properties.CodeUri;
+    }
+  }
+  return tpl;
+}
+
 module.exports = {
   zipToOss,
+  zipCodeToOss,
+  transformRosYmlCodeUri,
   uploadNasService,
   processNasPythonPaths,
   transformFlowDefinition,
