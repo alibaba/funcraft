@@ -42,6 +42,11 @@ async function getConf(rootDir) {
     conf.accessKeySecret = profile.accessKeySecret;
   }
 
+  if (!conf.securityToken) {
+    debug('try to get securityToken from profile');
+    conf.securityToken = profile.securityToken;
+  }
+
   debug('exitst config: %j', conf);
   return conf;
 }

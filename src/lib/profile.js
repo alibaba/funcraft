@@ -112,6 +112,11 @@ async function getProfileFromEnv() {
     profile.accessKeySecret = process.env.ACCESS_KEY_SECRET;
   }
 
+  if (process.env.SECURITY_TOKEN) {
+    debug('try to get SECURITY_TOKEN from environment variable');
+    profile.securityToken = process.env.SECURITY_TOKEN;
+  }
+
   if (process.env.TIMEOUT) {
     debug('try to get TIMEOUT from environment variable');
     profile.timeout = process.env.TIMEOUT;
@@ -169,6 +174,11 @@ async function getProfileFromDotEnv() {
     if (parsed['ACCESS_KEY_SECRET']) {
       debug('try to get ACCESS_KEY_SECRET from dotenv variable');
       profile.accessKeySecret = parsed['ACCESS_KEY_SECRET'];
+    }
+
+    if (parsed['SECURITY_TOKEN']) {
+      debug('try to get SECURITY_TOKEN from dotenv variable');
+      profile.securityToken = parsed['SECURITY_TOKEN'];
     }
 
     if (parsed['TIMEOUT']) {

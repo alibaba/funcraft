@@ -296,6 +296,7 @@ async function fun(stage) {
   const fc = new FC(conf.accountid, {
     accessKeyID: conf.accessKeyId,
     accessKeySecret: conf.accessKeySecret,
+    securityToken: conf.securityToken,
     region: conf['function-compute'].region,
     timeout: 60000
   });
@@ -341,6 +342,7 @@ async function fun(stage) {
   const ram = new Ram({
     accessKeyId: conf.accessKeyId,
     accessKeySecret: conf.accessKeySecret,
+    securityToken: conf.securityToken,
     endpoint: 'https://ram.aliyuncs.com'
   });
 
@@ -353,6 +355,7 @@ async function fun(stage) {
   const ag = new CloudAPI({
     accessKeyId: conf.accessKeyId,
     accessKeySecret: conf.accessKeySecret,
+    securityToken: conf.securityToken,
     endpoint: conf['api-gateway'].endpoint
   });
 

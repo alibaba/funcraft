@@ -450,6 +450,7 @@ async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionNa
     'local': true,
     'FC_ACCESS_KEY_ID': profile.accessKeyId,
     'FC_ACCESS_KEY_SECRET': profile.accessKeySecret,
+    'FC_SECURITY_TOKEN': profile.securityToken,
     'FC_ACCOUND_ID': profile.accountId,
     'FC_REGION': profile.defaultRegion,
     'FC_FUNCTION_NAME': functionName,
