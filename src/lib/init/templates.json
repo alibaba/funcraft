@@ -30,5 +30,6 @@
     "custom-ruby": "{{ templatePath }}/custom-ruby",
     "custom-rust": "{{ templatePath }}/custom-rust",
     "custom-typescript": "{{ templatePath }}/custom-typescript",
-    "custom-cpp": "{{ templatePath }}/custom-cpp"
+    "event-custom-cpp": "{{ templatePath }}/event-custom-cpp",
+    "http-custom-cpp": "{{ templatePath }}/http-custom-cpp"
 }

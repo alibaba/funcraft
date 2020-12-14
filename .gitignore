@@ -118,5 +118,7 @@ custom-fsharp/*/.vs
 custom-fsharp/*/NuGetScratch
 custom-fsharp/*/.NETCoreApp,Version=v3.1.AssemblyAttributes.fs
 custom-fsharp/*/.dotnet
-custom-cpp/*/bin
-custom-cpp/*/sample/release
+event-custom-cpp/*/bin
+event-custom-cpp/*/sample/release
+http-custom-cpp/*/bin
+http-custom-cpp/*/sample/release
