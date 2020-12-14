@@ -1,8 +1,0 @@
-{
-    "name": "custom-cpp",
-    "description": "cpp template for Custom Runtime",
-    "vars": {
-        "service": "{{ projectName }}"
-    },
-    "copyOnlyPaths": [ "libpistache.a" ]
-}
