@@ -20,7 +20,7 @@ const { showInstallNextTips } = require('../build/tips');
 
 const _ = require('lodash');
 
-async function installAll(funcPath, { verbose, useDocker }) {
+async function installAll(funcPath, { verbose, useDocker, useBuildkit }) {
   const tplPath = await detectTplPath(false);
 
   if (!tplPath) {
@@ -34,7 +34,7 @@ async function installAll(funcPath, { verbose, useDocker }) {
   const tpl = await getTpl(tplPath);
   const baseDir = path.dirname(tplPath);
 
-  await buildFunction(funcPath, tpl, baseDir, useDocker, ['install'], verbose);
+  await buildFunction(funcPath, tpl, baseDir, useDocker, useBuildkit, ['install'], verbose);
 
   showInstallNextTips();
 }

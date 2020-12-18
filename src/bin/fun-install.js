@@ -31,6 +31,7 @@ program
   .option('-f, --function <[service/]function>', `Specify which function to execute installation task.`)
   .option('-e, --env <env>', 'environment variable, ex. -e PATH=/code/bin', (e, envs) => (envs.push(e), envs), [])
   .option('-d, --use-docker', 'Use docker container to install function dependencies')
+  .option('-b, --use-buildkit', 'Use buildkit to build functions')
   .option('-r, --runtime <runtime>', `function runtime, avaliable choice is: ${getSupportedRuntimesAsString()}`)
   .option('-p, --package-type <type>', 'avaliable package type option: pip, apt, npm.')
   .option('--save', 'add task to fun.yml file.')
@@ -211,7 +212,8 @@ if (!program.args.length) {
 
     installAll(program.function, {
       verbose: parseInt(process.env.FUN_VERBOSE) > 0,
-      useDocker: program.useDocker
+      useDocker: program.useDocker,
+      useBuildkit: program.useBuildkit
     }).then(() => {
       visitor.event({
         ec: 'installAll',

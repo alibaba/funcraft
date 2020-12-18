@@ -70,11 +70,11 @@ RUN LD_LIBRARY=testLD_LIBRARY apt-get build-dep -y r-base; \\
   LD_LIBRARY=testLD_LIBRARY make ;  \\
   LD_LIBRARY=testLD_LIBRARY make install;`;
 
-const dockerHubDockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
+const dockerHubDockerfileContent = `FROM aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION} as python3
 ${dockerfileContent}`;
 
 
-const aliregistryDockerfileContent = `FROM registry.cn-beijing.aliyuncs.com/aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION}
+const aliregistryDockerfileContent = `FROM registry.cn-beijing.aliyuncs.com/aliyunfc/runtime-python3.6:build-${dockerOpts.IMAGE_VERSION} as python3
 ${dockerfileContent}`;
 
 
