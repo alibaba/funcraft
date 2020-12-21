@@ -25,7 +25,7 @@ function generateNasServiceRes(serviceName, vpcConfig, nasConfig, zipCodePath) {
       Type: 'Aliyun::Serverless::Function',
       Properties: {
         Handler: 'index.handler',
-        Runtime: 'nodejs10',
+        Runtime: 'nodejs8',
         CodeUri: zipCodePath,
         Timeout: 600,
         MemorySize: 256,
