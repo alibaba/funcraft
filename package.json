@@ -82,7 +82,7 @@
     "copy-dir": "^1.1.0",
     "copyfiles": "^2.2.0",
     "crc64-ecma182.js": "^1.0.0",
-    "date-and-time": "^0.12.0",
+    "date-and-time": "^0.14.2",
     "debug": "^2.6.8",
     "detect-mocha": "^0.1.0",
     "dev-null": "^0.1.1",
