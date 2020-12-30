@@ -29,6 +29,7 @@ const getRamClient = async () => {
   const ram = new Ram({
     accessKeyId: profile.accessKeyId,
     accessKeySecret: profile.accessKeySecret,
+    securityToken: profile.securityToken,
     endpoint: 'https://ram.aliyuncs.com',
     opts: {
       timeout: profile.timeout * 1000

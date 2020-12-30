@@ -31,6 +31,7 @@ const getOssClient = async (bucket) => {
       region: 'oss-' + profile.defaultRegion,
       accessKeyId: profile.accessKeyId,
       accessKeySecret: profile.accessKeySecret,
+      stsToken: profile.securityToken,
       timeout: profile.timeout * 1000
     });
   }
@@ -38,6 +39,7 @@ const getOssClient = async (bucket) => {
   const location = await OSS({
     accessKeyId: profile.accessKeyId,
     accessKeySecret: profile.accessKeySecret,
+    stsToken: profile.securityToken,
     bucket,
     region: 'oss-' + profile.defaultRegion
   }).getBucketLocation(bucket);
@@ -47,6 +49,7 @@ const getOssClient = async (bucket) => {
   const client = OSS({
     accessKeyId: profile.accessKeyId,
     accessKeySecret: profile.accessKeySecret,
+    stsToken: profile.securityToken,
     bucket,
     region: location.location,
     timeout: profile.timeout * 1000
@@ -69,13 +72,14 @@ const getFcClient = async (opts = {}) => {
   const accountId = profile.accountId ? profile.accountId : 'accountId';
   const accessKeyID = profile.accessKeyId ? profile.accessKeyId : 'accessKeyID';
   const accessKeySecret = profile.accessKeySecret ? profile.accessKeySecret : 'accessKeySecret';
+  const securityToken = profile.securityToken;
   const region = profile.defaultRegion ? profile.defaultRegion : 'cn-hangzhou';
 
   const enable = profile.enableCustomEndpoint === true || profile.enableCustomEndpoint === 'true';
   const endpoint = profile.fcEndpoint ? profile.fcEndpoint : (enable ? profile.endpoint : undefined);
 
   const fc = new FC(accountId, {
-    accessKeyID, accessKeySecret, region, endpoint,
+    accessKeyID, accessKeySecret, securityToken, region, endpoint,
     timeout: opts.timeout || profile.timeout * 1000,
     secure: profile.protocol !== 'http',
     headers: {
@@ -101,7 +105,8 @@ const getFnFClient = async () => {
   return new FnFClient({
     endpoint: `https://${profile.accountId}.${profile.defaultRegion}.fnf.aliyuncs.com`,
     accessKeyId: profile.accessKeyId,
-    accessKeySecret: profile.accessKeySecret
+    accessKeySecret: profile.accessKeySecret,
+    securityToken: profile.securityToken
   });
 };
 
@@ -113,6 +118,7 @@ const getPopClient = async (endpoint, apiVersion) => {
     apiVersion: apiVersion,
     accessKeyId: profile.accessKeyId,
     accessKeySecret: profile.accessKeySecret,
+    securityToken: profile.securityToken,
     opts: {
       timeout: profile.timeout * 1000
     }
@@ -165,6 +171,7 @@ const getOtsClient = async (instanceName) => {
   return new TableStore.Client({
     accessKeyId: profile.accessKeyId,
     secretAccessKey: profile.accessKeySecret,
+    securityToken: profile.securityToken,
     endpoint: endpoint,
     instancename: instanceName
   });
@@ -177,6 +184,7 @@ const getMnsClient = async (topicName, region) => {
     region: region,
     accessKeyId: profile.accessKeyId,
     accessKeySecret: profile.accessKeySecret,
+    securityToken: profile.securityToken,
     // optional & default
     secure: false, // use https or http
     internal: false, // use internal endpoint
@@ -190,6 +198,7 @@ const getCloudApiClient = async () => {
   return new CloudAPI({
     accessKeyId: profile.accessKeyId,
     accessKeySecret: profile.accessKeySecret,
+    securityToken: profile.securityToken,
     endpoint: `http://apigateway.${profile.defaultRegion}.aliyuncs.com`,
     opts: {
       timeout: profile.timeout * 1000
@@ -203,7 +212,8 @@ const getSlsClient = async () => {
   const log = new Log({
     region: profile.defaultRegion,
     accessKeyId: profile.accessKeyId,
-    accessKeySecret: profile.accessKeySecret
+    accessKeySecret: profile.accessKeySecret,
+    securityToken: profile.securityToken
   });
 
   const realRequest = log._request.bind(log);
