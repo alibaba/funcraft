@@ -190,6 +190,33 @@ export const rosSchema = {
                   "type": "string",
                   "enum": ["e1", "c1"]
                 },
+                'InstanceLifecycleConfig': {
+                  'type': 'object',
+                  'properties': {
+                    'PreFreeze': {
+                      'type': 'object',
+                      'properties': {
+                        'Handler': {
+                          'type': 'string'
+                        },
+                        'Timeout': {
+                          'type': 'integer'
+                        }
+                      }
+                    },
+                    'PreStop': {
+                      'type': 'object',
+                      'properties': {
+                        'Handler': {
+                          'type': 'string'
+                        },
+                        'Timeout': {
+                          'type': 'integer'
+                        }
+                      }
+                    }
+                  }
+                },
                 "AsyncConfiguration": {
                   "type": "object",
                   "properties": {
@@ -270,6 +297,33 @@ export const rosSchema = {
                 "InstanceType": {
                   "type": "string",
                   "enum": ["e1", "c1"]
+                },
+                'InstanceLifecycleConfig': {
+                  'type': 'object',
+                  'properties': {
+                    'PreFreeze': {
+                      'type': 'object',
+                      'properties': {
+                        'Handler': {
+                          'type': 'string'
+                        },
+                        'Timeout': {
+                          'type': 'integer'
+                        }
+                      }
+                    },
+                    'PreStop': {
+                      'type': 'object',
+                      'properties': {
+                        'Handler': {
+                          'type': 'string'
+                        },
+                        'Timeout': {
+                          'type': 'integer'
+                        }
+                      }
+                    }
+                  }
                 },
                 "AsyncConfiguration": {
                   "type": "object",

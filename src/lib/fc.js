@@ -1169,7 +1169,8 @@ async function makeFunction(baseDir, {
   environmentVariables = {},
   instanceConcurrency,
   nasConfig,
-  vpcConfig
+  vpcConfig,
+  InstanceLifecycleConfig
 }, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
   
@@ -1239,7 +1240,8 @@ async function makeFunction(baseDir, {
   const params = {
     description, handler, initializer,
     timeout, initializationTimeout, memorySize,
-    runtime, instanceConcurrency, instanceType
+    runtime, instanceConcurrency, instanceType,
+    InstanceLifecycleConfig
   };
   if (isNotCustomContainer) {
     params.code = code;
