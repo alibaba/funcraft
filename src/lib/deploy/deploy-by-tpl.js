@@ -127,7 +127,8 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
     nasConfig,
-    vpcConfig
+    vpcConfig,
+    InstanceLifecycleConfig: properties.InstanceLifecycleConfig
   }, onlyConfig, tplPath, useNas, assumeYes);
 
   if (!skipTrigger) {
@@ -975,7 +976,6 @@ async function deploy(tplPath, context) {
     const stackName = context.stackName || DEFAULT_STACK_NAME;
     await deployByRos(baseDir, stackName, tpl, context.assumeYes, context.parameterOverride, tplPath);
   } else {
-
     await deployByApi(baseDir, tpl, tplPath, context);
     const serviceNasMappings = await getNasMappingsFromNasYml(getNasYmlPath(tplPath));
     showTipsForNasYml(getRootBaseDir(baseDir), serviceNasMappings);
