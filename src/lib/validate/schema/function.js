@@ -196,6 +196,9 @@ const functionSchema = {
                 'Command': {
                   'type': 'string'
                 },
+                'InstanceID': {
+                  'type': 'string'
+                },
                 'Image': {
                   'type': 'string'
                 },
