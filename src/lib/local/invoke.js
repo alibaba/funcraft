@@ -11,11 +11,12 @@ const extract = require('extract-zip');
 const tmpDir = require('temp-dir');
 const uuid = require('uuid');
 const { DEFAULT_NAS_PATH_SUFFIX } = require('../tpl');
+const { isCustomContainerRuntime } = require('../common/model/runtime');
 
 const _ = require('lodash');
 
 function isZipArchive(codeUri) {
-  return codeUri.endsWith('.zip') || codeUri.endsWith('.jar') || codeUri.endsWith('.war');
+  return codeUri ? codeUri.endsWith('.zip') || codeUri.endsWith('.jar') || codeUri.endsWith('.war') : false;
 }
 
 async function processZipCodeIfNecessary(codeUri) {
@@ -53,7 +54,7 @@ class Invoke {
 
     this.runtime = this.functionProps.Runtime;
     this.baseDir = baseDir;
-    this.codeUri = path.resolve(this.baseDir, this.functionProps.CodeUri);
+    this.codeUri = this.functionProps.CodeUri ? path.resolve(this.baseDir, this.functionProps.CodeUri) : null;
     this.tmpDir = tmpDir;
     this.debuggerPath = debuggerPath;
     this.debugArgs = debugArgs;
@@ -102,8 +103,12 @@ class Invoke {
     debug(`docker mounts: %s`, JSON.stringify(this.mounts, null, 4));
 
     this.containerName = docker.generateRamdomContainerName();
-
-    this.imageName = await dockerOpts.resolveRuntimeToDockerImage(this.runtime);
+    const isCustomContainer = isCustomContainerRuntime(this.runtime);
+    if (isCustomContainer) {
+      this.imageName = this.functionProps.CustomContainerConfig.Image;
+    } else {
+      this.imageName = await dockerOpts.resolveRuntimeToDockerImage(this.runtime);
+    }
 
     await docker.pullImageIfNeed(this.imageName);
 

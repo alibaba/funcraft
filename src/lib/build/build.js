@@ -24,6 +24,8 @@ const { findFunctionsInTpl } = require('../definition');
 const { DEFAULT_NAS_PATH_SUFFIX } = require('../tpl');
 const { dockerBuildAndPush, buildkitBuild } = require('./build-image');
 const { execSync } = require('child_process');
+const { isCustomContainerRuntime } = require('../common/model/runtime');
+
 const _ = require('lodash');
 const { convertDockerfileToBuildkitFormat } = require('../buildkit');
 const { promptForConfirmContinue } = require('../init/prompt');
@@ -263,7 +265,7 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, st
 
     const runtime = functionRes.Properties.Runtime;
     const codeUri = functionRes.Properties.CodeUri;
-    if (runtime === 'custom-container') {
+    if (isCustomContainerRuntime(runtime)) {
       if (!buildStage) {
         continue;
       }

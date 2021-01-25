@@ -13,10 +13,12 @@ const docker = require('../docker');
 const dockerOpts = require('../docker-opts');
 const FC_HTTP_PARAMS = 'x-fc-http-params';
 
-const { red } = require('colors');
+const { red, green } = require('colors');
 const { startContainer } = require('../docker');
 const { validateSignature, parseOutputStream } = require('./http');
-const { getHttpRawBody, generateHttpParams, parseHttpTriggerHeaders, validateHeader } = require('../local/http');
+const { getHttpRawBody, generateHttpParams, parseHttpTriggerHeaders, validateHeader, getFcReqHeaders, requestUntilServerUp, generateInitRequestOpts, generateRequestOpts } = require('../local/http');
+const uuid = require('uuid');
+const { isCustomContainerRuntime } = require('../common/model/runtime');
 
 const isWin = process.platform === 'win32';
 
@@ -31,7 +33,6 @@ class HttpInvoke extends Invoke {
     this.isAnonymous = authType === 'ANONYMOUS' || authType === 'anonymous';
     this.endpointPrefix = endpointPrefix;
     this._invokeInitializer = true;
-
     process.on('SIGINT', () => {
       this.cleanUnzippedCodeDir();
     });
@@ -93,10 +94,9 @@ class HttpInvoke extends Invoke {
           if (!this.runner) {
             debug('acquire invoke lock success, ready to create runner');
 
-            if (!this.watcher) {
+            if (!this.watcher && !isCustomContainerRuntime(this.runtime)) {
               // add file ignore when auto reloading
               const ign = await ignore(this.baseDir);
-
               this.watcher = watch(this.codeUri, { recursive: true, persistent: false, filter: (f) => {
                 return ign && !ign(f);
               }}, (evt, name) => {
@@ -118,17 +118,22 @@ class HttpInvoke extends Invoke {
   }
 
   async _startRunner() {
-
     const envs = await docker.generateDockerEnvs(this.baseDir, this.serviceName, this.serviceRes.Properties, this.functionName, this.functionProps, this.debugPort, null, this.nasConfig, true, this.debugIde, this.debugArgs);
+    const cmd = docker.generateDockerCmd(this.runtime, true, { 
+      functionProps: this.functionProps
+    });
 
     const opts = await dockerOpts.generateLocalStartOpts(this.runtime,
       this.containerName,
       this.mounts,
-      ['--server'],
-      this.debugPort,
+      cmd,
       envs,
-      this.dockerUser);
-
+      {
+        debugPort: this.debugPort,
+        dockerUser: this.dockerUser,
+        imageName: this.imageName,
+        caPort: this.functionProps.CAPort
+      });
     this.runner = await startContainer(opts, process.stdout, process.stderr, {
       serviceName: this.serviceName,
       functionName: this.functionName
@@ -148,16 +153,17 @@ class HttpInvoke extends Invoke {
 
       const outputStream = new streams.WritableStream();
       const errorStream = new streams.WritableStream();
-
       const event = await getHttpRawBody(req);
-
       const httpParams = generateHttpParams(req, this.endpointPrefix);
 
       const envs = await docker.generateDockerEnvs(this.baseDir, this.serviceName, this.serviceRes.Properties, this.functionName, this.functionProps, this.debugPort, httpParams, this.nasConfig, true, this.debugIde);
 
-      if (this.debugPort && !this.runner) {
+      if (this.debugPort && !this.runner) {                                                                                               
         // don't reuse container
-        const cmd = docker.generateDockerCmd(this.functionProps, true);
+        const cmd = docker.generateDockerCmd(this.runtime, false, {
+          functionProps: this.functionProps,
+          httpMode: true
+        });
 
         this.containerName = docker.generateRamdomContainerName();
 
@@ -175,66 +181,95 @@ class HttpInvoke extends Invoke {
         await docker.run(opts,
           event,
           outputStream, errorStream);
+        this.response(outputStream, errorStream, res);
       } else {
         // reuse container
         debug('http doInvoke, acquire invoke lock');
+        if (isCustomContainerRuntime(this.runtime)) {
+          const fcReqHeaders = getFcReqHeaders(req.headers, uuid.v4(), envs);
+          if (this.functionProps.Initializer && this._invokeInitializer) {
+            console.log('Initializing...');
+            const initRequestOpts = generateInitRequestOpts(req, this.functionProps.CAPort, fcReqHeaders);
 
-        const cmd = [dockerOpts.resolveMockScript(this.runtime), ...docker.generateDockerCmd(this.functionProps, true, this._invokeInitializer, isWin ? event : null)];
-
-        debug(`http doInvoke, cmd is : ${cmd}`);
-
-        if (!this.isAnonymous) {
-          // check signature
-          if (!await validateSignature(req, res, req.method)) { return; }
-        }
-
-        try {
-          await this.runner.exec(cmd, {
-            env: envs,
-            outputStream,
-            errorStream,
-            verbose: true,
-            context: {
-              serviceName: this.serviceName,
-              functionName: this.functionName
-            },
-            event: !isWin ? event : null
-          });
-
-          this._invokeInitializer = false;
-        } catch (error) {
-          console.log(red('Fun Error: ', errorStream.toString()));
-
-          // errors for runtime error
-          // for example, when using nodejs, use response.send(new Error('haha')) will lead to runtime error
-          // and container will auto exit, exec will receive no message
-          res.status(500);
-          res.setHeader('Content-Type', 'application/json');
-
-          res.send({
-            'errorMessage': `Process exited unexpectedly before completing request`
-          });
-
-          // for next invoke
-          this.runner = null;
-          this.containerName = docker.generateRamdomContainerName();
-          if (error.indexOf && error.indexOf('exited with code 137') > -1) { // receive signal SIGKILL http://tldp.org/LDP/abs/html/exitcodes.html
-            debug(error);
-          } else {
-            console.error(error);
+            const initResp = await requestUntilServerUp(initRequestOpts, this.functionProps.InitializationTimeout || 3);
+            this._invokeInitializer = false;
+            console.log(green(`Initializing done. StatusCode of response is ${initResp.statusCode}`));
+            debug(`Response of initialization is: ${JSON.stringify(initResp)}`);
           }
-          return;
-        }
+          const requestOpts = generateRequestOpts(req, this.functionProps.CAPort, fcReqHeaders, event);
 
+          const respOfCustomContainer = await requestUntilServerUp(requestOpts, this.functionProps.Timeout || 3);
+          this.responseOfCustomContainer(res, respOfCustomContainer);
+        } else {
+          const cmd = [dockerOpts.resolveMockScript(this.runtime), ...docker.generateDockerCmd(this.runtime, false, {
+            functionProps: this.functionProps, 
+            httpMode: true, 
+            invokeInitializer: this._invokeInitializer, 
+            event: isWin ? event : null
+          })];
+
+          debug(`http doInvoke, cmd is : ${cmd}`);
+
+          if (!this.isAnonymous) {
+            // check signature
+            if (!await validateSignature(req, res, req.method)) { return; }
+          }
+
+          try {
+            await this.runner.exec(cmd, {
+              env: envs,
+              outputStream,
+              errorStream,
+              verbose: true,
+              context: {
+                serviceName: this.serviceName,
+                functionName: this.functionName
+              },
+              event: !isWin ? event : null
+            });
+
+            this._invokeInitializer = false;
+            this.response(outputStream, errorStream, res);
+          } catch (error) {
+            console.log(red('Fun Error: ', errorStream.toString()));
+
+            // errors for runtime error
+            // for example, when using nodejs, use response.send(new Error('haha')) will lead to runtime error
+            // and container will auto exit, exec will receive no message
+            res.status(500);
+            res.setHeader('Content-Type', 'application/json');
+
+            res.send({
+              'errorMessage': `Process exited unexpectedly before completing request`
+            });
+
+            // for next invoke
+            this.runner = null;
+            this.containerName = docker.generateRamdomContainerName();
+            if (error.indexOf && error.indexOf('exited with code 137') > -1) { // receive signal SIGKILL http://tldp.org/LDP/abs/html/exitcodes.html
+              debug(error);
+            } else {
+              console.error(error);
+            }
+            return;
+          }
+        }
         debug('http doInvoke exec end, begin to response');
       }
 
-      this.response(outputStream, errorStream, res);
     });
   }
 
   async afterInvoke() {
 
+  }
+
+
+  responseOfCustomContainer(res, resp) {
+    var { statusCode, headers, body } = resp;
+    res.status(statusCode);
+    res.set(headers);
+    res.send(body);
   }
 
   // responseHttpTriggers

@@ -12,8 +12,8 @@ const dockerOpts = require('./docker-opts');
 const getVisitor = require('./visitor').getVisitor;
 const getProfile = require('./profile').getProfile;
 const { generatePwdFile } = require('./utils/passwd');
-
-const { blue, red, yellow } = require('colors');
+const { isCustomContainerRuntime } = require('./common/model/runtime');
+const { blue, red, yellow, green } = require('colors');
 const { getRootBaseDir } = require('./tpl');
 const { parseArgsStringToArgv } = require('string-argv');
 const { extractNasMappingsFromNasYml } = require('./nas/support');
@@ -141,6 +141,9 @@ async function resolveDebuggerPathToMount(debuggerPath) {
 
 // todo: 当前只支持目录以及 jar。code uri 还可能是 oss 地址、目录、jar、zip?
 async function resolveCodeUriToMount(absCodeUri, readOnly = true) {
+  if (!absCodeUri) {
+    return null;
+  }
   let target = null;
 
   const stats = await fs.lstat(absCodeUri);
@@ -241,8 +244,20 @@ async function renameContainer(container, name) {
   });
 }
 
-// dockerode exec 在 windows 上有问题，用 exec 的 stdin 传递事件，当调用 stream.end() 时，会直接导致 exec 退出，且 ExitCode 为 null
-function generateDockerCmd(functionProps, httpMode, invokeInitializer = true, event = null) {
+function genDockerCmdOfCustomContainer(functionProps) {
+  const command = functionProps.CustomContainerConfig.Command ? JSON.parse(functionProps.CustomContainerConfig.Command) : undefined;
+  const args = functionProps.CustomContainerConfig.Args ? JSON.parse(functionProps.CustomContainerConfig.Args) : undefined;
+
+  if (command && args) {
+    return [...functionProps.CustomContainerConfig.Command, ...functionProps.CustomContainerConfig.Args];
+  } else if (command) {
+    return command;
+  } else if (args) {
+    return args;
+  }
+  return [];
+}
+function genDockerCmdOfNonCustomContainer(functionProps, httpMode, invokeInitializer = true, event = null) {
   const cmd = ['-h', functionProps.Handler];
 
   // 如果提供了 event
@@ -274,6 +289,16 @@ function generateDockerCmd(functionProps, httpMode, invokeInitializer = true, ev
   debug(`docker cmd: ${cmd}`);
 
   return cmd;
+}
+
+// dockerode exec 在 windows 上有问题，用 exec 的 stdin 传递事件，当调用 stream.end() 时，会直接导致 exec 退出，且 ExitCode 为 null
+function generateDockerCmd(runtime, isLocalStartInit, { functionProps, httpMode, invokeInitializer = true, event = null }) {
+  if (isCustomContainerRuntime(runtime)) {
+    return genDockerCmdOfCustomContainer(functionProps);
+  } else if (isLocalStartInit) {
+    return ['--server'];
+  }
+  return genDockerCmdOfNonCustomContainer(functionProps, httpMode, invokeInitializer, event);
 }
 
 
@@ -467,13 +492,15 @@ async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionNa
     'FC_MEMORY_SIZE': functionProps.MemorySize || 128,
     'FC_TIMEOUT': functionProps.Timeout || 3,
     'FC_INITIALIZER': functionProps.Initializer,
-    'FC_INITIALIZATIONTIMEOUT': functionProps.InitializationTimeout || 3,
+    'FC_INITIALIZATION_TIMEOUT': functionProps.InitializationTimeout || 3,
     'FC_SERVICE_NAME': serviceName,
     'FC_SERVICE_LOG_PROJECT': ((serviceProps || {}).LogConfig || {}).Project,
     'FC_SERVICE_LOG_STORE': ((serviceProps || {}).LogConfig || {}).Logstore
   });
 
-
+  if (isCustomContainerRuntime(functionProps.Runtime)) {
+    return envs;
+  }
   return addEnv(envs, nasConfig);
 }
 
@@ -543,8 +570,7 @@ async function isDockerToolBoxAndEnsureDockerVersion() {
   return process.platform === 'win32' && obj.provider === 'virtualbox';
 }
 
-async function run(opts, event, outputStream, errorStream, context = {}) {
-
+async function runContainer(opts, outputStream, errorStream, context = {}) {
   const container = await createContainer(opts);
 
   const attachOpts = {
@@ -590,6 +616,30 @@ async function run(opts, event, outputStream, errorStream, context = {}) {
 
   containers.add(container.id);
 
+  return { 
+    container,
+    stream
+  };
+}
+
+async function exitContainer(container) {
+  if (container) {
+    // exitRs format: {"Error":null,"StatusCode":0}
+    // see https://docs.docker.com/engine/api/v1.37/#operation/ContainerStop
+    console.log('exitContainer...');
+    await container.stop();
+
+    containers.delete(container.id);
+    console.log(green('container exited!'));
+  } else {
+    throw new Error(red('Exited container is undefined!'));
+  }
+}
+
+async function run(opts, event, outputStream, errorStream, context = {}) {
+
+  const { container, stream } = await runContainer(opts, outputStream, errorStream, context);
+
   writeEventToStreamAndClose(stream, event);
 
   // exitRs format: {"Error":null,"StatusCode":0}
@@ -600,6 +650,7 @@ async function run(opts, event, outputStream, errorStream, context = {}) {
 
   return exitRs;
 }
+
 
 async function createContainer(opts) {
   const isWin = process.platform === 'win32';
@@ -731,7 +782,6 @@ async function startContainer(opts, outputStream, errorStream, context = {}) {
       const stdin = event ? true : false;
 
       const options = {
-        Cmd: cmd,
         Env: dockerOpts.resolveDockerEnv(env),
         Tty: false,
         AttachStdin: stdin,
@@ -739,6 +789,9 @@ async function startContainer(opts, outputStream, errorStream, context = {}) {
         AttachStderr: true,
         WorkingDir: cwd
       };
+      if (cmd !== []) {
+        options.Cmd = cmd;
+      }
 
       // docker exec
       debug('docker exec opts: ' + JSON.stringify(options, null, 4));
@@ -1042,5 +1095,5 @@ module.exports = {
   conventInstallTargetsToMounts, startSboxContainer, buildImage, copyFromImage,
   resolveTmpDirToMount, showDebugIdeTipsForPycharm, resolveDebuggerPathToMount,
   listContainers, getContainer, createAndRunContainer, execContainer,
-  renameContainer, detectDockerVersion, resolveNasYmlToMount, resolvePasswdMount
+  renameContainer, detectDockerVersion, resolveNasYmlToMount, resolvePasswdMount, runContainer, exitContainer
 };

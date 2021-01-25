@@ -33,10 +33,23 @@ describe('test generateDockerCmd', () => {
     'Runtime': 'python3',
     'InitializationTimeout': 3
   };
+  const functionPropsOfCustomContainer = {
+    'Handler': 'not-used',
+    'CodeUri': './',
+    'CAPort': 9000,
+    'CustomContainerConfig': {
+      'Image': 'image-name',
+      'Command': '["python", "./app.py"]'
+    }
+  };
+  const nonCustomContainerRuntime = 'nodejs10';
+  const customContainerRuntime = 'custom-container';
+  it('test generate docker cmd of non-custom-container', () => {
 
-  it('test generate docker cmd', () => {
-
-    const cmd = docker.generateDockerCmd(functionProps, false);
+    const cmd = docker.generateDockerCmd(nonCustomContainerRuntime, false, { 
+      functionProps, 
+      httpMode: false 
+    });
 
     expect(cmd).to.eql([
       '-h',
@@ -49,9 +62,14 @@ describe('test generateDockerCmd', () => {
     ]);
   });
 
-  it('test generate docker cmd with event', () => {
+  it('test generate docker cmd with event of non-custom-container', () => {
 
-    const cmd = docker.generateDockerCmd(functionProps, false, true, 'event');
+    const cmd = docker.generateDockerCmd(nonCustomContainerRuntime, false, {
+      functionProps,
+      httpMode: false,
+      invokeInitializer: true,
+      event: 'event'
+    });
 
     expect(cmd).to.eql([
       '-h',
@@ -66,8 +84,11 @@ describe('test generateDockerCmd', () => {
     ]);
   });
 
-  it('test generate docker http cmd', () => {
-    const cmd = docker.generateDockerCmd(functionProps, true);
+  it('test generate docker http cmd of non-custom-container', () => {
+    const cmd = docker.generateDockerCmd(nonCustomContainerRuntime, false, {
+      functionProps,
+      httpMode: true
+    });
 
     expect(cmd).to.eql([
       '-h',
@@ -81,8 +102,12 @@ describe('test generateDockerCmd', () => {
     ]);
   });
 
-  it('test generate docker http cmd without initializer', () => {
-    const cmd = docker.generateDockerCmd(functionProps, true, false);
+  it('test generate docker http cmd without initializer of non-custom-container', () => {
+    const cmd = docker.generateDockerCmd(nonCustomContainerRuntime, false, {
+      functionProps,
+      httpMode: true,
+      invokeInitializer: false
+    });
 
     expect(cmd).to.eql([
       '-h',
@@ -92,6 +117,22 @@ describe('test generateDockerCmd', () => {
       '--initializationTimeout',
       '3'
     ]);
+  });
+
+  it('test generate docker cmd when local start init', () => {
+    const cmd = docker.generateDockerCmd(nonCustomContainerRuntime, true, {
+      functionProps,
+      httpMode: true
+    });
+    expect(cmd).to.eql(['--server']);
+  });
+
+  it('test generate docker cmd of custom container runtime', () => {
+    const cmd = docker.generateDockerCmd(customContainerRuntime, false, {
+      functionProps: functionPropsOfCustomContainer,
+      httpMode: true
+    });
+    expect(cmd).to.eql(['python', './app.py']);
   });
 });
 

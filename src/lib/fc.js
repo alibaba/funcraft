@@ -34,7 +34,7 @@ const { getTpl, getBaseDir, getNasYmlPath, getRootTplPath, getProjectTpl } = req
 const { addEnv, mergeEnvs, resolveLibPathsFromLdConf, generateDefaultLibPath } = require('./install/env');
 const { readFileFromNasYml, mergeNasMappingsInNasYml, getNasMappingsFromNasYml, extractNasMappingsFromNasYml } = require('./nas/support');
 const { isBinary } = require('istextorbinary');
-
+const { isCustomContainerRuntime } = require('./common/model/runtime');
 const _ = require('lodash');
 
 const {
@@ -105,13 +105,15 @@ async function detectLibraryFolders(dirName, libraryFolders, wrap, functionName)
 }
 
 async function detectLibrary(codeUri, runtime, baseDir, functionName, wrap = '') {
-  const absoluteCodePath = path.resolve(baseDir, codeUri);
+  if (codeUri) {
+    const absoluteCodePath = path.resolve(baseDir, codeUri);
 
-  const stats = await fs.lstat(absoluteCodePath);
-  if (stats.isFile()) {
-    let libraryFolders = runtimeTypeMapping[runtime];
+    const stats = await fs.lstat(absoluteCodePath);
+    if (stats.isFile()) {
+      let libraryFolders = runtimeTypeMapping[runtime];
 
-    await detectLibraryFolders(path.dirname(absoluteCodePath), libraryFolders, wrap, functionName);
+      await detectLibraryFolders(path.dirname(absoluteCodePath), libraryFolders, wrap, functionName);
+    }
   }
 }
 
@@ -1184,7 +1186,7 @@ async function makeFunction(baseDir, {
 }, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
   
-  const isNotCustomContainer = runtime !== 'custom-container';
+  const isNotCustomContainer = !isCustomContainerRuntime(runtime);
   var fn;
   try {
     fn = await fc.getFunction(serviceName, functionName);

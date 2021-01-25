@@ -4,6 +4,7 @@ const definition = require('../definition');
 const _ = require('lodash');
 const fs = require('fs-extra');
 const path = require('path');
+const { isCustomContainerRuntime } = require('../common/model/runtime');
 
 function findBuildFuncs(buildName, tpl) {
   if (buildName) {
@@ -37,7 +38,7 @@ function updateTemplateResources(originTplContent, buildFuncs, skippedBuildFuncs
       const absCodeDir = path.resolve(baseDir, functionRes.Properties.CodeUri);
       const relativeCodeUri = path.relative(absRootArtifactsDir, absCodeDir);
 
-      if (functionRes.Properties.Runtime === 'custom-container') {
+      if (isCustomContainerRuntime(functionRes.Properties.Runtime)) {
         delete functionRes.Properties.CodeUri;
       } else {
         functionRes.Properties.CodeUri = relativeCodeUri;
@@ -47,7 +48,7 @@ function updateTemplateResources(originTplContent, buildFuncs, skippedBuildFuncs
       const absFuncArtifactDir = path.resolve(baseDir, funcArtifactDir);
       const relativeCodeUri = path.relative(absRootArtifactsDir, absFuncArtifactDir);
 
-      if (functionRes.Properties.Runtime === 'custom-container') {
+      if (isCustomContainerRuntime(functionRes.Properties.Runtime)) {
         delete functionRes.Properties.CodeUri;
       } else {
         functionRes.Properties.CodeUri = relativeCodeUri;
