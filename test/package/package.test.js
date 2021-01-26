@@ -51,7 +51,7 @@ describe('test package', () => {
       '../tpl': tpl,
       '../client': client,
       '../oss': {
-        processOSSBucket: () => bucket
+        processOSSBucket: b => b ? b : `fun-gen-${getProfileRes.defaultRegion}-${getProfileRes.accountId}`
       }, 
       'path': path
     });
