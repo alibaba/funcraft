@@ -50,6 +50,9 @@ describe('test package', () => {
     pack = proxyquire('../../lib/package/package', {
       '../tpl': tpl,
       '../client': client,
+      '../oss': {
+        processOSSBucket: () => bucket
+      }, 
       'path': path
     });
   });
