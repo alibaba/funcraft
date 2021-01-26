@@ -50,6 +50,9 @@ describe('test package', () => {
     pack = proxyquire('../../lib/package/package', {
       '../tpl': tpl,
       '../client': client,
+      '../oss': {
+        processOSSBucket: b => b ? b : `fun-gen-${getProfileRes.defaultRegion}-${getProfileRes.accountId}`
+      }, 
       'path': path
     });
   });

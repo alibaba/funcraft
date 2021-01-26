@@ -2,7 +2,7 @@
 
 const sinon = require('sinon');
 const sandbox = sinon.createSandbox();
-const { deployByRos } = require('../../lib/deploy/deploy-support-ros');
+const proxyquire = require('proxyquire');
 const client = require('../../lib/client');
 const { setProcess } = require('../test-utils');
 const trigger = require('../../lib/trigger');
@@ -280,6 +280,7 @@ describe('test deploy support ros', () => {
   let rosClient;
   let requestStub;
   let restoreProcess;
+  let deployByRos;
   beforeEach(() => {
     restoreProcess = setProcess({
       ACCOUNT_ID: 'testAccountId',
@@ -300,6 +301,12 @@ describe('test deploy support ros', () => {
     sandbox.stub(time, 'sleep');
     sandbox.stub(client, 'getRosClient').resolves(rosClient);
     sandbox.stub(uuid, 'v4').returns('random');
+    deployByRos = proxyquire('../../lib/deploy/deploy-support-ros', {
+      '../package/template': {
+        ...require('../../lib/package/template'),
+        transformRosYmlCodeUri: ({ tpl }) => tpl
+      }
+    }).deployByRos;
   });
 
   afterEach(() => {
