@@ -1309,7 +1309,8 @@ async function generateDefaultLogConfig() {
   const profile = await getProfile();
   return {
     project: generateSlsProjectName(profile.accountId, profile.defaultRegion),
-    logstore: `function-log`
+    logstore: `function-log`,
+    enableRequestMetrics: true
   };
 }
 
@@ -1328,7 +1329,8 @@ async function transformLogConfig(logConfig) {
 
   return {
     project: logConfig.Project || '',
-    logstore: logConfig.Logstore || ''
+    logstore: logConfig.Logstore || '',
+    enableRequestMetrics: logConfig.EnableRequestMetrics || false
   };
 }
 
