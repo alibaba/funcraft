@@ -42,6 +42,7 @@ const laravel = {
           'mode': '0755',
           'backup': false,
           'content': `
+keepalive_timeout 1200s;
 server {
   listen 9000;
   server_name localhost;
