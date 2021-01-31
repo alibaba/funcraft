@@ -43,6 +43,33 @@ const functionSchema = {
               'type': 'string',
               'enum': ['e1', 'c1']
             },
+            'InstanceLifecycleConfig': {
+              'type': 'object',
+              'properties': {
+                'PreFreeze': {
+                  'type': 'object',
+                  'properties': {
+                    'Handler': {
+                      'type': 'string'
+                    },
+                    'Timeout': {
+                      'type': 'integer'
+                    }
+                  }
+                },
+                'PreStop': {
+                  'type': 'object',
+                  'properties': {
+                    'Handler': {
+                      'type': 'string'
+                    },
+                    'Timeout': {
+                      'type': 'integer'
+                    }
+                  }
+                }
+              }
+            },
             'AsyncConfiguration': {
               'type': 'object',
               'properties': {
@@ -107,6 +134,33 @@ const functionSchema = {
             'InstanceType': {
               'type': 'string',
               'enum': ['e1', 'c1']
+            },
+            'InstanceLifecycleConfig': {
+              'type': 'object',
+              'properties': {
+                'PreFreeze': {
+                  'type': 'object',
+                  'properties': {
+                    'Handler': {
+                      'type': 'string'
+                    },
+                    'Timeout': {
+                      'type': 'integer'
+                    }
+                  }
+                },
+                'PreStop': {
+                  'type': 'object',
+                  'properties': {
+                    'Handler': {
+                      'type': 'string'
+                    },
+                    'Timeout': {
+                      'type': 'integer'
+                    }
+                  }
+                }
+              }
             },
             'AsyncConfiguration': {
               'type': 'object',

@@ -1151,6 +1151,16 @@ async function generateFontsConfAndEnv(baseDir, codeUri, appendContet) {
   return DEFAULT_FONTS_CONFIG_ENV;
 }
 
+function transformInstanceLifecycleConfig(InstanceLifecycleConfig) {
+  const emptyProp = {
+    'Handler': ''
+  };
+  return {
+    'PreFreeze': (InstanceLifecycleConfig && InstanceLifecycleConfig.PreFreeze) ? InstanceLifecycleConfig.PreFreeze : emptyProp,
+    'PreStop': (InstanceLifecycleConfig && InstanceLifecycleConfig.PreStop) ? InstanceLifecycleConfig.PreStop : emptyProp
+  };
+}
+
 async function makeFunction(baseDir, {
   serviceName,
   functionName,
@@ -1169,7 +1179,8 @@ async function makeFunction(baseDir, {
   environmentVariables = {},
   instanceConcurrency,
   nasConfig,
-  vpcConfig
+  vpcConfig,
+  InstanceLifecycleConfig
 }, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
   
@@ -1235,11 +1246,13 @@ async function makeFunction(baseDir, {
       };
     }
   }
+  const transformedInstanceLifecycleConfig = transformInstanceLifecycleConfig(InstanceLifecycleConfig);
 
   const params = {
     description, handler, initializer,
     timeout, initializationTimeout, memorySize,
-    runtime, instanceConcurrency, instanceType
+    runtime, instanceConcurrency, instanceType,
+    InstanceLifecycleConfig: transformedInstanceLifecycleConfig
   };
   if (isNotCustomContainer) {
     params.code = code;
