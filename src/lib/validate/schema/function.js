@@ -198,6 +198,10 @@ const functionSchema = {
                 },
                 'Image': {
                   'type': 'string'
+                },
+                'accelerationType': {
+                  'type': 'string',
+                  'enum': ['Default', 'None']
                 }
               },
               'required': ['Image']
