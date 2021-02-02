@@ -61,7 +61,8 @@ const serviceResourceSchema = {
               'type': 'object',
               'properties': {
                 'Project': { 'type': 'string' },
-                'Logstore': { 'type': 'string' }
+                'Logstore': { 'type': 'string' },
+                'EnableRequestMetrics': { 'type': 'boolean' }
               },
               'required': ['Project', 'Logstore'],
               'additionalProperties': false
