@@ -10,7 +10,11 @@ async function bucketExist(ossClient, bucketName) {
   let bucketExist = false;
 
   try {
-    await ossClient.getBucketLocation(bucketName);
+    const { location } = await ossClient.getBucketLocation(bucketName);
+    const { defaultRegion } = await getProfile();
+    if (location !== `oss-${defaultRegion}`) {
+      throw new Error(`\nThe current oss-bucket region is ${location}, which is different from the configured region ${defaultRegion}.\n`);
+    }
     bucketExist = true;
   } catch (ex) {
 
