@@ -3,8 +3,6 @@
 ### Quick Start
 
 ```bash
-# Install dependencies in Funfile
-$ fun install -v
 
 # Deploy service and function
 $ fun deploy -y
