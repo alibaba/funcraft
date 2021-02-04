@@ -2,12 +2,14 @@
 
 const Invoke = require('./invoke');
 const streams = require('memory-streams');
-const { parseOutputStream } = require('./http');
-
-const { validateSignature, getHttpRawBody } = require('./http');
+const { parseOutputStream, getFcReqHeaders } = require('./http');
+const debug = require('debug')('fun:local');
+const { validateSignature, getHttpRawBody, generateInitRequestOpts, requestUntilServerUp, generateInvokeRequestOpts } = require('./http');
 const { red } = require('colors');
 const docker = require('../docker');
 const dockerOpts = require('../docker-opts');
+const uuid = require('uuid');
+const { isCustomContainerRuntime } = require('../common/model/runtime');
 
 class ApiInvoke extends Invoke {
 
@@ -19,22 +21,15 @@ class ApiInvoke extends Invoke {
     await super.init();
 
     this.envs = await docker.generateDockerEnvs(this.baseDir, this.serviceName, this.serviceRes.Properties, this.functionName, this.functionProps, this.debugPort, null, this.nasConfig, true, this.debugIde, this.debugArgs);
-    this.cmd = docker.generateDockerCmd(this.functionProps, true);
+    this.cmd = docker.generateDockerCmd(this.runtime, false, {
+      functionProps: this.functionProps,
+      httpMode: true
+    });
   }
 
   async doInvoke(req, res) {
 
     const containerName = docker.generateRamdomContainerName();
-
-    const opts = await dockerOpts.generateLocalInvokeOpts(this.runtime,
-      containerName,
-      this.mounts,
-      this.cmd,
-      this.debugPort,
-      this.envs,
-      this.dockerUser,
-      this.debugIde);
-
     const event = await getHttpRawBody(req);
 
     const outputStream = new streams.WritableStream();
@@ -42,15 +37,61 @@ class ApiInvoke extends Invoke {
 
     // check signature
     if (!await validateSignature(req, res, req.method)) { return; }
+    const opts = await dockerOpts.generateLocalStartOpts(this.runtime, 
+      containerName,
+      this.mounts,
+      this.cmd,
+      this.envs,
+      {
+        debugPort: this.debugPort,
+        dockerUser: this.dockerUser, 
+        debugIde: this.debugIde, 
+        imageName: this.imageName, 
+        caPort: this.functionProps.CAPort
+      });
+    if (isCustomContainerRuntime(this.runtime)) {
 
-    await docker.run(opts,
-      event,
-      outputStream,
-      errorStream);
+      const containerRunner = await docker.runContainer(opts, outputStream, errorStream, {
+        serviceName: this.serviceName,
+        functionName: this.functionName
+      });
 
-    this.response(outputStream, errorStream, res);
+      const container = containerRunner.container;
+
+      // send request
+      const fcReqHeaders = getFcReqHeaders({}, uuid.v4(), this.envs);
+      if (this.functionProps.Initializer) {
+        console.log('Initializing...');
+        const initRequestOpts = generateInitRequestOpts({}, this.functionProps.CAPort, fcReqHeaders);
+  
+        const initResp = await requestUntilServerUp(initRequestOpts, this.functionProps.InitializationTimeout || 3);
+        console.log(initResp.body);
+        debug(`Response of initialization is: ${JSON.stringify(initResp)}`);
+      }
+
+      const requestOpts = generateInvokeRequestOpts(this.functionProps.CAPort, fcReqHeaders, event);
+
+      const respOfCustomContainer = await requestUntilServerUp(requestOpts, this.functionProps.Timeout || 3);
+      // console.log(respOfCustomContainer.body);
+      // exit container
+      this.responseOfCustomContainer(res, respOfCustomContainer);
+      await docker.exitContainer(container);
+    } else {
+
+      await docker.run(opts,
+        event,
+        outputStream,
+        errorStream);
+  
+      this.response(outputStream, errorStream, res);
+    }
   }
-
+  responseOfCustomContainer(res, resp) {
+    var { statusCode, headers, body } = resp;
+    res.status(statusCode);
+    res.set(headers);
+    res.send(body);
+  }
   // responseApi
   response(outputStream, errorStream, res) {
     const errorResponse = errorStream.toString();

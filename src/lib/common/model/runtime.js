@@ -21,8 +21,13 @@ function getSupportedRuntimesAsString(ignoredRuntimes) {
   return getSupportedRuntimes(ignoredRuntimes).join(', ');
 }
 
+function isCustomContainerRuntime(runtime) {
+  return runtime === 'custom-container';
+}
+
 module.exports = {
   isSupportedRuntime,
   getSupportedRuntimes,
-  getSupportedRuntimesAsString
+  getSupportedRuntimesAsString,
+  isCustomContainerRuntime
 };

@@ -6,6 +6,10 @@ const FC = require('@alicloud/fc2');
 
 const debug = require('debug')('fun:local');
 const { parseHeaders, parseStatusLine } = require('http-string-parser');
+const rp = require('request-promise');
+// rp.debug = true;
+const { red } = require('colors');
+const { sleep } = require('../time');
 
 // https://stackoverflow.com/questions/14313183/javascript-regex-how-do-i-check-if-the-string-is-ascii-only
 /* eslint-disable */
@@ -176,7 +180,6 @@ function parseResponse(responseString) {
 function parseOutputStream(outputStream) {
   // 这里的 outputStream 包含 mock.sh 原始内容，以及 base64 后的 curl 的 response，因此可以直接按照 utf8 toString
   const response = outputStream.toString().split('\n');
-
   const [functionResponse, executionRawInfo] = filterFunctionResponseAndExecutionInfo(response);
 
   const functionBase64Response = functionResponse.join('\n');
@@ -230,10 +233,124 @@ function validateHeader(headerKey, headerValue) {
   return true;
 }
 
+function getFcReqHeaders(headers, reqeustId, envs) {
+  const fcHeaders = {};
+  // fcHeaders['connection'] = headers['connection'] ? headers['connection'] : 'keep-alive';
+  fcHeaders['content-type'] = headers['content-type'] ? headers['content-type'] : 'application/octet-stream';
+  fcHeaders['x-fc-request-id'] = headers['x-fc-request-id'] ? headers['x-fc-request-id'] : reqeustId;
+  fcHeaders['x-fc-function-name'] = headers['x-fc-function-name'] ? headers['x-fc-function-name'] : envs['FC_FUNCTION_NAME'] || 'fc-docker';
+  fcHeaders['x-fc-function-memory'] = headers['x-fc-function-memory'] ? headers['x-fc-function-memory'] : envs['FC_MEMORY_SIZE'];
+  fcHeaders['x-fc-function-timeout'] = headers['x-fc-function-timeout'] ? headers['x-fc-function-timeout'] : envs['FC_TIMEOUT'];
+  fcHeaders['x-fc-initialization-timeout'] = headers['x-fc-initialization-timeout'] ? headers['x-fc-initialization-timeout'] : envs['FC_INITIALIZATION_TIMEOUT'];
+  fcHeaders['x-fc-function-initializer'] = headers['x-fc-function-initializer'] ? headers['x-fc-function-initializer'] : envs['FC_INITIALIZER'];
+  fcHeaders['x-fc-function-handler'] = headers['x-fc-function-handler'] ? headers['x-fc-function-handler'] : envs['FC_HANDLER'];
+  fcHeaders['x-fc-access-key-id'] = headers['x-fc-access-key-id'] ? headers['x-fc-access-key-id'] : envs['FC_ACCESS_KEY_ID'];
+  fcHeaders['x-fc-access-key-secret'] = headers['x-fc-access-key-secret'] ? headers['x-fc-access-key-secret'] : envs['FC_ACCESS_KEY_SECRET'];
+  fcHeaders['x-fc-security-token'] = headers['x-fc-security-token'] ? headers['x-fc-security-token'] : envs['FC_SECURITY_TOKEN'];
+  fcHeaders['x-fc-region'] = headers['x-fc-region'] ? headers['x-fc-region'] : envs['FC_REGION'];
+  fcHeaders['x-fc-account-id'] = headers['x-fc-account-id'] ? headers['x-fc-account-id'] : envs['FC_ACCOUND_ID'];
+  fcHeaders['x-fc-service-name'] = headers['x-fc-service-name'] ? headers['x-fc-service-name'] : envs['FC_SERVICE_NAME'];
+  fcHeaders['x-fc-service-logproject'] = headers['x-fc-service-logproject'] ? headers['x-fc-service-logproject'] : envs['FC_SERVICE_LOG_PROJECT'];
+  fcHeaders['x-fc-service-logstore'] = headers['x-fc-service-logstore'] ? headers['x-fc-service-logstore'] : envs['FC_SERVICE_LOG_STORE'];
+  return fcHeaders;
+}
+
+async function requestUntilServerUp(opts, timeout) {
+  var serverEstablished = false;
+  // 重试请求间的间隔时间，单位 ms
+  const intervalPerReq = 500;
+  var retryTimes = (timeout * 1000) / intervalPerReq;
+  var resp = {};
+  while (!serverEstablished) {
+    try {
+      resp = await rp(opts);
+      serverEstablished = true;
+    } catch (error) {
+      if ((error.message.indexOf('socket hang up') !== -1 || !error.response) && retryTimes >= 0) {
+        retryTimes--;
+        await sleep(500);
+        continue;
+      } else {
+        if (retryTimes < 0) {
+          console.log(red(`Retry request to container for ${timeout}s, please make your function timeout longer`));
+        }
+        if (error.response && error.response.statusCode) {
+          resp = {
+            statusCode: error.response.statusCode, 
+            headers: {
+              'Content-Type': 'application/json'
+            }, 
+            body: {
+              'errorMessage': error.message
+            }
+          };
+        } else {
+          console.log(red(`Fun Error: ${error}`));
+          resp = {
+            statusCode: 500, 
+            headers: {
+              'Content-Type': 'application/json'
+            }, 
+            body: {
+              'errorMessage': error.message
+            }
+          };
+        }
+        break;
+      }
+    }
+  }
+  return resp;
+}
+
+function generateInitRequestOpts(req, port, fcHeaders) {
+  
+  const opts = {
+    method: 'POST',
+    headers: fcHeaders,
+    uri: `http://localhost:${port}/initialize`,
+    resolveWithFullResponse: true,
+    qs: req.query || {}
+  };
+  return opts;
+}
+
+function generateInvokeRequestOpts(port, fcReqHeaders, event) {
+  const opts = {
+    method: 'POST',
+    headers: fcReqHeaders,
+    uri: `http://localhost:${port}/invoke`,
+    resolveWithFullResponse: true
+  };
+  if (event.toString('utf8') !== '') {
+    opts.body = event;
+  }
+  debug('local invoke request options: %j', opts);
+  return opts;
+}
+
+function generateRequestOpts(req, port, fcReqHeaders, event) {
+  const method = req.method;
+
+  const opts = {
+    method: method,
+    headers: fcReqHeaders,
+    uri: `http://localhost:${port}${req.originalUrl}`,
+    resolveWithFullResponse: true,
+    qs: req.query
+  };
+  if (event.toString('utf8') !== '') {
+    opts.body = event;
+  }
+  debug('local start request options: %j', opts);
+  return opts;
+}
+
 module.exports = {
   generateHttpParams, getHttpRawBody,
   validateSignature, parseOutputStream,
   parseHttpTriggerHeaders, validateHeader, filterFunctionResponseAndExecutionInfo,
   normalizeMultiValues, normalizeRawHeaders,
-  parseResponse
+  parseResponse, getFcReqHeaders, requestUntilServerUp, 
+  generateInitRequestOpts, generateRequestOpts, generateInvokeRequestOpts
 };

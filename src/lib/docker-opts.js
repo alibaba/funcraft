@@ -15,6 +15,7 @@ const { red } = require('colors');
 const httpx = require('httpx');
 const getVisitor = require('../lib/visitor').getVisitor;
 const pkg = require('../package.json');
+const { isCustomContainerRuntime } = require('./common/model/runtime');
 
 const NAS_UID = 10003;
 const NAS_GID = 10003;
@@ -38,7 +39,10 @@ const runtimeImageMap = {
   'custom': 'custom'
 };
 
-function resolveDockerEnv(envs = {}) {
+function resolveDockerEnv(envs = {}, isCustomContainer = false) {
+  if (isCustomContainer) {
+    return _.map(envs || {}, (v, k) => `${k}=${v}`);
+  }
   return _.map(addEnv(envs || {}), (v, k) => `${k}=${v}`);
 }
 
@@ -267,8 +271,48 @@ function supportCustomBootstrapFile(runtime, envs) {
   }
 }
 
-async function generateLocalStartOpts(runtime, name, mounts, cmd, debugPort, envs, dockerUser, debugIde) {
+function genCustomContainerLocalStartOpts(name, mounts, cmd, envs, imageName, caPort = 9000) {
+  const exposedPort = `${caPort}/tcp`;
+  const hostOpts = {
+    ExposedPorts: {
+      [exposedPort]: {}
+    },
+    HostConfig: {
+      AutoRemove: true,
+      Mounts: mounts,
+      PortBindings: {
+        [exposedPort]: [
+          {
+            'HostIp': '',
+            'HostPort': `${caPort}`
+          }
+        ]
+      }
+    }
+  };
 
+  const opts = {
+    Env: resolveDockerEnv(envs, true),
+    Image: imageName,
+    name
+  };
+  if (cmd !== []) {
+    opts.Cmd = cmd;
+  }
+  const ioOpts = {
+    OpenStdin: true,
+    Tty: false,
+    StdinOnce: true,
+    AttachStdin: true,
+    AttachStdout: true,
+    AttachStderr: true
+  };
+  const dockerOpts = nestedObjectAssign(opts, hostOpts, ioOpts);
+  debug('docker options for custom container: %j', dockerOpts);
+  return dockerOpts;
+}
+
+async function genNonCustomContainerLocalStartOpts(runtime, name, mounts, cmd, debugPort, envs, dockerUser, debugIde) {
   const hostOpts = {
     HostConfig: {
       AutoRemove: true,
@@ -299,8 +343,14 @@ async function generateLocalStartOpts(runtime, name, mounts, cmd, debugPort, env
     debugOpts);
 
   debug('docker options: %j', opts);
-
   return opts;
+}
+
+async function generateLocalStartOpts(runtime, name, mounts, cmd, envs, { debugPort, dockerUser, debugIde, imageName, caPort = 9000 }) {
+  if (isCustomContainerRuntime(runtime)) {
+    return genCustomContainerLocalStartOpts(name, mounts, cmd, envs, imageName, caPort);
+  }
+  return await genNonCustomContainerLocalStartOpts(runtime, name, mounts, cmd, debugPort, envs, dockerUser, debugIde);
 }
 
 // Not Run stage:

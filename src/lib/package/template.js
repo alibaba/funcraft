@@ -15,7 +15,7 @@ const { generateRandomZipPath } = require('../utils/path');
 const { generateNasPythonPaths, mergeEnvs } = require('../../lib/install/env');
 const { processOSSBucket } = require('../oss');
 const { getOssClient } = require('../client');
-
+const { isCustomContainerRuntime } = require('../common/model/runtime');
 const _ = require('lodash');
 
 function generateRosTemplateForNasConfig(serviceName, userId, groupId) {
@@ -633,7 +633,7 @@ async function uploadAndUpdateFunctionCode({ tpl, tplPath, useNas, baseDir, ossC
 
     for (const {serviceName, serviceRes, functionName, functionRes} of definition.findFunctionsInTpl(updatedTplContent)) {
       const runtime = (functionRes.Properties || {}).Runtime;
-      if (runtime === 'custom-container') {
+      if (isCustomContainerRuntime(runtime)) {
         delete (functionRes.Properties || {}).CodeUri;
         continue;
       }
@@ -739,7 +739,7 @@ async function transformRosYmlCodeUri ({ baseDir, tpl, tplPath, bucketName, ossC
 
   for (const key of Object.keys(tpl.Resources)) {
     const { Type, Properties: properties } = tpl.Resources[key];
-    if (Type === 'ALIYUN::FC::Function' && properties.Runtime !== 'custom-container' && !properties.Code) {
+    if (Type === 'ALIYUN::FC::Function' && !isCustomContainerRuntime(properties.Runtime) && !properties.Code) {
       if (!properties.CodeUri) {
         throw new Error(`ALIYUN::FC::Function Code is empty.`);
       }

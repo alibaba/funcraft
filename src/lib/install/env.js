@@ -213,7 +213,7 @@ function generateNasPythonPaths(nasConfig) {
 
 async function resolveLibPathsFromLdConf(baseDir, codeUri) {
   const envs = {};
-
+  if (!codeUri) { return envs; }
   const confdPath = path.resolve(baseDir, codeUri, '.fun/root/etc/ld.so.conf.d');
 
   if (! await fs.pathExists(confdPath)) { return envs; }

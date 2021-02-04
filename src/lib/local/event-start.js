@@ -30,15 +30,22 @@ class EventStart extends Invoke {
       await Promise.all(jobs);
       debug('all containers stopped');
     }
-
+    const cmd = docker.generateDockerCmd(this.runtime, true, {
+      functionProps: this.functionProps
+    });
     this.opts = await dockerOpts.generateLocalStartOpts(this.runtime,
       this.containerName,
       this.mounts,
-      ['--server'],
-      this.debugPort,
+      cmd,
       this.envs,
-      this.dockerUser,
-      this.debugIde);
+      {
+        debugPort: this.debugPort,
+        dockerUser: this.dockerUser,
+        debugIde: this.debugIde,
+        imageName: this.imageName,
+        caPort: this.functionProps.CAPort
+      });
+
     const container = await docker.createAndRunContainer(this.opts);
     await container.logs({
       stdout: true,
