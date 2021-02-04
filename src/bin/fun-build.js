@@ -14,6 +14,8 @@ program
   .usage('[options] [[service/]function]')
   .description('Build the dependencies.')
   .option('-d, --use-docker', 'Use docker container to build functions')
+  .option('-b, --use-buildkit', 'Use buildkit to build functions')
+  .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.\n')
   .option('-t, --template [template]', 'The path of fun template file.')
   .parse(process.argv);
 

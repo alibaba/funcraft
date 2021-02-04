@@ -19,8 +19,8 @@ async function pack(options) {
   }
 
   validateTplName(tplPath);
-
-  await require('../package/package').pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry);
+  const assumeYes = options.assumeYes;
+  await require('../package/package').pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry, assumeYes);
 }
 
 module.exports = pack;

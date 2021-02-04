@@ -177,7 +177,7 @@ async function resolvePasswdMount() {
 
 function convertNasMappingsToMounts(baseDir, nasMappings) {
   return nasMappings.map(nasMapping => {
-    console.log('mounting local nas mock dir %s into container %s\n', nasMapping.localNasDir, nasMapping.remoteNasDir);
+    // console.log('mounting local nas mock dir %s into container %s\n', nasMapping.localNasDir, nasMapping.remoteNasDir);
     return {
       Type: 'bind',
       Source: path.resolve(baseDir, nasMapping.localNasDir),
@@ -411,6 +411,15 @@ function generateFunctionEnvs(functionProps) {
 
 function generateRamdomContainerName() {
   return `fun_local_${new Date().getTime()}_${Math.random().toString(36).substr(2, 7)}`;
+}
+
+async function generateDockerfileEnvs(baseDir, serviceName, serviceProps, functionName, functionProps, debugPort, httpParams, nasConfig, ishttpTrigger, debugIde, debugArgs) {
+  const DockerEnvs = await generateDockerEnvs(baseDir, serviceName, serviceProps, functionName, functionProps, debugPort, httpParams, nasConfig, ishttpTrigger, debugIde, debugArgs);
+  const DockerfilEnvs = [];
+  Object.keys(DockerEnvs).forEach((key) => {
+    DockerfilEnvs.push(`${key}=${DockerEnvs[key]}`);
+  });
+  return DockerfilEnvs;
 }
 
 async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionName, functionProps, debugPort, httpParams, nasConfig, ishttpTrigger, debugIde, debugArgs) {
@@ -1027,7 +1036,7 @@ module.exports = {
   imageExist, generateDockerCmd,
   pullImage,
   resolveCodeUriToMount, generateFunctionEnvs, run, generateRamdomContainerName,
-  generateDockerEnvs, pullImageIfNeed,
+  generateDockerEnvs, pullImageIfNeed, generateDockerfileEnvs,
   showDebugIdeTipsForVscode, resolveNasConfigToMounts,
   startInstallationContainer, startContainer, isDockerToolBoxAndEnsureDockerVersion,
   conventInstallTargetsToMounts, startSboxContainer, buildImage, copyFromImage,

@@ -229,7 +229,7 @@ async function transformSlsAuto(tpl) {
   return cloneTpl;
 }
 
-async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
+async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry, assumeYes) {
   const tpl = await getTpl(tplPath);
   if (tpl.Transform) {
     validateNasAndVpcConfig(tpl.Resources);
@@ -237,7 +237,7 @@ async function pack(tplPath, bucket, outputTemplateFile, useNas, pushRegistry) {
 
   const baseDir = path.dirname(tplPath);
 
-  const bucketName = await processOSSBucket(bucket);
+  const bucketName = await processOSSBucket(bucket, assumeYes);
 
   await ensureFilesModified(tplPath);
 

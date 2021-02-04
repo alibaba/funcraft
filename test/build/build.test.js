@@ -33,7 +33,7 @@ const { tpl,
 } = require('../local/mock-data');
 
 describe('test buildFunction', () => {
-
+  const useBuildkit = false;
   const updatedContent = 'updated';
   const dumpedContent = 'dumped';
 
@@ -95,7 +95,7 @@ describe('test buildFunction', () => {
 
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(false);
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -130,7 +130,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -167,7 +167,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInProcess').resolves({});
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -221,7 +221,7 @@ describe('test buildFunction', () => {
     pathExistsStub.withArgs(funfilePath).resolves(true);
     pathExistsStub.withArgs(codeUri).resolves(true);
 
-    await build.buildFunction(buildName, cloneTpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
+    await build.buildFunction(buildName, cloneTpl, baseDir, useDocker, useBuildkit, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, cloneTpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -260,7 +260,7 @@ describe('test buildFunction', () => {
     sandbox.stub(Builder, 'detectTaskFlow').resolves([mockedTaskFlowConstructor]);
     sandbox.stub(builder, 'buildInDocker').resolves({});
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -308,7 +308,7 @@ describe('test buildFunction', () => {
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], verbose, tplPath);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install', 'build'], verbose, tplPath);
 
     assert.calledWith(artifact.cleanDirectory, path.join(baseDir, DEFAULT_BUILD_ARTIFACTS_PATH_SUFFIX));
     assert.calledWith(template.updateTemplateResources, tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
@@ -345,7 +345,7 @@ describe('test buildFunction', () => {
     sandbox.stub(builder, 'buildInDocker').resolves({});
     sandbox.stub(taskflow, 'isOnlyDefaultTaskFlow').returns(true);
 
-    await build.buildFunction(buildName, tpl, baseDir, useDocker, ['install'], verbose, tplPath);
+    await build.buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install'], verbose, tplPath);
 
     assert.calledWith(taskflow.isOnlyDefaultTaskFlow, [mockedTaskFlowConstructor]);
     assert.calledWith(parser.funymlToFunfile, funymlPath);

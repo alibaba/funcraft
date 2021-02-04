@@ -18,6 +18,7 @@ program
   .option('-o, --output-template-file <filename>', 'The output path of the packaged template file')
   .option('--use-nas', 'Automatically upload local resources to NAS.')
   .option('--push-registry <pushRegistry>', 'Modify the image upload path')
+  .option('-y, --assume-yes', 'Automatic yes to prompts. Assume "yes" as answer to all prompts and run non-interactively.\n')
   .parse(process.argv);
 
 if (program.args.length > 1) {

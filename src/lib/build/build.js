@@ -22,9 +22,11 @@ const { green, red } = require('colors');
 const { recordMtimes } = require('../utils/file');
 const { findFunctionsInTpl } = require('../definition');
 const { DEFAULT_NAS_PATH_SUFFIX } = require('../tpl');
-const { dockerBuildAndPush } = require('./build-image');
-
+const { dockerBuildAndPush, buildkitBuild } = require('./build-image');
+const { execSync } = require('child_process');
 const _ = require('lodash');
+const { convertDockerfileToBuildkitFormat } = require('../buildkit');
+const { promptForConfirmContinue } = require('../init/prompt');
 
 async function convertFunYmlToFunfile(funymlPath, funfilePath) {
   const generatedFunfile = await parser.funymlToFunfile(funymlPath);
@@ -38,14 +40,24 @@ async function convertFunfileToDockerfile(funfilePath, dockerfilePath, runtime, 
   await fs.writeFile(dockerfilePath, dockerfileContent);
 }
 
+async function formatDockerfileForBuildkit(dockerfilePath, fromSrcToDstPairs, baseDir, targetBuildStage) {
+  if (!fromSrcToDstPairs) {
+    debug('There are no fromSrcToDstPairs');
+    return;
+  }
+  const dockerfileContent = await convertDockerfileToBuildkitFormat(dockerfilePath, fromSrcToDstPairs, baseDir, targetBuildStage);
+
+  await fs.writeFile(dockerfilePath, dockerfileContent);
+}
+
 async function assertCodeUriExist(codeUri) {
   if (!(await fs.pathExists(codeUri))) {
     throw new Error(`CodeUri ${codeUri} is not exist.`);
   }
 }
 
-async function copyNasArtifact(nasMappings, imageTag, rootArtifactsDir, funcArtifactDir) {
-  // if .fun/nas exist in funcArtifactDir , fun will move co rootartifactsDir
+async function copyNasArtifactFromLocal(rootArtifactsDir, funcArtifactDir) {
+  // if .fun/nas exist in funcArtifactDir , fun will move to rootartifactsDir
   const funcNasFolder = path.join(funcArtifactDir, DEFAULT_NAS_PATH_SUFFIX);
   const rootNasFolder = path.join(rootArtifactsDir, DEFAULT_NAS_PATH_SUFFIX);
 
@@ -57,7 +69,9 @@ async function copyNasArtifact(nasMappings, imageTag, rootArtifactsDir, funcArti
     await ncpAsync(funcNasFolder, rootNasFolder);
     await fs.remove(funcNasFolder);
   }
+}
 
+async function copyNasArtifactFromImage(nasMappings, imageTag) {
   if (nasMappings) {
     for (let nasMapping of nasMappings) {
       const localNasDir = nasMapping.localNasDir;
@@ -68,13 +82,19 @@ async function copyNasArtifact(nasMappings, imageTag, rootArtifactsDir, funcArti
       }
 
       try {
-        console.log('copy from container ' + remoteNasDir + '.' + ' to localNasDir');
+        console.log('copy from container ' + remoteNasDir + '.' + ' to ' + localNasDir);
         await docker.copyFromImage(imageTag, remoteNasDir + '.', localNasDir);
       } catch (e) {
         debug(`copy from image ${imageTag} directory ${remoteNasDir} to ${localNasDir} error`, e);
       }
     }
   }
+}
+
+async function copyNasArtifact(nasMappings, imageTag, rootArtifactsDir, funcArtifactDir) {
+  await copyNasArtifactFromLocal(rootArtifactsDir, funcArtifactDir);
+
+  await copyNasArtifactFromImage(nasMappings, imageTag);
 }
 
 async function getOrConvertFunfile(codeUri) {
@@ -125,6 +145,51 @@ async function processFunfile(serviceName, serviceRes, codeUri, funfilePath, bas
   return imageTag;
 }
 
+async function processFunfileForBuildkit(serviceName, serviceRes, codeUri, funfilePath, baseDir, funcArtifactDir, runtime, functionName) {
+  console.log(yellow('Funfile exist and useBuildkit is specified, Fun will use buildkit to build'));
+  const dockerfilePath = path.join(codeUri, '.Funfile.buildkit.generated.dockerfile');
+
+  await convertFunfileToDockerfile(funfilePath, dockerfilePath, runtime, serviceName, functionName);
+
+  const fromSrcToDstPairs = [{
+    'src': '/code',
+    'dst': funcArtifactDir
+  }];
+
+  const nasConfig = (serviceRes.Properties || {}).NasConfig;
+  let nasMappings;
+  if (nasConfig) {
+    nasMappings = await nas.convertNasConfigToNasMappings(nas.getDefaultNasDir(baseDir), nasConfig, serviceName);
+    if (nasMappings) {
+      for (let nasMapping of nasMappings) {
+        const localNasDir = nasMapping.localNasDir;
+        let remoteNasDir = nasMapping.remoteNasDir;
+  
+        if (!remoteNasDir.endsWith('/')) {
+          remoteNasDir += '/';
+        }
+        fromSrcToDstPairs.push({
+          'src': remoteNasDir,
+          'dst': localNasDir
+        });
+      }
+    }
+  }
+  // 复制本地 NAS 内容
+  await copyNasArtifactFromLocal(baseDir, funcArtifactDir);
+
+  // 生成 dockerfile
+  const targetBuildStage = 'buildresult';
+  await formatDockerfileForBuildkit(dockerfilePath, fromSrcToDstPairs, baseDir, targetBuildStage);
+
+  execSync(
+    `buildctl build --no-cache --frontend dockerfile.v0 --local context=${baseDir} --local dockerfile=${path.dirname(dockerfilePath)} --opt target=${targetBuildStage} --opt filename=${path.basename(dockerfilePath)} --output type=local,dest=${baseDir}`, {
+      stdio: 'inherit'
+    });
+
+  await fs.remove(dockerfilePath);
+}
+
 const metaFiles = ['.', 'pom.xml', 'package.json', 'package-lock.json', 'requirements.txt', 'composer.json',
   path.join('src', 'main', 'java')
 ];
@@ -153,11 +218,24 @@ async function recordMetaData(baseDir, functions, tplPath, metaPath, buildOps) {
   await recordMtimes([...metaPaths, tplPath], buildOps, metaPath);
 }
 
-async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose, tplPath) {
+async function buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, stages, verbose, tplPath, assumeYes) {
   const buildStage = _.includes(stages, 'build');
+  const escapeDockerArgsInBuildFC = +process.env.escapeDockerArgsInBuildFC;
+  const setBuildkitArgsDefaultInBuildFC = +process.env.setBuildkitArgsDefaultInBuildFC;
+  if (setBuildkitArgsDefaultInBuildFC) {
+    debug(`set useBuildkit arg default when building function`);
+    useDocker = false;
+    useBuildkit = true;
+  } else if (useDocker && escapeDockerArgsInBuildFC) {
+    debug(`escape useDocker arg when building function`);
+    useDocker = false;
+    useBuildkit = true;
+  }
 
   if (useDocker) {
     console.log(green(`start ${buildStage ? 'building' : 'installing'} functions using docker`));
+  } else if (useBuildkit) {
+    console.log(green(`start ${buildStage ? 'building' : 'installing'} functions using buildkit`));
   } else {
     console.log(green(`start ${buildStage ? 'building' : 'installing'} function dependencies without docker`));
   }
@@ -189,10 +267,19 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
       if (!buildStage) {
         continue;
       }
-      if (!useDocker) {
-        throw new Error(`Runtime custom-container must use --use-docker`);
+      if (!useDocker && !useBuildkit) {
+        throw new Error(`Runtime custom-container must use --use-docker or --use-buildkit`);
       }
-      await dockerBuildAndPush(codeUri, functionRes.Properties.CustomContainerConfig.Image, baseDir, functionName, serviceName);
+      if (useDocker) {
+        await dockerBuildAndPush(codeUri, functionRes.Properties.CustomContainerConfig.Image, baseDir, functionName, serviceName);
+      } else if (useBuildkit) {
+        const msg = `Use fun build to build image and push to ${functionRes.Properties.CustomContainerConfig.Image}.Please confirm to continue.`;
+        if (!assumeYes && !await promptForConfirmContinue(msg)) {
+          skippedBuildFuncs.push(func);
+          continue;
+        }
+        await buildkitBuild(codeUri, functionRes.Properties.CustomContainerConfig.Image, baseDir, functionName, serviceName);
+      }
       continue;
     }
     const absCodeUri = path.resolve(baseDir, functionRes.Properties.CodeUri);
@@ -218,11 +305,17 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
 
     let imageTag;
 
-    // convert Funfile to dockerfile if Funfile exist
+    // if Funfile exist,use docker or buildkit.
     if (funfilePath) {
-      imageTag = await processFunfile(serviceName, serviceRes, absCodeUri, funfilePath, baseDir, funcArtifactDir, runtime, functionName);
+      if (useBuildkit || escapeDockerArgsInBuildFC) {
+        await processFunfileForBuildkit(serviceName, serviceRes, absCodeUri, funfilePath, baseDir, funcArtifactDir, runtime, functionName);
+        useDocker = false;
+        useBuildkit = true;
+      } else { // force docker if funfilePath exist and escapeDockerArgsInBuildFC not exist
+        imageTag = await processFunfile(serviceName, serviceRes, absCodeUri, funfilePath, baseDir, funcArtifactDir, runtime, functionName);
+        useDocker = true;
+      }
     }
-
     // For build stage, Fun needn't compile functions only if there are no manifest file and no Funfile.
     // For install stage, Fun needn't compile functions only if there are no manifest file.
     const manifestExist = !(_.isEmpty(taskFlows) || taskflow.isOnlyDefaultTaskFlow(taskFlows));
@@ -234,13 +327,14 @@ async function buildFunction(buildName, tpl, baseDir, useDocker, stages, verbose
       continue;
     }
 
-    if (useDocker || funfilePath) { // force docker if funfilePath exist
+    if (useBuildkit) {
+      await builder.buildInBuildkit(serviceName, serviceRes, functionName, functionRes, baseDir, absCodeUri, funcArtifactDir, verbose, stages);
+    } else if (useDocker) {
       await builder.buildInDocker(serviceName, serviceRes, functionName, functionRes, baseDir, absCodeUri, funcArtifactDir, verbose, imageTag, stages);
     } else {
       await builder.buildInProcess(serviceName, functionName, absCodeUri, runtime, funcArtifactDir, verbose, stages);
     }
   }
-
   if (buildStage) {
     const updatedTemplateContent = template.updateTemplateResources(tpl, buildFuncs, skippedBuildFuncs, baseDir, rootArtifactsDir);
 
@@ -276,5 +370,5 @@ async function detectFunFile(baseDir, tpl) {
 }
 
 module.exports = {
-  buildFunction, copyNasArtifact, getOrConvertFunfile
+  buildFunction, copyNasArtifact, getOrConvertFunfile, copyNasArtifactFromLocal
 };

@@ -22,7 +22,7 @@ async function bucketExist(ossClient, bucketName) {
 }
 
 
-async function generateOssBucket(bucketName) {
+async function generateOssBucket(bucketName, assumeYes) {
   const ossClient = await getOssClient();
 
   if (await bucketExist(ossClient, bucketName)) {
@@ -31,8 +31,8 @@ async function generateOssBucket(bucketName) {
   }
 
   console.log(yellow(`using oss-bucket: ${bucketName}`));
-
-  if (process.stdin.isTTY && !await promptForConfirmContinue('Auto generate OSS bucket for you?')) {
+  
+  if (!assumeYes && (process.stdin.isTTY && !await promptForConfirmContinue('Auto generate OSS bucket for you?'))) {
     bucketName = (await promptForInputContinue('Input OSS bucket name:')).input;
   }
 
@@ -41,13 +41,13 @@ async function generateOssBucket(bucketName) {
   return bucketName;
 }
 
-async function processOSSBucket(bucket) {
+async function processOSSBucket(bucket, assumeYes) {
   if (!bucket) {
     const profile = await getProfile();
     const defalutBucket = `fun-gen-${profile.defaultRegion}-${profile.accountId}`;
-    return await generateOssBucket(defalutBucket);
+    return await generateOssBucket(defalutBucket, assumeYes);
   }
-  return await generateOssBucket(bucket);
+  return await generateOssBucket(bucket, assumeYes);
 }
 
 module.exports = {

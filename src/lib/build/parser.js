@@ -152,7 +152,7 @@ If you have a requirement, you can submit the issue at https://github.com/alibab
       }
 
       const imageName = await dockerOpts.resolveRuntimeToDockerImage(runtimeOfFunfile, true);
-      dockerfile.push('FROM ' + await dockerOpts.resolveImageNameForPull(imageName));
+      dockerfile.push('FROM ' + await dockerOpts.resolveImageNameForPull(imageName) + ` as ${runtimeOfFunfile}`);
     } else {
       const range = instruction.getRange();
 

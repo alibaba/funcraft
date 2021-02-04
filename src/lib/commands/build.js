@@ -18,6 +18,8 @@ async function build(buildName, options) {
   }
 
   const useDocker = options.useDocker;
+  const useBuildkit = options.useBuildkit;
+  const assumeYes = options.assumeYes;
 
   if (!tplPath) {
     throw new Error(red('Current folder not a fun project\nThe folder must contains template.[yml|yaml] or faas.[yml|yaml] .'));
@@ -31,7 +33,7 @@ async function build(buildName, options) {
 
   const baseDir = path.dirname(tplPath);
 
-  await buildFunction(buildName, tpl, baseDir, useDocker, ['install', 'build'], options.verbose, tplPath);
+  await buildFunction(buildName, tpl, baseDir, useDocker, useBuildkit, ['install', 'build'], options.verbose, tplPath, assumeYes);
 
   showBuildNextTips();
 }
