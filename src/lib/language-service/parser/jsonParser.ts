@@ -110,8 +110,8 @@ export class ValidationResult {
     if (
       !this.enumValueMatch &&
       !validationResult.enumValueMatch &&
-      this.enumValues &&
-      validationResult.enumValues
+      this.enumValues && this.enumValues.length > 0 &&
+      validationResult.enumValues && validationResult.enumValues.length > 0
     ) {
       this.enumValues = this.enumValues.concat(validationResult.enumValues);
       for (const error of this.problems) {
