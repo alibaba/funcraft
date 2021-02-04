@@ -12,7 +12,3 @@ Resources:
         Runtime: custom
         MemorySize: 512
         CodeUri: ./
-        EnvironmentVariables:
-          PATH: '$PATH:/code/.fun/root/opt/microsoft/powershell/7'
-          LD_LIBRARY_PATH: >-
-            /code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64
