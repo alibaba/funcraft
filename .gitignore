@@ -84,7 +84,7 @@ examples/nas_browser/src/*
 .vscode/
 
 output
-.oss_cfg
+.oss_cfg*
 
 *.pyc
 *.iml
