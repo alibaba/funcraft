@@ -122,3 +122,5 @@ event-custom-cpp/*/bin
 event-custom-cpp/*/sample/release
 http-custom-cpp/*/bin
 http-custom-cpp/*/sample/release
+
+templates/*/*/package-lock.json
