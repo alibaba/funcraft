@@ -492,7 +492,7 @@ async function generateDockerEnvs(baseDir, serviceName, serviceProps, functionNa
     'FC_MEMORY_SIZE': functionProps.MemorySize || 128,
     'FC_TIMEOUT': functionProps.Timeout || 3,
     'FC_INITIALIZER': functionProps.Initializer,
-    'FC_INITIALIZATION_TIMEOUT': functionProps.InitializationTimeout || 3,
+    'FC_INITIALIZATIONTIMEOUT': functionProps.InitializationTimeout || 3,
     'FC_SERVICE_NAME': serviceName,
     'FC_SERVICE_LOG_PROJECT': ((serviceProps || {}).LogConfig || {}).Project,
     'FC_SERVICE_LOG_STORE': ((serviceProps || {}).LogConfig || {}).Logstore
