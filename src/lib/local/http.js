@@ -241,7 +241,7 @@ function getFcReqHeaders(headers, reqeustId, envs) {
   fcHeaders['x-fc-function-name'] = headers['x-fc-function-name'] ? headers['x-fc-function-name'] : envs['FC_FUNCTION_NAME'] || 'fc-docker';
   fcHeaders['x-fc-function-memory'] = headers['x-fc-function-memory'] ? headers['x-fc-function-memory'] : envs['FC_MEMORY_SIZE'];
   fcHeaders['x-fc-function-timeout'] = headers['x-fc-function-timeout'] ? headers['x-fc-function-timeout'] : envs['FC_TIMEOUT'];
-  fcHeaders['x-fc-initialization-timeout'] = headers['x-fc-initialization-timeout'] ? headers['x-fc-initialization-timeout'] : envs['FC_INITIALIZATION_TIMEOUT'];
+  fcHeaders['x-fc-initialization-timeout'] = headers['x-fc-initialization-timeout'] ? headers['x-fc-initialization-timeout'] : envs['FC_INITIALIZATIONTIMEOUT'];
   fcHeaders['x-fc-function-initializer'] = headers['x-fc-function-initializer'] ? headers['x-fc-function-initializer'] : envs['FC_INITIALIZER'];
   fcHeaders['x-fc-function-handler'] = headers['x-fc-function-handler'] ? headers['x-fc-function-handler'] : envs['FC_HANDLER'];
   fcHeaders['x-fc-access-key-id'] = headers['x-fc-access-key-id'] ? headers['x-fc-access-key-id'] : envs['FC_ACCESS_KEY_ID'];
