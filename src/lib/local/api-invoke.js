@@ -5,7 +5,7 @@ const streams = require('memory-streams');
 const { parseOutputStream, getFcReqHeaders } = require('./http');
 const debug = require('debug')('fun:local');
 const { validateSignature, getHttpRawBody, generateInitRequestOpts, requestUntilServerUp, generateInvokeRequestOpts } = require('./http');
-const { red } = require('colors');
+const { red, yellow } = require('colors');
 const docker = require('../docker');
 const dockerOpts = require('../docker-opts');
 const uuid = require('uuid');
@@ -30,8 +30,7 @@ class ApiInvoke extends Invoke {
     this.cmd = docker.generateDockerCmd(this.runtime, false, {
       functionProps: this.functionProps,
       httpMode: true,
-      invokeInitializer,
-      event
+      invokeInitializer
     });
 
     const outputStream = new streams.WritableStream();
@@ -39,20 +38,20 @@ class ApiInvoke extends Invoke {
 
     // check signature
     if (!await validateSignature(req, res, req.method)) { return; }
-    const opts = await dockerOpts.generateLocalStartOpts(this.runtime, 
-      containerName,
-      this.mounts,
-      this.cmd,
-      this.envs,
-      {
-        debugPort: this.debugPort,
-        dockerUser: this.dockerUser, 
-        debugIde: this.debugIde, 
-        imageName: this.imageName, 
-        caPort: this.functionProps.CAPort
-      });
     if (isCustomContainerRuntime(this.runtime)) {
-
+      const opts = await dockerOpts.generateLocalStartOpts(this.runtime, 
+        containerName,
+        this.mounts,
+        this.cmd,
+        this.envs,
+        {
+          debugPort: this.debugPort,
+          dockerUser: this.dockerUser, 
+          debugIde: this.debugIde, 
+          imageName: this.imageName, 
+          caPort: this.functionProps.CAPort
+        }
+      );
       const containerRunner = await docker.runContainer(opts, outputStream, errorStream, {
         serviceName: this.serviceName,
         functionName: this.functionName
@@ -74,12 +73,20 @@ class ApiInvoke extends Invoke {
       const requestOpts = generateInvokeRequestOpts(this.functionProps.CAPort, fcReqHeaders, event);
 
       const respOfCustomContainer = await requestUntilServerUp(requestOpts, this.functionProps.Timeout || 3);
-      // console.log(respOfCustomContainer.body);
+
       // exit container
       this.responseOfCustomContainer(res, respOfCustomContainer);
       await docker.exitContainer(container);
     } else {
 
+      const opts = await dockerOpts.generateLocalInvokeOpts(this.runtime,	
+        containerName,
+        this.mounts,
+        this.cmd,
+        this.debugPort,
+        this.envs,
+        this.dockerUser,
+        this.debugIde);
       await docker.run(opts,
         event,
         outputStream,
@@ -97,6 +104,10 @@ class ApiInvoke extends Invoke {
   // responseApi
   response(outputStream, errorStream, res) {
     const errorResponse = errorStream.toString();
+    // 当容器的输出为空异常时
+    if (outputStream.toString() === '') {
+      console.log(yellow('Warning: outputStream of CA container is empty'));
+    }
 
     let { statusCode, body, requestId, billedTime, memoryUsage } = parseOutputStream(outputStream);
 
@@ -109,7 +120,12 @@ class ApiInvoke extends Invoke {
       'access-control-expose-headers': 'Date,x-fc-request-id,x-fc-error-type,x-fc-code-checksum,x-fc-invocation-duration,x-fc-max-memory-usage,x-fc-log-result,x-fc-invocation-code-version'
     };
 
-    res.status(statusCode);
+    if (statusCode) {
+      res.status(statusCode);
+    } else {
+      res.status(500);
+    }
+    
 
     // todo: fix body 后面多个换行的 bug
     if (errorResponse) { // process HandledInvocationError and UnhandledInvocationError
