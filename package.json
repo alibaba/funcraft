@@ -24,7 +24,7 @@
     ]
   },
   "fc-docker": {
-    "version": "1.9.13",
+    "version": "1.9.14",
     "registry_default": "registry.cn-beijing.aliyuncs.com",
     "registry_mirrors": [
       "registry.cn-beijing.aliyuncs.com",
@@ -32,6 +32,7 @@
     ]
   },
   "scripts": {
+    "help": "make -help",
     "test": "make test",
     "binary": "make binary",
     "postinstall": "node -e \"try { require('./src/lib/check-version'); } catch(e) { if (e.message && e.message.includes('Cannot find module')) { require('./lib/check-version'); } else { throw e; }}\"",

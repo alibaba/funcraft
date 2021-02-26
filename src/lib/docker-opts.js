@@ -70,7 +70,7 @@ async function resolveDockerRegistry() {
   return DOCKER_REGISTRY_CACHE;
 }
 
-const IMAGE_VERSION = process.env.FC_DOCKER_VERSION || pkg['fc-docker'].version || '1.9.13';
+const IMAGE_VERSION = process.env.FC_DOCKER_VERSION || pkg['fc-docker'].version || '1.9.14';
 
 async function resolveRuntimeToDockerImage(runtime, isBuild) {
   if (runtimeImageMap[runtime]) {
