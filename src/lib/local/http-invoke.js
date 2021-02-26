@@ -229,7 +229,6 @@ class HttpInvoke extends Invoke {
             });
 
             this._invokeInitializer = false;
-            this.response(outputStream, errorStream, res);
           } catch (error) {
             console.log(red('Fun Error: ', errorStream.toString()));
 
@@ -253,6 +252,7 @@ class HttpInvoke extends Invoke {
             }
             return;
           }
+          this.response(outputStream, errorStream, res);
         }
         debug('http doInvoke exec end, begin to response');
       }

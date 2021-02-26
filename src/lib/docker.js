@@ -257,6 +257,7 @@ function genDockerCmdOfCustomContainer(functionProps) {
   }
   return [];
 }
+// dockerode exec 在 windows 上有问题，用 exec 的 stdin 传递事件，当调用 stream.end() 时，会直接导致 exec 退出，且 ExitCode 为 null
 function genDockerCmdOfNonCustomContainer(functionProps, httpMode, invokeInitializer = true, event = null) {
   const cmd = ['-h', functionProps.Handler];
 
@@ -291,7 +292,6 @@ function genDockerCmdOfNonCustomContainer(functionProps, httpMode, invokeInitial
   return cmd;
 }
 
-// dockerode exec 在 windows 上有问题，用 exec 的 stdin 传递事件，当调用 stream.end() 时，会直接导致 exec 退出，且 ExitCode 为 null
 function generateDockerCmd(runtime, isLocalStartInit, { functionProps, httpMode, invokeInitializer = true, event = null }) {
   if (isCustomContainerRuntime(runtime)) {
     return genDockerCmdOfCustomContainer(functionProps);
