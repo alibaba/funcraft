@@ -10,7 +10,7 @@ const docker = require('../docker');
 const dockerOpts = require('../docker-opts');
 const uuid = require('uuid');
 const { isCustomContainerRuntime } = require('../common/model/runtime');
-
+const isWin = process.platform === 'win32';
 class ApiInvoke extends Invoke {
 
   constructor(serviceName, serviceRes, functionName, functionRes, debugPort, debugIde, baseDir, tmpDir, debuggerPath, debugArgs, nasBaseDir) {
@@ -20,18 +20,52 @@ class ApiInvoke extends Invoke {
   async init() {
     await super.init();
     this.envs = await docker.generateDockerEnvs(this.baseDir, this.serviceName, this.serviceRes.Properties, this.functionName, this.functionProps, this.debugPort, null, this.nasConfig, true, this.debugIde, this.debugArgs);
+    this.invokeInitializer = this.functionProps.Initializer ? true : false;
+  }
+  async beforeInvoke() {
+    if (!this.runner) {
+      if (!isCustomContainerRuntime(this.runtime)) {
+        debug('runner not created, preparing for starting runner.');
+        await this._startRunner();
+      }
+    }
+  }
+
+  async _startRunner() {
+    // start runner for non-custom-runtime function
+    const startCmd = docker.generateDockerCmd(this.runtime, true, { 
+      functionProps: this.functionProps
+    });
+
+    const opts = await dockerOpts.generateLocalStartOpts(this.runtime,
+      this.containerName,
+      this.mounts,
+      startCmd,
+      this.envs,
+      {
+        debugPort: this.debugPort,
+        dockerUser: this.dockerUser,
+        imageName: this.imageName,
+        caPort: this.functionProps.CAPort
+      });
+    this.runner = await docker.startContainer(opts, process.stdout, process.stderr, {
+      serviceName: this.serviceName,
+      functionName: this.functionName
+    });
+  }
+
+  async _disableRunner() {
+    if (!this.runner) {
+      return;
+    }
+    let oldRunner = this.runner;
+    this.runner = null;
+    await oldRunner.stop();
   }
 
   async doInvoke(req, res) {
     const containerName = docker.generateRamdomContainerName();
     const event = await getHttpRawBody(req);
-    var invokeInitializer = false;
-    if (this.functionProps.Initializer) { invokeInitializer = true; }
-    this.cmd = docker.generateDockerCmd(this.runtime, false, {
-      functionProps: this.functionProps,
-      httpMode: true,
-      invokeInitializer
-    });
 
     const outputStream = new streams.WritableStream();
     const errorStream = new streams.WritableStream();
@@ -39,10 +73,15 @@ class ApiInvoke extends Invoke {
     // check signature
     if (!await validateSignature(req, res, req.method)) { return; }
     if (isCustomContainerRuntime(this.runtime)) {
+      const cmd = docker.generateDockerCmd(this.runtime, false, {
+        functionProps: this.functionProps,
+        httpMode: true,
+        invokeInitializer: this.invokeInitializer
+      });
       const opts = await dockerOpts.generateLocalStartOpts(this.runtime, 
         containerName,
         this.mounts,
-        this.cmd,
+        cmd,
         this.envs,
         {
           debugPort: this.debugPort,
@@ -78,20 +117,53 @@ class ApiInvoke extends Invoke {
       this.responseOfCustomContainer(res, respOfCustomContainer);
       await docker.exitContainer(container);
     } else {
+      const cmd = [dockerOpts.resolveMockScript(this.runtime), ...docker.generateDockerCmd(this.runtime, false, {
+        functionProps: this.functionProps,
+        httpMode: true,
+        invokeInitializer: this.invokeInitializer,
+        event: isWin ? event : null
+      })];
 
-      const opts = await dockerOpts.generateLocalInvokeOpts(this.runtime,	
-        containerName,
-        this.mounts,
-        this.cmd,
-        this.debugPort,
-        this.envs,
-        this.dockerUser,
-        this.debugIde);
-      await docker.run(opts,
-        event,
-        outputStream,
-        errorStream);
-  
+      try {
+        await this.runner.exec(cmd, {
+          env: this.envs,
+          outputStream,
+          errorStream,
+          verbose: true,
+          context: {
+            serviceName: this.serviceName,
+            functionName: this.functionName
+          },
+          event: !isWin ? event : null
+        });
+      } catch (error) {
+        console.log(red('Fun Error: ', errorStream.toString()));
+
+        // errors for runtime error
+        // for example, when using nodejs, use response.send(new Error('haha')) will lead to runtime error
+        // and container will auto exit, exec will receive no message
+        res.status(500);
+        res.setHeader('Content-Type', 'application/json');
+
+        res.send({
+          'errorMessage': `Process exited unexpectedly before completing request`
+        });
+
+        if (error.indexOf && error.indexOf('exited with code 137') > -1) { // receive signal SIGKILL http://tldp.org/LDP/abs/html/exitcodes.html
+          debug(error);
+        } else {
+          console.error(error);
+        }
+        if (this.runner) {
+          debug('api invoke done, preparing for disabling runner.');
+          await this._disableRunner();
+        }
+        return;
+      }
+      if (this.runner) {
+        debug('api invoke done, preparing for disabling runner.');
+        await this._disableRunner();
+      }
       this.response(outputStream, errorStream, res);
     }
   }
