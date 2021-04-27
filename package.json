@@ -24,7 +24,7 @@
     ]
   },
   "fc-docker": {
-    "version": "1.9.13",
+    "version": "1.9.17",
     "registry_default": "registry.cn-beijing.aliyuncs.com",
     "registry_mirrors": [
       "registry.cn-beijing.aliyuncs.com",
