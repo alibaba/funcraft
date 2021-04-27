@@ -1,7 +1,7 @@
 'use strict';
 
 const HttpInvoke = require('../../lib/local/http-invoke');
-
+const { ensureTmpDir } = require('../../lib/utils/path');
 const sinon = require('sinon');
 const assert = sinon.assert;
 
@@ -18,7 +18,7 @@ const httpx = require('httpx');
 const FC = require('@alicloud/fc2');
 
 const { serviceName, serviceRes, functionName, functionRes,
-  httptriggerServiceRes, httpTriggerFunctionRes
+  httpTriggerServiceRes, httpTriggerFunctionRes
 } = require('./mock-data');
 
 const { setProcess } = require('../test-utils');
@@ -106,8 +106,9 @@ describe('test http response', async () => {
   let server;
   let restoreProcess;
   let httpInvoke;
-  
+  let tmpDir;
   beforeEach(async () => {
+    tmpDir = await ensureTmpDir(null, projectDir, serviceName, functionName);
 
     await fs.mkdirp(projectDir);
 
@@ -147,18 +148,15 @@ def handler(environ, start_response):
     const endpointPrefix = `/2016-08-15/proxy/${serviceName}/${functionName}`;
     const endpoint = `${endpointPrefix}*`;
 
-    httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
-      functionName, httpTriggerFunctionRes, null, null, projectDir, 'ANONYMOUS', endpointPrefix);
-
+    httpInvoke = new HttpInvoke(serviceName, httpTriggerServiceRes,
+      functionName, httpTriggerFunctionRes, null, null, projectDir, tmpDir, 'ANONYMOUS', endpointPrefix);
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);
     });
-
     const resp = await httpx.request(`http://localhost:${serverPort}${endpointPrefix}`, {
       method: 'GET',
       timeout: '3000'
     });
-
     const body = await httpx.read(resp, 'utf8');
 
     expect(body).to.contain('Hello world!');
@@ -177,8 +175,8 @@ def handler(environ, start_response):
     const endpointPrefix = `/2016-08-15/proxy/${serviceName}/${functionName}`;
     const endpoint = `${endpointPrefix}*`;
 
-    httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
-      functionName, httpTriggerFunctionRes, null, null, projectDir, 'FUNCTION', endpointPrefix);
+    httpInvoke = new HttpInvoke(serviceName, httpTriggerServiceRes,
+      functionName, httpTriggerFunctionRes, null, null, projectDir, tmpDir, 'FUNCTION', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);
@@ -207,8 +205,8 @@ def handler(environ, start_response):
     const endpointPrefix = `/2016-08-15/proxy/${serviceName}/${functionName}`;
     const endpoint = `${endpointPrefix}*`;
 
-    const httpInvoke = new HttpInvoke(serviceName, httptriggerServiceRes,
-      functionName, httpTriggerFunctionRes, null, null, projectDir, 'FUNCTION', endpointPrefix);
+    const httpInvoke = new HttpInvoke(serviceName, httpTriggerServiceRes,
+      functionName, httpTriggerFunctionRes, null, null, projectDir, tmpDir, 'FUNCTION', endpointPrefix);
 
     app.get(endpoint, async (req, res) => {
       await httpInvoke.invoke(req, res);
