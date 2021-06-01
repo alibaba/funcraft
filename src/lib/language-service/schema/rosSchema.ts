@@ -69,7 +69,8 @@ export const rosSchema = {
                   "properties": {
                     "Project": { "type": "string" },
                     "Logstore": { "type": "string" },
-                    "EnableRequestMetrics": { "type": "boolean" }
+                    "EnableRequestMetrics": { "type": "boolean" },
+                    "EnableInstanceMetrics": { "type": "boolean" }
                   },
                   "required": ["Project", "Logstore"],
                   "additionalProperties": false

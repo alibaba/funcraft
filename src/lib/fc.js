@@ -1326,7 +1326,8 @@ async function generateDefaultLogConfig() {
   return {
     project: generateSlsProjectName(profile.accountId, profile.defaultRegion),
     logstore: `function-log`,
-    enableRequestMetrics: true
+    enableRequestMetrics: true,
+    enableInstanceMetrics: true
   };
 }
 
@@ -1346,7 +1347,8 @@ async function transformLogConfig(logConfig) {
   return {
     project: logConfig.Project || '',
     logstore: logConfig.Logstore || '',
-    enableRequestMetrics: logConfig.EnableRequestMetrics || false
+    enableRequestMetrics: logConfig.EnableRequestMetrics || false,
+    enableInstanceMetrics: logConfig.EnableInstanceMetrics || false
   };
 }
 
