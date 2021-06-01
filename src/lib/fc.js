@@ -1182,6 +1182,7 @@ async function makeFunction(baseDir, {
   instanceConcurrency,
   nasConfig,
   vpcConfig,
+  layers = [],
   InstanceLifecycleConfig
 }, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
@@ -1251,7 +1252,7 @@ async function makeFunction(baseDir, {
   const transformedInstanceLifecycleConfig = transformInstanceLifecycleConfig(InstanceLifecycleConfig);
 
   const params = {
-    description, handler, initializer,
+    description, handler, initializer, layers,
     timeout, initializationTimeout, memorySize,
     runtime, instanceConcurrency, instanceType,
     InstanceLifecycleConfig: transformedInstanceLifecycleConfig

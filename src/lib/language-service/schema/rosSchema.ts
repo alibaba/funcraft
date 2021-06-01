@@ -253,6 +253,10 @@ export const rosSchema = {
                 "EnvironmentVariables": {
                   "type": "object"
                 },
+                "Layers": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
                 "MemorySize": {
                   "type": "integer",
                   "enum": [
@@ -360,6 +364,10 @@ export const rosSchema = {
                 },
                 "EnvironmentVariables": {
                   "type": "object"
+                },
+                "Layers": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 },
                 "MemorySize": {
                   "type": "integer",

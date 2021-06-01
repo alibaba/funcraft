@@ -92,6 +92,9 @@ const functionSchema = {
                 }
               }
             },
+            'Layers': {
+              'type': 'array'
+            },
             'MemorySize': {
               'type': 'integer'
             },
@@ -186,6 +189,9 @@ const functionSchema = {
             },
             'MemorySize': {
               'type': 'integer'
+            },
+            'Layers': {
+              'type': 'array'
             },
             'CustomContainerConfig': {
               'type': 'object',
