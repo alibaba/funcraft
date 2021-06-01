@@ -237,6 +237,9 @@ export const rosSchema = {
                         }
                       }
                     },
+                    "StatefulInvocation": {
+                      "type": "boolean"
+                    },
                     "MaxAsyncEventAgeInSeconds": {
                       "type": "integer"
                     },
@@ -348,6 +351,9 @@ export const rosSchema = {
                           "type": "string"
                         }
                       }
+                    },
+                    "StatefulInvocation": {
+                      "type": "boolean"
                     },
                     "MaxAsyncEventAgeInSeconds": {
                       "type": "integer"

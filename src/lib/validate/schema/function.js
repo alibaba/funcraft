@@ -87,6 +87,9 @@ const functionSchema = {
                 'MaxAsyncEventAgeInSeconds': {
                   'type': 'integer'
                 },
+                'StatefulInvocation': {
+                  'type': 'boolean'
+                },
                 'MaxAsyncRetryAttempts': {
                   'type': 'integer'
                 }
@@ -181,6 +184,9 @@ const functionSchema = {
                 },
                 'MaxAsyncEventAgeInSeconds': {
                   'type': 'integer'
+                },
+                'StatefulInvocation': {
+                  'type': 'boolean'
                 },
                 'MaxAsyncRetryAttempts': {
                   'type': 'integer'
