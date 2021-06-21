@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.6.22",
+  "version": "3.6.23",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
