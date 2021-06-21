@@ -61,7 +61,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.15.1",
+    "@alicloud/fc-builders": "^0.15.3",
     "@alicloud/fc2": "^2.2.2",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
