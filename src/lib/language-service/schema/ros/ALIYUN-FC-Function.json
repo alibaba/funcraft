@@ -23,6 +23,9 @@
         "EnvironmentVariables": {
           "type": "object"
         },
+        "Layers": {
+          "type": "array"
+        },
         "Description": {
           "type": "string"
         },

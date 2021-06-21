@@ -69,7 +69,8 @@ export const rosSchema = {
                   "properties": {
                     "Project": { "type": "string" },
                     "Logstore": { "type": "string" },
-                    "EnableRequestMetrics": { "type": "boolean" }
+                    "EnableRequestMetrics": { "type": "boolean" },
+                    "EnableInstanceMetrics": { "type": "boolean" }
                   },
                   "required": ["Project", "Logstore"],
                   "additionalProperties": false
@@ -236,6 +237,9 @@ export const rosSchema = {
                         }
                       }
                     },
+                    "StatefulInvocation": {
+                      "type": "boolean"
+                    },
                     "MaxAsyncEventAgeInSeconds": {
                       "type": "integer"
                     },
@@ -252,6 +256,10 @@ export const rosSchema = {
                 },
                 "EnvironmentVariables": {
                   "type": "object"
+                },
+                "Layers": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 },
                 "MemorySize": {
                   "type": "integer",
@@ -344,6 +352,9 @@ export const rosSchema = {
                         }
                       }
                     },
+                    "StatefulInvocation": {
+                      "type": "boolean"
+                    },
                     "MaxAsyncEventAgeInSeconds": {
                       "type": "integer"
                     },
@@ -360,6 +371,10 @@ export const rosSchema = {
                 },
                 "EnvironmentVariables": {
                   "type": "object"
+                },
+                "Layers": {
+                  "type": "array",
+                  "items": { "type": "string" }
                 },
                 "MemorySize": {
                   "type": "integer",
