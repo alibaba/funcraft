@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 async function makeDestination(serviceName, functionName, asyncConfiguration, qualifier = 'LATEST') {
   const { accountId, defaultRegion } = await getProfile();
-  const { OnSuccess, OnFailure } = asyncConfiguration.Destination;
+  const { OnSuccess, OnFailure } = asyncConfiguration.Destination || {};
 
   const destinationConfig = {};
   if (OnSuccess) {
