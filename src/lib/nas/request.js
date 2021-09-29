@@ -5,6 +5,7 @@ const { readFileChunk } = require('./cp/file');
 const { getServiceMeta } = require('../import/service');
 
 const path = require('path');
+const _ = require('lodash');
 const constants = require('./constants');
 const PROXY = 'proxy';
 
@@ -99,7 +100,7 @@ async function sendUnzipRequest(nasHttpTriggerPath, dstDir, nasZipFile, unzipFil
     cmd = cmd + ` '${unzipFile}'`;
   }
 
-  return await sendCmdRequest(nasHttpTriggerPath, cmd);
+  return await sendCmdRequest(nasHttpTriggerPath, _.escapeRegExp(cmd));
 }
 
 async function sendCleanRequest(nasHttpTriggerPath, nasZipFile) {
