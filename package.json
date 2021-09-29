@@ -1,6 +1,6 @@
 {
   "name": "@alicloud/fun",
-  "version": "3.6.23",
+  "version": "3.6.24",
   "description": "(have)Fun with Serverless",
   "engines": {
     "node": ">=8.6.0"
@@ -24,7 +24,7 @@
     ]
   },
   "fc-docker": {
-    "version": "1.9.17",
+    "version": "1.9.21",
     "registry_default": "registry.cn-beijing.aliyuncs.com",
     "registry_mirrors": [
       "registry.cn-beijing.aliyuncs.com",
@@ -61,7 +61,7 @@
   "dependencies": {
     "@alicloud/cloudapi": "^1.0.0",
     "@alicloud/fc": "^1.2.3",
-    "@alicloud/fc-builders": "^0.15.1",
+    "@alicloud/fc-builders": "^0.15.4",
     "@alicloud/fc2": "^2.2.2",
     "@alicloud/fnf-2019-03-15": "^1.1.0",
     "@alicloud/log": "^1.1.0",
