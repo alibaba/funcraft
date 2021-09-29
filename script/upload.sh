@@ -66,5 +66,5 @@ echo "All uploaded success!"
 echo "====================================="
 for f in "${files[@]}"
 do
-   echo "[$f](https://gosspublic.alicdn.com/fun/$f)"
+   echo "[$f](https://funcruft-release.oss-accelerate.aliyuncs.com/fun/$f)"
 done
