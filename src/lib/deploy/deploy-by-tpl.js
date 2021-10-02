@@ -843,7 +843,7 @@ async function fetchRemoteYml(baseDir, tpl) {
 
   const services = definition.findServices(tpl.Resources);
 
-  console.log('Collecting your services information, in order to caculate devlopment changes...');
+  console.log('Collecting your services information, in order to caculate development changes...');
 
   for (const service of services) {
     const originConsoleLog = console.log;
