@@ -43,7 +43,7 @@ OSS_ACCESS_KEY_SECRET=$OSS_ACCESS_KEY_SECRET
 EOL
 
 VERSION=`node -p "require('./package').version"`
-CHECK_FILE=oss://funcruft-release/fun/fun-v${VERSION}-linux-x64.zip
+CHECK_FILE=oss://funcraft-release/fun/fun-v${VERSION}-linux-x64.zip
 
 if ossutil ls $CHECK_FILE --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET  | grep "Object Number is: 1" > /dev/null ; then
     echo "Version $VERSION is already uploaded!"
@@ -57,7 +57,7 @@ files=()
 for p in *.zip
 do
     echo $p
-    ossutil cp $p oss://funcruft-release/fun/$p --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET
+    ossutil cp $p oss://funcraft-release/fun/$p --endpoint $ENDPOINT --access-key-id $OSS_ACCESS_KEY_ID --access-key-secret $OSS_ACCESS_KEY_SECRET
     files+=($p)
 done
 
@@ -66,5 +66,5 @@ echo "All uploaded success!"
 echo "====================================="
 for f in "${files[@]}"
 do
-   echo "[$f](https://funcruft-release.oss-accelerate.aliyuncs.com/fun/$f)"
+   echo "[$f](https://funcraft-release.oss-accelerate.aliyuncs.com/fun/$f)"
 done
