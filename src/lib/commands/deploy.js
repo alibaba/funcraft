@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const debug = require('debug')('fun:deploy');
+const _ = require('lodash');
 
 const { yellow, red, green } = require('colors');
 const { ensureFilesModified } = require('../utils/file');
@@ -30,7 +31,7 @@ async function deploy(context) {
 
     if (framework) {
       debug('detected framework', framework);
-      let name = path.basename(codeDir);
+      let name = _.kebabCase(path.basename(codeDir));
 
       if (!context.assumeYes) {
         name = (await promptForInputContinue(`What’s your service and function name?`, name)).input;
