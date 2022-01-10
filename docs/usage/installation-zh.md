@@ -46,7 +46,7 @@ $ fun --version
 
 ```bash
 # 设置版本，请把下面更新为 https://github.com/aliyun/fun/releases 页面的最新版本
-$ FUN_VERISON="v3.6.1"
+$ FUN_VERSION="v3.6.1"
 
 # 下载到本地
 $ curl -o fun-linux.zip https://gosspublic.alicdn.com/fun/fun-$FUN_VERSION-linux.zip
