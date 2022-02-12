@@ -18,7 +18,7 @@ $ npm install @alicloud/fun -g
 
 > 如果在 Linux/MacOS 下执行报 "Error: EACCES: permission denied" 错误，请加上 `sudo` 执行：`sudo npm install @alicloud/fun -g`。
 
-> 如果安装过程较慢，可以考虑使用淘宝 NPM 源：`npm --registry=https://registry.npm.taobao.org install @alicloud/fun -g`
+> 如果安装过程较慢，可以考虑使用淘宝 NPM 源：`npm --registry=https://registry.npmmirror.com install @alicloud/fun -g`
 
 安装完成之后。在控制终端输入 fun 命令可以查看版本信息：
 
