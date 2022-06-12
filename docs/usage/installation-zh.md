@@ -46,10 +46,10 @@ $ fun --version
 
 ```bash
 # 设置版本，请把下面更新为 https://github.com/aliyun/fun/releases 页面的最新版本
-$ FUN_VERISON="v3.6.1"
+$ FUN_VERSION="v3.6.22"
 
 # 下载到本地
-$ curl -o fun-linux.zip https://gosspublic.alicdn.com/fun/fun-$FUN_VERSION-linux.zip
+$ curl -o fun-linux.zip http://funcruft-release.oss-accelerate.aliyuncs.com/fun/fun-$FUN_VERSION-linux.zip
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 32.2M  100 32.2M    0     0  2606k      0  0:00:12  0:00:12 --:--:-- 2376k
