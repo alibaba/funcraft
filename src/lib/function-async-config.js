@@ -23,6 +23,7 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
   const asyncConfig = {
     maxAsyncRetryAttempts: asyncConfiguration.MaxAsyncRetryAttempts,
     maxAsyncEventAgeInSeconds: asyncConfiguration.MaxAsyncEventAgeInSeconds,
+    statefulInvocation: asyncConfiguration.StatefulInvocation,
     destinationConfig
   };
 
@@ -33,6 +34,7 @@ async function makeDestination(serviceName, functionName, asyncConfiguration, qu
     const asyncConfigCache = {
       destinationConfig: data.destinationConfig,
       maxAsyncEventAgeInSeconds: data.maxAsyncEventAgeInSeconds,
+      statefulInvocation: data.statefulInvocation,
       maxAsyncRetryAttempts: data.maxAsyncRetryAttempts
     };
     if (_.isEqual(asyncConfig, asyncConfigCache)) {

@@ -1,3 +1,16 @@
+# 全新的Serverless应用全生命周期管理工具：Serverless Devs
+
+感谢您长期对Funcraft的关注和支持，随着时间的发展，我们逐渐的发现Funcraft在很多端到端的能力上以及可拓展性上面是比较差的，很难满足日后Serverless架构的飞速发展步伐。所以我们大胆尝试，勇敢创建，推出了全新的Serverless开发者工具：[Serverless Devs](https://github.com/serverless-devs/serverless-devs)，通过Serverless Devs你可以非常方便的进行应用的开发、部署、调试。
+
+- 关于Serverless Devs下的FC组件支持的功能，可以参考[命令文档](https://github.com/devsapp/fc#%E6%96%87%E6%A1%A3%E7%9B%B8%E5%85%B3)
+- 关于Funcraft和Serverless Devs的对比，可以参考[对比文档](https://github.com/devsapp/fc/blob/main/docs/zh/vs_fun_fcli.md)
+- 关于Funcraft如何快速迁移到Serverless，可以参考[迁移方法](https://github.com/devsapp/fc/blob/main/docs/zh/vs_fun_fcli.md#%E8%BF%81%E7%A7%BB%E6%A1%88%E4%BE%8B)
+
+也感谢您对阿里云函数计算团队的关注，欢迎和我们一起[快速开始Serverless Devs之旅](https://github.com/devsapp/fc#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+
+
+---------------
+
 # Funcraft
 
 (have)Fun with Serverless

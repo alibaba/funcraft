@@ -87,10 +87,16 @@ const functionSchema = {
                 'MaxAsyncEventAgeInSeconds': {
                   'type': 'integer'
                 },
+                'StatefulInvocation': {
+                  'type': 'boolean'
+                },
                 'MaxAsyncRetryAttempts': {
                   'type': 'integer'
                 }
               }
+            },
+            'Layers': {
+              'type': 'array'
             },
             'MemorySize': {
               'type': 'integer'
@@ -179,6 +185,9 @@ const functionSchema = {
                 'MaxAsyncEventAgeInSeconds': {
                   'type': 'integer'
                 },
+                'StatefulInvocation': {
+                  'type': 'boolean'
+                },
                 'MaxAsyncRetryAttempts': {
                   'type': 'integer'
                 }
@@ -186,6 +195,9 @@ const functionSchema = {
             },
             'MemorySize': {
               'type': 'integer'
+            },
+            'Layers': {
+              'type': 'array'
             },
             'CustomContainerConfig': {
               'type': 'object',

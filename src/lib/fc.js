@@ -1182,6 +1182,7 @@ async function makeFunction(baseDir, {
   instanceConcurrency,
   nasConfig,
   vpcConfig,
+  layers = [],
   InstanceLifecycleConfig
 }, onlyConfig, tplPath, useNas = false, assumeYes) {
   const fc = await getFcClient();
@@ -1251,7 +1252,7 @@ async function makeFunction(baseDir, {
   const transformedInstanceLifecycleConfig = transformInstanceLifecycleConfig(InstanceLifecycleConfig);
 
   const params = {
-    description, handler, initializer,
+    description, handler, initializer, layers,
     timeout, initializationTimeout, memorySize,
     runtime, instanceConcurrency, instanceType,
     InstanceLifecycleConfig: transformedInstanceLifecycleConfig
@@ -1325,7 +1326,8 @@ async function generateDefaultLogConfig() {
   return {
     project: generateSlsProjectName(profile.accountId, profile.defaultRegion),
     logstore: `function-log`,
-    enableRequestMetrics: true
+    enableRequestMetrics: true,
+    enableInstanceMetrics: true
   };
 }
 
@@ -1345,7 +1347,8 @@ async function transformLogConfig(logConfig) {
   return {
     project: logConfig.Project || '',
     logstore: logConfig.Logstore || '',
-    enableRequestMetrics: logConfig.EnableRequestMetrics || false
+    enableRequestMetrics: logConfig.EnableRequestMetrics || false,
+    enableInstanceMetrics: logConfig.EnableInstanceMetrics || false
   };
 }
 

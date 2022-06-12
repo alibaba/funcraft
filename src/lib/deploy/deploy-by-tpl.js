@@ -126,6 +126,7 @@ async function deployFunction({ baseDir, nasConfig, vpcConfig, useNas, assumeYes
     asyncConfiguration: properties.AsyncConfiguration,
     environmentVariables: properties.EnvironmentVariables,
     instanceConcurrency: properties.InstanceConcurrency,
+    layers: properties.Layers,
     nasConfig,
     vpcConfig,
     InstanceLifecycleConfig: properties.InstanceLifecycleConfig
